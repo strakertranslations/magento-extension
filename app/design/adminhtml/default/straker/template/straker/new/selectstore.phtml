@@ -1,0 +1,34 @@
+<div class="content-header">
+    <h3><?php echo $this->__('Create New Job') ?></h3>
+</div>
+<div class="straker-main-container">
+    <h1><?php echo $this->__('Select Destination Store') ?></h1>
+    <p><?php echo $this->__('Please select the destination store for this translation job.') ?></p>
+    <form action="<?php echo Mage::helper("adminhtml")->getUrl("straker/adminhtml_new/selectstore") ?>" >
+        <div class="destination-container input-box input-left"><label for="store"><?php echo $this->__('Destination Store') ?></label>
+            <select name="store" onchange="this.form.submit()">
+                    <option value=""><?php echo $this->__('Pick a store') ?></option>
+                <?php foreach (Mage::app()->getWebsites() as $website): ?>
+                    <?php $showWebsite = false; ?>
+                    <?php foreach ($website->getGroups() as $group): ?>
+                        <?php $showGroup = false; ?>
+                        <?php foreach ($group->getStores() as $store): ?>
+                            <?php if ($showWebsite == false): ?>
+                                <?php $showWebsite = true; ?>
+                                <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                            <?php endif; ?>
+                            <?php if ($showGroup == false): ?>
+                                <?php $showGroup = true; ?>
+                                <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                            <?php endif; ?>
+                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>">&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                        <?php endforeach; ?>
+                        <?php if ($showGroup): ?>
+                            </optgroup>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                <?php endforeach; ?>
+            </select>
+        </div>
+    </form>
+</div>

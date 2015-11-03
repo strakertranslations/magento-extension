@@ -1,0 +1,35 @@
+<?php
+/**
+ * @see StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products
+ */
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Products to be translated') ?></h3></td>
+            <td class="a-right">
+                <?php echo $this->getButtonsHtml() ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<ol class="wizard" data-wizard-steps="3">
+    <li class="wizard-done">Select Product Details</li>
+    <li class="wizard-done">Select Products</li>
+    <li class="wizard-todo">Confirm Products</li>
+</ol>
+<form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("straker/adminhtml_new/submitjob") ?>" method="post">
+    <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
+    <input type="hidden" name="product" value="<?php echo implode(',', $this->getProduct()) ?>" >
+    <input type="hidden" name="attr" value="<?php echo $this->getAttr() ?>" >
+    <input type="hidden" name="store" value="<?php echo $this->getStore() ?>" >
+</form>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>
+<script>
+    Event.observe(window, "load", function() {
+        var buttonHtml = '<button title="Submit" type="button" class="right" onclick="$(\'submit-new-job-form\').submit();" style=""><span><span><span>Submit</span></span></span></button>';
+        $('strakerProducts').insert({after: buttonHtml});
+    });
+</script>

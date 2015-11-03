@@ -1,0 +1,59 @@
+<div class="content-header">
+    <h3><?php echo $this->__('Create New Job') ?></h3>
+</div>
+<div class="straker-main-container">
+    <h1><?php echo $this->__('Select Source Store') ?></h1>
+    <p><?php echo $this->__('This is the first time translating fro this Destination Store. We need you to confirm some details before proceeding. This is a one time setup process. Please select the source store') ?></p>
+    <form id="setupstore-form" action="<?php echo Mage::helper("adminhtml")->getUrl("straker/adminhtml_new/setupstore") ?>" >
+        <div class="store-select-container">
+            <h2><?php echo $this->__('Source') ?></h2>
+            <p><?php echo $this->__('Where would you like us to take your content from?') ?></p>
+            <div class="input-box"><label for="source"><?php echo $this->__('Source Store:') ?></label>
+                <select name="source" class="validate-select">
+                    <option value=""><?php echo $this->__('Pick a store') ?></option>
+                    <?php foreach (Mage::app()->getWebsites() as $website): ?>
+                        <?php $showWebsite = false; ?>
+                        <?php foreach ($website->getGroups() as $group): ?>
+                            <?php $showGroup = false; ?>
+                            <?php foreach ($group->getStores() as $store): ?>
+                                <?php if ($showWebsite == false): ?>
+                                    <?php $showWebsite = true; ?>
+                                    <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                                <?php endif; ?>
+                                <?php if ($showGroup == false): ?>
+                                    <?php $showGroup = true; ?>
+                                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                <?php endif; ?>
+                                <option value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                            <?php endforeach; ?>
+                            <?php if ($showGroup): ?>
+                                </optgroup>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="input-box"><label for="from"><?php echo $this->__('Source Language:') ?></label>
+                <?php echo $this->renderLanguageSelect('from') ?></div>
+        </div>
+        <div class="down-arrow"></div>
+        <div class="store-select-container">
+            <h2><?php echo $this->__('Destination') ?></h2>
+            <p><?php echo $this->__('Where would you like us to put the translated content?') ?></p>
+            <div class="input-box"><label for="destination"><?php echo $this->__('Destination Store:') ?></label>
+                <select name="destination" disabled class="disabled">
+                    <option value=""><?php echo Mage::getModel('core/store')->load($this->getSetupStoreId())->getName() ?></option>
+                </select>
+                <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+            </div>
+            <div class="input-box"><label for="to"><?php echo $this->__('Destination Language:') ?></label>
+                <?php echo $this->renderLanguageSelect('to') ?></div>
+        </div>
+        <div class="form-buttons">
+            <input type="submit" class="form-button right" value="Next" title="Next" onclick="setupstoreForm.submit()">
+        </div>
+    </form>
+</div>
+<script>
+        var setupstoreForm = new varienForm('setupstore-form');
+</script>

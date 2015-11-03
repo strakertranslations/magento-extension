@@ -1,0 +1,30 @@
+<?php
+/**
+ * @see StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products
+ */
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:50%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Products to Translate') ?></h3></td>
+            <td class="a-right">
+                <?php echo $this->getButtonsHtml() ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<ol class="wizard" data-wizard-steps="3">
+    <li class="wizard-done">Select Product Details</li>
+    <li class="wizard-todo">Select Products</li>
+    <li class="wizard-todo">Confirm Products</li>
+</ol>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>
+<script>
+    Event.observe(window, "load", function() {
+        var buttonHtml = '<button title="Submit" type="button" class="right" onclick="strakerProducts_massactionJsObject.apply()" style=""><span><span><span>Submit</span></span></span></button>';
+        $('strakerProducts').insert({after: buttonHtml});
+        $$('.content-header-floating .content-header td.a-right')[0].insert(buttonHtml);
+    });
+</script>

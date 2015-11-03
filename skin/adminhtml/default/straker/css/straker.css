@@ -1,0 +1,309 @@
+.straker-main-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+.straker-main-container.border {
+  border: 1px solid #000000;
+  padding: 20px;
+}
+.straker-main-container .destination-container {
+  margin-top: 10px;
+}
+.straker-main-container label.terms-label {
+  margin-top: 10px;
+  display: inline-block;
+}
+.straker-main-container label.terms-label > input {
+  margin-right: 5px;
+}
+.straker-main-container input.input-text,
+.straker-main-container textarea {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 5px;
+}
+.straker-main-container .col-left,
+.straker-main-container .col-right {
+  margin-top: 20px;
+  padding-bottom: 10px;
+}
+.straker-main-container .col-left {
+  float: left;
+  width: 43%;
+  padding-right: 7%;
+  border-right: 2px solid #000000;
+}
+.straker-main-container .col-right {
+  float: right;
+  padding-left: 5%;
+  width: 43%;
+}
+.straker-main-container .store-select-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #000000;
+}
+.straker-main-container .store-select-container .input-box {
+  width: 100%;
+  margin-bottom: 5px;
+}
+.straker-main-container .store-select-container .input-box label {
+  text-align: right;
+  display: inline-block;
+  width: 48%;
+}
+.straker-main-container .store-select-container .validation-advice {
+  margin-left: 49%;
+}
+.straker-main-container .form-buttons {
+  margin-top: 20px;
+}
+.strakertranslations-adminhtml-job-index {
+  /* DO NOT CHANGE THESE VALUES*/
+}
+.strakertranslations-adminhtml-job-index .overlay_dialog {
+  background-color: #666666;
+  filter: alpha(opacity=60);
+  -moz-opacity: 0.6;
+  opacity: 0.6;
+}
+.strakertranslations-adminhtml-job-index .overlay___invisible__ {
+  background-color: #666666;
+  filter: alpha(opacity=0);
+  -moz-opacity: 0;
+  opacity: 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_nw {
+  width: 9px;
+  height: 23px;
+  background: transparent url(../images/default/top_left.gif) no-repeat 0 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_n {
+  background: transparent url(../images/default/top_mid.gif) repeat-x 0 0;
+  height: 23px;
+}
+.strakertranslations-adminhtml-job-index .dialog_ne {
+  width: 9px;
+  height: 23px;
+  background: transparent url(../images/default/top_right.gif) no-repeat 0 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_e {
+  width: 2px;
+  background: transparent url(../images/default/center_right.gif) repeat-y 0 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_w {
+  width: 2px;
+  background: transparent url(../images/default/center_left.gif) repeat-y 0 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_sw {
+  width: 9px;
+  height: 19px;
+  background: transparent url(../images/default/bottom_left.gif) no-repeat 0 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_s {
+  background: transparent url(../images/default/bottom_mid.gif) repeat-x 0 0;
+  height: 19px;
+}
+.strakertranslations-adminhtml-job-index .dialog_se {
+  width: 9px;
+  height: 19px;
+  background: transparent url(../images/default/bottom_right.gif) no-repeat 0 0;
+}
+.strakertranslations-adminhtml-job-index .dialog_sizer {
+  width: 9px;
+  height: 19px;
+  background: transparent url(../images/default/sizer.gif) no-repeat 0 0;
+  cursor: se-resize;
+}
+.strakertranslations-adminhtml-job-index .dialog_close {
+  width: 14px;
+  height: 14px;
+  background: transparent url(../images/default/close.gif) no-repeat 0 0;
+  position: absolute;
+  top: 5px;
+  left: 8px;
+  cursor: pointer;
+  z-index: 2000;
+}
+.strakertranslations-adminhtml-job-index .dialog_minimize {
+  width: 14px;
+  height: 15px;
+  background: transparent url(../images/default/minimize.gif) no-repeat 0 0;
+  position: absolute;
+  top: 5px;
+  left: 28px;
+  cursor: pointer;
+  z-index: 2000;
+}
+.strakertranslations-adminhtml-job-index .dialog_maximize {
+  width: 14px;
+  height: 15px;
+  background: transparent url(../images/default/maximize.gif) no-repeat 0 0;
+  position: absolute;
+  top: 5px;
+  left: 49px;
+  cursor: pointer;
+  z-index: 2000;
+}
+.strakertranslations-adminhtml-job-index .dialog_title {
+  float: left;
+  height: 14px;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 12px;
+  text-align: center;
+  width: 100%;
+  color: #000;
+}
+.strakertranslations-adminhtml-job-index .dialog_content {
+  overflow: auto;
+  color: #DDD;
+  font-family: Tahoma, Arial, sans-serif;
+  font-size: 10px;
+  background-color: #123;
+}
+.strakertranslations-adminhtml-job-index .top_draggable,
+.strakertranslations-adminhtml-job-index .bottom_draggable {
+  cursor: move;
+}
+.strakertranslations-adminhtml-job-index .status_bar {
+  font-size: 12px;
+}
+.strakertranslations-adminhtml-job-index .status_bar input {
+  font-size: 12px;
+}
+.strakertranslations-adminhtml-job-index .wired_frame {
+  display: block;
+  position: absolute;
+  border: 1px #000 dashed;
+}
+.strakertranslations-adminhtml-job-index .dialog {
+  display: block;
+  position: absolute;
+}
+.strakertranslations-adminhtml-job-index .dialog table.table_window {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+.strakertranslations-adminhtml-job-index .dialog table.table_window td,
+.strakertranslations-adminhtml-job-index .dialog table.table_window th {
+  padding: 0;
+}
+.strakertranslations-adminhtml-job-index .dialog .title_window {
+  -moz-user-select: none;
+}
+.strakertranslations-adminhtml-job-index .quote-workflow {
+  margin-bottom: 5px;
+  border: 1px solid #999999;
+  padding: 5px;
+}
+.strakertranslations-adminhtml-job-index .straker-refresh-button {
+  display: block;
+  width: 32px;
+  height: 32px;
+  background: url('../images/refresh_32.png');
+  background-size: 100% 100%;
+  text-indent: -9999px;
+  overflow: hidden;
+  border: none;
+}
+.strakertranslations-adminhtml-job-index .straker-refresh-button:hover {
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=80);
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+}
+.strakertranslations-adminhtml-product-index #dispute-container {
+  position: fixed;
+  background: #fff;
+  margin-left: -300px;
+  margin-top: -200px;
+  height: 400px;
+  width: 600px;
+  left: 50%;
+  top: 50%;
+  border: 2px solid;
+  padding: 40px;
+  z-index: 10;
+}
+.strakertranslations-adminhtml-product-index #dispute-container #dispute-container-close {
+  height: 20px;
+  width: 20px;
+  display: block;
+  position: absolute;
+  right: -10px;
+  top: -10px;
+  background: #ffffff;
+  border: 1px solid #000000;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+ol.wizard {
+  margin-bottom: 30px;
+}
+ol.wizard[data-wizard-steps="2"] li {
+  width: 49%;
+}
+ol.wizard[data-wizard-steps="3"] li {
+  width: 33%;
+}
+ol.wizard[data-wizard-steps="4"] li {
+  width: 24%;
+}
+ol.wizard[data-wizard-steps="5"] li {
+  width: 19%;
+}
+ol.wizard[data-wizard-steps="6"] li {
+  width: 16%;
+}
+ol.wizard[data-wizard-steps="7"] li {
+  width: 14%;
+}
+ol.wizard[data-wizard-steps="8"] li {
+  width: 12%;
+}
+ol.wizard[data-wizard-steps="9"] li {
+  width: 11%;
+}
+ol.wizard li {
+  display: inline-block;
+  text-align: center;
+  line-height: 3em;
+}
+ol.wizard li.wizard-done {
+  color: black;
+  border-bottom: 4px solid yellowgreen;
+}
+ol.wizard li.wizard-todo {
+  color: silver;
+  border-bottom: 4px solid silver;
+}
+ol.wizard li:after {
+  content: "\00a0\00a0";
+}
+ol.wizard li:before {
+  position: relative;
+  bottom: -2.5em;
+  float: left;
+  left: 50%;
+  line-height: 1em;
+}
+ol.wizard li.wizard-done:before {
+  content: "\2713";
+  color: white;
+  background-color: yellowgreen;
+  height: 1.2em;
+  width: 1.2em;
+  line-height: 1.2em;
+  border: none;
+  border-radius: 1.2em;
+}
+ol.wizard li.wizard-todo:before {
+  content: "\039F";
+  color: silver;
+  background-color: white;
+  font-size: 1.5em;
+  bottom: -1.6em;
+}

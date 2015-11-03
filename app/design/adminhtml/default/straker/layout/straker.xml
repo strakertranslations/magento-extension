@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <reference name="head">
+            <action method="addCss">
+                <name>css/straker.css</name>
+            </action>
+            <action method="addJs">
+                <name>straker/translations.js</name>
+            </action>
+        </reference>
+    </default>
+    <strakertranslations_adminhtml_job_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+            <!--<action method="addJs">-->
+                <!--<name>straker/livepipe/livepipe.js</name>-->
+            <!--</action>-->
+            <!--<action method="addJs">-->
+                <!--<name>straker/livepipe/window.js</name>-->
+            <!--</action>-->
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job" name="strakertranslations_easytranslationplatform_job" />
+        </reference>
+    </strakertranslations_adminhtml_job_index>
+    <strakertranslations_adminhtml_product_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+            <!--<action method="addJs">-->
+            <!--<name>straker/livepipe/livepipe.js</name>-->
+            <!--</action>-->
+            <!--<action method="addJs">-->
+            <!--<name>straker/livepipe/window.js</name>-->
+            <!--</action>-->
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job_product" name="strakertranslations_easytranslationplatform_job_product" />
+        </reference>
+    </strakertranslations_adminhtml_product_index>
+</layout>
