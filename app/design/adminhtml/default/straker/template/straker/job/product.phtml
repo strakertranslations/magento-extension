@@ -15,7 +15,7 @@
     <a id="dispute-container-close">X</a>
     <form id="straker-dispute-form" action="<?php echo Mage::helper("adminhtml")->getUrl("straker/adminhtml_job/dispute") ?>" method="post">
         <h4 id="dispute-form-title"><?php echo $this->__('If you have any issues, please provide comments below. You must provide specific examples of the source and translation. You can edit translations after you published them to your site.') ?></h4>
-        <input type="hidden" name="form_key" value="<? echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
+        <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
         <input type="hidden" name="job_id">
         <div class="input-box"><label for="message">Message</label><em class="required">*</em><br />
             <textarea id="message" name="message" value="" class="required-entry input-text" rows="16" cols="90"></textarea></div>
