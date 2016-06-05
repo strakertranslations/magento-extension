@@ -6,7 +6,7 @@
                 <resource id="Magento_Backend::system">
                     <resource id="Tym17_AdminSample::customMenu" title="Custom Menu">
                         <resource id="Tym17_AdminSample::sampleOne" title="One" sortOrder="10" />
-                        <resource id="Tym17_AdminSample::sampleTwo" title="Two" sortOrder="20" />
+                        <resource id="Tym17_AdminSample::sampleTwo" title="Two" sortOrder="10" />
                     </resource>
                 </resource>
                 <!-- You can imagine an other node here:
