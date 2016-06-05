@@ -24,4 +24,9 @@ class AdminSample extends \Magento\Framework\Model\AbstractModel implements Admi
     {
         return $this->_config->getConfig('txt/textsample');
     }
+
+    public function getName()
+    {
+        return 'Rakesh';
+    }
 }
