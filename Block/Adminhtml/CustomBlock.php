@@ -3,7 +3,7 @@ namespace Tym17\AdminSample\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
 use Tym17\AdminSample\Helper\ConfigHelper;
-use Tym17\AdminSample\Model\AdminSample;
+use Tym17\AdminSample\Api\Data\AdminSampleInterface;
 
 class CustomBlock extends Template
 {
@@ -20,7 +20,8 @@ class CustomBlock extends Template
     */
     public function __construct(
         Template\Context $context,
-        AdminSample $adminSampleModel,
+//        AdminSample $adminSampleModel,
+        AdminSampleInterface $adminSampleModel,
         ConfigHelper $config,
         array $data = []
     ) {
@@ -34,7 +35,8 @@ class CustomBlock extends Template
      */
     public function greet()
     {
-        return $this->_adminSampleModel->getGreetings();
+        //return $this->_adminSampleModel->getGreetings();
+        return $this->_adminSampleModel->getName();
     }
 
     public function getSampleText()
