@@ -3,7 +3,7 @@ namespace Tym17\AdminSample\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
 use Tym17\AdminSample\Helper\ConfigHelper;
-use Tym17\AdminSample\Api\Data\AdminSampleInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 class CustomBlock extends Template
 {
@@ -14,6 +14,8 @@ class CustomBlock extends Template
 
     protected $_adminSampleModel;
 
+    protected  $_storeManager;
+
     /**
     * @param Context $context
     * @param array $data
@@ -23,11 +25,13 @@ class CustomBlock extends Template
 //        AdminSample $adminSampleModel,
         AdminSampleInterface $adminSampleModel,
         ConfigHelper $config,
+        StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_config = $config;
         $this->_adminSampleModel = $adminSampleModel;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -42,6 +46,15 @@ class CustomBlock extends Template
     public function getSampleText()
     {
         return $this->_adminSampleModel->getSampleText();
+    }
+
+    public function getHeading()
+    {
+        return $this->_adminSampleModel->getHeading();
+    }
+
+    public function getWebsites() {
+        return false;
     }
 
 }

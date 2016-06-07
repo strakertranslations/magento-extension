@@ -3,38 +3,38 @@
 namespace Tym17\AdminSample\Controller\Adminhtml\SampleTwo;
 
 use \GuzzleHttp\Client;
+use Magento\Store\Model\StoreManagerInterface;
+use Tym17\AdminSample\Api\Data\AdminSampleInterface;
+use Magento\Framework\App\Action\Context;
 
 class Test extends \Magento\Framework\App\Action\Action
 {
 
+    protected $_storeManager;
+
+    public function __construct(
+        Context $context,
+        StoreManagerInterface $storeManagerInterface,
+        AdminSampleInterface $adminSampleInterface
+    )
+    {
+        $this->_adminManager = $adminSampleInterface;
+        $this->_storeManager = $storeManagerInterface;
+        return parent::__construct($context);
+    }
+
     public function execute()
     {
-        $client = new Client(['base_uri' => 'https://test-magento-api.strakertranslations.com/']);
+        $a = [];
 
-        $response = $client->request('GET','languages');
-
-        $body = $response->getBody()->getContents();
+        foreach($this->_adminManager->getLocaleOptions() as $key => $value)
+        {
+            $a[$value['value']] = $value['label'];
+        }
 
         echo '<pre>';
-
-        print_r($body);
-
+        print_r($a);
         echo '</pre>';
-
         exit;
-        //$url = 'https://test-magento-api.strakertranslations.com/languages';
-
-// use key 'http' even if you send the request to https://...
-//        $options = array(
-//            'http' => array(
-//                'header'  => "Content-type: application/x-www-form-urlencoded\r\n",
-//                'method'  => 'GET'
-//            )
-//        );
-//        $context  = stream_context_create($options);
-//        $result = file_get_contents($url, false, $context);
-//        if ($result === FALSE) { /* Handle error */ }
-//
-//        var_dump($result);
     }
 }

@@ -1,8 +1,12 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/menu.xsd">
     <menu>
-        <add id="Tym17_AdminSample::customMenu" title="Translations" module="Tym17_AdminSample" sortOrder="30" resource="Tym17_AdminSample::customMenu"/>
-        <add id="Tym17_AdminSample::sampleOne" title="Straker" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleOne" resource="Tym17_AdminSample::SampleOne" />
-        <add id="Tym17_AdminSample::sampleTwo" title="Setup" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleTwo" resource="Tym17_AdminSample::sampleTwo"/>
+        <add id="Tym17_AdminSample::customMenu" title="Straker Translations" module="Tym17_AdminSample" sortOrder="30" resource="Tym17_AdminSample::customMenu"/>
+        <add id="Tym17_AdminSample::sampleOne" title="Create New Job" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleOne" resource="Tym17_AdminSample::SampleOne" />
+        <add id="Tym17_AdminSample::sampleTwo" title="Manage Jobs" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleTwo" resource="Tym17_AdminSample::sampleTwo"/>
+        <add id="Tym17_AdminSample::sampleThree" title="Settings" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleThree" resource="Tym17_AdminSample::sampleThree"/>
+        <add id="Tym17_AdminSample::sampleFour" title="Accounts" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleFour" resource="Tym17_AdminSample::sampleFour"/>
+        <add id="Tym17_AdminSample::sampleFive" title="Create Store View" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/store" resource="Tym17_AdminSample::store"/>
+        <add id="Tym17_AdminSample::sampleSix" title="Terms &amp; Conditions" module="Tym17_AdminSample" sortOrder="10" parent="Tym17_AdminSample::customMenu" action="AdminSample/sampleSix" resource="Tym17_AdminSample::sampleSix"/>
     </menu>
 </config>

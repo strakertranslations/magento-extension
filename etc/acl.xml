@@ -7,13 +7,18 @@
                     <resource id="Tym17_AdminSample::customMenu" title="Custom Menu">
                         <resource id="Tym17_AdminSample::sampleOne" title="One" sortOrder="10" />
                         <resource id="Tym17_AdminSample::sampleTwo" title="Two" sortOrder="10" />
+                        <resource id="Tym17_AdminSample::sampleThree" title="Three" sortOrder="10" />
+                        <resource id="Tym17_AdminSample::sampleFour" title="Four" sortOrder="10" />
+                        <resource id="Tym17_AdminSample::sampleFive" title="Five" sortOrder="10" />
+                        <resource id="Tym17_AdminSample::sampleSix" title="Five" sortOrder="10" />
                     </resource>
                 </resource>
-                <!-- You can imagine an other node here:
+
                 <resource id="Magento_Backend::content">
-                    <resource id="Tym17_AdminSample::things" title="Things" sortOrder="70"/>
+                    <resource id="Tym17_AdminSample::store" title="store" sortOrder="10"/>
+                    <resource id="Tym17_AdminSample::store_edit" title="store" sortOrder="10"/>
                 </resource>
-                -->
+
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">

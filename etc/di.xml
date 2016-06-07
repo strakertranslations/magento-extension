@@ -9,6 +9,6 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
 
 
-    <preference for="Tym17\AdminSample\Api\Data\AdminSampleInterface" type="Tym17\AdminSample\Model\AdminSample" />
+    <preference for="Tym17\AdminSample\Api\Data\AdminSampleInterface" type="Tym17\AdminSample\Model\AdminSample"/>
 
 </config>

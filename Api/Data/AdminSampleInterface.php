@@ -8,4 +8,6 @@ interface AdminSampleInterface
 
     public function getSampleText();
 
+    public function getLocaleOptions();
+
 }

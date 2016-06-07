@@ -4,6 +4,7 @@
         <adminsample> <!-- Note that this, is section id from "etc/adminhtml/system.xml" -->
             <txt> <!-- And this, group id -->
                 <textsample>YesThisIsText</textsample>
+                <heading>Hello_Rakesh</heading>
             </txt>
             <yn>
                 <ynsample>0</ynsample>

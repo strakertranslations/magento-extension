@@ -1,14 +1,13 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
-    <head>
-        <title>SampleOne Title</title>
-    </head>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Tym17\AdminSample\Block\Adminhtml\CustomBlock" name="Overview" template="Tym17_AdminSample::custom/one.phtml" />
-        </referenceContainer>
-        <referenceContainer name="left">
-            <block class="Magento\Framework\View\Element\Template" name="One" template="Tym17_AdminSample::sample/one.phtml" />
+            <block class="Tym17\AdminSample\Block\Adminhtml\Store\Edit" />
+            <!--<block class="Magento\Backend\Block\Store\Switcher" name="store_switcher">-->
+                <!--<action method="setUseConfirm">-->
+                    <!--<argument name="params" xsi:type="string">1</argument>-->
+                <!--</action>-->
+            <!--</block>-->
         </referenceContainer>
     </body>
 </page>
