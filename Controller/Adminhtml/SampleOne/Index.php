@@ -1,5 +1,6 @@
 <?php
-namespace Tym17\AdminSample\Controller\Adminhtml\SampleOne;
+
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\SampleOne;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
@@ -40,7 +41,7 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \MAgento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-//        $resultPage->setActiveMenu('Tym17_AdminSample::sampleTwo');
+//        $resultPage->setActiveMenu('Straker_EasyTranslationPlatform::sampleTwo');
 //        /*$resultPage->addBreadcrumb(__('System'), __('System'));  This also changes page title in tab name
 //        $resultPage->addBreadcrumb(__('SampleTwo'), __('SampleTwo'));*/
         $resultPage->getConfig()->getTitle()->prepend(__('Create New Job')); // Changing the page title

@@ -1,8 +1,8 @@
 <?php
 
-namespace Tym17\AdminSample\Api\Data;
+namespace Straker\EasyTranslationPlatform\Api\Data;
 
-interface AdminSampleInterface
+interface EasyTranslationPlatformInterface
 {
     public function getGreetings();
 

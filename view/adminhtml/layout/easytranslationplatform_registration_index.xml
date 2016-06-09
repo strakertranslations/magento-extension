@@ -2,7 +2,8 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content">
-            <block class="Tym17\AdminSample\Block\Adminhtml\Store\Edit" name="newstore_edit"/>
+            <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::registration/form.phtml" />
+            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Registration\NewRegistration" name="registration_form"/>
         </referenceContainer>
     </body>
 </page>

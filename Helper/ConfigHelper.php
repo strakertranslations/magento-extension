@@ -1,5 +1,5 @@
 <?php
-namespace Tym17\AdminSample\Helper;
+namespace Straker\EasyTranslationPlatform\Helper;
 
 class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -8,6 +8,6 @@ class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfig($req)
     {
-        return $this->scopeConfig->getValue('adminsample/' . $req);
+        return $this->scopeConfig->getValue('easytranslationplatform/' . $req);
     }
 }

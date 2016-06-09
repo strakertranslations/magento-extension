@@ -1,18 +1,19 @@
 <?php
-namespace Tym17\AdminSample\Block\Adminhtml;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
-use Tym17\AdminSample\Helper\ConfigHelper;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Magento\Store\Model\StoreManagerInterface;
+use Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
 
 class CustomBlock extends Template
 {
     /**
-     * @var \Tym17\AdminSample\Helper\ConfigHelper
+     * @var \Straker\EasyTranslationPlatform\Helper\ConfigHelper
      */
     protected $_config;
 
-    protected $_adminSampleModel;
+    protected $_easyTranslationModel;
 
     protected  $_storeManager;
 
@@ -22,15 +23,14 @@ class CustomBlock extends Template
     */
     public function __construct(
         Template\Context $context,
-//        AdminSample $adminSampleModel,
-        AdminSampleInterface $adminSampleModel,
+        EasyTranslationPlatformInterface $easyTranslationPlatformInterface,
         ConfigHelper $config,
         StoreManagerInterface $storeManager,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_config = $config;
-        $this->_adminSampleModel = $adminSampleModel;
+        $this->_easyTranslationModel = $easyTranslationPlatformInterface;
         $this->_storeManager = $storeManager;
     }
 
@@ -39,18 +39,17 @@ class CustomBlock extends Template
      */
     public function greet()
     {
-        //return $this->_adminSampleModel->getGreetings();
-        return $this->_adminSampleModel->getName();
+        return $this->_easyTranslationModel->getName();
     }
 
     public function getSampleText()
     {
-        return $this->_adminSampleModel->getSampleText();
+        return $this->_easyTranslationModel->getSampleText();
     }
 
     public function getHeading()
     {
-        return $this->_adminSampleModel->getHeading();
+        return $this->_easyTranslationModel->getHeading();
     }
 
     public function getWebsites() {

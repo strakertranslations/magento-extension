@@ -1,14 +1,14 @@
 {
-  "name": "tym17/admin-module-sample",
+  "name": "Straker/EasyTranslationPlatform",
   "type": "magento2-module",
-  "description": "Admin module sample for Magento 2",
+  "description": "Translation Platform for Magento 2",
   "keywords": ["Magento2", "Admin", "Sample"],
-  "homepage": "https://github.com/Tym17/",
+  "homepage": "https://Strakertranslations.com/magento",
   "aaaminimum-stability": "dev",
   "license": "AFL - Academic Free License (AFL 3.0)",
   "authors": [
     {
-      "name": "Tym17"
+      "name": "Straker Translation"
     }
   ],
   "require": {
@@ -19,7 +19,7 @@
     "map": [
       [
         "*",
-        "Tym17/AdminSample"
+        "Straker/EasyTranslationPlatform"
       ]
     ]
   }

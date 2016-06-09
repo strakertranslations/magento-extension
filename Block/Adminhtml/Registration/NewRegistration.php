@@ -1,8 +1,8 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Store;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Registration;
 
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class NewRegistration extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
@@ -10,6 +10,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
+
+    protected $_mode = 'newRegistration';
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
@@ -34,11 +36,11 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         $this->_objectId = 'post_id';
         $this->_blockGroup = 'Straker_EasyTranslationPlatform';
-        $this->_controller = 'adminhtml_store';
+        $this->_controller = 'adminhtml_registration';
 
         parent::_construct();
 
-        $this->buttonList->update('save', 'label', __('Save Store'));
+        $this->buttonList->update('save', 'label', __('Register'));
 
         $this->buttonList->remove('reset');
     }
@@ -53,4 +55,5 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     {
         return $this->_authorization->isAllowed($resourceId);
     }
+
 }

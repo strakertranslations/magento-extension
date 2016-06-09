@@ -1,6 +1,6 @@
 <?php
 
-namespace Tym17\AdminSample\Model\Config\Source;
+namespace Straker\EasyTranslationPlatform\Model\Config\Source;
 
 class Custom implements \Magento\Framework\Option\ArrayInterface
 {

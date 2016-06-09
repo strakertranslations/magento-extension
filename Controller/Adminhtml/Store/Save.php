@@ -1,6 +1,6 @@
 <?php
 
-namespace Tym17\AdminSample\Controller\Adminhtml\Store;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Store;
 
 use Magento\Backend\App\Action;
 use Magento\TestFramework\ErrorLog\Logger;
@@ -32,7 +32,7 @@ class Save extends \Magento\Backend\App\Action
      */
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Tym17_AdminSample::save');
+        return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::save');
     }
 
     /**
@@ -56,11 +56,11 @@ class Save extends \Magento\Backend\App\Action
 
             $new_store->setName($data['name']);
 
-            $new_store->setCode($data['code']);
+            $new_store->setCode(strtolower(str_replace('_','',$data['general_locale_code'])));
 
-            $new_store->setisActive($data['is_active']);
+            $new_store->setisActive('0');
 
-            $new_store->setWebsiteId($this->_storeManager->getStore()->getId());
+            $new_store->setWebsiteId($this->_storeManager->getWebsite()->getId());
 
             $new_store->setGroupId($this->_storeManager->getGroup()->getId());
 
@@ -74,7 +74,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
-                return $resultRedirect->setPath('*/*/');
+                return $resultRedirect->setPath('/');
 
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
 

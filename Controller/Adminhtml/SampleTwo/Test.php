@@ -1,10 +1,10 @@
 <?php
 
-namespace Tym17\AdminSample\Controller\Adminhtml\SampleTwo;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\SampleTwo;
 
 use \GuzzleHttp\Client;
 use Magento\Store\Model\StoreManagerInterface;
-use Tym17\AdminSample\Api\Data\AdminSampleInterface;
+use Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
 use Magento\Framework\App\Action\Context;
 
 class Test extends \Magento\Framework\App\Action\Action
@@ -15,10 +15,10 @@ class Test extends \Magento\Framework\App\Action\Action
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManagerInterface,
-        AdminSampleInterface $adminSampleInterface
+        EasyTranslationPlatformInterface $easyTranslationPlatformInterface
     )
     {
-        $this->_adminManager = $adminSampleInterface;
+        $this->_easyTranslationModel = $easyTranslationPlatformInterface;
         $this->_storeManager = $storeManagerInterface;
         return parent::__construct($context);
     }
@@ -27,7 +27,7 @@ class Test extends \Magento\Framework\App\Action\Action
     {
         $a = [];
 
-        foreach($this->_adminManager->getLocaleOptions() as $key => $value)
+        foreach($this->_easyTranslationModel->getLocaleOptions() as $key => $value)
         {
             $a[$value['value']] = $value['label'];
         }

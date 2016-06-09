@@ -1,5 +1,5 @@
 <?php
-namespace Tym17\AdminSample\Controller\Adminhtml\SampleTwo;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\SampleTwo;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
@@ -40,14 +40,14 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \MAgento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
-        $resultPage->setActiveMenu('Tym17_AdminSample::sampleTwo');
+        $resultPage->setActiveMenu('Straker_EasyTranslations::sampleTwo');
         /*$resultPage->addBreadcrumb(__('System'), __('System'));  This also changes page title in tab name
         $resultPage->addBreadcrumb(__('SampleTwo'), __('SampleTwo'));*/
         $resultPage->getConfig()->getTitle()->prepend(__('SampleTwo Title')); // Changing the page title
         // You will notice that this block 'Two' is defined in the template file
         $resultPage->getLayout()->getBlock('Two')->setSampleText('This text is passed'); // Here we use Magento2's Magic getsetters
         // Retrieving config value and passing it to template
-        $cfg_text = $this->scopeConfig->getValue('adminsample/txt/textsample');
+        $cfg_text = $this->scopeConfig->getValue('easytranslationplatform/txt/textsample');
         $resultPage->getLayout()->getBlock('Two')->setCfgSample($cfg_text);
         return $resultPage;
     }

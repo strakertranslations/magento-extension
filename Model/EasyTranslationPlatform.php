@@ -1,12 +1,12 @@
 <?php
 
-namespace Tym17\AdminSample\Model;
+namespace Straker\EasyTranslationPlatform\Model;
 
-use Tym17\AdminSample\Api\Data\AdminSampleInterface;
-use Tym17\AdminSample\Helper\ConfigHelper;
+use Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Magento\Framework\Locale\ListsInterface;
 
-class AdminSample extends \Magento\Framework\Model\AbstractModel implements AdminSampleInterface
+class EasyTranslationPlatform extends \Magento\Framework\Model\AbstractModel implements EasyTranslationPlatformInterface
 {
     /** @var  ConfigHelper */
     protected $_config;

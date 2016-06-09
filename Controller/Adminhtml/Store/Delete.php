@@ -1,5 +1,5 @@
 <?php
-namespace Tym17\AdminSample\Controller\Adminhtml\Store;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Store;
 
 use Magento\Backend\App\Action;
 
