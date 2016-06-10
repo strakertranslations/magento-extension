@@ -8,5 +8,6 @@
         <add id="Straker_EasyTranslationPlatform::sampleFour" title="Accounts" module="Straker_EasyTranslationPlatform" sortOrder="10" parent="Straker_EasyTranslationPlatform::customMenu" action="EasyTranslationPlatform/sampleFour" resource="Straker_EasyTranslationPlatform::sampleFour"/>
         <add id="Straker_EasyTranslationPlatform::sampleFive" title="Create Store View" module="Straker_EasyTranslationPlatform" sortOrder="10" parent="Straker_EasyTranslationPlatform::customMenu" action="EasyTranslationPlatform/store" resource="Straker_EasyTranslationPlatform::store"/>
         <add id="Straker_EasyTranslationPlatform::sampleSix" title="Terms &amp; Conditions" module="Straker_EasyTranslationPlatform" sortOrder="10" parent="Straker_EasyTranslationPlatform::customMenu" action="EasyTranslationPlatform/sampleSix" resource="Straker_EasyTranslationPlatform::sampleSix"/>
+        <add id="Straker_EasyTranslationPlatform::test" title="Test" module="Straker_EasyTranslationPlatform" sortOrder="10" parent="Straker_EasyTranslationPlatform::customMenu" action="EasyTranslationPlatform/test" resource="Straker_EasyTranslationPlatform::test"/>
     </menu>
 </config>

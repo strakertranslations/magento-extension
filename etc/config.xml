@@ -1,28 +1,17 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
     <default>
-        <easytranslationplatform> <!-- Note that this, is section id from "etc/adminhtml/system.xml" -->
-            <txt> <!-- And this, group id -->
-                <textsample>YesThisIsText</textsample>
-                <heading>Hello_Rakesh</heading>
-            </txt>
-            <yn>
-                <ynsample>0</ynsample>
-            </yn>
-        </easytranslationplatform>
-    </default>
-    <default>
         <straker>
             <api_url>
-                <register>https://magento-api.strakertranslations.com/v1/register</register>
-                <languages>https://magento-api.strakertranslations.com/v1/languages</languages>
-                <translate>https://magento-api.strakertranslations.com/v1/translate</translate>
-                <quote>https://magento-api.strakertranslations.com/v1/quote</quote>
-                <payment>https://magento-api.strakertranslations.com/v1/payment</payment>
-                <countries>https://magento-api.strakertranslations.com/v1/countries</countries>
-                <payment>https://magento-api.strakertranslations.com/v1/payment</payment>
+                <register>https://dev-app.strakertranslations.com/v1/ta4ma/register</register>
+                <languages>https://dev-app.strakertranslations.com/v1/ta4ma/languages</languages>
+                <translate>https://dev-app.strakertranslations.com/v1/ta4ma/translate</translate>
+                <quote>https://dev-app.strakertranslations.com/v1/ta4ma/quote</quote>
+                <payment>https://dev-app.strakertranslations.com/v1/ta4ma/payment</payment>
+                <countries>https://dev-app.strakertranslations.com/v1/ta4ma/countries</countries>
+                <payment>https://dev-app.strakertranslations.com/v1/ta4ma/payment</payment>
                 <payment_page>https://myaccount.strakertranslations.com/o/?action=api.quote</payment_page>
-                <support>https://magento-api.strakertranslations.com/v1/support</support>
+                <support>https://dev-app.strakertranslations.com/v1/ta4ma/support</support>
             </api_url>
         </straker>
     </default>

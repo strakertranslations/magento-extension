@@ -1,4 +1,5 @@
 <?php
+
 namespace Straker\EasyTranslationPlatform\Helper;
 
 class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
@@ -8,6 +9,6 @@ class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfig($req)
     {
-        return $this->scopeConfig->getValue('easytranslationplatform/' . $req);
+        return $this->scopeConfig->getValue('straker'.$req);
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\SampleTwo;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
 
 use \GuzzleHttp\Client;
 use Magento\Store\Model\StoreManagerInterface;
 use Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Magento\Framework\App\Action\Context;
 
 class Index extends \Magento\Framework\App\Action\Action
@@ -15,26 +16,31 @@ class Index extends \Magento\Framework\App\Action\Action
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManagerInterface,
-        EasyTranslationPlatformInterface $easyTranslationPlatformInterface
+        EasyTranslationPlatformInterface $easyTranslationPlatformInterface,
+        StrakerAPIInterface $strakerAPIInterface
     )
     {
         $this->_easyTranslationModel = $easyTranslationPlatformInterface;
         $this->_storeManager = $storeManagerInterface;
+        $this->_strakerAPI = $strakerAPIInterface;
         return parent::__construct($context);
     }
 
     public function execute()
     {
-        $a = [];
+        $aCountries = [];
 
-        foreach($this->_easyTranslationModel->getLocaleOptions() as $key => $value)
+        foreach($this->_strakerAPI->getCountries() as $key => $value)
         {
-            $a[$value['value']] = $value['label'];
+            $aCountries[$value->code] = $value->name;
         }
 
         echo '<pre>';
-        print_r($a);
+
+       print_r($aCountries);
+
         echo '</pre>';
+
         exit;
     }
 }

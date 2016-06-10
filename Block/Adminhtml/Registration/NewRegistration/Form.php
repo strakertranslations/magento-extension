@@ -2,7 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Registration\NewRegistration;
 
-use Straker\EasyTranslationPlatform\Api\Data\RegistrationInterface;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
@@ -38,12 +38,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         Config $wysiwygConfig,
         Store $systemStore,
         StoreManagerInterface $storeManager,
-        RegistrationInterface $registrationInterface
+        StrakerAPIInterface $strakerAPIInterface
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_systemStore = $systemStore;
         $this->_storeManager = $storeManager;
-        $this->_registrationInterface = $registrationInterface;
+        $this->_strakerAPIinterface = $strakerAPIInterface;
         $this->_formFactory = $formFactory;
         $this->_Registry = $registry;
 
@@ -184,9 +184,11 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     ){
         $aCountries = [];
 
-        foreach($this->_registrationInterface->getCountryOptions() as $key => $value)
+        $aCountries[NULL] = 'Select-A-Country';
+
+        foreach($this->_strakerAPIinterface->getCountries() as $key => $value)
         {
-            $aCountries[$value['value']] = $value['label'];
+            $aCountries[$value->code] = $value->name;
         }
 
         return $aCountries;
