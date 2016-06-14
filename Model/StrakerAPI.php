@@ -12,6 +12,8 @@ use Magento\Framework\HTTP\ZendClientFactory;
 
 use Magento\Store\Model\StoreManagerInterface;
 
+use Magento\Config\Model\ResourceModel\Config;
+
 class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements StrakerAPIInterface
 {
 
@@ -38,13 +40,15 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     protected $_options = [];
 
     public function __construct(
-        ConfigHelper $config,
+        ConfigHelper $configHelper,
+        Config $configModel,
         ZendClientFactory $httpClient,
         Logger $logger,
         StoreManagerInterface $storeManagerInterface
     )
     {
-        $this->_config = $config;
+        $this->_configHelper = $configHelper;
+        $this->_configModel = $configModel;
         $this->_httpClient = $httpClient;
         $this->_logger = $logger;
         $this->_storeManager = $storeManagerInterface;
@@ -166,7 +170,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
     protected  function _getRegisterUrl(){
 
-        return $this->_config->getConfig('/api_url/register');
+        return $this->_configHelper->getConfig('/api_url/register');
     }
 
     protected  function _getLanguagesUrl(){
@@ -175,7 +179,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
     protected  function _getCountiresUrl(){
 
-        return $this->_config->getConfig('/api_url/countries');
+        return $this->_configHelper->getConfig('/api_url/countries');
     }
 
     protected  function _getTranslateUrl(){
@@ -237,21 +241,12 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     }
 
     public function saveAppKey($appKey){
-        //Default Scope
-        if ($this->_storeId === 0) {
-            Mage::getModel('core/config')->saveConfig('straker/general/application_key', $appKey);
-        }
-        else {
-            Mage::getModel('core/config')->saveConfig('straker/general/application_key', $appKey, 'website', $this->_storeId);
-        }
+
+        return $this->_configModel->SaveConfig('straker/general/application_key',$appKey,'default',$this->_storeManager->getWebsite()->getId());
     }
 
     public function saveAccessToken($accessToken){
-        if ($this->_storeId === 0) {
-            Mage::getModel('core/config')->saveConfig('straker/general/access_token', $accessToken);
-        }
-        else {
-            Mage::getModel('core/config')->saveConfig('straker/general/access_token', $accessToken, 'website', $this->_storeId);
-        }
+
+        return $this->_configModel->SaveConfig('straker/general/access_token',$accessToken,'default',$this->_storeManager->getWebsite()->getId());
     }
 }
