@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Store\Edit;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Store\NewStore;
 
 use Staker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
 

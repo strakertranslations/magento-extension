@@ -2,7 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Store;
 
-class Edit extends \Magento\Backend\Block\Widget\Form\Container
+class NewStore extends \Magento\Backend\Block\Widget\Form\Container
 {
     /**
      * Core registry
@@ -10,6 +10,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      * @var \Magento\Framework\Registry
      */
     protected $_coreRegistry = null;
+
+    protected $_mode = 'newStore';
 
     /**
      * @param \Magento\Backend\Block\Widget\Context $context
