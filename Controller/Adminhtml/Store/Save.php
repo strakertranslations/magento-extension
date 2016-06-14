@@ -70,11 +70,11 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->_config->SaveConfig('general/locale/code',$data['general_locale_code'],'stores',$new_store->getId());
 
-                $this->messageManager->addSuccess(__('Store Saved.'));
+                $this->messageManager->addSuccess(__('Store Saved'));
 
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
 
-                return $resultRedirect->setPath('/');
+                return $resultRedirect->setPath('*/*/');
 
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
