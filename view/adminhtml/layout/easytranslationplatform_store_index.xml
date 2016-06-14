@@ -4,6 +4,9 @@
         <link src="Straker_EasyTranslationPlatform::test.js"/>
     </head>
     <body>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+        </referenceContainer>
         <referenceContainer name="content">
             <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Store\Edit" name="newstore_edit"/>
         </referenceContainer>
