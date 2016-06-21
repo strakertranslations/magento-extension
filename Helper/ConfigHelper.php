@@ -9,6 +9,11 @@ class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getConfig($req)
     {
-        return $this->scopeConfig->getValue('straker'.$req);
+        return $this->scopeConfig->getValue('straker' . $req);
+    }
+
+    public function getAccessToken()
+    {
+        return $this->scopeConfig->getValue('straker/general/access_token', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) ? $this->scopeConfig->getValue('straker/general/access_token', \Magento\Store\Model\ScopeInterface::SCOPE_STORE) : false ;
     }
 }

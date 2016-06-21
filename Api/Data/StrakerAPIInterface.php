@@ -7,6 +7,8 @@ interface StrakerAPIInterface
 
     public function getCountries();
 
+    public function getLanguages();
+
     public function callRegister($data);
 
     public function saveAppKey($appKey);

@@ -15,6 +15,8 @@ class Index extends \Magento\Backend\App\Action
 
     protected $scopeConfig;
 
+    public $resultRedirectFactory;
+
     /**
      * @param Action\Context $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -39,6 +41,7 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultPage = $this->resultPageFactory->create();
+
         $resultPage->getConfig()->getTitle()->prepend(__('New Language Store View'));
 
         return $resultPage;

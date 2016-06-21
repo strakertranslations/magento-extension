@@ -47,8 +47,12 @@ class Save extends \Magento\Backend\App\Action
 
         $this->_StrakerAPI->saveAppKey($oRegistration->application_key);
 
-        echo 'Success';
+        $url = $this->_url->getUrl("EasyTranslationPlatform/Store/Index/");
 
-        exit;
+        $resultRedirect = $this->resultRedirectFactory->create();
+
+        $resultRedirect->setUrl($url);
+
+        return $resultRedirect;
     }
 }

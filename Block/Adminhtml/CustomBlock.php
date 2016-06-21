@@ -1,59 +1,19 @@
 <?php
+
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml;
 
-use Magento\Backend\Block\Template;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Magento\Store\Model\StoreManagerInterface;
-use Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
+use Magento\Framework\View\Element\Template;
 
-class CustomBlock extends Template
+class Test1 extends Template
 {
-    /**
-     * @var \Straker\EasyTranslationPlatform\Helper\ConfigHelper
-     */
-    protected $_config;
-
-    protected $_easyTranslationModel;
-
-    protected  $_storeManager;
-
-    /**
-    * @param Context $context
-    * @param array $data
-    */
-    public function __construct(
-        Template\Context $context,
-        EasyTranslationPlatformInterface $easyTranslationPlatformInterface,
-        ConfigHelper $config,
-        StoreManagerInterface $storeManager,
-        array $data = []
-    ) {
-        parent::__construct($context, $data);
-        $this->_config = $config;
-        $this->_easyTranslationModel = $easyTranslationPlatformInterface;
-        $this->_storeManager = $storeManager;
-    }
-
-    /**
-     * @return string
-     */
-    public function greet()
+    protected function _prepareLayout()
     {
-        return $this->_easyTranslationModel->getName();
+        $this->setMessage('Hello Again World');
+        $this->setName($this->getRequest()->getParam('name'));
     }
 
-    public function getSampleText()
+    public function getGoodbyeMessage()
     {
-        return $this->_easyTranslationModel->getSampleText();
+        return 'Goodbye World';
     }
-
-    public function getHeading()
-    {
-        return $this->_easyTranslationModel->getHeading();
-    }
-
-    public function getWebsites() {
-        return false;
-    }
-
 }

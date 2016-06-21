@@ -174,7 +174,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     }
 
     protected  function _getLanguagesUrl(){
-        return Mage::getStoreConfig('straker/api_url/languages');
+        return $this->_configHelper->getConfig('/api_url/languages');
     }
 
     protected  function _getCountiresUrl(){

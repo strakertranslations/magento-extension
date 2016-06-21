@@ -1,0 +1,58 @@
+
+            <h2><?php echo __('Source') ?></h2>
+            <p><?php echo __('Where would you like us to take your content from?') ?></p>
+            <div class="input-box"><label for="source"><?php echo __('Source Store View:') ?></label>
+                <select name="source" class="required-entry _required select admin__control-select">
+                    <option value=""><?php echo __('Pick a store view') ?></option>
+                    <?php foreach ($block->getWebsites() as $website): ?>
+                        <?php $showWebsite = false; ?>
+                        <?php foreach ($website->getGroups() as $group): ?>
+                            <?php $showGroup = false; ?>
+                            <?php foreach ($group->getStores() as $store): ?>
+                                <?php if ($showWebsite == false): ?>
+                                    <?php $showWebsite = true; ?>
+                                    <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                                <?php endif; ?>
+                                <?php if ($showGroup == false): ?>
+                                    <?php $showGroup = true; ?>
+                                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                <?php endif; ?>
+                                <option value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                            <?php endforeach; ?>
+                            <?php if ($showGroup): ?>
+                                </optgroup>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+            <div class="input-box"><label for="from"><?php echo __('Source Language:') ?></label>
+                <select name="from" id="language-from" class="required-entry _required select admin__control-select">
+                    <option value="">Select A Language</option>
+                    <?php foreach($block->_getOptions() as $languages):?>
+                        <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        <div class="down-arrow"></div>
+        <div class="store-select-container">
+            <h2><?php echo __('Destination Store View') ?></h2>
+            <p><?php echo __('Where would you like us to put the translated content?') ?></p>
+            <div class="input-box"><label for="destination"><?php echo __('Destination Store:') ?></label>
+                <select name="destination" disabled class="disabled">
+                    <option value="">
+<!--                        --><?php //echo Mage::getModel('core/store')->load($this->getSetupStoreId())->getName() ?>
+                    </option>
+                </select>
+                <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+            </div>
+            <div class="input-box">
+                <label for="to"><?php echo __('Target Language:') ?></label>
+                <select name="to" id="language-to" class="required-entry _required select admin__control-select">
+                    <option value="">Select A Language</option>
+                    <?php foreach($block->_getOptions() as $languages):?>
+                        <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>

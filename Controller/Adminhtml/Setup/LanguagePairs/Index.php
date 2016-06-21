@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\LanguagePairs;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
@@ -23,6 +23,9 @@ class Index extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $page_object = $this->_pageFactory->create();
+
+        $page_object->getConfig()->getTitle()->prepend(__('Straker Translations'));
+
         return $page_object;
 
     }

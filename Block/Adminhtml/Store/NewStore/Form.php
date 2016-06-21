@@ -2,8 +2,13 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Store\NewStore;
 
-use Staker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface;
-
+use Staker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Data\FormFactory;
+use Magento\Cms\Model\Wysiwyg\Config;
+use Magento\Store\Model\System\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -31,12 +36,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         \Magento\Framework\Data\FormFactory $formFactory,
         \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig,
         \Magento\Store\Model\System\Store $systemStore,
-        \Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface $easyTranslationPlatformInterface,
+        \Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface $strakerAPIInterfaceInterface,
         \Magento\Store\Model\StoreManagerInterface $storeManager
     ) {
         $this->_wysiwygConfig = $wysiwygConfig;
         $this->_systemStore = $systemStore;
-        $this->_easyTranslation = $easyTranslationPlatformInterface;
+        $this->_strakerAPI = $strakerAPIInterfaceInterface;
         $this->_storeManager = $storeManager;
         parent::__construct($context, $registry, $formFactory);
     }
@@ -97,7 +102,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-//        $form->setValues($model->getData());
+//       $form->setValues($model->getData());
         $form->setUseContainer(true);
         $this->setForm($form);
 
@@ -106,14 +111,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     protected function _getOptions(
     ){
-        $aLocales = [];
+        $aCountries = [];
 
-        foreach($this->_easyTranslation->getLocaleOptions() as $key => $value)
+        foreach($this->_strakerAPI->getCountries() as $key => $value)
         {
-            $aLocales[$value['value']] = $value['label'];
+            $aCountries[$value->code] = $value->name;
         }
 
-        return $aLocales;
+        return $aCountries;
     }
 
 }

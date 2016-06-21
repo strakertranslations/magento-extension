@@ -1,0 +1,58 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var $block \Magento\Backend\Block\Widget\Form\Container */
+?>
+
+<?php /* @escapeNotVerified */ echo $block->getFormInitScripts() ?>
+<?php if ($block->getButtonsHtml('header')): ?>
+    <div class="page-form-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
+<?php endif; ?>
+<div class="content-header">
+    <h3><?php echo __('Create New Job') ?></h3>
+</div>
+<div class="straker-main-container">
+    <h4><?php echo __('Select your Destination Store View') ?></h4>
+    <p><?php echo __('Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each Store View.') ?></p>
+    <form id="edit_form" action="<?php echo $block->getFormActionUrl() ?>" >
+        <?php echo $block->getBlockHtml('formkey')?>
+        <?php echo $block->getFormHtml() ?>
+    </form>
+</div>
+
+
+<?php if ($block->hasFooterButtons()): ?>
+    <div class="content-footer">
+        <p class="form-buttons"><?php echo $block->getButtonsHtml('footer') ?></p>
+    </div>
+<?php endif; ?>
+<script>
+    require([
+        'jquery',
+        'mage/backend/form',
+        'mage/backend/validation'
+    ], function($){
+
+        $('#edit_form').form()
+            .validation({
+                validationUrl: '<?php /* @escapeNotVerified */ echo $block->getValidationUrl() ?>',
+                highlight: function(element) {
+                    var detailsElement = $(element).closest('details');
+                    if (detailsElement.length && detailsElement.is('.details')) {
+                        var summaryElement = detailsElement.find('summary');
+                        if (summaryElement.length && summaryElement.attr('aria-expanded') === "false") {
+                            summaryElement.trigger('click');
+                        }
+                    }
+                    $(element).trigger('highlight.validate');
+                }
+            });
+
+    });
+</script>
+<?php /* @escapeNotVerified */ echo $block->getFormScripts() ?>
