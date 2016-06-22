@@ -3,7 +3,7 @@
 namespace Straker\EasyTranslationPlatform\Plugin\Registration;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Straker\EasyTranslationPlatform\Controller\Adminhtml\Store\Index;
+use Straker\EasyTranslationPlatform\Controller\Adminhtml\NewJob\Index;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Backend\Model\View\Factory;
@@ -28,7 +28,7 @@ class Plugin
     {
         if(!$this->_configHelper->getAccessToken()) {
 
-            $url = $this->_url->getUrl("EasyTranslationPlatform/Registration/Index/");
+            $url = $this->_url->getUrl("EasyTranslationPlatform/Setup_registration/Index/");
 
             $resultRedirect = $subject->resultRedirectFactory->create();
 

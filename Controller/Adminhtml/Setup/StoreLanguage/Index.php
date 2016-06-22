@@ -1,12 +1,12 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Store;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\StoreLanguage;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
-class Index extends \Magento\Backend\App\Action
+class Index extends \Magento\Framework\App\Action\Action
 {
     /**
      * @var \Magento\Framework\View\Result\PageFactory
@@ -40,6 +40,7 @@ class Index extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+
         $resultPage = $this->resultPageFactory->create();
 
         $resultPage->getConfig()->getTitle()->prepend(__('New Language Store View'));

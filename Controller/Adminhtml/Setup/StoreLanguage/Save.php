@@ -1,27 +1,23 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Store;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\StoreLanguage;
 
-use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\TestFramework\ErrorLog\Logger;
 use Magento\Framework\Locale\ListsInterface;
 use Magento\Config\Model\ResourceModel\Config;
+use Magento\Store\Model\StoreManagerInterface;
 
 class Save extends \Magento\Backend\App\Action
 {
 
-    /**
-     * @param Action\Context $context
-     */
     public function __construct(
-        Action\Context $context,
-        ListsInterface $listInterface,
+        Context $context,
         Config $config,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager
     )
     {
         $this->_storeManager = $storeManager;
-        $this->_listInterface = $listInterface;
         $this->_config = $config;
 
         parent::__construct($context);
@@ -43,8 +39,6 @@ class Save extends \Magento\Backend\App\Action
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
-
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
 
         $resultRedirect = $this->resultRedirectFactory->create();
 
@@ -70,11 +64,10 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->_config->SaveConfig('general/locale/code',$data['general_locale_code'],'stores',$new_store->getId());
 
-                $this->messageManager->addSuccess(__('Store Saved'));
+                $resultRedirect->setUrl($this->_url->getUrl("EasyTranslationPlatform/Setup_LanguagePairs/Index/"));
 
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                return $resultRedirect;
 
-                return $resultRedirect->setPath('*/*/');
 
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
@@ -91,7 +84,7 @@ class Save extends \Magento\Backend\App\Action
 
             $this->_getSession()->setFormData($data);
 
-            return $resultRedirect->setPath('*/*/edit', ['post_id' => $this->getRequest()->getParam('post_id')]);
+            return $resultRedirect->setPath('*/*/edit');
         }
 
         return $resultRedirect->setPath('*/*/');

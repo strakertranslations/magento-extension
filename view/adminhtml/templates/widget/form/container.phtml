@@ -13,15 +13,12 @@
 <?php if ($block->getButtonsHtml('header')): ?>
     <div class="page-form-actions" <?php /* @escapeNotVerified */ echo $block->getUiId('content-header') ?>><?php echo $block->getButtonsHtml('header') ?></div>
 <?php endif; ?>
-<div class="content-header">
-    <h3><?php echo __('Create New Job') ?></h3>
-</div>
-<div class="straker-main-container">
-    <h4><?php echo __('Select your Destination Store View') ?></h4>
-    <p><?php echo __('Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each Store View.') ?></p>
+<div class="entry-edit form-inline">
     <form id="edit_form" action="<?php echo $block->getFormActionUrl() ?>" >
-        <?php echo $block->getBlockHtml('formkey')?>
-        <?php echo $block->getFormHtml() ?>
+        <fieldset class="fieldset admin__fieldset fieldset-wide">
+            <?php echo $block->getBlockHtml('formkey')?>
+            <?php echo $block->getFormHtml() ?>
+        </fieldset>
     </form>
 </div>
 

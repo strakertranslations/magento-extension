@@ -4,8 +4,11 @@
         <link src="Straker_EasyTranslationPlatform::test.js"/>
     </head>
     <body>
+        <referenceContainer name="page.messages">
+            <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+        </referenceContainer>
         <referenceContainer name="content">
-            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\LanguagePairs\FormContainer" name="languagepair_container"/>
+            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\StoreLanguage\FormContainer" name="storelanguage_container"/>
         </referenceContainer>
     </body>
 </page>

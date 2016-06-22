@@ -1,12 +1,9 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Registration;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\Registration;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
-use Magento\Backend\App\Action;
-use Magento\TestFramework\ErrorLog\Logger;
-use Magento\Framework\Locale\ListsInterface;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Action\Context;
 
@@ -47,7 +44,7 @@ class Save extends \Magento\Backend\App\Action
 
         $this->_StrakerAPI->saveAppKey($oRegistration->application_key);
 
-        $url = $this->_url->getUrl("EasyTranslationPlatform/Store/Index/");
+        $url = $this->_url->getUrl("EasyTranslationPlatform/Setup_StoreLanguage/Index/");
 
         $resultRedirect = $this->resultRedirectFactory->create();
 

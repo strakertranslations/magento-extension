@@ -1,47 +1,26 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Registration\NewRegistration;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\Registration\Form;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
-use Magento\Cms\Model\Wysiwyg\Config;
 use Magento\Store\Model\System\Store;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
-    /**
-     * @var \Magento\Cms\Model\Wysiwyg\Config
-     */
-    protected $_wysiwygConfig;
 
-    /**
-     * @var \Magento\Store\Model\System\Store
-     */
-    protected $_systemStore;
-
-    /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Data\FormFactory $formFactory
-     * @param \Magento\Cms\Model\Wysiwyg\Config $wysiwygConfig
-     * @param \Magento\Store\Model\System\Store $systemStore
-     * @param array $data
-     */
     public function __construct(
         Context $context,
         Registry $registry,
         FormFactory $formFactory,
-        Config $wysiwygConfig,
-        Store $systemStore,
         StoreManagerInterface $storeManager,
         StrakerAPIInterface $strakerAPIInterface
     ) {
-        $this->_wysiwygConfig = $wysiwygConfig;
-        $this->_systemStore = $systemStore;
+
         $this->_storeManager = $storeManager;
         $this->_strakerAPIinterface = $strakerAPIInterface;
         $this->_formFactory = $formFactory;
@@ -50,24 +29,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         parent::__construct($context,$registry,$formFactory);
     }
 
-    /**
-     * Init form
-     *
-     * @return void
-     */
+
     protected function _construct()
     {
         parent::_construct();
     }
 
-    /**
-     * Prepare form
-     *
-     * @return $this
-     */
     protected function _prepareForm()
     {
-        $model = $this->_coreRegistry->registry('test_item');
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(
@@ -163,14 +132,12 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset->addField(
             'terms',
-            'checkboxes',
+            'checkbox',
             [
                 'label' => __(' '),
                 'name' => 'terms',
-                'values' => [
-                    ['value' => '1','label' => 'I have read and agreed to the <a href="https://www.strakertranslations.com/terms-conditions/"> terms and conditions</a>']
-                ],
-                'required' => true
+                'after_element_html' => '<span>&nbsp;&nbsp;I have read and agreed to the</span><a href="https://www.strakertranslations.com/terms-conditions/"> terms and conditions</a>',
+                'class'=>'checkbox required'
             ]
         );
 
@@ -184,7 +151,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     ){
         $aCountries = [];
 
-        $aCountries[NULL] = 'Select-A-Country';
+        $aCountries[NULL] = 'Select A Country';
 
         foreach($this->_strakerAPIinterface->getCountries() as $key => $value)
         {
