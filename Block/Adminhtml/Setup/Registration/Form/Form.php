@@ -9,6 +9,7 @@ use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
 use Magento\Store\Model\System\Store;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Backend\Model\Session;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -18,15 +19,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         Registry $registry,
         FormFactory $formFactory,
         StoreManagerInterface $storeManager,
-        StrakerAPIInterface $strakerAPIInterface
+        StrakerAPIInterface $strakerAPIInterface,
+        Session $session,
+        array $data = []
     ) {
 
         $this->_storeManager = $storeManager;
         $this->_strakerAPIinterface = $strakerAPIInterface;
         $this->_formFactory = $formFactory;
         $this->_Registry = $registry;
+        $this->session = $session;
 
-        parent::__construct($context,$registry,$formFactory);
+        parent::__construct($context,$registry,$formFactory,$data);
     }
 
 
@@ -142,6 +146,9 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         );
 
         $form->setUseContainer(true);
+
+        $form->setValues($this->session->getData('form_data'));
+
         $this->setForm($form);
 
         return parent::_prepareForm();

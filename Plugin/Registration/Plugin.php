@@ -26,6 +26,7 @@ class Plugin
         RequestInterface $request
     )
     {
+
         if(!$this->_configHelper->getAccessToken()) {
 
             $url = $this->_url->getUrl("EasyTranslationPlatform/Setup_registration/Index/");

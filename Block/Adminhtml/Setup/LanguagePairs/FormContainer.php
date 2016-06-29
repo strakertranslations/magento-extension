@@ -15,7 +15,7 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
     {
 
         parent::_construct();
-
+        
         $this->addButton(
             'back',
             [
@@ -23,11 +23,6 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
                 'onclick' => 'setLocation(\'' . $this->getBackUrl() . '\')',
                 'class' => 'back'
             ],
-            -1
-        );
-        $this->addButton(
-            'reset',
-            ['label' => __('Reset'), 'onclick' => 'setLocation(window.location.href)', 'class' => 'reset'],
             -1
         );
 
@@ -76,11 +71,8 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
 
     public function getFormHtml()
     {
-        //$this->getChildBlock('form')->setAttribute('hello','test');
 
         return $this->getChildHtml('form');
-
-        //return $this->getLayout()->createBlock('Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\LanguagePairs\Form\Form')->setTemplate('Straker_EasyTranslationPlatform::setup/languagepairs.phtml')->toHtml();
 
     }
 

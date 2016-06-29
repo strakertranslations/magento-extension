@@ -44,25 +44,11 @@ class Save extends \Magento\Backend\App\Action
 
         if ($data) {
 
-            $websiteFactory = $this->_objectManager->get('\Magento\Store\Model\storeFactory');
-
-            $new_store = $websiteFactory->create();
-
-            $new_store->setName($data['name']);
-
-            $new_store->setCode(strtolower(str_replace('_','',$data['general_locale_code'])));
-
-            $new_store->setisActive('0');
-
-            $new_store->setWebsiteId($this->_storeManager->getWebsite()->getId());
-
-            $new_store->setGroupId($this->_storeManager->getGroup()->getId());
-
             try {
 
-                $new_store->save();
+                $id = $this->_storeManager->getStore()->getId();
 
-                $this->_config->SaveConfig('general/locale/code',$data['general_locale_code'],'stores',$new_store->getId());
+                $this->_config->SaveConfig('straker/general/destination_store',$data['destination_store'],'stores',$id);
 
                 $resultRedirect->setUrl($this->_url->getUrl("EasyTranslationPlatform/Setup_LanguagePairs/Index/"));
 

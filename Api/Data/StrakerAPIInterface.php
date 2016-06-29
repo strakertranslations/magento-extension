@@ -11,8 +11,4 @@ interface StrakerAPIInterface
 
     public function callRegister($data);
 
-    public function saveAppKey($appKey);
-
-    public function saveAccessToken($accessToken);
-
 }

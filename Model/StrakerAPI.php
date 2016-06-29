@@ -3,15 +3,12 @@
 namespace Straker\EasyTranslationPlatform\Model;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
-
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\Error;
 
 use Magento\Framework\HTTP\ZendClientFactory;
-
 use Magento\Store\Model\StoreManagerInterface;
-
 use Magento\Config\Model\ResourceModel\Config;
 
 class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements StrakerAPIInterface
@@ -44,7 +41,8 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         Config $configModel,
         ZendClientFactory $httpClient,
         Logger $logger,
-        StoreManagerInterface $storeManagerInterface
+        StoreManagerInterface $storeManagerInterface,
+        Error $error
     )
     {
         $this->_configHelper = $configHelper;
@@ -52,6 +50,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         $this->_httpClient = $httpClient;
         $this->_logger = $logger;
         $this->_storeManager = $storeManagerInterface;
+        $this->_errorManager = $error;
 //        $this->_storeId = ($this->getStore()) ? $this->getStore() : 0;
 //        $this->_init('strakertranslations_easytranslationplatform/api');
 //        $this->_headers[] = 'Authorization: Bearer '. Mage::getStoreConfig('straker/general/access_token', $this->_storeId);
@@ -99,15 +98,11 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
             $debugData['response'] = $response;
 
-            $this->_logger->debug('response',$debugData);
-
             return json_decode($response);
 
         } catch (Exception $e) {
 
             $debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
-
-            $this->_logger->debug('error',$debugData);
 
             throw $e;
         }
@@ -131,12 +126,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         $this->_options = $options;
         return $this;
     }
-
-    protected  function _debug($debugData){
-
-        // to be added
-
-    }
+    
 
     protected function _isCallSuccessful($response)
     {
@@ -200,7 +190,21 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
     public function callRegister($data){
 
-        return $this->_call($this->_getRegisterUrl(), 'post', $data);
+        try{
+
+            return $this->_call($this->_getRegisterUrl(), 'post', $data);
+
+        }catch (\Exception $e){
+
+            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e);
+
+            $this->_errorManager->_errorMessage = 'There was an error registering your details';
+
+            $this->_errorManager->_error = true;
+
+            return $this->_errorManager;
+        }
+
     }
 
     public function callTranslate($data){
@@ -240,13 +244,4 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         return $result->languages ? $result->languages : false;
     }
 
-    public function saveAppKey($appKey){
-
-        return $this->_configModel->SaveConfig('straker/general/application_key',$appKey,'default',$this->_storeManager->getWebsite()->getId());
-    }
-
-    public function saveAccessToken($accessToken){
-
-        return $this->_configModel->SaveConfig('straker/general/access_token',$accessToken,'default',$this->_storeManager->getWebsite()->getId());
-    }
 }

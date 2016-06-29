@@ -7,17 +7,18 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\System\Store;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
 
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Data\FormFactory $formFactory,
-        \Magento\Store\Model\System\Store $systemStore,
-        \Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface $strakerAPIInterfaceInterface,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        Context $context,
+        Registry $registry,
+        FormFactory $formFactory,
+        Store $systemStore,
+        StrakerAPIInterface $strakerAPIInterfaceInterface,
+        StoreManagerInterface $storeManager
     ) {
 
         $this->_systemStore = $systemStore;
@@ -35,7 +36,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     protected function _prepareForm()
     {
-        /** @var \Magento\Framework\Data\Form $form */
+
         $form = $this->_formFactory->create(
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
@@ -44,37 +45,36 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset = $form->addFieldset(
             'base_fieldset',
-            ['legend' => __('Select Your Language'), 'class' => 'fieldset-wide']
+            ['legend' => __('Select your Destination Store View'), 'class' => 'fieldset-wide']
         );
 
-        $fieldset->addField(
-            'name',
-            'hidden',
-            [
-                'name' => 'name',
-                'label' => __('Name'),
-                'title' => __('Name'),
-                'required' => true
-            ]
-        );
 
-        $fieldset->addField(
-            'general_locale_code',
+        $field = $fieldset->addField(
+            'destination',
             'select',
             [
-                'label' => __('Language'),
-                'title' => __('Locale'),
-                'name' => 'general_locale_code',
-                'required' => true,
-                'options' => $this->_getOptions()
+                'name' 	=> 'destination',
+                'title'	=> __('destination')
             ]
         );
+
+        $renderer = $this->getLayout()->createBlock(
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\Sourcefield'
+        );
+
+        $field->setRenderer($renderer);
+
 
 //       $form->setValues($model->getData());
         $form->setUseContainer(true);
         $this->setForm($form);
 
         return parent::_prepareForm();
+    }
+
+    public function getWebsites() {
+
+        return $this->_storeManager->getWebsites();
     }
 
     protected function _getOptions(

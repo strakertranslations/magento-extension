@@ -5,6 +5,9 @@
     </head>
     <body>
         <referenceContainer name="content">
+            <referenceContainer name="page.messages">
+                <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+            </referenceContainer>
             <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\LanguagePairs\FormContainer" name="languagepair_container"/>
         </referenceContainer>
     </body>

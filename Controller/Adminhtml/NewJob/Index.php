@@ -22,8 +22,12 @@ class Index extends \Magento\Framework\App\Action\Action
         return parent::__construct($context);
     }
 
+
     public function execute()
     {
+
+        $data = $this->getRequest()->getParams();
+
         $page_object = $this->_pageFactory->create();
 
         $page_object->getConfig()->getTitle()->prepend(__('Straker Translations'));

@@ -2,7 +2,8 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\LanguagePairs;
 
-use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
+use Straker\EasyTranslationPlatform\Model\Error;
 
 use Magento\Framework\App\Action\Context;
 
@@ -11,37 +12,71 @@ class Save extends \Magento\Backend\App\Action
 
     public function __construct(
         Context $context,
-        StrakerAPIInterface $strakerAPIInterface
+        SetupInterface $setupInterface,
+        Error $error
     )
     {
 
         parent::__construct($context);
 
-        $this->_StrakerAPI = $strakerAPIInterface;
+        $this->_setup = $setupInterface;
+        $this->_errorManager = $error;
     }
 
 
     public function execute()
     {
 
-        echo '<pre>';
-        print_r($this->getRequest()->getParams());
-        echo '</pre>';
+        $data = $this->getRequest()->getParams();
 
-        exit;
+        $resultRedirect = $this->resultRedirectFactory->create();
 
-//        $oRegistration = $this->_StrakerAPI->callRegister($data);
-//
-//        $this->_StrakerAPI->saveAccessToken($oRegistration->access_token);
-//
-//        $this->_StrakerAPI->saveAppKey($oRegistration->application_key);
-//
-//        $url = $this->_url->getUrl("EasyTranslationPlatform/Store/Index/");
-//
-//        $resultRedirect = $this->resultRedirectFactory->create();
-//
-//        $resultRedirect->setUrl($url);
-//
-//        return $resultRedirect;
+        if ($data) {
+
+            try {
+
+                $this->_setup->saveStoreSetup($data['source_store'],$data['source_language'],$data['destination_store'],$data['destination_language']);
+
+                if($this->_errorManager->_error){
+
+                    $this->_getSession()->setFormData($data);
+
+                    $resultRedirect->setPath('/*/index/');
+
+                    $this->messageManager->addError($this->_errorManager->getErrorMessage());
+
+                }else{
+
+                    $resultRedirect->setPath('/NewJob/index/');
+
+                }
+
+                return $resultRedirect;
+
+
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
+                $this->messageManager->addError($e->getMessage());
+
+            } catch (\RuntimeException $e) {
+
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
+                $this->messageManager->addError($e->getMessage());
+
+            } catch (\Exception $e) {
+
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
+                $this->messageManager->addException($e, __('Something went wrong while saving the language configuration.'));
+            }
+
+            $resultRedirect->setPath('/*/index/');
+
+        }
+
+        return $resultRedirect;
     }
 }

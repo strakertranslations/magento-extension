@@ -23,6 +23,7 @@ class Index extends \Magento\Framework\App\Action\Action
     public function execute()
     {
         $page_object = $this->_pageFactory->create();
+
         return $page_object;
 
     }

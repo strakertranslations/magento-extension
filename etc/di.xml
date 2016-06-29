@@ -8,10 +8,8 @@
 
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
 
-
-    <preference for="Straker\EasyTranslationPlatform\Api\Data\EasyTranslationPlatformInterface" type="Straker\EasyTranslationPlatform\Model\EasyTranslationPlatform"/>
-    <preference for="Straker\EasyTranslationPlatform\Api\Data\RegistrationInterface" type="Straker\EasyTranslationPlatform\Model\Registration"/>
     <preference for="Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface" type="Straker\EasyTranslationPlatform\Model\StrakerAPI"/>
+    <preference for="Straker\EasyTranslationPlatform\Api\Data\SetupInterface" type="Straker\EasyTranslationPlatform\Model\Setup"/>
 
     <type name="Straker\EasyTranslationPlatform\Logger\Handler">
         <arguments>

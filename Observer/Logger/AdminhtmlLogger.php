@@ -18,7 +18,7 @@ class AdminhtmlLogger implements ObserverInterface
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
 
-        $this->_logger->debug('helloWorld');
+        //$this->_logger->debug('helloWorld');
 
         return $this;
 
