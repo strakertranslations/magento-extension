@@ -14,11 +14,6 @@
                     </resource>
                 </resource>
 
-                <resource id="Magento_Backend::content">
-                    <resource id="Straker_EasyTranslationPlatform::store" title="store" sortOrder="10"/>
-                    <resource id="Straker_EasyTranslationPlatform::store_edit" title="store" sortOrder="10"/>
-                </resource>
-
                 <resource id="Magento_Backend::stores">
                     <resource id="Magento_Backend::stores_settings">
                         <resource id="Magento_Config::config">

@@ -2,12 +2,14 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\StoreLanguage\Form;
 
-use Staker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\System\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Backend\Model\Session;
 
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -16,15 +18,18 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         Context $context,
         Registry $registry,
         FormFactory $formFactory,
-        Store $systemStore,
-        StrakerAPIInterface $strakerAPIInterfaceInterface,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        StrakerAPIInterface $strakerAPIInterface,
+        Session $session
     ) {
 
-        $this->_systemStore = $systemStore;
-        $this->_strakerAPI = $strakerAPIInterfaceInterface;
         $this->_storeManager = $storeManager;
-        parent::__construct($context, $registry, $formFactory);
+        $this->_strakerAPIinterface = $strakerAPIInterface;
+        $this->_formFactory = $formFactory;
+        $this->_Registry = $registry;
+        $this->session = $session;
+
+        parent::__construct($context,$registry,$formFactory);
     }
 
 
@@ -32,7 +37,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
         parent::_construct();
     }
-
 
     protected function _prepareForm()
     {
@@ -64,9 +68,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $field->setRenderer($renderer);
 
-
-//       $form->setValues($model->getData());
-        $form->setUseContainer(true);
         $this->setForm($form);
 
         return parent::_prepareForm();
@@ -75,18 +76,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getWebsites() {
 
         return $this->_storeManager->getWebsites();
-    }
-
-    protected function _getOptions(
-    ){
-        $aCountries = [];
-
-        foreach($this->_strakerAPI->getCountries() as $key => $value)
-        {
-            $aCountries[$value->code] = $value->name;
-        }
-
-        return $aCountries;
     }
 
 }

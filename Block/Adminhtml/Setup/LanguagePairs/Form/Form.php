@@ -25,8 +25,6 @@ class Form extends Template{
     }
 
     public function getWebsites() {
-
-        $data = $this->getRequest()->getParam('form_key');
         
         return $this->_storeManager->getWebsites();
     }

@@ -8,42 +8,28 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
+
     protected $resultPageFactory;
 
     protected $scopeConfig;
 
-    public $resultRedirectFactory;
-
-    /**
-     * @param Action\Context $context
-     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
-     * @param \Magento\Framework\Registry $registry
-     */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        ScopeConfigInterface $scopeConfig // Needed to retrieve config values
+        ScopeConfigInterface $scopeConfig
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
-        $this->scopeConfig = $scopeConfig; // Needed to retrieve config values
+        $this->scopeConfig = $scopeConfig;
     }
 
-    /**
-     * Edit Blog post
-     *
-     * @return \Magento\Backend\Model\View\Result\Page|\Magento\Backend\Model\View\Result\Redirect
-     * @SuppressWarnings(PHPMD.NPathComplexity)
-     */
+
     public function execute()
     {
 
         $resultPage = $this->resultPageFactory->create();
 
-        $resultPage->getConfig()->getTitle()->prepend(__('New Language Store View'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Select Destination Store'));
 
         return $resultPage;
     }
