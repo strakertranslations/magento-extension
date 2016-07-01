@@ -159,33 +159,32 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     }
 
     protected  function _getRegisterUrl(){
-
-        return $this->_configHelper->getConfig('/api_url/register');
+        return $this->_configHelper->getRegisterUrl();
     }
 
     protected  function _getLanguagesUrl(){
-        return $this->_configHelper->getConfig('/api_url/languages');
+        return $this->_configHelper->getLanguagesUrl();
     }
 
-    protected  function _getCountiresUrl(){
+    protected  function _getCountriesUrl(){
 
-        return $this->_configHelper->getConfig('/api_url/countries');
+        return $this->_configHelper->getCountriesUrl();
     }
 
     protected  function _getTranslateUrl(){
-        return Mage::getStoreConfig('straker/api_url/translate');
+        return $this->_configHelper->getTranslateUrl();
     }
 
     protected  function _getQuoteUrl(){
-        return Mage::getStoreConfig('straker/api_url/quote');
+        return $this->_configHelper->getQuoteUrl();
     }
 
     protected  function _getPaymentUrl(){
-        return Mage::getStoreConfig('straker/api_url/payment');
+        return $this->_configHelper->getPaymentUrl();
     }
 
     protected  function _getSupportUrl(){
-        return Mage::getStoreConfig('straker/api_url/support');
+        return $this->_configHelper->getSupportUrl();
     }
 
     public function callRegister($data){
@@ -234,7 +233,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
     public function getCountries(){
 
-        $result = $this->_call($this->_getCountiresUrl());
+        $result = $this->_call($this->_getCountriesUrl());
 
         return $result->country;
     }
