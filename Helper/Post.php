@@ -35,7 +35,7 @@ class Post extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * Return a blog post from given post id.
+     * Return a easytranslationplatform post from given post id.
      *
      * @param Action $action
      * @param null $postId
@@ -61,16 +61,16 @@ class Post extends \Magento\Framework\App\Helper\AbstractHelper
         /** @var \Magento\Framework\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         // We can add our own custom page handles for layout easily.
-        $resultPage->addHandle('blog_post_view');
+        $resultPage->addHandle('easytranslationplatform_post_view');
 
-        // This will generate a layout handle like: blog_post_view_id_1
-        // giving us a unique handle to target specific blog posts if we wish to.
+        // This will generate a layout handle like: easytranslationplatform_post_view_id_1
+        // giving us a unique handle to target specific easytranslationplatform posts if we wish to.1
         $resultPage->addPageLayoutHandles(['id' => $this->_post->getId()]);
 
         // Magento is event driven after all, lets remember to dispatch our own, to help people
         // who might want to add additional functionality, or filter the posts somehow!
         $this->_eventManager->dispatch(
-            'ashsmith_blog_post_render',
+            'straker_easytranslationplatform_post_render',
             ['post' => $this->_post, 'controller_action' => $action]
         );
 

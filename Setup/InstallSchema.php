@@ -21,7 +21,8 @@ class InstallSchema implements InstallSchemaInterface
         $installer->startSetup();
 
         $table = $installer->getConnection()
-            ->newTable($installer->getTable('straker_easytranslation_post'))
+
+            ->newTable($installer->getTable('straker_easytranslationplatform_post'))
             ->addColumn(
                 'post_id',
                 Table::TYPE_SMALLINT,

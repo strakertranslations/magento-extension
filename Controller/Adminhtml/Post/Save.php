@@ -45,7 +45,7 @@ class Save extends \Magento\Backend\App\Action
             $model->setData($data);
 
             $this->_eventManager->dispatch(
-                'blog_post_prepare_save',
+                'easytranslationplatform_post_prepare_save',
                 ['post' => $model, 'request' => $this->getRequest()]
             );
 

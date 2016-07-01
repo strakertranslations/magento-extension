@@ -9,8 +9,9 @@ use Magento\Framework\UrlInterface;
 class PostActions extends Column
 {
     /** Url path */
-    const BLOG_URL_PATH_EDIT = 'blog/post/edit';
-    const BLOG_URL_PATH_DELETE = 'blog/post/delete';
+
+    const BLOG_URL_PATH_EDIT = 'easytranslationplatform/post/edit';
+    const BLOG_URL_PATH_DELETE = 'easytranslationplatform/post/delete';
 
     /** @var UrlInterface */
     protected $urlBuilder;

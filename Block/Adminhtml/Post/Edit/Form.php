@@ -2,7 +2,7 @@
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Post\Edit;
 
 /**
- * Adminhtml blog post edit form
+ * Adminhtml easytranslationplatform post edit form
  */
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
@@ -51,7 +51,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
         /** @var \Straker\EasyTranslationPlatform\Model\Post $model */
-        $model = $this->_coreRegistry->registry('blog_post');
+        $model = $this->_coreRegistry->registry('easytranslationplatform_post');
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create(

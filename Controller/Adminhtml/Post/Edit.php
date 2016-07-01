@@ -83,7 +83,7 @@ class Edit extends \Magento\Backend\App\Action
             $model->setData($data);
         }
 
-        $this->_coreRegistry->register('blog_post', $model);
+        $this->_coreRegistry->register('easytranslationplatform_post', $model);
 
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->_initAction();

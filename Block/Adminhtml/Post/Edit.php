@@ -25,7 +25,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Initialize blog post edit block
+     * Initialize easytranslationplatform post edit block
      *
      * @return void
      */
@@ -70,8 +70,8 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     public function getHeaderText()
     {
-        if ($this->_coreRegistry->registry('blog_post')->getId()) {
-            return __("Edit Post '%1'", $this->escapeHtml($this->_coreRegistry->registry('blog_post')->getTitle()));
+        if ($this->_coreRegistry->registry('easytranslationplatform_post')->getId()) {
+            return __("Edit Post '%1'", $this->escapeHtml($this->_coreRegistry->registry('easytranslationplatform_post')->getTitle()));
         } else {
             return __('New Post');
         }
@@ -96,6 +96,6 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _getSaveAndContinueUrl()
     {
-        return $this->getUrl('blog/*/save', ['_current' => true, 'back' => 'edit', 'active_tab' => '']);
+        return $this->getUrl('easytranslationplatform/*/save', ['_current' => true, 'back' => 'edit', 'active_tab' => '']);
     }
 }

@@ -16,19 +16,20 @@ class Post  extends \Magento\Framework\Model\AbstractModel implements PostInterf
     /**
      * CMS page cache tag
      */
-    const CACHE_TAG = 'blog_post';
+    const CACHE_TAG = 'easytranslationplatform_post';
 
     /**
      * @var string
      */
-    protected $_cacheTag = 'blog_post';
+    protected $_cacheTag = 'easytranslationplatform_post';
 
     /**
      * Prefix of model events names
      *
      * @var string
      */
-    protected $_eventPrefix = 'blog_post';
+
+    protected $_eventPrefix = 'easytranslationplatform_post';
 
     /**
      * @var \Magento\Framework\UrlInterface
@@ -79,7 +80,7 @@ class Post  extends \Magento\Framework\Model\AbstractModel implements PostInterf
 
     /**
      * Prepare post's statuses.
-     * Available event blog_post_get_available_statuses to customize statuses.
+     * Available event easytranslationplatform_post_get_available_statuses to customize statuses.
      *
      * @return array
      */
@@ -119,16 +120,16 @@ class Post  extends \Magento\Framework\Model\AbstractModel implements PostInterf
 
     /**
      * Return the desired URL of a post
-     *  eg: /blog/view/index/id/1/
+     *  eg: /easytranslationplatform/view/index/id/1/
      * @TODO Move to a PostUrl model, and make use of the
      * @TODO rewrite system, using url_key to build url.
-     * @TODO desired url: /blog/my-latest-blog-post-title
+     * @TODO desired url: /easytranslationplatform/my-latest-easytranslationplatform-post-title
      *
      * @return string
      */
     public function getUrl()
     {
-        return $this->_urlBuilder->getUrl('blog/' . $this->getUrlKey());
+        return $this->_urlBuilder->getUrl('easytranslationplatform/' . $this->getUrlKey());
     }
 
     /**

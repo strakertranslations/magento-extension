@@ -1,19 +1,41 @@
-# Magento 2 EasyTranslationPlatform Module Tutorial
+# AdminSample module
 
-This module is a WIP, it'll be updated as each tutorial I'm currently writing is completed.
+* To add a menu/sub-menu, check out the following files:
+  * `etc/adminhtml/menu.xml`
+  * `etc/adminhtml/routes.xml`
+* To bind a page to those submenus, check out the following files:
+  * You will notice the path to look like the action parameter from `etc/adminhtml/menu.xml`
+  * `Controller/Adminhtml/SampleOne/Index.php`
+  * `Controller/Adminhtml/SampleTwo/Index.php`
+* To add content to your freshly created pages, check out the following files:
+  * `view/adminhtml/layout/adminsample_sampleone_index.xml`
+  * `view/adminhtml/templates/sample/one.phtml`
+* To add content to your freshly created pages and pass something to it, You can also check:
+  * `view/adminhtml/layout/adminsample_sampletwo_index.xml`
+  * `Controller/Adminhtml/SampleTwo/Index.php`
+  * `view/adminhtml/templates/sample/two.phtml`
+* To set and retrieve values from Magento2's configuration you can check these files:
+  * `Controller/Adminhtml/SampleTwo/Index.php`
+  * `etc/adminhtml/system.xml` Configuration menu in *Stores/Settings/Configuration* is set here
+  * `etc/config.xml` Default configuration
+  * `view/adminhtml/templates/sample/two.phtml`
+* To see how ACLs are made, check these files:
+  * `etc/acl.xml`
+  * You'll notice that most resource elements are from `etc/adminhtml/menu.xml`
+* To see how to have different layouts, check this file:
+  * `view/adminhtml/layout/adminsample_sampletwo_index.xml`
+* To see how we create a custom block and use it, check those files:
+  * `Block/Adminhtml/CustomBlock.php`
+  * `view/adminhtml/layout/adminsample_sampletwo_index.xml`
+* To see how you use block functions, have a look at:
+* `Block/Adminhtml/CustomBlock.php`
+  * `view/adminhtml/templates/custom/one.phtml`
+* To call a helper from a block you can check:
+  * `Block/Adminhtml/CustomBlock.php`
+  * `Helper/ConfigHelper.php`
+  * `view/adminhtml/templates/custom/one.phtml`
 
-I'm covering how to create a fully functional Magento 2 module from scratch.. even with tests. You can follow along below:
+# To do
 
-- [Introduction](https://www.ashsmith.io/magento2/module-from-scratch-introduction/)
-- 0.1.0 - [Module Setup](https://www.ashsmith.io/magento2/module-from-scratch-module-part-1-setup/)
-- 0.2.0 - [Models & Resource Models](https://www.ashsmith.io/magento2/module-from-scratch-module-part-2-models/)
-- 0.3.0 - [Migrations & Database Schema](http://www.ashsmith.io/magento2/module-from-scratch-part-3-database-tables/)
-- 0.4.2 - [Frontend: Controllers, Blocks & Templates](https://www.ashsmith.io/magento2/module-from-scratch-part-4-the-frontend/)
-- 0.5.0 - [Backend: Controllers, Blocks, UI & Templates](https://www.ashsmith.io/magento2/module-from-scratch-part-5-adminhtml/)
-- 0.6.0 - [Unit Testing](https://www.ashsmith.io/magento2/module-from-scratch-part-6-unit-testing/)
+- Use model inside CustomBlock
 
-
-## Install with Composer as you go
-
-Specify the version of the tutorial you need, and go go go.
-composer require ashsmith/magento2-blog-module-example:0.5.2

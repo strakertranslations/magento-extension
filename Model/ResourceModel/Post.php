@@ -35,7 +35,7 @@ class Post extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('ashsmith_blog_post', 'post_id');
+        $this->_init('straker_easytranslationplatform_post', 'post_id');
     }
 
     /**

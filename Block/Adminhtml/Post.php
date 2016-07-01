@@ -7,6 +7,7 @@ class Post extends \Magento\Backend\Block\Widget\Grid\Container
     {
         $this->_controller = 'adminhtml_post';
         $this->_blockGroup = 'Straker_EasyTranslationPlatform';
+
         $this->_headerText = __('Manage EasyTranslationPlatform Posts');
 
         parent::_construct();

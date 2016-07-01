@@ -50,6 +50,4 @@ class Index extends \Magento\Backend\App\Action
     {
         return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::post');
     }
-
-
 }

@@ -1,5 +1,8 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/ObjectManager/etc/config.xsd">
+
+    <preference for="Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface" type="Straker\EasyTranslationPlatform\Model\StrakerAPI"/>
+    <preference for="Straker\EasyTranslationPlatform\Api\Data\SetupInterface" type="Straker\EasyTranslationPlatform\Model\Setup"/>
     <preference for="Straker\EasyTranslationPlatform\Api\Data\PostInterface" type="Straker\EasyTranslationPlatform\Model\Post" />
     <virtualType name="EasyTranslationPlatformGirdFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
@@ -24,8 +27,27 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="blog_post_listing_data_source" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Post\Grid\Collection</item>
+                <item name="easytranslationplatform_post_listing_data_source" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Post\Grid\Collection</item>
             </argument>
         </arguments>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">myLoggerName</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Straker\EasyTranslationPlatform\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Controller\Adminhtml\NewJob\Index">
+        <plugin name="starker_easytranslation_plugin_registration_plugin" type="Straker\EasyTranslationPlatform\Plugin\Registration\Plugin" sortOrder="10" disabled="false"/>
     </type>
 </config>
