@@ -1,15 +1,17 @@
 <?xml version="1.0"?>
+
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/system_file.xsd">
     <system>
         <tab id="easytranslationplatform" translate="label" sortOrder="700">
             <label>Straker Translations</label>
         </tab>
-        <section id="easytranslationplatform" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="straker" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Configuration</label>
+            <!-- should be the same as the tab's id above -->
             <tab>easytranslationplatform</tab>
             <resource>Straker_EasyTranslationPlatform::config</resource>
-            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="example" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
                 <field id="dropdown_example" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Dropdown with custom source model example</label>
@@ -36,17 +38,44 @@
                     <label>Textarea example</label>
                 </field>
             </group>
-            <group id="txt" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>txtsample</label>
-                <field id="textsample" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>text sample</label>
+            <!--<group id="txt" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">-->
+                <!--<label>txtsample</label>-->
+                <!--<field id="textsample" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">-->
+                    <!--<label>text sample</label>-->
+                <!--</field>-->
+            <!--</group>-->
+            <!--<group id="yn" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">-->
+                <!--<label>ynsample</label>-->
+                <!--<field id="ynsample" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">-->
+                    <!--<label>Yes no sample</label>-->
+                    <!--<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
+                <!--</field>-->
+            <!--</group>-->
+            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Account Information</label>
+                <field id="version" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Environment</label>
                 </field>
-            </group>
-            <group id="yn" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>ynsample</label>
-                <field id="ynsample" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Yes no sample</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <field id="settings_name" translate="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Name</label>
+                </field>
+                <field id="settings_login" translate="label" type="label" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Login</label>
+                </field>
+                <field id="access_token" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Access Token</label>
+                </field>
+                <field id="reset_account_button" type="button" translate="label" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <depends>
+                        <field id="*/*/version" negative="1">live</field>
+                    </depends>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetAccountButton</frontend_model>
+                </field>
+                </group>
+                <group id="languages_store_views" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Languages &amp; Store Views</label>
+                <field id="settings_title" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Languages &amp; Store Views</label>
                 </field>
             </group>
         </section>
