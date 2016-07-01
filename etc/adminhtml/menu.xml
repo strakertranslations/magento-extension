@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Straker_EasyTranslationPlatform::blog_content" title="EasyTranslationPlatform" module="Straker_EasyTranslationPlatform" sortOrder="50" parent="Magento_Backend::content" resource="Straker_EasyTranslationPlatform::blog_content" />
+        <add id="Straker_EasyTranslationPlatform::post" title="Posts" module="Straker_EasyTranslationPlatform" sortOrder="0" parent="Straker_EasyTranslationPlatform::blog_content" action="blog/post" resource="Straker_EasyTranslationPlatform::post"/>
+    </menu>
+</config>
