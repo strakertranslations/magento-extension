@@ -3,7 +3,7 @@
     <default>
         <straker>
             <general>
-                <version>demo</version>
+                <version>dev</version>
                 <domain>
                     <dev>https://dev-app.strakertranslations.com</dev>
                     <uat>https://uat-app.strakertranslations.com</uat>
