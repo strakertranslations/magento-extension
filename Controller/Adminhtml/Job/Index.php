@@ -24,16 +24,7 @@ class Index extends \Magento\Framework\App\Action\Action
 
     public function execute()
     {
-
-        $resultRedirect = $this->resultRedirectFactory->create();
-
-//        if(stripos($this->_redirect->getRefererUrl(), 'Languagepairs')===false)
-//        {
-//            $resultRedirect->setPath('/Setup_Storelanguage/index/');
-//
-//            return $resultRedirect;
-//        }
-
+        
         $resultPage = $this->_pageFactory->create();
         $resultPage->setActiveMenu('Straker_EasyTranslationPlatform::post');
         $resultPage->addBreadcrumb(__('Blog Posts'), __('Blog Posts'));

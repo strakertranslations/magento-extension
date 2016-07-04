@@ -10,8 +10,8 @@ class PostActions extends Column
 {
     /** Url path */
 
-    const BLOG_URL_PATH_EDIT = 'easytranslationplatform/post/edit';
-    const BLOG_URL_PATH_DELETE = 'easytranslationplatform/post/delete';
+    const BLOG_URL_PATH_EDIT = 'EasyTranslationPlatform/post/edit';
+    const BLOG_URL_PATH_DELETE = 'EasyTranslationPlatform/post/delete';
 
     /** @var UrlInterface */
     protected $urlBuilder;

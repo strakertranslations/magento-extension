@@ -26,11 +26,40 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
         $this->_errorManager = $error;
     }
 
+    public function saveClientData($data){
+
+        try{
+
+            $this->_configModel->SaveConfig('straker/general/first_name',$data['first_name'],'default',0);
+
+            $this->_configModel->SaveConfig('straker/general/last_name',$data['last_name'],'default',0);
+
+            $this->_configModel->SaveConfig('straker/general/email',$data['email'],'default',0);
+
+            $this->_configModel->SaveConfig('straker/general/url',$data['url'],'default',0);
+
+            $this->_errorManager->_error = false;
+
+            return $this->_errorManager;
+
+        }catch (\Exception $e){
+
+            $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
+            $this->_errorManager->_errorMessage = 'There was an error saving your details';
+
+            $this->_errorManager->_error = true;
+
+            return $this->_errorManager;
+
+        }
+    }
+
     public function saveAppKey($appKey){
 
         try{
 
-            $this->_configModel->SaveConfig('/straker/general/application_key',$appKey,'default',0);
+            $this->_configModel->SaveConfig('straker/general/application_key',$appKey,'default',0);
 
             $this->_errorManager->_error = false;
 

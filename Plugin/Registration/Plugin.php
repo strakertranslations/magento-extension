@@ -3,7 +3,7 @@
 namespace Straker\EasyTranslationPlatform\Plugin\Registration;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Straker\EasyTranslationPlatform\Controller\Adminhtml\NewJob\Index;
+use Straker\EasyTranslationPlatform\Controller\Adminhtml\Job\Index;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Backend\Model\View\Factory;

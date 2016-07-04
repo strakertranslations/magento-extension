@@ -10,4 +10,6 @@ interface SetupInterface
 
     public function saveStoreSetup($source_id, $source_language, $destination_id, $destination_language);
 
+    public function saveClientData($data);
+
 }

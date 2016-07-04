@@ -47,7 +47,7 @@ class Save extends \Magento\Backend\App\Action
 
                 }else{
 
-                    $resultRedirect->setPath('/NewJob/index/');
+                    $resultRedirect->setPath('/Job/index/');
 
                 }
 

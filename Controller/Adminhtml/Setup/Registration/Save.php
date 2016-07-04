@@ -52,6 +52,8 @@ class Save extends \Magento\Backend\App\Action
 
             try {
 
+                $this->_setup->saveClientData($data);
+
                 $oRegistration = $this->_strakerAPI->callRegister($data);
 
                 $this->_setup->saveAccessToken($oRegistration->access_token);

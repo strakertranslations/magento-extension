@@ -47,7 +47,7 @@
         </arguments>
     </type>
 
-    <type name="Straker\EasyTranslationPlatform\Controller\Adminhtml\NewJob\Index">
+    <type name="Straker\EasyTranslationPlatform\Controller\Adminhtml\Job\Index">
         <plugin name="starker_easytranslation_plugin_registration_plugin" type="Straker\EasyTranslationPlatform\Plugin\Registration\Plugin" sortOrder="10" disabled="false"/>
     </type>
 </config>
