@@ -144,7 +144,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
      * Handle logical errors
      *
      * @param array $response
-     * @throws Mage_Core_Exception
+     * @throst Mage_Core_Exception
      */
     protected function _handleCallErrors($response)
     {

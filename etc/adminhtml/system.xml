@@ -72,10 +72,10 @@
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetAccountButton</frontend_model>
                 </field>
                 </group>
-                <group id="languages_store_views" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Languages &amp; Store Views</label>
+                <group id="languages_store_viest" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Languages &amp; Store Viest</label>
                 <field id="settings_title" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Languages &amp; Store Views</label>
+                    <label>Languages &amp; Store Viest</label>
                 </field>
             </group>
         </section>

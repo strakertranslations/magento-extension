@@ -1,4 +1,5 @@
-<?php namespace Straker\EasyTranslationPlatform\Setup;
+<?php
+namespace Straker\EasyTranslationPlatform\Setup;
 
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
@@ -20,28 +21,60 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->startSetup();
 
-        $table = $installer->getConnection()
+        if (!$installer->tableExists('straker_contact')) {
+            $table = $installer->getConnection()
+                ->newTable($installer->getTable('straker_contact'))
+                ->addColumn(
+                    'contact_id',
+                    Table::TYPE_INTEGER,
+                    10,
+                    ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true]
+                )
+                ->addColumn('contact_name', Table::TYPE_TEXT, 255, ['nullable' => false])
+                ->addColumn('age', Table::TYPE_INTEGER, 10, ['nullable' => false])
+                ->addColumn('address', Table::TYPE_TEXT, '2M', ['default' => ''], 'File path')
+                ->addColumn('phone', Table::TYPE_TEXT, 10, ['default' => ''], 'File extension')
+                ->addColumn('creation_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Creation Time')
+                ->addColumn('update_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Update Time')
+                ->setComment('Sample table');
 
-            ->newTable($installer->getTable('straker_easytranslationplatform_post'))
-            ->addColumn(
-                'post_id',
-                Table::TYPE_SMALLINT,
-                null,
-                ['identity' => true, 'nullable' => false, 'primary' => true],
-                'Post ID'
-            )
-            ->addColumn('url_key', Table::TYPE_TEXT, 100, ['nullable' => true, 'default' => null])
-            ->addColumn('title', Table::TYPE_TEXT, 255, ['nullable' => false], 'EasyTranslationPlatform Title')
-            ->addColumn('content', Table::TYPE_TEXT, '2M', [], 'EasyTranslationPlatform Content')
-            ->addColumn('is_active', Table::TYPE_SMALLINT, null, ['nullable' => false, 'default' => '1'], 'Is Post Active?')
-            ->addColumn('creation_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Creation Time')
-            ->addColumn('update_time', Table::TYPE_DATETIME, null, ['nullable' => false], 'Update Time')
-            ->addIndex($installer->getIdxName('easytranslation_post', ['url_key']), ['url_key'])
-            ->setComment('Straker EasyTranslationPlatform Posts');
+            $installer->getConnection()->createTable($table);
+        }
 
-        $installer->getConnection()->createTable($table);
+        if (!$installer->tableExists('straker_product_attachment_rel')) {
+            $table = $installer->getConnection()
+                ->newTable($installer->getTable('straker_product_attachment_rel'))
+                ->addColumn('contact_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true])
+                ->addColumn('product_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true], 'Magento Product Id')
+                ->addForeignKey(
+                    $installer->getFkName(
+                        'straker_contact',
+                        'contact_id',
+                        'straker_product_attachment_rel',
+                        'contact_id'
+                    ),
+                    'contact_id',
+                    $installer->getTable('straker_contact'),
+                    'contact_id',
+                    Table::ACTION_CASCADE
+                )
+                ->addForeignKey(
+                    $installer->getFkName(
+                        'straker_product_attachment_rel',
+                        'contact_id',
+                        'catalog_product_entity',
+                        'entity_id'
+                    ),
+                    'product_id',
+                    $installer->getTable('catalog_product_entity'),
+                    'entity_id',
+                    Table::ACTION_CASCADE
+                )
+                ->setComment('Straker Product Attachment relation table');
+
+            $installer->getConnection()->createTable($table);
+        }
 
         $installer->endSetup();
     }
-
 }

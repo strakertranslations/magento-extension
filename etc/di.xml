@@ -3,9 +3,29 @@
 
     <preference for="Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface" type="Straker\EasyTranslationPlatform\Model\StrakerAPI"/>
     <preference for="Straker\EasyTranslationPlatform\Api\Data\SetupInterface" type="Straker\EasyTranslationPlatform\Model\Setup"/>
-    <preference for="Straker\EasyTranslationPlatform\Api\Data\PostInterface" type="Straker\EasyTranslationPlatform\Model\Post" />
 
-    <virtualType name="EasyTranslationPlatformGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="contacts_grid_data_source" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Contact\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Straker\EasyTranslationPlatform\Model\ResourceModel\Contact\Grid\Collection">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">straker_contact</argument>
+            <argument name="eventPrefix" xsi:type="string">straker_contact_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">straker_contact_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Contact</argument>
+        </arguments>
+    </type>
+    <virtualType name="ContactGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Straker\EasyTranslationPlatform\Model\ResourceModel\Contact\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">ContactGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="ContactGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
             <argument name="appliers" xsi:type="array">
                 <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
@@ -13,57 +33,6 @@
             </argument>
         </arguments>
     </virtualType>
-
-    <virtualType name="EasyTranslationPlatformJobGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
-        <arguments>
-            <argument name="appliers" xsi:type="array">
-                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
-                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
-            </argument>
-        </arguments>
-    </virtualType>
-
-
-    <virtualType name="JobGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
-        <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Straker\EasyTranslationPlatform\Model\Resource\Job\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">EasyTranslationPlatformGridJobFilterPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">straker_easytranslationplatform_post</argument>
-            <argument name="resourceModel" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Job</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="easytranslationplatform_job_listing_data_source" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid\Collection</item>
-            </argument>
-        </arguments>
-    </type>
-
-
-    <virtualType name="PostGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
-        <arguments>
-            <argument name="collection" xsi:type="object" shared="false">Straker\EasyTranslationPlatform\Model\Resource\Post\Collection</argument>
-            <argument name="filterPool" xsi:type="object" shared="false">EasyTranslationPlatformGridFilterPool</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Straker\EasyTranslationPlatform\Model\ResourceModel\Post\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
-        <arguments>
-            <argument name="mainTable" xsi:type="string">straker_easytranslationplatform_post</argument>
-            <argument name="resourceModel" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Post</argument>
-        </arguments>
-    </virtualType>
-    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
-        <arguments>
-            <argument name="collections" xsi:type="array">
-                <item name="easytranslationplatform_post_listing_data_source" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Post\Grid\Collection</item>
-            </argument>
-        </arguments>
-    </type>
 
     <type name="Straker\EasyTranslationPlatform\Logger\Handler">
         <arguments>

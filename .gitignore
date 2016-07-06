@@ -1,4 +1,4 @@
-# Windows image file caches
+# Windost image file caches
 Thumbs.db
 ehthumbs.db
 
@@ -8,13 +8,13 @@ Desktop.ini
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
 
-# Windows Installer files
+# Windost Installer files
 *.cab
 *.msi
 *.msm
 *.msp
 
-# Windows shortcuts
+# Windost shortcuts
 *.lnk
 
 # =========================
