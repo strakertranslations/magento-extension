@@ -5,6 +5,9 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
 {
     const BUTTON_TEMPLATE = 'settings/config/button/reset_account_button.phtml';
 
+    private $_buttonId;
+    private $_buttonName;
+
     /**
      * Set template to itself
      *
@@ -37,9 +40,9 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @return string
      */
-    public function getAjaxCheckUrl()
+    public function getAjaxResetUrl()
     {
-        return $this->getUrl('addbutton/listdata'); //hit controller by ajax call on button click.
+        return $this->getUrl('EasyTranslationPlatform/Job/NewJob'); //hit controller by ajax call on button click.
     }
 
     /**
@@ -50,17 +53,25 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
      */
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
-
-        $this->addData(
-            [
-                'id' => $element->getId(),
-                'name' => $element->getName(),
-                'button_label' => __('Reset Account'),
-                'type' => $element->getType()
-            ]
-        );
+        $this->_buttonId = $element->getId();
+        $this->_buttonName = $element->getName();
 
         return $this->_toHtml();
 
     }
+
+    public function getButtonHtml()
+    {
+        $button = $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->addData([
+            'id' => $this->_buttonId,
+                'name' => $this->_buttonName,
+                'label' => __('Reset Account'),
+                'type' => 'button'
+        ]);
+
+        return $button->toHtml();
+    }
+
 }
