@@ -73,7 +73,7 @@
 
     <type name="Straker\EasyTranslationPlatform\Logger\Logger">
         <arguments>
-            <argument name="name" xsi:type="string">myLoggerName</argument>
+            <argument name="name" xsi:type="string">StrakerLogger</argument>
             <argument name="handlers"  xsi:type="array">
                 <item name="system" xsi:type="object">Straker\EasyTranslationPlatform\Logger\Handler</item>
             </argument>

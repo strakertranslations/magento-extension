@@ -10,8 +10,8 @@ class JobActions extends Column
 {
     /** Url path */
 
-    const BLOG_URL_PATH_EDIT = 'EasyTranslationPlatform/post/edit';
-    const BLOG_URL_PATH_DELETE = 'EasyTranslationPlatform/post/delete';
+    const BLOG_URL_PATH_EDIT = 'EasyTranslationPlatform/job/edit';
+    const BLOG_URL_PATH_DELETE = 'EasyTranslationPlatform/job/delete';
 
     /** @var UrlInterface */
     protected $urlBuilder;

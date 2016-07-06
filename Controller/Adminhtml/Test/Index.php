@@ -2,31 +2,27 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
 
-use Magento\Framework\App\Action\Context;
+use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends \Magento\Backend\App\Action
 {
 
-    protected $_storeManager;
-    protected $_pageFactory;
+    protected $resultPageFactory;
 
     public function __construct(
-        Context $context,
+        Action\Context $context,
         PageFactory $pageFactory
     )
     {
-        $this->_pageFactory = $pageFactory;
+        $this->resultPageFactory = $pageFactory;
         return parent::__construct($context);
     }
 
     public function execute()
     {
-        $page_object = $this->_pageFactory->create();
-
-        return $page_object;
-
+        $resultPage = $this->resultPageFactory->create();
+        return $resultPage;
     }
-
 
 }

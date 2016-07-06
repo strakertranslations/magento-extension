@@ -1,8 +1,32 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<!--
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="sales_order_transactions_grid_block"/>
+    <head>
+        <link src="Magento_Sales::js/bootstrap/order-create-index.js"/>
+        <link src="Magento_Sales::js/bootstrap/order-post-action.js"/>
+    </head>
+    <update handle="sales_order_item_price"/>
     <body>
         <referenceContainer name="content">
-
+            <block class="Magento\Sales\Block\Adminhtml\Order\View" name="sales_order_edit"/>
         </referenceContainer>
+        <referenceContainer name="left">
+            <block class="Magento\Sales\Block\Adminhtml\Order\View\Tabs" name="sales_order_tabs">
+                <block class="Magento\Sales\Block\Adminhtml\Order\View\Tab\Invoices" name="sales_order_invoice.grid.container"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">order_invoices</argument>
+                    <argument name="block" xsi:type="string">sales_order_invoice.grid.container</argument>
+                </action>
+            </block>
+        </referenceContainer>
+        <referenceBlock name="sales_order_invoice.grid.container">
+            <uiComponent name="sales_order_view_invoice_grid"/>
+        </referenceBlock>
     </body>
 </page>
