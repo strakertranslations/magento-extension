@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Contact;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job;
 
 class Edit extends \Magento\Backend\Block\Widget\Form\Container
 {
@@ -31,13 +31,13 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _construct()
     {
-        $this->_objectId = 'contact_id';
+        $this->_objectId = 'job_id';
         $this->_blockGroup = 'Straker_EasyTranslationPlatform';
-        $this->_controller = 'adminhtml_contact';
+        $this->_controller = 'adminhtml_job';
 
         parent::_construct();
 
-        $this->buttonList->update('save', 'label', __('Save Contact'));
+        $this->buttonList->update('save', 'label', __('Save Job'));
         $this->buttonList->add(
             'saveandcontinue',
             [
@@ -52,7 +52,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             -100
         );
 
-        $this->buttonList->update('delete', 'label', __('Delete Contact'));
+        $this->buttonList->update('delete', 'label', __('Delete Job'));
     }
 
     /**

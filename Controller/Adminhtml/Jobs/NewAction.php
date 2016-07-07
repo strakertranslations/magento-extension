@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Contacts;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 class NewAction extends \Magento\Backend\App\Action
 {
@@ -27,7 +27,7 @@ class NewAction extends \Magento\Backend\App\Action
     protected function _isAllowed()
     {
         return true;
-        // return $this->_authorization->isAllowed('Straker_Contact::attachment_save');
+        // return $this->_authorization->isAllowed('Straker_Job::attachment_save');
     }
 
     /**

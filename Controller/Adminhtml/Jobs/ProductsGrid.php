@@ -1,11 +1,11 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Contacts;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\TestFramework\ErrorLog\Logger;
 
-class Products extends \Magento\Backend\App\Action
+class EasyTranslationPlatform extends \Magento\Backend\App\Action
 {
 
     /**
@@ -42,8 +42,9 @@ class Products extends \Magento\Backend\App\Action
     {
         $resultLayout = $this->_resultLayoutFactory->create();
         $resultLayout->getLayout()->getBlock('easytranslationplatform.edit.tab.products')
-                     ->setInProducts($this->getRequest()->getPost('contact_products', null));
+                     ->setInBanner($this->getRequest()->getPost('job_products', null));
 
         return $resultLayout;
     }
+
 }

@@ -5,7 +5,7 @@ namespace Straker\EasyTranslationPlatform\Model\ResourceModel;
 /**
  * EasyTranslationPlatform mysql resource
  */
-class Contact extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
+class Job extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
 
     const TBL_ATT_PRODUCT = 'straker_product_attachment_rel';
@@ -38,7 +38,7 @@ class Contact extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     protected function _construct()
     {
-        $this->_init('straker_contact', 'contact_id');
+        $this->_init('straker_job', 'job_id');
     }
 
     /**

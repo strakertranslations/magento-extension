@@ -36,7 +36,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
         $this->_blockGroup = 'Straker_EasyTranslationPlatform';
         $this->_controller = 'adminhtml_test';
         parent::_construct();
-        $this->buttonList->update('save', 'label', __('Save Contact'));
+        $this->buttonList->update('save', 'label', __('Save Job'));
         $this->buttonList->add(
             'saveandcontinue',
             [
@@ -50,7 +50,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             ],
             -100
         );
-        $this->buttonList->update('delete', 'label', __('Delete Contact'));
+        $this->buttonList->update('delete', 'label', __('Delete Job'));
     }
     /**
      * Check permission for passed action

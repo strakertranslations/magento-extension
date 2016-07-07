@@ -1,8 +1,8 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit\Tab;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
-use Straker\EasyTranslationPlatform\Model\ContactFactory;
+use Straker\EasyTranslationPlatform\Model\JobFactory;
 
 class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -12,11 +12,11 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $productCollectionFactory;
 
     /**
-     * Contact factory
+     * Job factory
      *
-     * @var ContactFactory
+     * @var JobFactory
      */
-    protected $contactFactory;
+    protected $jobFactory;
 
     /**
      * @var  \Magento\Framework\Registry
@@ -30,7 +30,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Framework\Registry $registry
-     * @param ContactFactory $attachmentFactory
+     * @param JobFactory $attachmentFactory
      * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
      * @param array $data
      */
@@ -39,11 +39,11 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        ContactFactory $contactFactory,
+        JobFactory $jobFactory,
         \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
         array $data = []
     ) {
-        $this->contactFactory = $contactFactory;
+        $this->jobFactory = $jobFactory;
         $this->productCollectionFactory = $productCollectionFactory;
         $this->_objectManager = $objectManager;
         $this->registry = $registry;
@@ -62,7 +62,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
-        if ($this->getRequest()->getParam('contact_id')) {
+        if ($this->getRequest()->getParam('job_id')) {
             $this->setDefaultFilter(array('in_product' => 1));
         }
     }
@@ -111,7 +111,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareColumns()
     {
         /* @var $model \Straker\EasyTranslationPlatform\Model\Slide */
-        $model = $this->_objectManager->get('\Straker\EasyTranslationPlatform\Model\Contact');
+        $model = $this->_objectManager->get('\Straker\EasyTranslationPlatform\Model\Job');
 
         $this->addColumn(
             'in_product',
@@ -185,8 +185,8 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 
     protected function _getSelectedProducts()
     {
-        $contact = $this->getContact();
-        return $contact->getProducts($contact);
+        $job = $this->getJob();
+        return $job->getProducts($job);
     }
 
     /**
@@ -196,8 +196,8 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     public function getSelectedProducts()
     {
-        $contact = $this->getContact();
-        $selected = $contact->getProducts($contact);
+        $job = $this->getJob();
+        $selected = $job->getProducts($job);
 
         if (!is_array($selected)) {
             $selected = [];
@@ -205,14 +205,14 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         return $selected;
     }
 
-    protected function getContact()
+    protected function getJob()
     {
-        $contactId = $this->getRequest()->getParam('contact_id');
-        $contact   = $this->contactFactory->create();
-        if ($contactId) {
-            $contact->load($contactId);
+        $jobId = $this->getRequest()->getParam('job_id');
+        $job   = $this->jobFactory->create();
+        if ($jobId) {
+            $job->load($jobId);
         }
-        return $contact;
+        return $job;
     }
 
     /**

@@ -21,16 +21,16 @@ class InstallSchema implements InstallSchemaInterface
 
         $installer->startSetup();
 
-        if (!$installer->tableExists('straker_contact')) {
+        if (!$installer->tableExists('straker_job')) {
             $table = $installer->getConnection()
-                ->newTable($installer->getTable('straker_contact'))
+                ->newTable($installer->getTable('straker_job'))
                 ->addColumn(
-                    'contact_id',
+                    'job_id',
                     Table::TYPE_INTEGER,
                     10,
                     ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true]
                 )
-                ->addColumn('contact_name', Table::TYPE_TEXT, 255, ['nullable' => false])
+                ->addColumn('job_name', Table::TYPE_TEXT, 255, ['nullable' => false])
                 ->addColumn('age', Table::TYPE_INTEGER, 10, ['nullable' => false])
                 ->addColumn('address', Table::TYPE_TEXT, '2M', ['default' => ''], 'File path')
                 ->addColumn('phone', Table::TYPE_TEXT, 10, ['default' => ''], 'File extension')
@@ -44,24 +44,24 @@ class InstallSchema implements InstallSchemaInterface
         if (!$installer->tableExists('straker_product_attachment_rel')) {
             $table = $installer->getConnection()
                 ->newTable($installer->getTable('straker_product_attachment_rel'))
-                ->addColumn('contact_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true])
+                ->addColumn('job_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true])
                 ->addColumn('product_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true], 'Magento Product Id')
                 ->addForeignKey(
                     $installer->getFkName(
-                        'straker_contact',
-                        'contact_id',
+                        'straker_job',
+                        'job_id',
                         'straker_product_attachment_rel',
-                        'contact_id'
+                        'job_id'
                     ),
-                    'contact_id',
-                    $installer->getTable('straker_contact'),
-                    'contact_id',
+                    'job_id',
+                    $installer->getTable('straker_job'),
+                    'job_id',
                     Table::ACTION_CASCADE
                 )
                 ->addForeignKey(
                     $installer->getFkName(
                         'straker_product_attachment_rel',
-                        'contact_id',
+                        'job_id',
                         'catalog_product_entity',
                         'entity_id'
                     ),

@@ -3,14 +3,14 @@
     <update handle="editor"/>
     <body>
         <referenceContainer name="content">
-            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit" name="easytranslationplatform_contact_edit"/>
+            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit" name="easytranslationplatform_job_edit"/>
         </referenceContainer>
         <referenceContainer name="left">
-            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit\Tabs" name="easytranslationplatform_contact_edit_tabs">
-                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit\Tab\Main" name="easytranslationplatform_contact_edit_tab_main"/>
+            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tabs" name="easytranslationplatform_job_edit_tabs">
+                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Main" name="easytranslationplatform_job_edit_tab_main"/>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">main_section</argument>
-                    <argument name="block" xsi:type="string">easytranslationplatform_contact_edit_tab_main</argument>
+                    <argument name="block" xsi:type="string">easytranslationplatform_job_edit_tab_main</argument>
                 </action>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">attachment_products</argument>
@@ -20,6 +20,11 @@
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getEasyTranslationPlatformUrl"></item>
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
+                </action>
+                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Attributes" name="easytranslationplatform_job_edit_tab_attributes" template="Straker_EasyTranslationPlatform::setup/registrationtitle.phtml"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">attribute_section</argument>
+                    <argument name="block" xsi:type="string">easytranslationplatform_job_edit_tab_attributes</argument>
                 </action>
             </block>
         </referenceContainer>

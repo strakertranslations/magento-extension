@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit;
 
 /**
  * Admin page left menu
@@ -13,8 +13,8 @@ class Tabs extends \Magento\Backend\Block\Widget\Tabs
     protected function _construct()
     {
         parent::_construct();
-        $this->setId('contact_tabs');
+        $this->setId('job_tabs');
         $this->setDestElementId('edit_form');
-        $this->setTitle(__('Contact Information'));
+        $this->setTitle(__('Job Information'));
     }
 }

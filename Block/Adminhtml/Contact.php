@@ -3,9 +3,9 @@
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml;
 
 /**
- * Adminhtml contact content block
+ * Adminhtml job content block
  */
-class Contact extends \Magento\Backend\Block\Widget\Grid\Container
+class Job extends \Magento\Backend\Block\Widget\Grid\Container
 {
     /**
      * Block constructor

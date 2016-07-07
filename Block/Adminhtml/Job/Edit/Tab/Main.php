@@ -1,5 +1,6 @@
 <?php
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit\Tab;
+
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
 class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
@@ -38,25 +39,25 @@ class Main extends \Magento\Backend\Block\Widget\Form\Generic implements \Magent
      */
     protected function _prepareForm()
     {
-        /* @var $model \Straker\EasyTranslationPlatform\Model\Contact */
-        $model = $this->_coreRegistry->registry('st_contact');
+        /* @var $model \Straker\EasyTranslationPlatform\Model\Job */
+        $model = $this->_coreRegistry->registry('st_job');
 
         /** @var \Magento\Framework\Data\Form $form */
         $form = $this->_formFactory->create();
 
-        $form->setHtmlIdPrefix('contact_');
+        $form->setHtmlIdPrefix('job_');
 
-        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Contact Information')]);
+        $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Job Information')]);
 
         if ($model->getId()) {
-            $fieldset->addField('contact_id', 'hidden', ['name' => 'contact_id']);
+            $fieldset->addField('job_id', 'hidden', ['name' => 'job_id']);
         }
 
         $fieldset->addField(
-            'contact_name',
+            'job_name',
             'text',
             [
-                'name' => 'contact_name',
+                'name' => 'job_name',
                 'label' => __('Name'),
                 'title' => __('Name'),
                 'required' => true,

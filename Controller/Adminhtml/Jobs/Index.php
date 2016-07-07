@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Contacts;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
@@ -34,6 +34,7 @@ class Index extends \Magento\Backend\App\Action
     {
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->prepend(__('Straker Translations'));
         return $resultPage;
     }
 
@@ -44,6 +45,6 @@ class Index extends \Magento\Backend\App\Action
      */
     /*protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::contacts');
+        return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::jobs');
     }*/
 }

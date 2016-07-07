@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Contacts;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -14,9 +14,9 @@ class Save extends \Magento\Backend\App\Action
     protected $_jsHelper;
 
     /**
-     * @var \Straker\EasyTranslationPlatform\Model\ResourceModel\Contact\CollectionFactory
+     * @var \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory
      */
-    protected $_contactCollectionFactory;
+    protected $_jobCollectionFactory;
 
     /**
      * \Magento\Backend\Helper\Js $jsHelper
@@ -25,10 +25,10 @@ class Save extends \Magento\Backend\App\Action
     public function __construct(
         Context $context,
         \Magento\Backend\Helper\Js $jsHelper,
-        \Straker\EasyTranslationPlatform\Model\ResourceModel\Contact\CollectionFactory $contactCollectionFactory
+        \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
     ) {
         $this->_jsHelper = $jsHelper;
-        $this->_contactCollectionFactory = $contactCollectionFactory;
+        $this->_jobCollectionFactory = $jobCollectionFactory;
         parent::__construct($context);
     }
 
@@ -53,10 +53,10 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
         if ($data) {
 
-            /** @var \Straker\EasyTranslationPlatform\Model\Contact $model */
-            $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\Contact');
+            /** @var \Straker\EasyTranslationPlatform\Model\Job $model */
+            $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\Job');
 
-            $id = $this->getRequest()->getParam('contact_id');
+            $id = $this->getRequest()->getParam('job_id');
             if ($id) {
                 $model->load($id);
             }
@@ -67,10 +67,10 @@ class Save extends \Magento\Backend\App\Action
                 $model->save();
                 $this->saveProducts($model, $data);
 
-                $this->messageManager->addSuccess(__('You saved this contact.'));
+                $this->messageManager->addSuccess(__('You saved this job.'));
                 $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
                 if ($this->getRequest()->getParam('back')) {
-                    return $resultRedirect->setPath('*/*/edit', ['contact_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath('*/*/edit', ['job_id' => $model->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
@@ -78,18 +78,18 @@ class Save extends \Magento\Backend\App\Action
             } catch (\RuntimeException $e) {
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the contact.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
             }
 
             $this->_getSession()->setFormData($data);
-            return $resultRedirect->setPath('*/*/edit', ['contact_id' => $this->getRequest()->getParam('contact_id')]);
+            return $resultRedirect->setPath('*/*/edit', ['job_id' => $this->getRequest()->getParam('job_id')]);
         }
         return $resultRedirect->setPath('*/*/');
     }
 
     public function saveProducts($model, $post)
     {
-        // Attach the attachments to contact
+        // Attach the attachments to job
         if (isset($post['products'])) {
             $productIds = $this->_jsHelper->decodeGridSerializedInput($post['products']);
             try {
@@ -99,24 +99,24 @@ class Save extends \Magento\Backend\App\Action
                 $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\ResourceConnection');
                 $connection = $this->_resources->getConnection();
 
-                $table = $this->_resources->getTableName(\Straker\EasyTranslationPlatform\Model\ResourceModel\Contact::TBL_ATT_PRODUCT);
+                $table = $this->_resources->getTableName(\Straker\EasyTranslationPlatform\Model\ResourceModel\Job::TBL_ATT_PRODUCT);
                 $insert = array_diff($newProducts, $oldProducts);
                 $delete = array_diff($oldProducts, $newProducts);
 
                 if ($delete) {
-                    $where = ['contact_id = ?' => (int)$model->getId(), 'product_id IN (?)' => $delete];
+                    $where = ['job_id = ?' => (int)$model->getId(), 'product_id IN (?)' => $delete];
                     $connection->delete($table, $where);
                 }
 
                 if ($insert) {
                     $data = [];
                     foreach ($insert as $product_id) {
-                        $data[] = ['contact_id' => (int)$model->getId(), 'product_id' => (int)$product_id];
+                        $data[] = ['job_id' => (int)$model->getId(), 'product_id' => (int)$product_id];
                     }
                     $connection->insertMultiple($table, $data);
                 }
             } catch (Exception $e) {
-                $this->messageManager->addException($e, __('Something went wrong while saving the contact.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
             }
         }
 

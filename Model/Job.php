@@ -4,7 +4,7 @@ namespace Straker\EasyTranslationPlatform\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
 
-class Contact extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
+class Job extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
 
     /**
@@ -31,7 +31,7 @@ class Contact extends \Magento\Framework\Model\AbstractModel implements Identity
      */
     protected function _construct()
     {
-        $this->_init('Straker\EasyTranslationPlatform\Model\ResourceModel\Contact');
+        $this->_init('Straker\EasyTranslationPlatform\Model\ResourceModel\Job');
     }
 
     /**
@@ -44,15 +44,15 @@ class Contact extends \Magento\Framework\Model\AbstractModel implements Identity
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
-    public function getProducts(\Straker\EasyTranslationPlatform\Model\Contact $object)
+    public function getProducts(\Straker\EasyTranslationPlatform\Model\Job $object)
     {
-        $tbl = $this->getResource()->getTable(\Straker\EasyTranslationPlatform\Model\ResourceModel\Contact::TBL_ATT_PRODUCT);
+        $tbl = $this->getResource()->getTable(\Straker\EasyTranslationPlatform\Model\ResourceModel\Job::TBL_ATT_PRODUCT);
         $select = $this->getResource()->getConnection()->select()->from(
             $tbl,
             ['product_id']
         )
         ->where(
-            'contact_id = ?',
+            'job_id = ?',
             (int)$object->getId()
         );
         return $this->getResource()->getConnection()->fetchCol($select);

@@ -1,12 +1,12 @@
 <?php
-namespace Straker\EasyTranslationPlatform\Model\ResourceModel\Contact;
+namespace Straker\EasyTranslationPlatform\Model\ResourceModel\Job;
 
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
      * @var string
      */
-    protected $_idFieldName = 'contact_id';
+    protected $_idFieldName = 'job_id';
 
     /**
      * Define resource model
@@ -15,6 +15,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      */
     protected function _construct()
     {
-        $this->_init('Straker\EasyTranslationPlatform\Model\Contact', 'Straker\EasyTranslationPlatform\Model\ResourceModel\Contact');
+        $this->_init('Straker\EasyTranslationPlatform\Model\Job', 'Straker\EasyTranslationPlatform\Model\ResourceModel\Job');
     }
 }

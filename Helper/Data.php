@@ -35,6 +35,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getEasyTranslationPlatformUrl()
     {
-        return $this->_backendUrl->getUrl('EasyTranslationPlatform/Contacts/products', ['_current' => true]);
+        return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/products', ['_current' => true]);
     }
 }

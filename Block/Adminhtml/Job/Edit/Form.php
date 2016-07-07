@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Contact\Edit;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit;
 
 /**
  * Adminhtml attachment edit form block

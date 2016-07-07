@@ -7,11 +7,11 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
 use Magento\Framework\UrlInterface;
 
-class ContactsActions extends Column
+class JobsActions extends Column
 {
     /** Url path */
-    const CONTACTS_URL_PATH_EDIT = 'EasyTranslationPlatform/contacts/edit';
-    const CONTACTS_URL_PATH_DELETE = 'EasyTranslationPlatform/contacts/delete';
+    const CONTACTS_URL_PATH_EDIT = 'EasyTranslationPlatform/jobs/edit';
+    const CONTACTS_URL_PATH_DELETE = 'EasyTranslationPlatform/jobs/delete';
 
     /** @var UrlInterface */
     protected $urlBuilder;
@@ -53,13 +53,13 @@ class ContactsActions extends Column
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
-                if (isset($item['contact_id'])) {
+                if (isset($item['job_id'])) {
                     $item[$name]['edit'] = [
-                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['contact_id' => $item['contact_id']]),
+                        'href' => $this->urlBuilder->getUrl($this->editUrl, ['job_id' => $item['job_id']]),
                         'label' => __('Edit')
                     ];
                     $item[$name]['delete'] = [
-                        'href' => $this->urlBuilder->getUrl(self::CONTACTS_URL_PATH_DELETE, ['contact_id' => $item['contact_id']]),
+                        'href' => $this->urlBuilder->getUrl(self::CONTACTS_URL_PATH_DELETE, ['job_id' => $item['job_id']]),
                         'label' => __('Delete'),
                         'confirm' => [
                             'title' => __('Delete "${ $.$data.attachment_name }"'),

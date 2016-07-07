@@ -2,36 +2,36 @@
 <listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="context" xsi:type="configurableObject">
         <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\Context</argument>
-        <argument name="namespace" xsi:type="string">st_contacts_listing</argument>
+        <argument name="namespace" xsi:type="string">st_jobs_listing</argument>
         <!-- this should be same as the file name or uicomponentname -->
     </argument>
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">st_contacts_listing.contacts_grid_data_source</item>
+            <item name="provider" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>
              <!-- the format here is uicomponentname.datasourcename -->
-            <item name="deps" xsi:type="string">st_contacts_listing.contacts_grid_data_source</item>
+            <item name="deps" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>
             <!-- the format here is uicomponentname.datasourcename -->
         </item>
-        <item name="spinner" xsi:type="string">contacts_grid_columns</item>
+        <item name="spinner" xsi:type="string">jobs_grid_columns</item>
         <!-- the format here is columns name defined below -->
         <item name="buttons" xsi:type="array">
             <!-- here we can add buttons -->
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Add New Contact</item>
+                <item name="label" xsi:type="string" translate="true">Add New Job</item>
                 <item name="class" xsi:type="string">primary</item>
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
         </item>
     </argument>
-    <dataSource name="contacts_grid_data_source">
+    <dataSource name="jobs_grid_data_source">
         <!-- this is data source name, this is used at many places -->
         <argument name="dataProvider" xsi:type="configurableObject">
-            <argument name="class" xsi:type="string">ContactGridDataProvider</argument>
+            <argument name="class" xsi:type="string">JobGridDataProvider</argument>
             <!-- <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider</argument> -->
-            <argument name="name" xsi:type="string">contacts_grid_data_source</argument>
+            <argument name="name" xsi:type="string">jobs_grid_data_source</argument>
             <!-- the same data source name as above -->
-            <argument name="primaryFieldName" xsi:type="string">contact_id</argument>
+            <argument name="primaryFieldName" xsi:type="string">job_id</argument>
             <!-- our model's primary key -->
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <!-- the field used in ajax url's of grid. just define this as id -->
@@ -61,7 +61,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="storageConfig" xsi:type="array">
-                        <item name="namespace" xsi:type="string">st_contacts_listing</item>
+                        <item name="namespace" xsi:type="string">st_jobs_listing</item>
                     </item>
                 </item>
             </argument>
@@ -71,7 +71,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">st_contacts_listing.st_contacts_listing.contacts_grid_columns</item>
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
                     </item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
@@ -82,10 +82,10 @@
         <filterSearch name="fulltext">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="provider" xsi:type="string">st_contacts_listing.contacts_grid_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">st_contacts_listing.st_contacts_listing.listing_top.listing_filters_chips</item>
+                    <item name="provider" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>
+                    <item name="chipsProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.listing_filters_chips</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">st_contacts_listing.st_contacts_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.search</item>
                     </item>
                 </item>
@@ -95,15 +95,15 @@
         <filters name="listing_filters">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="columnsProvider" xsi:type="string">st_contacts_listing.st_contacts_listing.contacts_grid_columns</item>
+                    <item name="columnsProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">st_contacts_listing.st_contacts_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
                     <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">st_contacts_listing.st_contacts_listing.listing_top.listing_filters</item>
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.listing_filters</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">st_contacts_listing.st_contacts_listing.contacts_grid_columns.${ $.index }:visible</item>
+                            <item name="visible" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns.${ $.index }:visible</item>
                         </item>
                     </item>
                 </item>
@@ -113,8 +113,8 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">st_contacts_listing.st_contacts_listing.contacts_grid_columns.ids</item>
-                    <item name="indexField" xsi:type="string">contact_id</item>
+                    <item name="selectProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns.ids</item>
+                    <item name="indexField" xsi:type="string">job_id</item>
                 </item>
             </argument>
             <action name="delete">
@@ -136,28 +136,28 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">st_contacts_listing.st_contacts_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks</item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
-                    <item name="selectProvider" xsi:type="string">st_contacts_listing.st_contacts_listing.contacts_grid_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns.ids</item>
                 </item>
             </argument>
         </paging>
 
     </container>
 
-    <columns name="contacts_grid_columns">
+    <columns name="jobs_grid_columns">
        <!-- this is columns section name, used above in spinner -->
         <selectionsColumn name="ids">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="indexField" xsi:type="string">contact_id</item>
+                    <item name="indexField" xsi:type="string">job_id</item>
                 </item>
             </argument>
         </selectionsColumn>
         <!-- this is for the first column which allost to select multiple columns -->
         <!-- below are different column types based on our models -->
-        <column name="contact_id">
+        <column name="job_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -166,7 +166,7 @@
                 </item>
             </argument>
         </column>
-        <column name="contact_name">
+        <column name="job_name">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -222,12 +222,12 @@
                 </item>
             </argument>
         </column>
-        <actionsColumn name="actions" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\ContactsActions">
+        <actionsColumn name="actions" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobsActions">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="resizeEnabled" xsi:type="boolean">false</item>
                     <item name="resizeDefaultWidth" xsi:type="string">107</item>
-                    <item name="indexField" xsi:type="string">contact_id</item>
+                    <item name="indexField" xsi:type="string">job_id</item>
                 </item>
             </argument>
         </actionsColumn>
@@ -237,8 +237,8 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>
-                <item name="toolbarProvider" xsi:type="string">st_contacts_listing.st_contacts_listing.listing_top</item>
-                <item name="listingProvider" xsi:type="string">st_contacts_listing.st_contacts_listing.contacts_grid_columns</item>
+                <item name="toolbarProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top</item>
+                <item name="listingProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
             </item>
         </argument>
     </container>
