@@ -30,9 +30,11 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
 
         try{
 
-            $this->_configModel->SaveConfig('straker/general/first_name',$data['first_name'],'default',0);
+//            $this->_configModel->SaveConfig('straker/general/first_name',$data['first_name'],'default',0);
 
-            $this->_configModel->SaveConfig('straker/general/last_name',$data['last_name'],'default',0);
+//            $this->_configModel->SaveConfig('straker/general/last_name',$data['last_name'],'default',0);
+
+            $this->_configModel->SaveConfig('straker/general/name',$data['first_name'].' ' . $data['last_name'],'default',0);
 
             $this->_configModel->SaveConfig('straker/general/email',$data['email'],'default',0);
 
@@ -101,14 +103,13 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
         }
     }
 
-    public function saveStoreSetup($source_store, $source_language, $destination_store, $destination_language){
+    public function saveStoreSetup($storeId, $source_store, $source_language, $destination_store, $destination_language){
 
         try{
-
-            $this->_configModel->SaveConfig('straker/general/source_store',$source_store,'stores',$source_store);
-            $this->_configModel->SaveConfig('straker/general/source_language',$source_language,'stores',$source_store);
-            $this->_configModel->SaveConfig('straker/general/destination_store',$destination_store,'stores',$source_store);
-            $this->_configModel->SaveConfig('straker/general/destination_language',$destination_language,'stores',$source_store);
+            $this->_configModel->SaveConfig('straker/general/source_store',$source_store,'stores',$storeId);
+            $this->_configModel->SaveConfig('straker/general/source_language',$source_language,'stores',$storeId);
+            $this->_configModel->SaveConfig('straker/general/destination_store',$destination_store,'stores',$storeId);
+            $this->_configModel->SaveConfig('straker/general/destination_language',$destination_language,'stores',$storeId);
 
             $this->_errorManager->_error = false;
 

@@ -1,5 +1,25 @@
-<button id="<?php echo $block->escapeHtml($block->getData('id'));?>"
-       name="<?php echo $block->escapeHtml($block->getData('name'));?>"
-       type="<?php echo $block->escapeHtml($block->getData('type'));?>">
-    <span><?php echo $block->escapeHtml($block->getButtonLabel()); ?></span>
-</button>
+<script>
+    require([
+        'jquery'
+    ], function( $ ){
+        var $resetButton = $('#straker_general_reset_account_button');
+        $resetButton.on('click', function(){
+
+            var bResult = window.confirm("Do you want reset all settings?");
+
+            if( bResult ){
+                $.ajax({
+                    url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                    //data     : { form_key: window.FORM_KEY },
+                    method   : 'get',
+                    dataType : 'json',
+                    complete : function(){
+                        location.reload();
+                    }
+                });
+            }
+        });
+    });
+</script>
+
+<?php echo $block->getButtonHtml();
