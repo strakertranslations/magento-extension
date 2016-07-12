@@ -35,7 +35,7 @@ class Save extends \Magento\Backend\App\Action
 
             try {
 
-                $this->_setup->saveStoreSetup($data['source_store'], $data['source_store'],$data['source_language'],$data['destination_store'],$data['destination_language']);
+                $this->_setup->saveStoreSetup($data['destination_store'], $data['source_store'],$data['source_language'],$data['destination_language']);
 
                 if($this->_errorManager->_error){
 

@@ -13,7 +13,7 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
 {
     protected $_configModel;
     protected $_storeManager;
-    protected $_error;
+    protected $_errorManager;
 
     public function __construct(
         Config $config,
@@ -103,13 +103,14 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
         }
     }
 
-    public function saveStoreSetup($storeId, $source_store, $source_language, $destination_store, $destination_language){
+    public function saveStoreSetup($scopeId, $source_store, $source_language, $destination_language){
 
         try{
-            $this->_configModel->SaveConfig('straker/general/source_store',$source_store,'stores',$storeId);
-            $this->_configModel->SaveConfig('straker/general/source_language',$source_language,'stores',$storeId);
-            $this->_configModel->SaveConfig('straker/general/destination_store',$destination_store,'stores',$storeId);
-            $this->_configModel->SaveConfig('straker/general/destination_language',$destination_language,'stores',$storeId);
+
+            $this->_configModel->saveConfig('straker/general/source_store',$source_store, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
+            $this->_configModel->SaveConfig('straker/general/source_language',$source_language,\Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
+            $this->_configModel->SaveConfig('straker/general/destination_language',$destination_language,\Magento\Store\Model\ScopeInterface::SCOPE_STORES,$scopeId);
+
 
             $this->_errorManager->_error = false;
 
