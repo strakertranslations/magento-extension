@@ -1,6 +1,8 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
 class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
 {
     const BUTTON_TEMPLATE = 'settings/config/button/reset_account_button.phtml';
@@ -25,10 +27,10 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Render button
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         // Remove scope label
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
@@ -42,16 +44,16 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function getAjaxResetUrl()
     {
-        return $this->getUrl('EasyTranslationPlatform/Job/NewJob'); //hit controller by ajax call on button click.
+        return $this->getUrl('EasyTranslationPlatform/Settings/ResetAccount'); 
     }
 
     /**
      * Get the button and scripts contents
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         $this->_buttonId = $element->getId();
         $this->_buttonName = $element->getName();

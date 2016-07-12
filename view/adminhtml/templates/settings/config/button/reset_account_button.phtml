@@ -1,23 +1,29 @@
 <script>
     require([
-        'jquery'
-    ], function( $ ){
+        'jquery',
+        'Magento_Ui/js/modal/confirm'
+    ], function( $, confirm ){
+
         var $resetButton = $('#straker_general_reset_account_button');
+
         $resetButton.on('click', function(){
 
-            var bResult = window.confirm("Do you want reset all settings?");
-
-            if( bResult ){
-                $.ajax({
-                    url      : '<?php echo $block->getAjaxResetUrl(); ?>',
-                    //data     : { form_key: window.FORM_KEY },
-                    method   : 'get',
-                    dataType : 'json',
-                    complete : function(){
-                        location.reload();
+            confirm({
+                title: '<?php echo __("Please Confirm") ?>',
+                content: '<?php echo __('Do you want to reset all settings?') ?>',
+                actions: {
+                    confirm: function(){
+                        $.ajax({
+                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                            method   : 'get',
+                            dataType : 'json',
+                            complete : function(){
+                                location.reload();
+                            }
+                        });
                     }
-                });
-            }
+                }
+            });
         });
     });
 </script>
