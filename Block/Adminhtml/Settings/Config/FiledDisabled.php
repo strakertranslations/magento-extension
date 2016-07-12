@@ -14,11 +14,6 @@ class FiledDisabled extends \Magento\Config\Block\System\Config\Form\Field
     protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $element->setDisabled('disabled');
-        $this->setData(
-            [
-                'value' => '2342'
-            ]
-        );
         return $element->getElementHtml();
 
     }
