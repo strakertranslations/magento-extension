@@ -74,11 +74,23 @@
                     </depends>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetAccountButton</frontend_model>
                 </field>
-                </group>
-                <group id="languages_store_views" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Languages &amp; Store Views</label>
-                <field id="settings_title" translate="label" type="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Languages &amp; Store Views</label>
+                <field id="reset_store" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Reset Language Settings for a Store</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetStore</frontend_model>
+                </field>
+                <field id="backup_product_data_button" translate="label" type="button" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Backup Product Data</label>
+                    <depends>
+                        <field id="*/*/version" negative="1">live</field>
+                    </depends>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\BackupProductData</frontend_model>
+                </field>
+                <field id="restore_product_data_button" translate="label" type="button" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Restore Product Data</label>
+                    <depends>
+                        <field id="*/*/version" negative="1">live</field>
+                    </depends>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData</frontend_model>
                 </field>
             </group>
         </section>
