@@ -1,11 +1,9 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
-use Magento\Framework\Data\Form\Element\AbstractElement;
-
-class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
+class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
 {
-    const BUTTON_TEMPLATE = 'settings/config/button/reset_account_button.phtml';
+    const BUTTON_TEMPLATE = 'settings/config/button/backup_product_data_button.phtml';
 
     private $_buttonId;
     private $_buttonName;
@@ -27,10 +25,10 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Render button
      *
-     * @param  AbstractElement $element
+     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    public function render(AbstractElement $element)
+    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         // Remove scope label
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
@@ -44,16 +42,16 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function getAjaxResetUrl()
     {
-        return $this->getUrl('EasyTranslationPlatform/Settings/ResetAccount'); 
+        return $this->getUrl('EasyTranslationPlatform/Settings/BackupProductData'); //hit controller by ajax call on button click.
     }
 
     /**
      * Get the button and scripts contents
      *
-     * @param AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_buttonId = $element->getId();
         $this->_buttonName = $element->getName();
@@ -69,7 +67,7 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
         )->addData([
             'id' => $this->_buttonId,
                 'name' => $this->_buttonName,
-                'label' => __('Reset Account'),
+                'label' => __('Backup Product Data'),
                 'type' => 'button'
         ]);
 

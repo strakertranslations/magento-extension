@@ -9,11 +9,18 @@ use Straker\EasyTranslationPlatform\Logger\Logger;
 
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
-use Magento\Framework\App\Action\Context;
+use Magento\Backend\App\Action\Context;
 
 
 class Save extends \Magento\Backend\App\Action
 {
+
+    protected $_config;
+    protected $_reinitConfig;
+    protected $_strakerAPI;
+    protected $_setup;
+    protected $_errorManager;
+    protected $_logger;
 
     public function __construct(
         Context $context,

@@ -1,21 +1,23 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Job;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Settings;
 
 use \Magento\Framework\App\Action\Context;
 use \Magento\Framework\Message\ManagerInterface;
+use \Magento\Store\Model\StoreManagerInterface;
+use \Magento\Framework\App\CacheInterface;
 use \Magento\Framework\App\ObjectManager;
 use \Magento\Framework\Controller\Result\Json;
-use \Straker\EasyTranslationPlatform\Model\StrakerAPI;
 use \Straker\EasyTranslationPlatform\Model\Setup;
 
 
-class NewJob extends \Magento\Framework\App\Action\Action
+class ResetAccount extends \Magento\Framework\App\Action\Action
 {
 
     protected $_messageManager;
+    protected $_storeManager;
+    protected $_storeCache;
     protected $_resultJson;
-    protected $_strakerAPI;
     protected $_strakerSetup;
 
     public $resultRedirectFactory;
@@ -24,13 +26,15 @@ class NewJob extends \Magento\Framework\App\Action\Action
         Context $context,
         Json $resultJson,
         ManagerInterface $messageManager,
-        StrakerAPI $strakerAPI,
+        StoreManagerInterface $storeManager,
+        CacheInterface $storeCache,
         Setup $strakerSetup
     )
     {
         $this->_messageManager = $messageManager;
+        $this->_storeManager = $storeManager;
+        $this->_storeCache = $storeCache;
         $this->_resultJson = $resultJson;
-        $this->_strakerAPI = $strakerAPI;
         $this->_strakerSetup = $strakerSetup;
 
         return parent::__construct($context);
@@ -48,20 +52,11 @@ class NewJob extends \Magento\Framework\App\Action\Action
             $data = ['first_name' => '', 'last_name' => '', 'email' => '', 'url' => ''];
             $this->_strakerSetup->saveClientData( $data );
 
-            /** @var \Magento\Framework\App\ObjectManager $objManager */
-            $objManager = ObjectManager::getInstance();
-
-            /** @var \Magento\Store\Model\StoreManagerInterface|\Magento\Store\Model\StoreManager $storeManager */
-            $storeManager = $objManager->get('Magento\Store\Model\StoreManagerInterface');
-
-            foreach ($storeManager->getStores($withDefault = false) as $store) {
-                $this->_strakerSetup->saveStoreSetup($store->getId(),'','','','');
+            foreach ($this->_storeManager->getStores($withDefault = false) as $store) {
+                $this->_strakerSetup->saveStoreSetup($store->getId(),'','','');
             }
 
-            /** @var \Magento\Framework\App\CacheInterface $cache */
-            $cache = $objManager->get('Magento\Framework\App\CacheInterface');
-
-            $cache->clean(\Magento\Framework\App\Config::CACHE_TAG);
+            $this->_storeCache->clean(\Magento\Framework\App\Config::CACHE_TAG);
 
             $this->_messageManager->addSuccess(__('Straker Settings has been cleared.'));
 

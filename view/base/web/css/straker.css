@@ -1,0 +1,25 @@
+.site-group-name{
+    font-weight: 700;
+    line-height: 35px;
+    padding: 0 ! important;
+}
+
+.store-view-list{
+    line-height: 20px;
+}
+
+.store-view-name{
+    width: 45%;
+    padding: 0.5rem 0 ! important;
+    vertical-align: middle;
+    /*text-align: right;*/
+}
+
+.clear-language{
+    padding: 0.5rem 0 ! important;
+}
+
+.action-default.scalable.straker-reset-store-button{
+    font-size: 1rem;
+    padding: 0.3rem 0.6rem 0.3rem;
+}

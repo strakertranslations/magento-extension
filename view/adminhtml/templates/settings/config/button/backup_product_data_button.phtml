@@ -4,19 +4,18 @@
         'Magento_Ui/js/modal/confirm'
     ], function( $, confirm ){
 
-        var $resetButton = $('#straker_general_reset_account_button');
+        var $resetButton = $('#straker_general_backup_product_data_button');
 
         $resetButton.on('click', function(){
 
             confirm({
                 title: '<?php echo __("Please Confirm") ?>',
-                content: '<?php echo __('Do you want to reset all settings?') ?>',
+                content: '<?php echo __('Do you want to backup product data?') . '<br><strong>'. __( 'Note, ') . '</strong>'  . __('if you have previous backup, it will be overwritten!') ?>',
                 actions: {
                     confirm: function(){
                         $.ajax({
                             url      : '<?php echo $block->getAjaxResetUrl(); ?>',
                             method   : 'get',
-                            dataType : 'json',
                             complete : function(){
                                 location.reload();
                             }
@@ -27,5 +26,4 @@
         });
     });
 </script>
-
 <?php echo $block->getButtonHtml();

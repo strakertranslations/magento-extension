@@ -2,7 +2,10 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
-class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Store\Model\ScopeInterface;
+
+class ConfigHelper extends AbstractHelper
 {
 
     public function getConfig($req)
@@ -69,6 +72,27 @@ class ConfigHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getPaymentPageUrl(){
         return $this->_getSiteDomain().'/'.$this->scopeConfig->getValue('straker/general/api_url/payment_page');
+    }
+
+    public function getStoreSetup( $storeId ){
+        $objManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $collectionFactory = $objManager->get('\Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory');
+
+        $collection = $collectionFactory->create(
+            ['scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES, 'scopeId' => $storeId ]
+        );
+
+        $dbStoreConfig = [];
+        foreach ($collection as $item) {
+            $dbStoreConfig[$item->getPath()] = $item->getValue();
+        }
+
+        $source_store = array_key_exists('straker/general/source_store',$dbStoreConfig ) ? $dbStoreConfig['straker/general/source_store'] : false;
+        $source_language = array_key_exists('straker/general/source_language',$dbStoreConfig ) ? $dbStoreConfig['straker/general/source_language'] :  false;
+        $destination_language = array_key_exists('straker/general/destination_language',$dbStoreConfig ) ? $dbStoreConfig['straker/general/destination_language'] :  false;
+
+        return ($source_store && $source_language && $destination_language) ? true : false;
+
     }
 
 }
