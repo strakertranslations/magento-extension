@@ -25,8 +25,14 @@ define(['jquery'], function( $ ){
             }
         };
 
+        var hello = function(){
+
+            console.log('rakesh.test')
+        };
+
         return {
-            hideEnvField : hideEnvEield
+            hideEnvField : hideEnvEield,
+            hello : hello
         }
         
     })();

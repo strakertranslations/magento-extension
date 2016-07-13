@@ -6,4 +6,5 @@ var config = {
 
 requirejs(['straker' ], function( straker ) {
     straker.hideEnvField();
+    straker.hello();
 });

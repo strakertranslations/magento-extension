@@ -4,8 +4,9 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\TestFramework\ErrorLog\Logger;
+use Magento\Framework\Controller\Result\JsonFactory;
 
-class ProductsGrid extends \Magento\Backend\App\Action
+class ProductAttributes extends \Magento\Backend\App\Action
 {
 
     /**
@@ -19,10 +20,12 @@ class ProductsGrid extends \Magento\Backend\App\Action
      */
     public function __construct(
         Action\Context $context,
-        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory
+        \Magento\Framework\View\Result\LayoutFactory $resultLayoutFactory,
+        JsonFactory $jsonFactory
     ) {
         parent::__construct($context);
         $this->_resultLayoutFactory = $resultLayoutFactory;
+        $this->_jsonFactory = $jsonFactory;
     }
 
     /**
@@ -40,11 +43,11 @@ class ProductsGrid extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+
         $resultLayout = $this->_resultLayoutFactory->create();
-        $resultLayout->getLayout()->getBlock('easytranslationplatform.edit.tab.products')
-                     ->setInBanner($this->getRequest()->getPost('job_products', null));
+
+        $resultLayout->getLayout()->getBlock('easytranslationplatform.edit.tab.productattributes')->setData('productIds', $this->getRequest()->getPost('products'));
 
         return $resultLayout;
     }
-
 }

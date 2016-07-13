@@ -4,6 +4,9 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
 
 use Magento\Backend\App\Action;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection;
 
 class Index extends \Magento\Backend\App\Action
 {
@@ -12,17 +15,24 @@ class Index extends \Magento\Backend\App\Action
 
     public function __construct(
         Action\Context $context,
-        PageFactory $pageFactory
+        PageFactory $pageFactory,
+        JsonFactory $jsonFactory,
+        Collection $attCollection
     )
     {
+        $this->attributeCollection = $attCollection;
         $this->resultPageFactory = $pageFactory;
+        $this->jsonFactory = $jsonFactory;
         return parent::__construct($context);
     }
 
     public function execute()
     {
-        $resultPage = $this->resultPageFactory->create();
-        return $resultPage;
+        
+        $result =  $this->jsonFactory->create();
+        $resultLayout = $this->resultPageFactory->create();
+
+        return $resultLayout;
     }
 
 }

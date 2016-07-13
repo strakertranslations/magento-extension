@@ -108,6 +108,20 @@
                     </item>
                 </item>
             </argument>
+            <filterSelect name="uiSelect">
+                <argument name="optionsProvider" xsi:type="configurableObject">
+                    <argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>
+                </argument>
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>
+                        <item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>
+                        <item name="dataScope" xsi:type="string">uiSelect</item>
+                        <item name="label" xsi:type="string" translate="true">uiSelect</item>
+                        <item name="chipsEnabled" xsi:type="boolean">1</item>
+                    </item>
+                </argument>
+            </filterSelect>
         </filters>
 
         <massaction name="listing_massaction">
