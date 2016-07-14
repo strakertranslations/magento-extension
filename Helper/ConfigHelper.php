@@ -3,6 +3,7 @@
 namespace Straker\EasyTranslationPlatform\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
 
 class ConfigHelper extends AbstractHelper
@@ -75,11 +76,11 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getStoreSetup( $storeId ){
-        $objManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objManager = ObjectManager::getInstance();
         $collectionFactory = $objManager->get('\Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory');
 
         $collection = $collectionFactory->create(
-            ['scope' => \Magento\Store\Model\ScopeInterface::SCOPE_STORES, 'scopeId' => $storeId ]
+            ['scope' => ScopeInterface::SCOPE_STORES, 'scopeId' => $storeId ]
         );
 
         $dbStoreConfig = [];

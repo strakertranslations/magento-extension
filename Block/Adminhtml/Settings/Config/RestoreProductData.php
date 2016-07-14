@@ -66,17 +66,14 @@ class RestoreProductData extends Field
 
     public function getButtonHtml()
     {
-
         $objManager = ObjectManager::getInstance();
         $resourceConnection = $objManager->get('Magento\Framework\App\ResourceConnection');
-        $connection = $resourceConnection->getConnection();
 
-        $backupTables = array(
-            'catalog_product_entity_varchar_back',
-            'catalog_product_entity_text_back',
-            'catalog_category_entity_varchar_back',
-            'catalog_category_entity_text_back'
-        );
+        /** @var \Straker\EasyTranslationPlatform\Helper\Data $dataHelper */
+        $dataHelper = $objManager->get('Straker\EasyTranslationPlatform\Helper\Data');
+
+        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
+        $connection = $resourceConnection->getConnection();
 
         $attributeData = [
             'id' => $this->_buttonId,
@@ -87,8 +84,8 @@ class RestoreProductData extends Field
 
         $validBackupData = true;
 
-        foreach ( $backupTables as $backupTableName ){
-
+        foreach ( $dataHelper->getProductTableArray() as $tableName ){
+            $backupTableName = $dataHelper->getBackupTableNames( $tableName );
             if( $connection->isTableExists( $backupTableName ) ){
                 $sql = $connection->select()
                     ->from(
@@ -112,9 +109,12 @@ class RestoreProductData extends Field
             $attributeData['disabled'] = 'disabled';
         }
 
+        /** @var \Magento\Framework\View\Element\BlockInterface $button */
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
-        )->addData($attributeData);
+        );
+
+        $button->addData($attributeData);
 
         return $button->toHtml();
     }

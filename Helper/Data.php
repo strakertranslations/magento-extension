@@ -15,6 +15,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $storeManager;
 
+    protected $_productTables = array(
+        'catalog_product_entity_varchar',
+        'catalog_product_entity_text',
+        'catalog_category_entity_varchar',
+        'catalog_category_entity_text'
+    );
+
+    const BACKUP_TABLE_SUFFIX = '_back';
+
+
     /**
      * @param \Magento\Framework\App\Helper\Context   $context
      * @param \Magento\Backend\Model\UrlInterface $backendUrl
@@ -36,5 +46,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getEasyTranslationPlatformUrl()
     {
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/products', ['_current' => true]);
+    }
+
+    public function getProductTableArray(){
+        return $this->_productTables;
+    }
+
+    public function getBackupTableNames( $tableName ){
+        return $tableName.self::BACKUP_TABLE_SUFFIX;
     }
 }
