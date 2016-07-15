@@ -41,13 +41,13 @@ class Save extends \Magento\Backend\App\Action
 
                     $this->_getSession()->setFormData($data);
 
-                    $resultRedirect->setPath('/*/index/');
+                    $resultRedirect->setPath('*/*/index/');
 
                     $this->messageManager->addError($this->_errorManager->getErrorMessage());
 
                 }else{
 
-                    $resultRedirect->setPath('/Job/index/');
+                    $resultRedirect->setPath('*/Jobs/new');
 
                 }
 
@@ -73,7 +73,7 @@ class Save extends \Magento\Backend\App\Action
                 $this->messageManager->addException($e, __('Something went wrong while saving the language configuration.'));
             }
 
-            $resultRedirect->setPath('/*/index/');
+            $resultRedirect->setPath('*/*/index/');
 
         }
 

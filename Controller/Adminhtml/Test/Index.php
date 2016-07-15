@@ -28,10 +28,8 @@ class Index extends \Magento\Backend\App\Action
 
     public function execute()
     {
-        
-        $result =  $this->jsonFactory->create();
-        $resultLayout = $this->resultPageFactory->create();
 
+        $resultLayout = $this->resultPageFactory->create();
         return $resultLayout;
     }
 

@@ -19,13 +19,10 @@
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
                 </action>
-                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Attributes"/>
+                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Attributes" name="easytranslationplatform_job_edit_tabs_attributes"/>
                 <action method="addTab">
-                    <argument name="name" xsi:type="string">attribute_section</argument>
-                        <argument name="block" xsi:type="array">
-                        <item name="label" xsi:type="string">Select Attributes</item>
-                        <item name="title" xsi:type="string">Select Attributes</item>
-                        </argument>
+                    <argument name="name" xsi:type="string">select_attributes</argument>
+                    <argument name="block" xsi:type="string">easytranslationplatform_job_edit_tabs_attributes</argument>
                 </action>
             </block>
         </referenceContainer>

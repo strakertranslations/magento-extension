@@ -74,7 +74,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      */
     protected function _getSaveAndContinueUrl()
     {
-        return $this->getUrl('easytranslationplatform/*/save', ['_current' => true, 'back' => 'edit', 'active_tab' => '']);
+        return $this->getUrl('EasyTranslationPlatform/*/save', ['_current' => true, 'back' => 'edit', 'active_tab' => '']);
     }
 
 }

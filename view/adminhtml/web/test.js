@@ -3,8 +3,6 @@ require(['jquery', 'jquery/ui'], function($){
         $('input[name="name"]').val($(this).find('option:selected').text());
     });
 
-    console.log('hello');
-
     $('#job_tabs_attribute_section').on('click',function(e){
 
         console.log($('input[name="products"]').val());

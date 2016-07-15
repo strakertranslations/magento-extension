@@ -29,7 +29,7 @@ class Plugin
 
         if(!$this->_configHelper->getAccessToken()) {
 
-            $url = $this->_url->getUrl("EasyTranslationPlatform/Setup_registration/Index/");
+            $url = $this->_url->getUrl("*/Setup_registration/index/");
 
             $resultRedirect = $subject->resultRedirectFactory->create();
 
