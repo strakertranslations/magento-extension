@@ -8,6 +8,8 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Helper\Data;
 
 
 class RestoreProductData extends Action
@@ -16,24 +18,25 @@ class RestoreProductData extends Action
     protected $_messageManager;
     protected $_resourceConnection;
     protected $_connection;
+    protected $_logger;
 
-    protected $_productTables = array(
-        'catalog_product_entity_varchar',
-        'catalog_product_entity_text',
-        'catalog_category_entity_varchar',
-        'catalog_category_entity_text'
-    );
-
-    const BACKUP_TABLE_SUFFIX = '_back';
+    /**
+     * @var \Straker\EasyTranslationPlatform\Helper\Data
+     */
+    protected $_dataHelper;
 
     public function __construct(
         Context $context,
         ResourceConnection $resourceConnection,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        Logger $logger,
+        Data $dataHelper
     )
     {
         $this->_messageManager = $messageManager;
         $this->_resourceConnection = $resourceConnection;
+        $this->_logger = $logger;
+        $this->_dataHelper = $dataHelper;
 
         return parent::__construct($context);
     }
@@ -48,8 +51,8 @@ class RestoreProductData extends Action
                 $this->_connection = $this->_resourceConnection->getConnection();
             }
 
-            foreach( $this->_productTables as $tableName ){
-                $backupTableName = $this->_getBackupTableName( $tableName );
+            foreach( $this->_dataHelper->getProductTableArray() as $tableName ){
+                $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
 
                 if( $this->_connection->isTableExists( $tableName )
                     && $this->_connection->isTableExists( $backupTableName )){
@@ -83,30 +86,34 @@ class RestoreProductData extends Action
 
     public function execute()
     {
-
         try{
 
             if($this->_hasBackupData()){
-
                 $this->_truncateProductData();
-
             }else{
-
-                $this->_messageManager->addErrorMessage( 'There is no backup data to restore.' );
+                $message = __( 'There is no backup data to restore.' );
+                $this->_logger->error( $message );
+                $this->_messageManager->addErrorMessage( $message );
                 return;
 
             }
 
             $result = $this->_executeRestore();
 
-            if( !$result['Success'] ){
-                $this->_messageManager->addErrorMessage( $result['Message'] );
+            if( $result['Success'] ){
+                $message = __( 'Product and category entity tables has been restored!' );
+                $this->_logger->info( $message );
+                $this->_messageManager->addSuccessMessage( $message );
             }else{
-                $this->_messageManager->addSuccessMessage( 'product and category entity tables has been restored!' );
+                $message = __( $result['Message'] );
+                $this->_logger->error( $message );
+                $this->_messageManager->addErrorMessage( $message );
             }
 
         }catch (Exception $e ){
-            $this->messageManager->addErrorMessage( $e->getMessage() );
+            $message = __( $e->getMessage() );
+            $this->_logger->error( $message );
+            $this->messageManager->addErrorMessage( $message );
         }
 
         return;
@@ -120,9 +127,9 @@ class RestoreProductData extends Action
             $this->_connection = $this->_resourceConnection->getConnection();
         }
 
-        foreach ( $this->_productTables as $tableName ){
+        foreach ( $this->_dataHelper->getProductTableArray() as $tableName ){
 
-            $backupTableName = $this->_getBackupTableName( $tableName );
+            $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
 
             if( $this->_connection->isTableExists( $backupTableName ) ){
                 $sql = $this->_connection->select()
@@ -143,18 +150,13 @@ class RestoreProductData extends Action
         return $result;
     }
 
-    private function _getBackupTableName( $tableName ){
-        return $tableName.self::BACKUP_TABLE_SUFFIX;
-    }
-
-
     private function _truncateProductData()
     {
         if( !isset($this->_connection) ){
             $this->_connection = $this->_resourceConnection->getConnection();
         }
 
-        foreach ( $this->_productTables as $tableName ){
+        foreach ( $this->_dataHelper->getProductTableArray() as $tableName ){
             if($this->_connection->isTableExists( $tableName )){
                 $this->_connection->truncateTable( $tableName );
             }
