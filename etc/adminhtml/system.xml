@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <tab id="easytranslationplatform" translate="label" sortOrder="700">
             <label>Straker Translations</label>
@@ -91,6 +91,17 @@
                         <field id="*/*/version" negative="1">live</field>
                     </depends>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData</frontend_model>
+                </field>
+            </group>
+            <group id="attributes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Attribute Defaults</label>
+                <field id="default" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Default Attributes</label>
+                    <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\DefaultAttributeSource</source_model>
+                </field>
+                <field id="custom" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Custom Attributes</label>
+                    <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\CustomAttributeSource</source_model>
                 </field>
             </group>
         </section>

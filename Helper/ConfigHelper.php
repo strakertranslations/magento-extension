@@ -3,11 +3,23 @@
 namespace Straker\EasyTranslationPlatform\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 
 class ConfigHelper extends AbstractHelper
 {
+    protected $_scopeFactory;
+
+    public function __construct(
+        Context $context,
+        ScopedFactory $scopedFactory
+    )
+    {
+        $this->_scopeFactory = $scopedFactory;
+        parent::__construct( $context );
+    }
 
     public function getConfig($req)
     {
@@ -76,10 +88,7 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getStoreSetup( $storeId ){
-        $objManager = ObjectManager::getInstance();
-        $collectionFactory = $objManager->get('\Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory');
-
-        $collection = $collectionFactory->create(
+        $collection = $this->_scopeFactory->create(
             ['scope' => ScopeInterface::SCOPE_STORES, 'scopeId' => $storeId ]
         );
 
@@ -94,6 +103,28 @@ class ConfigHelper extends AbstractHelper
 
         return ($source_store && $source_language && $destination_language) ? true : false;
 
+    }
+    
+    public function getDefaultAttributes(){
+        return  explode(',', $this->scopeConfig->getValue('straker/attributes/default'));
+    }
+
+    public function getCustomAttributes(){
+        return  explode(',', $this->scopeConfig->getValue('straker/attributes/custom'));
+    }
+
+    /**
+     * retrieve language code for the given store, or the default language code if the store id is not provide
+     * @param $storeId
+     * @return mixed
+     */
+    public function getStoreViewLanguage( $storeId = null )
+    {
+        if( empty( $storeId ) ){
+            return $this->scopeConfig->getValue('general/locale/code', ScopeInterface::SCOPE_STORE, $storeId );
+        }else{
+            return $this->scopeConfig->getValue('general/locale/code' );
+        }
     }
 
 }
