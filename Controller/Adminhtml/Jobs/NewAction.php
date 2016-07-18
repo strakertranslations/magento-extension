@@ -9,6 +9,8 @@ class NewAction extends \Magento\Backend\App\Action
      */
     protected $resultForwardFactory;
 
+    public $resultRedirectFactory;
+
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
