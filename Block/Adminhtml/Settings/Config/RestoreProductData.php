@@ -1,9 +1,12 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
+use Magento\Backend\Block\Widget\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\App\ResourceConnection;
+use Straker\EasyTranslationPlatform\Helper\Data;
 
 class RestoreProductData extends Field
 {
@@ -11,6 +14,19 @@ class RestoreProductData extends Field
 
     private $_buttonId;
     private $_buttonName;
+    private $_dataHelper;
+    private $_resourceConnection;
+
+    public function __construct(
+        Context $context,
+        Data $dataHelper,
+        ResourceConnection $resourceConnection,
+        array $data = []
+    ) {
+        $this->_dataHelper = $dataHelper;
+        $this->_resourceConnection = $resourceConnection;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Set template to itself
@@ -66,14 +82,7 @@ class RestoreProductData extends Field
 
     public function getButtonHtml()
     {
-        $objManager = ObjectManager::getInstance();
-        $resourceConnection = $objManager->get('Magento\Framework\App\ResourceConnection');
-
-        /** @var \Straker\EasyTranslationPlatform\Helper\Data $dataHelper */
-        $dataHelper = $objManager->get('Straker\EasyTranslationPlatform\Helper\Data');
-
-        /** @var \Magento\Framework\DB\Adapter\AdapterInterface $connection */
-        $connection = $resourceConnection->getConnection();
+        $connection = $this->_resourceConnection->getConnection();
 
         $attributeData = [
             'id' => $this->_buttonId,
@@ -84,8 +93,8 @@ class RestoreProductData extends Field
 
         $validBackupData = true;
 
-        foreach ( $dataHelper->getProductTableArray() as $tableName ){
-            $backupTableName = $dataHelper->getBackupTableNames( $tableName );
+        foreach ( $this->_dataHelper->getProductTableArray() as $tableName ){
+            $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
             if( $connection->isTableExists( $backupTableName ) ){
                 $sql = $connection->select()
                     ->from(

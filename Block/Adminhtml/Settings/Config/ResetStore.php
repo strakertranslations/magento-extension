@@ -3,10 +3,23 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
 use Magento\Backend\Block\System\Store\Store;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
 {
     const BUTTON_TEMPLATE = 'settings/config/button/reset_store_button.phtml';
+    protected $_configHelper;
+
+    public function __construct(
+        Context $context,
+        ConfigHelper $configHelper,
+        array $data = []
+    ) {
+        $this->_configHelper = $configHelper;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Set template to itself
@@ -25,10 +38,10 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Render button
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         // Remove scope label
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
@@ -48,28 +61,29 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Get the button and scripts contents
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         return $this->_toHtml();
     }
 
+    /**
+     * @return \Magento\Store\Api\Data\WebsiteInterface[]
+     */
     public function getWebsites() {
         return $this->_storeManager->getWebsites();
     }
 
-    public function getConfig( $storeId ){
-        $this->_scopeConfig->getValue('straker/general/source_store', 'stores', $storeId );
-    }
-
+    /**
+     * @param $store
+     * @return string
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public function getClearStoreButtonHtml( $store )
     {
-        $objManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $configHelper = $objManager->get('Straker\EasyTranslationPlatform\Helper\ConfigHelper');
-
-        if ($store->getId() && $configHelper->getStoreSetup($store->getId())) {
+        if ($store->getId() && $this->_configHelper->getStoreSetup($store->getId())) {
             $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData([
                     'id' => 'straker_reset_store_button_' . $store->getCode(),

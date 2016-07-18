@@ -48,7 +48,7 @@
             foreach ($website->getGroups() as $group) { ?>
                 <tr>
                     <td colspan="2" class="site-group-name">
-                        <span> <?php echo $website->getName() . ' - ' . $group->getName(); ?> </span>
+                        <span> <?php echo __( $website->getName() ) . ' - ' . __( $group->getName() ); ?> </span>
                     </td>
                 </tr>
                 <?php $stores = $group->getStores();
@@ -56,7 +56,7 @@
                     foreach ($stores as $store) { ?>
                         <tr class="store-view-list">
                             <td class="store-view-name">
-                                <span><?php echo $store->getName() ?></span>
+                                <span><?php echo __( $store->getName() ) ?></span>
                             </td>
                             <td class="clear-language">
                                 <input type="hidden" name="store-id" value="<?php echo $store->getId(); ?>" />
