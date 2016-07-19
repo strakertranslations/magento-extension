@@ -120,9 +120,12 @@ class ConfigHelper extends AbstractHelper
      */
     public function getStoreViewLanguage( $storeId = null )
     {
-        if( empty( $storeId ) ){
-            return $this->scopeConfig->getValue('general/locale/code', ScopeInterface::SCOPE_STORE, $storeId );
+        if(!empty( $storeId ) ){
+
+            return $this->scopeConfig->getValue('general/locale/code', 'stores', $storeId );
+
         }else{
+
             return $this->scopeConfig->getValue('general/locale/code' );
         }
     }

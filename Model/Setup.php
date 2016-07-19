@@ -127,4 +127,34 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
             return $this->_errorManager;
         }
     }
+
+    public function saveProductAttributes($attributes){
+
+        try{
+
+            if(!empty($attributes['custom'])){
+
+                $this->_configModel->SaveConfig('straker/attributes/default',$attributes['custom'],'default',0);
+            }
+
+            if(!empty($attributes['default'])){
+
+                $this->_configModel->SaveConfig('straker/attributes/custom',$attributes['default'],'default',0);
+            }
+
+            $this->_errorManager->_error = false;
+
+            return $this->_errorManager;
+
+        } catch (\Exception $e) {
+
+            $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
+            $this->_errorManager->_errorMessage = 'There was an error saving Product Attributes';
+
+            $this->_errorManager->_error = true;
+
+            return $this->_errorManager;
+        }
+    }
 }

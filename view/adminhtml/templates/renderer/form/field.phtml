@@ -1,12 +1,9 @@
-<div>
-    <p>Please select the destination Store View where you would like this translation to show.</p>
-</div>
-<div class="admin__field field required _required">
-    <label for="source" class="label admin__field-label">
-        <span><?php echo __('Destination Store View:') ?></span>
-    </label>
+    <div>
+        <h3>Please Select Your Destination Store View</h3>
+        <p>Where you would like your translation to show</p>
+    </div>
     <div class="admin__field-control control">
-        <select name="source" class="required-entry _required select admin__control-select">
+        <select name="destination_store" class="required-entry _required select admin__control-select">
             <option value=""><?php echo __('Pick a store view') ?></option>
             <?php foreach ($block->getWebsites() as $website): ?>
                 <?php $showWebsite = false; ?>
@@ -32,4 +29,3 @@
             <?php endforeach; ?>
         </select>
     </div>
-</div>

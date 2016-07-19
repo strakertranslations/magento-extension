@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\Registration;
+namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\ProductAttributes;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
@@ -59,15 +59,9 @@ class Save extends \Magento\Backend\App\Action
 
             try {
 
-                $this->_setup->saveClientData($data);
+                $attributes = $this->sortData($data);
 
-                $oRegistration = $this->_strakerAPI->callRegister($data);
-
-                $this->_setup->saveAccessToken($oRegistration->access_token);
-
-                $this->_setup->saveAppKey($oRegistration->application_key);
-
-                $this->_reinitConfig->reinit();
+                $this->_setup->saveProductAttributes($attributes);
 
                 if($this->_errorManager->_error){
 
@@ -79,7 +73,7 @@ class Save extends \Magento\Backend\App\Action
 
                 }else{
 
-                    $resultRedirect->setPath('/Setup_Languagepairs/index/');
+                    $resultRedirect->setPath('*/Jobs/new');
 
                 }
 
@@ -102,7 +96,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
-                $this->messageManager->addException($e, __('Something went wrong while saving registration details.'));
+                $this->messageManager->addException($e, __('Something went wrong while saving the product attributes.'));
             }
 
             $resultRedirect->setPath('/*/index/');
@@ -110,5 +104,23 @@ class Save extends \Magento\Backend\App\Action
         }
 
         return $resultRedirect;
+    }
+
+    protected function sortData($data)
+    {
+        $attributes = [];
+
+        if(!empty($data['custom'])){
+
+            $attributes['custom'] = implode(",", $data['custom']);
+        }
+
+        if(!empty($data['default'])){
+
+            $attributes['default'] = implode(",", $data['default']);
+
+        }
+
+        return $attributes;
     }
 }
