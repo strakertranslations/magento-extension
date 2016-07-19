@@ -195,7 +195,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
         }catch (\Exception $e){
 
-            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e);
+            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e,$e);
 
             $this->_errorManager->_errorMessage = 'There was an error registering your details';
 

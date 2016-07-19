@@ -1,116 +1,120 @@
 <?php $data = $block->_formData()? $block->_formData():false ?>
-<div>
-    <h2><?php echo __('Source') ?></h2>
-    <p><?php echo __('Where would you like us to take your content from?') ?></p>
-</div>
-<div class="admin__field field required _required">
-    <label for="source" class="label admin__field-label">
-        <span><?php echo __('Source Store View:') ?></span>
-    </label>
-    <div class="admin__field-control control">
-        <select name="source_store" class="required-entry _required select admin__control-select">
-            <option value="<?php $data['source_store']? $data['source_store'] : '' ?>"><?php echo __('Select source store view') ?></option>
-            <?php foreach ($block->getWebsites() as $website): ?>
-                <?php $showWebsite = false; ?>
-                <?php foreach ($website->getGroups() as $group): ?>
-                    <?php $showGroup = false; ?>
-                    <?php foreach ($group->getStores() as $store): ?>
-                        <?php if ($showWebsite == false): ?>
-                            <?php $showWebsite = true; ?>
-                            <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
-                        <?php endif; ?>
-                        <?php if ($showGroup == false): ?>
-                            <?php $showGroup = true; ?>
-                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
-                        <?php endif; ?>
-                        <?php if($store->getId() == $data['source_store']):?>
-                        <option value="<?php echo $this->escapeHtml($store->getId()) ?>" selected="selected"><?php echo $this->escapeHtml($store->getName()) ?></option>
-                        <?php else: ?>
-                        <option value="<?php echo $this->escapeHtml($store->getId()) ?>"><?php echo $this->escapeHtml($store->getName()) ?></option>
-                        <?php endif ?>
-                    <?php endforeach; ?>
-                    <?php if ($showGroup): ?>
-                        </optgroup>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-        </select>
-    </div>
-</div>
 
-<div class="admin__field field required _required">
-    <label for="language" class="label admin__field-label">
-        <span><?php echo __('Source language:') ?></span>
-    </label>
-    <div class="admin__field-control control">
-        <select name="source_language" class="required-entry _required select admin__control-select">
-            <option value=""><?php echo __('Select store language') ?></option>
-            <?php foreach ($block->_getOptions() as $languages): ?>
-                <?php if($languages->code == $data['source_language']): ?>
-                    <option value="<?php echo $languages->code ?>" selected="selected"><?php echo $languages->name ?></option>
-                    <?php else: ?>
-                <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
-                <?php endif;?>
-            <?php endforeach; ?>
-        </select>
-    </div>
-</div>
+<h1>Setup Language Pairs</h1>
+<p>Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each Store View.</p>
 
-<div>
-    <h2><?php echo __('Destination') ?></h2>
-    <p><?php echo __('Where would you like us to put the translated content?') ?></p>
-</div>
+<table id="language_pairs_table">
+    <?php foreach ( $block->getWebsites() as $website) {
+        $groups = $website->getGroups();
+        if( count($groups) > 0 ){
+            foreach ($website->getGroups() as $group) { ?>
+                <tr>
+                    <td colspan="2" class="site-group-name">
+                        <span> <?php echo $website->getName() . ' - ' . $group->getName(); ?> </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h4>Store View</h4></td>
+                    <td><h4>Select Target Language </h4></td>
+                    <td><h4>Select Source Language</h4></td>
+                    <td><h4>Select Source Store View</h4></td>
+                </tr>
+                <?php $stores = $group->getStores();
+                if( count( $stores ) > 0 ) {
+                    foreach ($stores as $store) { ?>
+                        <tr>
+                            <td><?php echo $store->getName() ?></td>
+                            <td>
+                                <div class="admin__field field">
+                                    <div class="admin__field-control control">
+                                        <select name="straker_target_language_store_id_<?php echo $store->getId()?>" id="source-language" class="select admin__control-select">
+                                            <option value=""><?php echo __('Select target language') ?></option>
+                                            <?php foreach ($block->_getOptions() as $languages): ?>
+                                                <?php if($languages->code == $data['destination_language']):?>
+                                                    <option value="<?php echo $languages->code ?>" selected="selected"><?php echo $languages->name ?></option>
+                                                <?php else: ?>
+                                                    <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
+                                                <?php endif;?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="admin__field field">
+                                    <div class="admin__field-control control">
+                                        <select name="straker_source_language_store_id_<?php echo $store->getId()?>" id="target-language" class="select admin__control-select">
+                                            <option value=""><?php echo __('Select source language') ?></option>
+                                            <?php foreach ($block->_getOptions() as $languages): ?>
+                                                <?php if($languages->code == $data['destination_language']):?>
+                                                    <option value="<?php echo $languages->code ?>" selected="selected"><?php echo $languages->name ?></option>
+                                                <?php else: ?>
+                                                    <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
+                                                <?php endif;?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="admin__field field required _required">
+                                    <div class="admin__field-control control">
+                                        <select name="magento_source_store_id_<?php echo $store->getId()?>" class="required-entry _required select admin__control-select">
+                                            <option value="<?php $data['source_store']? $data['source_store'] : '' ?>"><?php echo __('Select source store view') ?></option>
+                                            <?php foreach ($block->getWebsites() as $website): ?>
+                                                <?php $showWebsite = false; ?>
+                                                <?php foreach ($website->getGroups() as $group): ?>
+                                                    <?php $showGroup = false; ?>
+                                                    <?php foreach ($group->getStores() as $store): ?>
+                                                        <?php if ($showWebsite == false): ?>
+                                                            <?php $showWebsite = true; ?>
+                                                            <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                                                        <?php endif; ?>
+                                                        <?php if ($showGroup == false): ?>
+                                                            <?php $showGroup = true; ?>
+                                                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                                        <?php endif; ?>
+                                                        <?php if($store->getId() == $data['source_store']):?>
+                                                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>" selected="selected"><?php echo $this->escapeHtml($store->getName()) ?></option>
+                                                        <?php else: ?>
+                                                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>"><?php echo $this->escapeHtml($store->getName()) ?></option>
+                                                        <?php endif ?>
+                                                    <?php endforeach; ?>
+                                                    <?php if ($showGroup): ?>
+                                                        </optgroup>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            <?php endforeach; ?>
+                                        </select>
+                                    </div>
+                                </div>
+                            </td>
+                            <input type="hidden" name="magento_store_view_language_store_id_<?php echo $store->getId()?>" value="<?php echo $block->getSourcelanguage($store->getId())?>">
+                        </tr>
+                    <?php }
+                }else{ ?>
+                    <tr class="store-view-list">
+                        <td colspan="2">
+                            <span><?php echo __("No store views for this website."); ?></span>
+                        </td>
+                    </tr>
+                    <?php
+                }
+            }
+        }else{ ?>
+            <tr>
+                <td colspan="2">
+                    <span class="site-group-name"> <?php echo $website->getName(); ?> </span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span> <?php echo __("No stores for this website."); ?> </span>
+                </td>
+            </tr>
+        <?php }
+
+    }?>
+</table>
 
 
-<div class="admin__field field required _required">
-    <label for="source" class="label admin__field-label">
-        <span><?php echo __('Destination Store:') ?></span>
-    </label>
-    <div class="admin__field-control control">
-        <select name="destination_store" class="required-entry _required select admin__control-select">
-            <option value=""><?php echo __('Select destination store view') ?></option>
-            <?php foreach ($block->getWebsites() as $website): ?>
-                <?php $showWebsite = false; ?>
-                <?php foreach ($website->getGroups() as $group): ?>
-                    <?php $showGroup = false; ?>
-                    <?php foreach ($group->getStores() as $store): ?>
-                        <?php if ($showWebsite == false): ?>
-                            <?php $showWebsite = true; ?>
-                            <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
-                        <?php endif; ?>
-                        <?php if ($showGroup == false): ?>
-                            <?php $showGroup = true; ?>
-                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
-                        <?php endif; ?>
-                        <?php if($store->getId() == $data['destination_store']):?>
-                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>" selected="selected"><?php echo $this->escapeHtml($store->getName()) ?></option>
-                        <?php else: ?>
-                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>"><?php echo $this->escapeHtml($store->getName()) ?></option>
-                        <?php endif ?>
-                    <?php endforeach; ?>
-                    <?php if ($showGroup): ?>
-                        </optgroup>
-                    <?php endif; ?>
-                <?php endforeach; ?>
-            <?php endforeach; ?>
-        </select>
-    </div>
-</div>
-
-<div class="admin__field field required _required">
-    <label for="target" class="label admin__field-label">
-        <span><?php echo __('Destination Language:') ?></span>
-    </label>
-    <div class="admin__field-control control">
-        <select name="destination_language" id="target-language" class="required-entry _required select admin__control-select">
-            <option value=""><?php echo __('Select destination language') ?></option>
-            <?php foreach ($block->_getOptions() as $languages): ?>
-                <?php if($languages->code == $data['destination_language']):?>
-                    <option value="<?php echo $languages->code ?>" selected="selected"><?php echo $languages->name ?></option>
-                <?php else: ?>
-                    <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
-                <?php endif;?>
-            <?php endforeach; ?>
-        </select>
-    </div>
-</div>

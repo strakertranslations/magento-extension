@@ -27,11 +27,9 @@ class FormContainer extends \Magento\Backend\Block\Widget\Form\Container
 
         parent::_construct();
 
-        $this->buttonList->update('save', 'label', __('Continue'));
+        $this->buttonList->update('save', 'label', __('Save'));
 
         $this->buttonList->remove('reset');
-
-        $this->buttonList->remove('back');
     }
 
     protected function _isAllowedAction($resourceId)

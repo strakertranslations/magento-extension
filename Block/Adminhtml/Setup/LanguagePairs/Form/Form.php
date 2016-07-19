@@ -7,6 +7,8 @@ use Magento\Framework\View\Element\Template;
 use Magento\Backend\Block\Template\Context;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Backend\Model\Session;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
+use Magento\Framework\Locale\ListsInterface;
 
 class Form extends Template{
 
@@ -15,12 +17,16 @@ class Form extends Template{
         StoreManagerInterface $storeManager,
         StrakerAPIInterface $strakerAPIInterface,
         Session $session,
+        ConfigHelper $configHelper,
+        ListsInterface $localeList,
         array $data = []
     ) {
 
         $this->_storeManager = $storeManager;
         $this->_strakerAPIinterface = $strakerAPIInterface;
         $this->session = $session;
+        $this->configHelper = $configHelper;
+        $this->localeList = $localeList;
         parent::__construct($context);
     }
 
@@ -43,6 +49,13 @@ class Form extends Template{
         }
 
         return false;
+    }
+
+    public function getSourceLanguage($storeId)
+    {
+        $language = $this->configHelper->getStoreViewLanguage($storeId);
+
+        return $language;
     }
 
 }

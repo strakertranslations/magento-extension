@@ -2,9 +2,9 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer;
 
-class Sourcefield extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class Field extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
-    protected $_template = 'Straker_EasyTranslationPlatform::renderer/form/sourcefield.phtml';
+    protected $_template = 'Straker_EasyTranslationPlatform::renderer/form/field.phtml';
 
     public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {

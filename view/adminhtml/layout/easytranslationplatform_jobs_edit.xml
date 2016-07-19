@@ -10,6 +10,11 @@
         </referenceContainer>
         <referenceContainer name="left">
             <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tabs" name="easytranslationplatform_job_edit_tabs">
+                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Destination" name="easytranslationplatform_job_edit_tab_destination"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">select_destination</argument>
+                    <argument name="block" xsi:type="string">easytranslationplatform_job_edit_tab_destination</argument>
+                </action>
                 <action method="addTab">
                     <argument name="name" xsi:type="string">attachment_products</argument>
                     <argument name="block" xsi:type="array">

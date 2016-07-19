@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\StoreLanguage\Form;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
@@ -11,7 +11,7 @@ use Magento\Store\Model\System\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Backend\Model\Session;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
 {
 
     public function __construct(
@@ -41,32 +41,20 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     protected function _prepareForm()
     {
 
-        $form = $this->_formFactory->create(
-            ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
-        );
+        $form = $this->_formFactory->create();
 
-        $form->setHtmlIdPrefix('item_');
+        $form->setHtmlIdPrefix('job_');
 
         $fieldset = $form->addFieldset(
-            'base_fieldset',
-            ['legend' => __('Select your Destination Store View'), 'class' => 'fieldset-wide']
+            '', []
         );
 
-
-        $field = $fieldset->addField(
-            'destination',
-            'select',
-            [
-                'name' 	=> 'destination',
-                'title'	=> __('destination')
-            ]
-        );
 
         $renderer = $this->getLayout()->createBlock(
-            'Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\Sourcefield'
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\Field'
         );
 
-        $field->setRenderer($renderer);
+        $fieldset->setRenderer($renderer);
 
         $this->setForm($form);
 
@@ -76,6 +64,42 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     public function getWebsites() {
 
         return $this->_storeManager->getWebsites();
+    }
+
+    /**
+     * Prepare label for tab
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getTabLabel()
+    {
+        return __('Select Destination');
+    }
+
+    /**
+     * Prepare title for tab
+     *
+     * @return \Magento\Framework\Phrase
+     */
+    public function getTabTitle()
+    {
+        return __('Select Destination');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canShowTab()
+    {
+        return true;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isHidden()
+    {
+        return false;
     }
 
 }
