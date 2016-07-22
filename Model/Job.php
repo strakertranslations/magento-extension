@@ -7,6 +7,7 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 class Job extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
+    const ENTITY = 'straker_job';
 
     /**
      * CMS page cache tag
