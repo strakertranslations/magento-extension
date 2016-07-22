@@ -3,6 +3,7 @@
 namespace Straker\EasyTranslationPlatform\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 class Job extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
 {
@@ -24,12 +25,16 @@ class Job extends \Magento\Framework\Model\AbstractModel implements IdentityInte
      */
     protected $_eventPrefix = 'st_products_grid';
 
+    protected $configHelper ;
+
     /**
      * Initialize resource model
      *
      * @return void
      */
-    protected function _construct()
+
+    protected function _construct(
+    )
     {
         $this->_init('Straker\EasyTranslationPlatform\Model\ResourceModel\Job');
     }

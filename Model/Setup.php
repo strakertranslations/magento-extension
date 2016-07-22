@@ -134,12 +134,12 @@ class Setup extends \Magento\Framework\Model\AbstractModel implements SetupInter
 
             if(!empty($attributes['custom'])){
 
-                $this->_configModel->SaveConfig('straker/attributes/default',$attributes['custom'],'default',0);
+                $this->_configModel->SaveConfig('straker/attributes/custom',$attributes['custom'],'default',0);
             }
 
             if(!empty($attributes['default'])){
 
-                $this->_configModel->SaveConfig('straker/attributes/custom',$attributes['default'],'default',0);
+                $this->_configModel->SaveConfig('straker/attributes/default',$attributes['default'],'default',0);
             }
 
             $this->_errorManager->_error = false;
