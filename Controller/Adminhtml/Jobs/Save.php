@@ -5,9 +5,13 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\TestFramework\ErrorLog\Logger;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Store\Model\StoreManagerInterface;
+
+
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
+use Straker\EasyTranslationPlatform\Model\JobType;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -36,7 +40,9 @@ class Save extends \Magento\Backend\App\Action
         ConfigHelper $configHelper,
         \Magento\Backend\Helper\Js $jsHelper,
         AttributeRepository $attributeRepository,
+        StoreManagerInterface $storeManager,
         XmlHelper $xmlHelper,
+        JobType $jobType,
         \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
     ) {
         $this->_configHelper = $configHelper;
@@ -44,6 +50,8 @@ class Save extends \Magento\Backend\App\Action
         $this->_jobCollectionFactory = $jobCollectionFactory;
         $this->_attributeRepository = $attributeRepository;
         $this->_xmlHelper = $xmlHelper;
+        $this->_storeManager = $storeManager;
+        $this->_jobTypeModel = $jobType;
         parent::__construct($context);
     }
 
@@ -77,16 +85,32 @@ class Save extends \Magento\Backend\App\Action
 //                $model->load($id);
 //            }
 
-            $model->setData(['job_name'=>'products']);
+
+            $model->setData(
+                [
+                'job_type_id'=>$this->getJobTypeId('product'),
+                'job_status_id'=>$this->getJobStatusId('queued'),
+                'source_store_id'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_store'],
+                'target_store_id'=>$data['destination_store'],
+                'source_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_language'],
+                'target_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/destination_language']
+                ]
+            );
+
+
+            $model->save();
+
+            $productData = $this->getProductData($data['products'],$this->_storeManager->getStore()->getId());
+
+            $this->generateProductXML($productData, $model->getId().'_'.$model->getData('job_type_id'));
 
             try {
 
-                //$model->save();
+                $model->save();
 
                 $productData = $this->getProductData($data['products']);
 
-                $this->generateProductXML($productData);
-
+                $this->generateProductXML($productData,$model->getId());
 
                 $this->saveProducts($model, $data);
 
@@ -161,7 +185,7 @@ class Save extends \Magento\Backend\App\Action
      * @return array
      * Todo: Add Store Id & Buffers
      */
-    protected function getProductData($productIds)
+    protected function getProductData($productIds,$store_id)
     {
         $productIds = explode('&',$productIds);
 
@@ -186,14 +210,14 @@ class Save extends \Magento\Backend\App\Action
 
                 if(in_array($this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id)->getFrontendInput(),$this->_multiSelectInputTypes)){
 
-                    if($this->findMultiOptionAttributes($attribute_id,$product)){
+                    if($this->findMultiOptionAttributes($attribute_id,$product,$store_id)){
 
-                        array_push($attributeData,$this->findMultiOptionAttributes($attribute_id,$product));
+                        array_push($attributeData,$this->findMultiOptionAttributes($attribute_id,$product,$store_id));
                     }
 
                 }else{
 
-                    if($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,0)){
+                    if($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$store_id)){
 
                        array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$this->_attributeRepository->get('catalog_product',$attribute_id)->getFrontendLabel(),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,0)]);
                     }
@@ -209,12 +233,12 @@ class Save extends \Magento\Backend\App\Action
 
     }
 
-    protected function findMultiOptionAttributes($attribute_id, $product)
+    protected function findMultiOptionAttributes($attribute_id, $product,$store_id)
     {
 
         $attribute = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id);
 
-        $options = $product->getResource()->getAttributeRawValue($product->getId(), $attribute, 0);
+        $options = $product->getResource()->getAttributeRawValue($product->getId(), $attribute, $store_id);
 
         if($options){
 
@@ -237,10 +261,10 @@ class Save extends \Magento\Backend\App\Action
 
     }
 
-    protected function generateProductXML($productData)
+    protected function generateProductXML($productData, $job_id)
     {
 
-        $this->_xmlHelper->create( 101 );
+        $this->_xmlHelper->create('_'.$job_id.'_'.time());
 
         foreach ($productData as $data){
 
@@ -251,10 +275,13 @@ class Save extends \Magento\Backend\App\Action
                     foreach ($attribute['value'] as $value)
                     {
                         $this->_xmlHelper->appendDataToRoot([
-                            'name' => $attribute['label'],
+                            'name' => $job_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'].'_'.$value['option_id'],
                             'content_context' => 'Product',
                             'content_context_url' => $data['product_url'],
-                            'content_id' => $data['product_id'],
+                            'product_id' => $data['product_id'],
+                            'attribute_id'=>$attribute['attribute_id'],
+                            'attribute_label'=>$attribute['label'],
+                            'option_id'=>$value['option_id'],
                             'value' => $value['value']
                         ]);
                     }
@@ -262,10 +289,12 @@ class Save extends \Magento\Backend\App\Action
                 }else{
 
                     $this->_xmlHelper->appendDataToRoot([
-                        'name' => $attribute['label'],
+                        'name' => $job_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'],
                         'content_context' => 'Product',
                         'content_context_url' => $data['product_url'],
-                        'content_id' => $data['product_id'],
+                        'product_id' => $data['product_id'],
+                        'attribute_id'=>$attribute['attribute_id'],
+                        'attribute_label'=>$attribute['label'],
                         'value' => $attribute['value']
                     ]);
 
@@ -279,5 +308,31 @@ class Save extends \Magento\Backend\App\Action
         $this->_xmlHelper->saveXmlFile();
         var_dump($productData);
         exit;
+    }
+
+    protected function getJobTypeId($jobType){
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        $productCollection = $objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory');//insert your custom resource model
+
+        $collection = $productCollection->create()
+            ->addFieldToFilter('type_name',array('eq'=>$jobType))
+            ->getFirstItem();
+
+        return $collection->getData('type_id');
+    }
+
+    protected function getJobStatusId($jobStatus){
+
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+
+        $productCollection = $objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory');//insert your custom resource model
+
+        $collection = $productCollection->create()
+            ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
+            ->getFirstItem();
+
+        return $collection->getData('status_id');
     }
 }

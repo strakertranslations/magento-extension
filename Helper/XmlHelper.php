@@ -31,7 +31,14 @@ class XmlHelper extends AbstractHelper
     private $_data;
 
     private $_elemAttributes = [
-        'name', 'content_context', 'content_context_url', 'content_id'
+        'name',
+        'content_context',
+        'content_context_url',
+        'product_id',
+        'attribute_id',
+        'parent_attribute_id',
+        'parent_attribute_name',
+        'option_id'
     ];
 
     public function __construct(
@@ -52,7 +59,7 @@ class XmlHelper extends AbstractHelper
         $this->_dom->version = $this->getVersion();
         $this->_dom->encoding = $this->getEncoding();
 
-        $this->_xmlFileName = $this->_xmlFilePath . DIRECTORY_SEPARATOR . 'job'. $jobId .'.xml';
+        $this->_xmlFileName = $this->_xmlFilePath . DIRECTORY_SEPARATOR . 'straker_job'. $jobId .'.xml';
         $flag = true;
 
         if( !file_exists( $this->_xmlFilePath ) ){
@@ -80,18 +87,13 @@ class XmlHelper extends AbstractHelper
      * @return bool
      */
     public function appendDataToRoot( $attributes = [] ){
-        if( !is_array( $attributes )
-            || count( $attributes ) <= 0
-            || !$this->_validateKeys( $attributes )
-        ){
-            return false;
-        }
 
         $this->_data = $this->_dom->createElement( 'data' );
-        $this->_data->setAttribute( $this->_elemAttributes[0], $attributes['name']);
-        $this->_data->setAttribute( $this->_elemAttributes[1], $attributes['content_context']);
-        $this->_data->setAttribute( $this->_elemAttributes[2], $attributes['content_context_url']);
-        $this->_data->setAttribute( $this->_elemAttributes[3], $attributes['content_id']);
+
+        foreach ($attributes as $key => $value){
+
+            ($key !='value')? $this->_data->setAttribute($key, $value) : false;
+        }
 
         $valueElem = $this->_dom->createElement( 'value' );
         $valueElem->appendChild( $this->_dom->createCDATASection( $attributes['value'] ) );

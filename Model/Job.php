@@ -50,17 +50,17 @@ class Job extends \Magento\Framework\Model\AbstractModel implements IdentityInte
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
-    public function getProducts(\Straker\EasyTranslationPlatform\Model\Job $object)
-    {
-        $tbl = $this->getResource()->getTable(\Straker\EasyTranslationPlatform\Model\ResourceModel\Job::TBL_ATT_PRODUCT);
-        $select = $this->getResource()->getConnection()->select()->from(
-            $tbl,
-            ['product_id']
-        )
-        ->where(
-            'job_id = ?',
-            (int)$object->getId()
-        );
-        return $this->getResource()->getConnection()->fetchCol($select);
-    }
+//    public function getProducts(\Straker\EasyTranslationPlatform\Model\Job $object)
+//    {
+//        $tbl = $this->getResource()->getTable(\Straker\EasyTranslationPlatform\Model\ResourceModel\Job::TBL_ATT_PRODUCT);
+//        $select = $this->getResource()->getConnection()->select()->from(
+//            $tbl,
+//            ['product_id']
+//        )
+//        ->where(
+//            'job_id = ?',
+//            (int)$object->getId()
+//        );
+//        return $this->getResource()->getConnection()->fetchCol($select);
+//    }
 }

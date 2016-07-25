@@ -73,7 +73,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _addColumnFilterToCollection($column)
     {
         if ($column->getId() == 'in_product') {
-            $productIds = $this->_getSelectedProducts();
+            //$productIds = $this->_getSelectedProducts();
 
             if (empty($productIds)) {
                 $productIds = 0;

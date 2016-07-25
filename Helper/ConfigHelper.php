@@ -113,6 +113,22 @@ class ConfigHelper extends AbstractHelper
         return  explode(',', $this->scopeConfig->getValue('straker/attributes/custom'));
     }
 
+    public function getStoreInfo( $storeId )
+    {
+        $collection = $this->_scopeFactory->create(
+            ['scope' => ScopeInterface::SCOPE_STORES, 'scopeId' => $storeId]
+        );
+
+        $dbStoreConfig = [];
+
+        foreach ($collection as $item) {
+            $dbStoreConfig[$item->getPath()] = $item->getValue();
+        }
+
+        return $dbStoreConfig;
+
+    }
+
     /**
      * retrieve language code for the given store, or the default language code if the store id is not provide
      * @param $storeId
@@ -122,12 +138,17 @@ class ConfigHelper extends AbstractHelper
     {
         if(!empty( $storeId ) ){
 
-            return $this->scopeConfig->getValue('general/locale/code', 'stores', $storeId );
+            return $this->scopeConfig->getValue('straker/general/source_language', \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId );
 
         }else{
 
             return $this->scopeConfig->getValue('general/locale/code' );
         }
+    }
+
+    public function getSourceStore($storeId = null)
+    {
+        return $this->scopeConfig->getValue('straker/general/source_store',\Magento\Store\Model\ScopeInterface::SCOPE_STORE,$storeId);
     }
 
 }
