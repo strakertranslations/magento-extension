@@ -182,18 +182,6 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Download Url'
             )->addColumn(
-                'remote_version',
-                Table::TYPE_TEXT,
-                10,
-                ['default' => ''],
-                'File extension'
-            )->addColumn(
-                'download_version',
-                Table::TYPE_TEXT,
-                10,
-                ['default' => ''],
-                'File extension'
-            )->addColumn(
                 'creation_time',
                 Table::TYPE_TIMESTAMP,
                 null,
@@ -280,11 +268,11 @@ class InstallSchema implements InstallSchemaInterface
             $table = $installer->getConnection()->newTable(
                 $installer->getTable(Model\AttributeTranslation::ENTITY)
             )->addColumn(
-                'attribute_transltion_id',
+                'attribute_translation_id',
                 Table::TYPE_SMALLINT,
                 null,
                 ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
-                'Transltion ID'
+                'Translation ID'
             )->addColumn(
                 'job_id',
                 Table::TYPE_SMALLINT,
@@ -316,7 +304,7 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => true],
                 'Original Text'
             )->addColumn(
-                'transleted_value',
+                'translated_value',
                 Table::TYPE_TEXT,
                 Table::MAX_TEXT_SIZE,
                 ['nullable' => true],
@@ -352,9 +340,9 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false, 'default' => '1',],
                 'Is Active'
             )->addIndex(
-                $installer->getIdxName(Model\AttributeTranslation::ENTITY, ['attribute_transltion_id'],
+                $installer->getIdxName(Model\AttributeTranslation::ENTITY, ['attribute_translation_id'],
                     AdapterInterface::INDEX_TYPE_UNIQUE),
-                'attribute_transltion_id',
+                'attribute_translation_id',
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addForeignKey(
                 $installer->getFkName(Model\AttributeTranslation::ENTITY, 'job_id', Model\Job::ENTITY, 'job_id'),
@@ -374,18 +362,18 @@ class InstallSchema implements InstallSchemaInterface
         }
         //END   table setup
 
-        //START straker_attribute_transltion setup
+        //START straker_attribute_translation setup
         if (!$installer->tableExists(Model\AttributeOptionTranslation::ENTITY)) {
             $table = $installer->getConnection()->newTable(
                 $installer->getTable(Model\AttributeOptionTranslation::ENTITY)
             )->addColumn(
-                'attribute_option_transltion_id',
+                'attribute_option_translation_id',
                 Table::TYPE_SMALLINT,
                 null,
                 ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
                 'Transltion ID'
             )->addColumn(
-                'attribute_transltion_id',
+                'attribute_translation_id',
                 Table::TYPE_SMALLINT,
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
@@ -439,15 +427,15 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false, 'default' => '1',],
                 'Is Active'
             )->addIndex(
-                $installer->getIdxName(Model\AttributeOptionTranslation::ENTITY, ['attribute_option_transltion_id'],
+                $installer->getIdxName(Model\AttributeOptionTranslation::ENTITY, ['attribute_option_translation_id'],
                     AdapterInterface::INDEX_TYPE_UNIQUE),
-                'attribute_option_transltion_id',
+                'attribute_option_translation_id',
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addForeignKey(
-                $installer->getFkName(Model\AttributeOptionTranslation::ENTITY, 'attribute_transltion_id', Model\AttributeTranslation::ENTITY, 'attribute_transltion_id'),
-                'attribute_transltion_id',
+                $installer->getFkName(Model\AttributeOptionTranslation::ENTITY, 'attribute_translation_id', Model\AttributeTranslation::ENTITY, 'attribute_translation_id'),
+                'attribute_translation_id',
                 Model\AttributeTranslation::ENTITY,
-                'attribute_transltion_id',
+                'attribute_translation_id',
                 Table::ACTION_CASCADE
             )->addForeignKey(
                 $installer->getFkName(Model\AttributeOptionTranslation::ENTITY, 'option_id', 'eav_attribute_option', 'option_id'),

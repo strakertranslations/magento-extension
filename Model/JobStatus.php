@@ -6,7 +6,7 @@ class JobStatus extends \Magento\Framework\Model\AbstractModel implements JobSta
     
     const ENTITY = 'straker_job_status';
     
-    const JOBSTATUS = ['QUEUED','READY','IN_PROGRESS','COMPLETED'];
+    const JOBSTATUS = ['queued','ready','in progress','completed','published'];
 
     protected function _construct()
     {

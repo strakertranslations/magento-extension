@@ -6,7 +6,7 @@ class JobType extends \Magento\Framework\Model\AbstractModel implements JobTypeI
 
     const ENTITY = 'straker_job_type';
 
-    const JOBTYPE = ['PRODUCT', 'CATEGORY', 'ATTRIBUTE'];
+    const JOBTYPE = ['product', 'category', 'attribute'];
 
     protected function _construct()
     {
