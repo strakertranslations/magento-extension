@@ -8,7 +8,7 @@ namespace Straker\EasyTranslationPlatform\Model\ResourceModel;
 class Job extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
 
-    const TBL_ATT_PRODUCT = 'straker_product_attachment_rel';
+    const TBL_ATT_PRODUCT = 'straker_job';
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\DateTime

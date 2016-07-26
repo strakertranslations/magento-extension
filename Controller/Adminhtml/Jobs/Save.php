@@ -7,8 +7,6 @@ use Magento\Backend\App\Action\Context;
 use Magento\TestFramework\ErrorLog\Logger;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Store\Model\StoreManagerInterface;
-
-
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Model\JobType;
@@ -77,42 +75,33 @@ class Save extends \Magento\Backend\App\Action
 
         if ($data) {
 
-            /** @var \Straker\EasyTranslationPlatform\Model\Job $model */
-            $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\Job');
-
-//            $id = $this->getRequest()->getParam('job_id');
-//            if ($id) {
-//                $model->load($id);
-//            }
-
-
-            $model->setData(
-                [
-                'job_type_id'=>$this->getJobTypeId('product'),
-                'job_status_id'=>$this->getJobStatusId('queued'),
-                'source_store_id'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_store'],
-                'target_store_id'=>$data['destination_store'],
-                'source_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_language'],
-                'target_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/destination_language']
-                ]
-            );
-
-
-            $model->save();
-
             $productData = $this->getProductData($data['products'],$this->_storeManager->getStore()->getId());
-
-            $this->generateProductXML($productData, $model->getId().'_'.$model->getData('job_type_id'));
 
             try {
 
+
+                $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\Job');
+
+                $model->setData(
+                    [
+                        'job_type_id'=>$this->getJobTypeId('product'),
+                        'job_status_id'=>$this->getJobStatusId('queued'),
+                        'source_store_id'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_store'],
+                        'target_store_id'=>$data['destination_store'],
+                        'source_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_language'],
+                        'target_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/destination_language']
+                    ]
+                );
+
                 $model->save();
 
-                $productData = $this->getProductData($data['products']);
+                $this->generateProductXML($productData, $model->getId().'_'.$model->getData('job_type_id'));
 
-                $this->generateProductXML($productData,$model->getId());
+                $model->addData(['source_file'=>$this->_xmlHelper->getXMLFileName()]);
 
-                $this->saveProducts($model, $data);
+                $model->save();
+
+                $this->saveProducts($productData,$model->getId());
 
                 $this->messageManager->addSuccess(__('You saved this job.'));
 
@@ -144,54 +133,57 @@ class Save extends \Magento\Backend\App\Action
         return $resultRedirect->setPath('*/*/');
     }
 
-    public function saveProducts($model, $post)
+    /**
+     * @param $product_data
+     * @param $job_id
+     * @return bool
+     */
+    protected function saveProducts($product_data, $job_id)
     {
-        // Attach the attachments to job
-        if (isset($post['products'])) {
-            $productIds = $this->_jsHelper->decodeGridSerializedInput($post['products']);
-            try {
-                $oldProducts = (array) $model->getProducts($model);
-                $newProducts = (array) $productIds;
 
-                $this->_resources = \Magento\Framework\App\ObjectManager::getInstance()->get('Magento\Framework\App\ResourceConnection');
-                $connection = $this->_resources->getConnection();
+        try {
 
-                $table = $this->_resources->getTableName(\Straker\EasyTranslationPlatform\Model\ResourceModel\Job::TBL_ATT_PRODUCT);
-                $insert = array_diff($newProducts, $oldProducts);
-                $delete = array_diff($oldProducts, $newProducts);
+            foreach ($product_data as $data) {
 
-                if ($delete) {
-                    $where = ['job_id = ?' => (int)$model->getId(), 'product_id IN (?)' => $delete];
-                    $connection->delete($table, $where);
-                }
+                foreach ($data['attributes'] as $attribute) {
 
-                if ($insert) {
-                    $data = [];
-                    foreach ($insert as $product_id) {
-                        $data[] = ['job_id' => (int)$model->getId(), 'product_id' => (int)$product_id];
+                    $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\AttributeTranslation');
+
+                    $model->setData(
+                        [
+                            'job_id' => $job_id,
+                            'entity_id' => $data['product_id'],
+                            'attribute_id' => $attribute['attribute_id'],
+                            'original_value' => (is_array($attribute['value']) ? $attribute['label'] : $attribute['value']),
+                            'has_option' => is_array($attribute['value']) ? (bool)1 : (bool)0
+                        ]
+                    )->save();
+
+                    if ($model->getData('has_option')) {
+
+                        $this->saveOptionValues($attribute['value'], $model->getId());
                     }
-                    $connection->insertMultiple($table, $data);
-                }
-            } catch (Exception $e) {
 
-                $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
+                }
             }
+
+        } catch (Exception $e) {
+
+            $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
         }
 
     }
 
     /**
      * @param $productIds
+     * @param $store_id
      * @return array
-     * Todo: Add Store Id & Buffers
      */
     protected function getProductData($productIds,$store_id)
     {
         $productIds = explode('&',$productIds);
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-
-        $productCollection = $objectManager->create('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory');
+        $productCollection = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory');
 
         $products = $productCollection->create()
             ->addAttributeToSelect('*')
@@ -202,9 +194,9 @@ class Save extends \Magento\Backend\App\Action
 
         $productData = [];
 
-        $attributeData = [];
-
         foreach ($products as $product){
+
+            $attributeData = [];
 
             foreach ($attributes as $attribute_id){
 
@@ -225,7 +217,7 @@ class Save extends \Magento\Backend\App\Action
                 }
             }
 
-            $productData[] = ['product_id'=>$product->getId(), 'product_name'=>$product->getName(),'product_url'=>$product->setStoreId(1)->getUrlInStore(),'attributes'=>$attributeData];
+            $productData[] = ['product_id'=>$product->getId(), 'product_name'=>$product->getName(),'product_url'=>$product->setStoreId($store_id)->getUrlInStore(),'attributes'=>$attributeData];
 
         }
 
@@ -233,6 +225,12 @@ class Save extends \Magento\Backend\App\Action
 
     }
 
+    /**
+     * @param $attribute_id
+     * @param $product
+     * @param $store_id
+     * @return bool
+     */
     protected function findMultiOptionAttributes($attribute_id, $product,$store_id)
     {
 
@@ -261,6 +259,11 @@ class Save extends \Magento\Backend\App\Action
 
     }
 
+    /**
+     * @param $productData
+     * @param $job_id
+     * @return bool
+     */
     protected function generateProductXML($productData, $job_id)
     {
 
@@ -274,6 +277,7 @@ class Save extends \Magento\Backend\App\Action
                 {
                     foreach ($attribute['value'] as $value)
                     {
+
                         $this->_xmlHelper->appendDataToRoot([
                             'name' => $job_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'].'_'.$value['option_id'],
                             'content_context' => 'Product',
@@ -282,8 +286,11 @@ class Save extends \Magento\Backend\App\Action
                             'attribute_id'=>$attribute['attribute_id'],
                             'attribute_label'=>$attribute['label'],
                             'option_id'=>$value['option_id'],
-                            'value' => $value['value']
+                            'value' => $value['value'],
+                            'translate'=> isset($attributeList[$attribute['attribute_id']][$value['option_id']]) ? 'false' : 'true'
                         ]);
+
+                        $attributeList[$attribute['attribute_id']][$value['option_id']] = 'inList';
                     }
 
                 }else{
@@ -306,15 +313,18 @@ class Save extends \Magento\Backend\App\Action
         }
 
         $this->_xmlHelper->saveXmlFile();
-        var_dump($productData);
-        exit;
+
+        return true;
     }
 
+    /**
+     * @param $jobType
+     * @return mixed
+     */
     protected function getJobTypeId($jobType){
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 
-        $productCollection = $objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory');//insert your custom resource model
+        $productCollection = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory');//insert your custom resource model
 
         $collection = $productCollection->create()
             ->addFieldToFilter('type_name',array('eq'=>$jobType))
@@ -323,16 +333,49 @@ class Save extends \Magento\Backend\App\Action
         return $collection->getData('type_id');
     }
 
+    /**
+     * @param $jobStatus
+     * @return mixed
+     */
     protected function getJobStatusId($jobStatus){
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-
-        $productCollection = $objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory');//insert your custom resource model
+        $productCollection = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory');//insert your custom resource model
 
         $collection = $productCollection->create()
             ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
             ->getFirstItem();
 
         return $collection->getData('status_id');
+    }
+
+    /**
+     * @param $option_values
+     * @param $attribute_translation_id
+     */
+    protected function saveOptionValues($option_values,$attribute_translation_id)
+    {
+
+        try{
+
+            foreach ($option_values as $option){
+
+                $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation');
+
+                $model->setData(
+                    [
+                        'attribute_transltion_id'=>$attribute_translation_id,
+                        'option_id'=>$option['option_id'],
+                        'original_value'=>$option['value']
+                    ]
+                )->save();
+
+            }
+
+        }catch (Exception $e) {
+
+
+            $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
+        }
+
     }
 }
