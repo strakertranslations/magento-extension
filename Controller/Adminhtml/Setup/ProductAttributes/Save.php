@@ -112,10 +112,14 @@ class Save extends \Magento\Backend\App\Action
 
         if(!empty($data['custom'])){
 
+            asort($data['custom']);
+
             $attributes['custom'] = implode(",", $data['custom']);
         }
 
         if(!empty($data['default'])){
+
+            asort($data['default']);
 
             $attributes['default'] = implode(",", $data['default']);
 

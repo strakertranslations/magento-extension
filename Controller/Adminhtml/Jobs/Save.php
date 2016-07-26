@@ -18,12 +18,16 @@ class Save extends \Magento\Backend\App\Action
      */
     protected $_jsHelper;
 
+    /**
+     * @var \Straker\EasyTranslationPlatform\Helper\ConfigHelper
+     */
     protected $_configHelper;
 
     /**
      * @var \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory
      */
     protected $_jobCollectionFactory;
+
 
     protected $_multiSelectInputTypes = array(
         'select', 'multiselect'
@@ -95,7 +99,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $model->save();
 
-                $this->generateProductXML($productData, $model->getId().'_'.$model->getData('job_type_id'));
+                $this->generateProductXML($productData, $model->getId(), $model->getData('job_type_id'),$model->getData('source_store_id'),$model->getData('target_store_id'));
 
                 $model->addData(['source_file'=>$this->_xmlHelper->getXMLFileName()]);
 
@@ -175,22 +179,22 @@ class Save extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $productIds
+     * @param $product_ids
      * @param $store_id
      * @return array
      */
-    protected function getProductData($productIds,$store_id)
+    protected function getProductData($product_ids,$store_id)
     {
-        $productIds = explode('&',$productIds);
+        $product_ids = explode('&',$product_ids);
 
         $productCollection = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory');
 
         $products = $productCollection->create()
             ->addAttributeToSelect('*')
-            ->addIdFilter($productIds)
+            ->addIdFilter($product_ids)
             ->load();
 
-        $attributes = array_merge($this->_configHelper->getDefaultAttributes(),$custom_attributes = $this->_configHelper->getCustomAttributes());
+        $attributes = array_merge($this->_configHelper->getDefaultAttributes(),$this->_configHelper->getCustomAttributes());
 
         $productData = [];
 
@@ -211,7 +215,7 @@ class Save extends \Magento\Backend\App\Action
 
                     if($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$store_id)){
 
-                       array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$this->_attributeRepository->get('catalog_product',$attribute_id)->getFrontendLabel(),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,0)]);
+                       array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$this->_attributeRepository->get('catalog_product',$attribute_id)->getFrontendLabel(),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$store_id)]);
                     }
 
                 }
@@ -262,9 +266,12 @@ class Save extends \Magento\Backend\App\Action
     /**
      * @param $productData
      * @param $job_id
+     * @param $jobtype_id
+     * @param $source_store_id
+     * @param $destination_store_id
      * @return bool
      */
-    protected function generateProductXML($productData, $job_id)
+    protected function generateProductXML($productData, $job_id, $jobtype_id, $source_store_id, $target_store_id)
     {
 
         $this->_xmlHelper->create('_'.$job_id.'_'.time());
@@ -279,9 +286,10 @@ class Save extends \Magento\Backend\App\Action
                     {
 
                         $this->_xmlHelper->appendDataToRoot([
-                            'name' => $job_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'].'_'.$value['option_id'],
+                            'name' => $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'].'_'.$value['option_id'],
                             'content_context' => 'Product',
                             'content_context_url' => $data['product_url'],
+                            'source_store_id'=>$source_store_id,
                             'product_id' => $data['product_id'],
                             'attribute_id'=>$attribute['attribute_id'],
                             'attribute_label'=>$attribute['label'],
@@ -296,9 +304,10 @@ class Save extends \Magento\Backend\App\Action
                 }else{
 
                     $this->_xmlHelper->appendDataToRoot([
-                        'name' => $job_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'],
+                        'name' => $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'],
                         'content_context' => 'Product',
                         'content_context_url' => $data['product_url'],
+                        'source_store_id'=> $source_store_id,
                         'product_id' => $data['product_id'],
                         'attribute_id'=>$attribute['attribute_id'],
                         'attribute_label'=>$attribute['label'],

@@ -106,10 +106,12 @@ class ConfigHelper extends AbstractHelper
     }
     
     public function getDefaultAttributes(){
+
         return  explode(',', $this->scopeConfig->getValue('straker/attributes/default'));
     }
 
     public function getCustomAttributes(){
+
         return  explode(',', $this->scopeConfig->getValue('straker/attributes/custom'));
     }
 

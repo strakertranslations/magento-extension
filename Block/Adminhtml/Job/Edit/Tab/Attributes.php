@@ -123,7 +123,7 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic implements \
 
     public function getDefaultAttributes()
     {
-        $options = [];
+        $default_attributes = [];
 
         $DefaultTypes = ['Name','Description','Short Description','Meta Title','Meta Description','Meta Keywords'];
 
@@ -133,18 +133,18 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic implements \
 
             if(in_array($attribute->getFrontendLabel(),$DefaultTypes)){
 
-                $options[] = array('value'=>$attribute->getAttributeId(),'label'=> $attribute->getFrontendLabel());
+                $default_attributes[] = array('value'=>$attribute->getAttributeId(),'label'=> $attribute->getFrontendLabel());
 
                 }
         }
 
-        return $options;
+        return $default_attributes;
     }
 
     public function getCustomAttributes()
     {
 
-            $options = [];
+            $custom_attributes = [];
 
             $attributes = $this->attributeCollection->setEntityTypeFilter(4)
                 ->addFieldToFilter('is_user_defined', array('in' => array(1)))
@@ -155,12 +155,12 @@ class Attributes extends \Magento\Backend\Block\Widget\Form\Generic implements \
 
                 if($attribute->getFrontendLabel()){
 
-                    $options[] = array('value'=>$attribute->getAttributeId(),'label'=> $attribute->getFrontendLabel().'   ');
+                    $custom_attributes[] = array('value'=>$attribute->getAttributeId(),'label'=> $attribute->getFrontendLabel().'   ');
                 }
 
             }
 
-        return $options;
+        return $custom_attributes;
     }
 
     /**
