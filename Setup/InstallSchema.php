@@ -263,7 +263,7 @@ class InstallSchema implements InstallSchemaInterface
 //            $installer->getConnection()->createTable($table);
 //        }
 
-        //START straker_attribute_transltion setup
+        //START straker_attribute_translation setup
         if (!$installer->tableExists(Model\AttributeTranslation::ENTITY)) {
             $table = $installer->getConnection()->newTable(
                 $installer->getTable(Model\AttributeTranslation::ENTITY)
@@ -297,6 +297,12 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Attribute Option Id'
+            )->addColumn(
+                'is_label',
+                Table::TYPE_BOOLEAN,
+                null,
+                ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                'Attribute Label'
             )->addColumn(
                 'original_value',
                 Table::TYPE_TEXT,
@@ -371,7 +377,7 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_SMALLINT,
                 null,
                 ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
-                'Transltion ID'
+                'Translation ID'
             )->addColumn(
                 'attribute_translation_id',
                 Table::TYPE_SMALLINT,
@@ -391,7 +397,7 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => true],
                 'Original Text'
             )->addColumn(
-                'transleted_value',
+                'translated_value',
                 Table::TYPE_TEXT,
                 Table::MAX_TEXT_SIZE,
                 ['nullable' => true],
