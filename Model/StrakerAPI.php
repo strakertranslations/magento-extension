@@ -2,6 +2,9 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Exception;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -35,8 +38,15 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     protected $_headers = [];
 
     protected $_options = [];
+    protected $_configHelper;
+    protected $_configModel;
+    protected $_httpClient;
+    protected $_errorManager;
+    protected $_storeManager;
 
     public function __construct(
+        Context $context,
+        Registry $registry,
         ConfigHelper $configHelper,
         Config $configModel,
         ZendClientFactory $httpClient,
@@ -45,6 +55,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         Error $error
     )
     {
+        parent::__construct( $context, $registry );
         $this->_configHelper = $configHelper;
         $this->_configModel = $configModel;
         $this->_httpClient = $httpClient;
