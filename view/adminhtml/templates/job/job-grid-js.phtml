@@ -30,8 +30,10 @@
                                 if( response.Success ){
                                     quoteFrame.prop('src', response.JobKey );
                                     quoteFrame.load();
+                                    quoteFrame.load();
                                     jobGrid.hide();
                                     quoteDiv.show();
+                                    console.log( response );
                                 }
                             }
 
