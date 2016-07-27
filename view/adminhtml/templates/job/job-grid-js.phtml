@@ -1,0 +1,59 @@
+<script>
+    require([
+        'jquery'
+    ], function ( $ ) {
+        $(function () {
+            var anchorContent = $('#anchor-content');
+            var jobGrid = $('#straker-job-grid');
+            var quoteDiv = $('#straker-quote-frame');
+
+            if (typeof jobGrid.get(0) !== 'undefined') {
+                anchorContent.on('click', 'a', function (e) {
+                    e.preventDefault();
+
+                    var jobKey = $(this).data('jobKey');
+                    var jobId = $(this).data('jobId');
+
+                    // if( jobId ){
+                    if ($(this).hasClass('straker-job-view-anchor')) {
+                        console.log('view job for ' + jobKey);
+                    }
+
+                    if ($(this).hasClass('straker-view-quote-anchor')) {
+                        var quoteFrame = quoteDiv.find('iframe');
+                        
+                        $.ajax({
+                            url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/ViewQuote'); ?>',
+                            data: { job_key : jobKey },
+                            dataType: 'json',
+                            success: function( response ){
+                                if( response.Success ){
+                                    quoteFrame.prop('src', response.JobKey );
+                                    quoteFrame.load();
+                                    jobGrid.hide();
+                                    quoteDiv.show();
+                                }
+                            }
+
+                        });
+//                        jobGrid.hide();
+//                        quoteDiv.show();
+//                        console.log('view quote for ' + jobKey);
+                    }
+
+                    if ($(this).hasClass('straker-job-confirm-anchor')) {
+                        console.log('confirm job for ' + jobKey);
+                    }
+
+                    if ($(this).is('#back-to-grid')) {
+                        quoteDiv.hide();
+                        jobGrid.show();
+                    }
+                    // }
+
+                });
+            }
+        });
+    });
+
+</script>
