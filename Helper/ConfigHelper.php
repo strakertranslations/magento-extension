@@ -40,17 +40,17 @@ class ConfigHelper extends AbstractHelper
     }
 
     /**
-     * @param $version string param, value would be one of 'dev', 'uat', 'demo' and 'live'
-     * @return string or null  a domain of the website.
+     * @param string $domain
+     * @return string
      */
-    protected function _getSiteDomain( ){
+    protected function _getSiteDomain( $domain = '' ){
         $siteVersion = $this->getVersion();
-        if(trim($siteVersion) === ''){
+        if( empty($siteVersion) ){
             $siteVersion = 'live';
         }
-        $siteDomain = $this->scopeConfig->getValue('straker/general/domain/'. $siteVersion);
-        if(trim($siteDomain) === '' ){
-            $siteDomain = 'https://live-app.strakertranslations.com';
+        $siteDomain = $this->scopeConfig->getValue('straker/general/'. (empty($domain) ? 'domain' : 'my_account_domain') .'/'. $siteVersion);
+        if( empty($siteDomain) ){
+            $siteDomain = 'https://app.strakertranslations.com';
         }
         return rtrim($siteDomain,'/');
     }
@@ -84,7 +84,7 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getPaymentPageUrl(){
-        return $this->_getSiteDomain().'/'.$this->scopeConfig->getValue('straker/general/api_url/payment_page');
+        return $this->_getSiteDomain( 'my_account_domain' ).'/'.$this->scopeConfig->getValue('straker/general/api_url/payment_page');
     }
 
     public function getStoreSetup( $storeId ){

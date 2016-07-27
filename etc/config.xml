@@ -3,18 +3,21 @@
     <default>
         <straker>
             <general>
-                <version>dev</version>
+                <version>uat</version>
                 <domain>
                     <dev>https://dev-app.strakertranslations.com</dev>
                     <uat>https://uat-app.strakertranslations.com</uat>
-                    <demo>https://demo-app.strakertranslations.com</demo>
-                    <live>https://live-app.strakertranslations.com</live>
+                    <live>https://app.strakertranslations.com</live>
                 </domain>
+                <my_account_domain>
+                    <dev>https://dev-myaccount.strakertranslations.com/</dev>
+                    <uat>https://uat-myaccount.strakertranslations.com/</uat>
+                    <live>https://myaccount.strakertranslations.com/</live>
+                </my_account_domain>
                 <api_url>
                     <register>v1/ta4ma/register</register>
                     <languages>v1/ta4ma/languages</languages>
                     <translate>v1/ta4ma/translate</translate>
-                    <quote>v1/ta4ma/quote</quote>
                     <payment>v1/ta4ma/payment</payment>
                     <countries>v1/ta4ma/countries</countries>
                     <payment_page>o/?action=api.quote</payment_page>

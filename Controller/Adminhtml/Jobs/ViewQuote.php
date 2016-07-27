@@ -42,7 +42,7 @@ class ViewQuote extends \Magento\Backend\App\Action
     public function execute()
     {
         $jobKey = $this->getRequest()->getParam('job_key');
-        $quoteUrl = $this->_configHelper->getQuoteUrl().'?job_key='.$jobKey;
+        $quoteUrl = $this->_configHelper->getPaymentPageUrl().'&job_key='.$jobKey;
         $result = [ 'Success'=> true, 'JobKey' => $quoteUrl ];
 //        $result = [ 'Success'=> true, 'JobKey' => 'http://www.strakertranslations.com' ];
 
