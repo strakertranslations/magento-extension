@@ -5,7 +5,7 @@ namespace Straker\EasyTranslationPlatform\Model;
 use Magento\Framework\DataObject\IdentityInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
-class Job extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
+class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface, IdentityInterface
 {
     const ENTITY = 'straker_job';
 
