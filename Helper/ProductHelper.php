@@ -22,7 +22,7 @@ class ProductHelper extends AbstractHelper
     protected $_entityTypeId;
 
     protected $_translatableBackendType = array (
-        'varchar', 'text'
+        'varchar', 'text','int'
     );
 
     protected $_translatableFrontendInputType = array(
@@ -30,7 +30,7 @@ class ProductHelper extends AbstractHelper
     );
 
     protected $_translatableFrontendLabel = array(
-        'name', 'description', 'meta title', 'meta keywords', 'meta description', 'short description'
+        'name', 'description', 'meta title', 'meta keywords', 'meta description', 'short description', 'color','size'
     );
 
 
@@ -62,25 +62,26 @@ class ProductHelper extends AbstractHelper
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
         $collection = $this->getAttributes()
-            ->addFieldToFilter( 'frontend_label',  array( 'in' => $this->_translatableFrontendLabel ))
-            ->addFieldToFilter( 'is_user_defined', array( 'eq' => 0 ));
+            ->addFieldToFilter( 'frontend_label',  array( 'in' => $this->_translatableFrontendLabel ));
         return $collection;
     }
 
     public function getCustomAttributes()
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
-        $collection = $this->getAttributes()->addFieldToFilter( 'is_user_defined', array( 'eq' => 1 ));
+        $collection = $this->getAttributes()
+                        ->addFieldToFilter( 'is_user_defined', array( 'eq' => 1 ))
+                        ->addFieldToFilter('frontend_label',array('nin'=>$this->_translatableFrontendLabel));
         return $collection;
     }
 
     public function getAttributes(){
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
-        $collection = $this->_collectionFactory->create()->addVisibleFilter();
+        $collection = $this->_collectionFactory->create();
         $collection->setEntityTypeFilter( $this->_entityTypeId )
             ->setFrontendInputTypeFilter( array( 'in' => $this->_translatableFrontendInputType ) )
             ->addFieldToFilter( 'backend_type',   array( 'in' => $this->_translatableBackendType ) )
-            ->setOrder( 'frontend_label', Collection::SORT_ORDER_ASC  );
+            ->setOrder( 'attribute_id', 'asc' );
         return $collection;
     }
 }

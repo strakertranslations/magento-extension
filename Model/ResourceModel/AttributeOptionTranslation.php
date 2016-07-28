@@ -4,6 +4,6 @@ class AttributeOptionTranslation extends \Magento\Framework\Model\ResourceModel\
 {
     protected function _construct()
     {
-        $this->_init('straker_attribute_option_translation','attribute_option_transltion_id');
+        $this->_init('straker_attribute_option_translation','attribute_option_translation_id');
     }
 }

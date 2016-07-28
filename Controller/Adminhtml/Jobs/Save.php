@@ -33,6 +33,11 @@ class Save extends \Magento\Backend\App\Action
         'select', 'multiselect'
     );
 
+    protected  $_translatedAttributeLabels = [];
+
+    protected  $_translatedAttributeOptions = [];
+
+
     /**
      * \Magento\Backend\Helper\Js $jsHelper
      * @param Action\Context $context
@@ -159,7 +164,8 @@ class Save extends \Magento\Backend\App\Action
                             'entity_id' => $data['product_id'],
                             'attribute_id' => $attribute['attribute_id'],
                             'original_value' => (is_array($attribute['value']) ? $attribute['label'] : $attribute['value']),
-                            'has_option' => is_array($attribute['value']) ? (bool)1 : (bool)0
+                            'has_option' => is_array($attribute['value']) ? (bool)1 : (bool)0,
+                            'is_label' => is_array($attribute['value']) ? (bool)1 : (bool)0
                         ]
                     )->save();
 
@@ -202,6 +208,11 @@ class Save extends \Magento\Backend\App\Action
 
             $attributeData = [];
 
+            if($product->getData('type_id') =='configurable'){
+
+                $attributeData = $this->getConfigurableAttributes($product);
+            }
+
             foreach ($attributes as $attribute_id){
 
                 if(in_array($this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id)->getFrontendInput(),$this->_multiSelectInputTypes)){
@@ -220,6 +231,11 @@ class Save extends \Magento\Backend\App\Action
 
                 }
             }
+
+            usort($attributeData, function($a, $b) {
+
+                return $a['attribute_id'] - $b['attribute_id'];
+            });
 
             $productData[] = ['product_id'=>$product->getId(), 'product_name'=>$product->getName(),'product_url'=>$product->setStoreId($store_id)->getUrlInStore(),'attributes'=>$attributeData];
 
@@ -276,50 +292,7 @@ class Save extends \Magento\Backend\App\Action
 
         $this->_xmlHelper->create('_'.$job_id.'_'.time());
 
-        foreach ($productData as $data){
-
-            foreach ($data['attributes'] as $attribute){
-
-                if(is_array($attribute['value']))
-                {
-                    foreach ($attribute['value'] as $value)
-                    {
-
-                        $this->_xmlHelper->appendDataToRoot([
-                            'name' => $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'].'_'.$value['option_id'],
-                            'content_context' => 'Product',
-                            'content_context_url' => $data['product_url'],
-                            'source_store_id'=>$source_store_id,
-                            'product_id' => $data['product_id'],
-                            'attribute_id'=>$attribute['attribute_id'],
-                            'attribute_label'=>$attribute['label'],
-                            'option_id'=>$value['option_id'],
-                            'value' => $value['value'],
-                            'translate'=> isset($attributeList[$attribute['attribute_id']][$value['option_id']]) ? 'false' : 'true'
-                        ]);
-
-                        $attributeList[$attribute['attribute_id']][$value['option_id']] = 'inList';
-                    }
-
-                }else{
-
-                    $this->_xmlHelper->appendDataToRoot([
-                        'name' => $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'],
-                        'content_context' => 'Product',
-                        'content_context_url' => $data['product_url'],
-                        'source_store_id'=> $source_store_id,
-                        'product_id' => $data['product_id'],
-                        'attribute_id'=>$attribute['attribute_id'],
-                        'attribute_label'=>$attribute['label'],
-                        'value' => $attribute['value']
-                    ]);
-
-                }
-
-
-            }
-
-        }
+        $this->appendProductAttributes($productData, $job_id, $jobtype_id, $source_store_id, $target_store_id, $this->_xmlHelper);
 
         $this->_xmlHelper->saveXmlFile();
 
@@ -372,7 +345,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $model->setData(
                     [
-                        'attribute_transltion_id'=>$attribute_translation_id,
+                        'attribute_translation_id'=>$attribute_translation_id,
                         'option_id'=>$option['option_id'],
                         'original_value'=>$option['value']
                     ]
@@ -386,5 +359,135 @@ class Save extends \Magento\Backend\App\Action
             $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
         }
 
+    }
+
+    protected function getConfigurableAttributes($product)
+    {
+
+        //$ids = $product->getTypeInstance()->getUsedProducts($product);
+
+        $attributes = $product->getTypeInstance(true)->getConfigurableAttributesAsArray($product);
+
+        $configAttributeData = [];
+
+        foreach ($attributes as $attribute)
+        {
+            $value_data = [];
+
+            foreach ($attribute['values'] as $value){
+
+                $value_data[] = ['option_id'=>$value['value_index'],'value'=>$value['default_label']];
+            }
+
+            $configAttributeData[] = [
+                'attribute_id'=>$attribute['attribute_id'],
+                'label'=>$attribute['label'],
+                'value'=>$value_data
+            ];
+
+        }
+
+        return $configAttributeData;
+
+    }
+
+    protected function appendProductAttributes($productData, $job_id, $jobtype_id, $source_store_id, $target_store_id, $xmlHelper)
+    {
+
+        if($productData)
+        {
+            try
+            {
+                foreach ($productData as $data){
+
+                    foreach ($data['attributes'] as $attribute){
+
+                        $job_name = $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'];
+
+                        $this->appendProductAttributeLabel($data,$attribute,$job_name,$source_store_id,$xmlHelper);
+
+                        if(is_array($attribute['value']))
+                        {
+                            foreach ($attribute['value'] as $value)
+                            {
+
+                                $xmlHelper->appendDataToRoot([
+                                    'name' => $job_name.'_'.$value['option_id'],
+                                    'content_context' => 'product_attribute_value',
+                                    'content_context_url' => $data['product_url'],
+                                    'source_store_id'=>$source_store_id,
+                                    'product_id' => $data['product_id'],
+                                    'attribute_id'=>$attribute['attribute_id'],
+                                    'attribute_label'=>$attribute['label'],
+                                    'option_id'=>$value['option_id'],
+                                    'value' => $value['value'],
+                                    'translate'=> (in_array($value['value'], $this->_translatedAttributeOptions) || is_numeric($value['value'])  ) ? 'false' : 'true'
+                                ]);
+
+                                array_push($this->_translatedAttributeOptions,$value['value']);
+                            }
+
+                        }else{
+
+                            $xmlHelper->appendDataToRoot([
+                                'name' => $job_name,
+                                'content_context' => 'product_attribute_value',
+                                'content_context_url' => $data['product_url'],
+                                'source_store_id'=> $source_store_id,
+                                'product_id' => $data['product_id'],
+                                'attribute_id'=>$attribute['attribute_id'],
+                                'attribute_label'=>$attribute['label'],
+                                'value' => $attribute['value']
+                            ]);
+
+                        }
+
+
+                    }
+
+                }
+
+            }catch (\Exception $e){
+
+                $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
+
+            }
+        }
+
+        return false;
+
+    }
+
+    protected function appendProductAttributeLabel($productData, $attribute, $jobName, $source_store_id, $xmlHelper)
+    {
+
+        if($productData){
+
+            try{
+
+                $xmlHelper->appendDataToRoot([
+                    'name' => $jobName,
+                    'content_context' => 'product_attribute_label',
+                    'content_context_url' => $productData['product_url'],
+                    'source_store_id'=> $source_store_id,
+                    'product_id' => $productData['product_id'],
+                    'attribute_id'=>$attribute['attribute_id'],
+                    'attribute_label'=>$attribute['label'],
+                    'value'=>$attribute['label'],
+                    'translate' => in_array($attribute['label'],$this->_translatedAttributeLabels) ? 'false' : 'true'
+                ]);
+
+                array_push($this->_translatedAttributeLabels,$attribute['label']);
+
+                return true;
+
+            }catch (\Exception $e){
+
+                $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
+
+            }
+        }
+
+        return false;
     }
 }
