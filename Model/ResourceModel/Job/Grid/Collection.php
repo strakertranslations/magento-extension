@@ -2,8 +2,16 @@
 
 namespace Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid;
 
+use Magento\Eav\Model\Entity\Store;
 use Magento\Framework\Api\Search\SearchResultInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Search\AggregationInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Straker\EasyTranslationPlatform\Model;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Collection
@@ -16,34 +24,34 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
      */
     protected $aggregations;
     /**
-     * @param \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @param EntityFactoryInterface $entityFactory
+     * @param LoggerInterface $logger
+     * @param FetchStrategyInterface $fetchStrategy
+     * @param ManagerInterface $eventManager
+     * @param StoreManagerInterface $storeManager
      * @param mixed|null $mainTable
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb $eventPrefix
+     * @param AbstractDb $eventPrefix
      * @param mixed $eventObject
      * @param mixed $resourceModel
      * @param string $model
      * @param null $connection
-     * @param \Magento\Framework\Model\ResourceModel\Db\AbstractDb|null $resource
+     * @param AbstractDb|null $resource
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Data\Collection\EntityFactoryInterface $entityFactory,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        StoreManagerInterface $storeManager,
         $mainTable,
         $eventPrefix,
         $eventObject,
         $resourceModel,
         $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
         $connection = null,
-        \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
+        AbstractDb $resource = null
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
         $this->_eventPrefix = $eventPrefix;
@@ -128,5 +136,29 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
     public function setItems(array $items = null)
     {
         return $this;
+    }
+
+    protected function _beforeLoad() {
+
+        $jobStatusTable = $this->getTable(Model\JobStatus::ENTITY);
+        $jobTypeTable = $this->getTable( Model\JobType::ENTITY );
+        $storeTable = $this->getTable( 'store' );
+
+        $this->getSelect()
+            ->join(
+                ['status' => $jobStatusTable ],
+                'main_table.job_status_id = status.status_id',
+                ['status_name AS job_status_name']
+            )->join(
+                ['type' => $jobTypeTable ],
+                'main_table.job_type_id = type.type_id',
+                ['type_name AS job_type_name']
+            )->join(
+                ['store' => $storeTable ],
+                'main_table.target_store_id = store.store_id',
+                [ 'name AS target_store_name' ]
+            );
+
+        parent::_beforeLoad();
     }
 }

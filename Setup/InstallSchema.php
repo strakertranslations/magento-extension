@@ -314,7 +314,7 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_TEXT,
                 Table::MAX_TEXT_SIZE,
                 ['nullable' => true],
-                'Transltion done by Straker'
+                'Translation done by Straker'
             )->addColumn(
                 'is_imported',
                 Table::TYPE_BOOLEAN,
@@ -401,7 +401,7 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_TEXT,
                 Table::MAX_TEXT_SIZE,
                 ['nullable' => true],
-                'Transltion done by Straker'
+                'Translation done by Straker'
             )->addColumn(
                 'is_imported',
                 Table::TYPE_BOOLEAN,

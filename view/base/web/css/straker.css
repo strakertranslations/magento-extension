@@ -32,6 +32,17 @@
     padding: 1rem 1rem 0 0;
 }
 
+#straker-job-grid a{
+    cursor: pointer;
+}
+
+/*a.straker-job-refresh{*/
+    /*display: inline-block;*/
+    /*width: 100%;*/
+    /*text-align: center;*/
+    /*color: #0a0a0a;*/
+    /*cursor: pointer;*/
+/*}*/
 /*.straker_attribute_sub_fieldset .admin__legend{*/
     /*margin: 2rem 0 1rem 0;*/
 /*}*/

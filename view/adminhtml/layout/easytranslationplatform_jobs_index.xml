@@ -1,9 +1,16 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
-    <update handle="styles"/>
     <body>
-        <referenceContainer name="content">
-            <uiComponent name="st_jobs_listing"/>
+        <referenceContainer name="content" >
+           <container name="straker.job.content" as="job_grid" htmlTag="div" htmlId="straker-job-grid">
+               <uiComponent name="st_jobs_listing"/>
+           </container>
+            <container name="straker.job.quote" as="job_quote">
+                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewQuote" template="Straker_EasyTranslationPlatform::job/quote-frame.phtml"/>
+            </container>
+        </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::job/job-grid-js.phtml"/>
         </referenceContainer>
     </body>
 </page>
