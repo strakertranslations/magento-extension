@@ -10,6 +10,9 @@ use Magento\Store\Model\StoreManagerInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Model\JobType;
+use Straker\EasyTranslationPlatform\Model\JobRepository;
+use Straker\EasyTranslationPlatform\Helper\JobHelper;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -49,7 +52,10 @@ class Save extends \Magento\Backend\App\Action
         AttributeRepository $attributeRepository,
         StoreManagerInterface $storeManager,
         XmlHelper $xmlHelper,
+        JobRepository $jobRepository,
         JobType $jobType,
+        JobHelper $jobHelper,
+        StrakerAPIInterface $API,
         \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
     ) {
         $this->_configHelper = $configHelper;
@@ -59,6 +65,10 @@ class Save extends \Magento\Backend\App\Action
         $this->_xmlHelper = $xmlHelper;
         $this->_storeManager = $storeManager;
         $this->_jobTypeModel = $jobType;
+        $this->jobRepository = $jobRepository;
+        $this->_api = $API;
+        $this->_jobHelper = $jobHelper;
+
         parent::__construct($context);
     }
 
@@ -81,6 +91,30 @@ class Save extends \Magento\Backend\App\Action
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
+
+        $test = $this->_jobHelper->createJob($data)->generateProductJob()->getJobInfo();
+
+        var_dump($test);
+
+        exit;
+
+        $model = $this->jobRepository->
+
+        $model->setData(
+            [
+                'job_type_id'=>$this->getJobTypeId('product'),
+                'job_status_id'=>$this->getJobStatusId('queued'),
+                'source_store_id'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_store'],
+                'target_store_id'=>$data['destination_store'],
+                'source_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_language'],
+                'target_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/destination_language']
+            ]
+        );
+
+        $model->save();
+
+        $this->_jobHelper->createJob();
+
 
         if ($data) {
 
@@ -111,6 +145,8 @@ class Save extends \Magento\Backend\App\Action
                 $model->save();
 
                 $this->saveProducts($productData,$model->getId());
+
+                $this->_summitJob($model);
 
                 $this->messageManager->addSuccess(__('You saved this job.'));
 
@@ -442,7 +478,6 @@ class Save extends \Magento\Backend\App\Action
 
                         }
 
-
                     }
 
                 }
@@ -490,4 +525,54 @@ class Save extends \Magento\Backend\App\Action
 
         return false;
     }
+
+    protected function _summitJob($model){
+
+        $request = array();
+
+        $store = $model->getData('source_store_id');
+
+        $defaultTitle = $model->getData('source_language').'_'.$model->getData('target_language').'_'.$store.'_'.$model->getData('job_id');
+
+        $model->setData('title',$defaultTitle);
+
+
+        $request['title'] = $model->getTitle();
+        $request['sl']    = $model->getSourceLanguage();
+        $request['tl']    = $model->getTargetLanguage();
+
+
+        $filePath = $model->getData('source_file');
+
+        //$request['source_file']    = function_exists('curl_file_create') ?  curl_file_create($filePath) :'@'.$filePath;
+
+
+        $request['source_file'] =  $filePath;
+
+        //$request['callback_uri']    = Mage::getStoreConfig('web/unsecure/base_link_url',$this->getStoreId()) . 'straker/callback';
+        $request['token']    = $model->getId();
+
+        $response = $this->_api->callTranslate($request);
+
+        if($response->job_key) {
+
+            $model->addData(['job_key'=>$response->job_key]);
+
+            $model->save();
+
+            return true;
+        }
+
+        else{
+
+            $this->setLastStatus(0);
+            $message = $response->magentoMessage?$response->magentoMessage:'Unknown Error.';
+            $this->setLastMessage($message);
+
+            return false;
+        }
+
+
+    }
+
 }
