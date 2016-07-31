@@ -28,8 +28,6 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
     public function getConfigurableAttributes($product)
     {
 
-        //$ids = $product->getTypeInstance()->getUsedProducts($product);
-
         $attributes = $product->getTypeInstance(true)->getConfigurableAttributesAsArray($product);
 
         $configAttributeData = [];

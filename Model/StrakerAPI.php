@@ -85,7 +85,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
                 $httpClient->setParameterPost($request);
 
-                if($request['source_file']){
+                if(!empty($request['source_file'])){
 
                     $httpClient->setFileUpload($request['source_file'],'source_file');
                 }

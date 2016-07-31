@@ -94,7 +94,7 @@ class ProductHelper extends AbstractHelper
         $this->_attributeHelper = $attributeHelper;
         $this->_xmlHelper = $xmlHelper;
         $this->_logger = $logger;
-        $this->_entityTypeId =  $eavConfig->getEntityType( ProductAttributeInterface::ENTITY_TYPE_CODE )->getEntityTypeId();
+        $this->_entityTypeId =  $eavConfig->getEntityType(ProductAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
 
         parent::__construct($context);
     }
@@ -130,7 +130,16 @@ class ProductHelper extends AbstractHelper
         return $collection;
     }
 
-    public function getProducts($product_ids,$store_id)
+    /**
+     * @param $product_ids
+     * @param $store_id
+     * @return $this
+     * Todo: Add store id to filter products by store
+     */
+    public function getProducts(
+        $product_ids,
+        $store_id
+    )
     {
         $product_ids = explode('&',$product_ids);
 
@@ -146,11 +155,14 @@ class ProductHelper extends AbstractHelper
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function getSelectedProductAttributes()
     {
         $attributes = array_merge($this->_configHelper->getDefaultAttributes(),$this->_configHelper->getCustomAttributes());
 
-        $productData = [];
+        $productAttributeData = [];
 
         foreach ($this->_productData as $product){
 
@@ -180,12 +192,13 @@ class ProductHelper extends AbstractHelper
                 }
             }
 
+            //Sort Attribute Data by Id Asc
             usort($attributeData, function($a, $b) {
 
                 return $a['attribute_id'] - $b['attribute_id'];
             });
 
-            $productData[] = [
+            $productAttributeData[] = [
                 'product_id'=>$product->getId(),
                 'product_name'=>$product->getName(),
                 'product_url'=>$product->setStoreId($this->_storeId)->getUrlInStore(),
@@ -194,13 +207,15 @@ class ProductHelper extends AbstractHelper
 
         }
 
-        $this->_productData = $productData;
+        $this->_productData = $productAttributeData;
 
         return $this;
-
-        //return $productData;
     }
 
+    /**
+     * @param $jobModel
+     * @return string
+     */
     public function generateProductXML($jobModel)
     {
 
@@ -220,6 +235,15 @@ class ProductHelper extends AbstractHelper
         return $this->_xmlHelper->getXmlFileName();
     }
 
+    /**
+     * @param $productData
+     * @param $job_id
+     * @param $jobtype_id
+     * @param $source_store_id
+     * @param $target_store_id
+     * @param $xmlHelper
+     * @return bool
+     */
     protected function appendProductAttributes(
         $productData,
         $job_id,
@@ -284,7 +308,7 @@ class ProductHelper extends AbstractHelper
 
             }catch (\Exception $e){
 
-                $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
+                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
 
             }
         }
@@ -293,6 +317,10 @@ class ProductHelper extends AbstractHelper
 
     }
 
+    /**
+     * @param $job_id
+     * @return $this
+     */
     public function saveProductData($job_id)
     {
 
@@ -332,6 +360,10 @@ class ProductHelper extends AbstractHelper
 
     }
 
+    /**
+     * @param $option_values
+     * @param $attribute_translation_id
+     */
     protected function saveOptionValues(
         $option_values,
         $attribute_translation_id

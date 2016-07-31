@@ -41,7 +41,10 @@ class JobHelper extends AbstractHelper
         parent::__construct($context);
     }
 
-
+    /**
+     * @param $data
+     * @return $this
+     */
     public function createJob($data)
     {
 
@@ -62,6 +65,9 @@ class JobHelper extends AbstractHelper
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function generateProductJob()
     {
 
@@ -81,10 +87,30 @@ class JobHelper extends AbstractHelper
         return $this;
     }
 
-
+    /**
+     * @return mixed
+     */
     public function getJobInfo(){
 
         return $this->jobModel->getData();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getJob(){
+
+        return $this->jobModel;
+    }
+
+    /**
+     * @return $this
+     */
+    public function save()
+    {
+        $this->jobModel->save();
+
+        return $this;
     }
 
     /**
@@ -92,9 +118,6 @@ class JobHelper extends AbstractHelper
      * @return mixed
      */
     protected function getJobTypeId($jobType){
-
-
-        //$productCollection = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory');//insert your custom resource model
 
         $collection = $this->_jobTypeCollection->create()
             ->addFieldToFilter('type_name',array('eq'=>$jobType))
@@ -108,8 +131,6 @@ class JobHelper extends AbstractHelper
      * @return mixed
      */
     protected function getJobStatusId($jobStatus){
-
-        //$productCollection = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory');//insert your custom resource model
 
         $collection = $this->_jobStatusCollection->create()
             ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
