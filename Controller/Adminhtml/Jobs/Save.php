@@ -372,7 +372,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $model->setData(
                     [
-                        'attribute_transltion_id'=>$attribute_translation_id,
+                        'attribute_translation_id'=>$attribute_translation_id,
                         'option_id'=>$option['option_id'],
                         'original_value'=>$option['value']
                     ]
