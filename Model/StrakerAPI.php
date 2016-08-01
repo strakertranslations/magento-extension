@@ -85,6 +85,11 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
                 $httpClient->setParameterPost($request);
 
+                if(!empty($request['source_file'])){
+
+                    $httpClient->setFileUpload($request['source_file'],'source_file');
+                }
+
                 break;
 
             case 'get' :
@@ -98,7 +103,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
         $httpClient->setConfig(['timeout' => 60,'verifypeer'=>0]);
 
-        //$httpClient->setHeaders($this->_headers);
+        $httpClient->setHeaders($this->getHeaders());
 
         $httpClient->setMethod($method);
 
@@ -197,6 +202,15 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     protected  function _getSupportUrl(){
         return $this->_configHelper->getSupportUrl();
     }
+
+    public function getHeaders(){
+
+        $this->_headers[] = 'Authorization: Bearer '.$this->_configHelper->getAccessToken();
+        $this->_headers[] = 'X-Auth-App: '. $this->_configHelper->getApplicationKey();
+
+        return $this->_headers;
+    }
+
 
     public function callRegister($data){
 

@@ -31,6 +31,11 @@ class ConfigHelper extends AbstractHelper
         return $this->scopeConfig->getValue('straker/general/access_token','default','') ? $this->scopeConfig->getValue('straker/general/access_token','default','') : false ;
     }
 
+    public function getApplicationKey()
+    {
+        return $this->scopeConfig->getValue('straker/general/application_key','default','') ? $this->scopeConfig->getValue('straker/general/application_key','default','') : false ;
+    }
+
     /**
      * @return string or null  current version of the website hard-coded in config.xml
      */

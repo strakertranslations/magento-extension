@@ -4,12 +4,15 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\TestFramework\ErrorLog\Logger;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Store\Model\StoreManagerInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Model\JobType;
+use Straker\EasyTranslationPlatform\Model\JobRepository;
+use Straker\EasyTranslationPlatform\Helper\JobHelper;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+use Straker\EasyTranslationPlatform\Logger\Logger;
 
 class Save extends \Magento\Backend\App\Action
 {
@@ -33,6 +36,13 @@ class Save extends \Magento\Backend\App\Action
         'select', 'multiselect'
     );
 
+    protected  $_translatedAttributeLabels = [];
+
+    protected  $_translatedAttributeOptions = [];
+
+    protected $_jobRequest;
+
+
     /**
      * \Magento\Backend\Helper\Js $jsHelper
      * @param Action\Context $context
@@ -44,7 +54,11 @@ class Save extends \Magento\Backend\App\Action
         AttributeRepository $attributeRepository,
         StoreManagerInterface $storeManager,
         XmlHelper $xmlHelper,
+        JobRepository $jobRepository,
         JobType $jobType,
+        JobHelper $jobHelper,
+        StrakerAPIInterface $API,
+        Logger $logger,
         \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
     ) {
         $this->_configHelper = $configHelper;
@@ -54,6 +68,11 @@ class Save extends \Magento\Backend\App\Action
         $this->_xmlHelper = $xmlHelper;
         $this->_storeManager = $storeManager;
         $this->_jobTypeModel = $jobType;
+        $this->jobRepository = $jobRepository;
+        $this->_api = $API;
+        $this->_jobHelper = $jobHelper;
+        $this->_logger = $logger;
+
         parent::__construct($context);
     }
 
@@ -66,54 +85,31 @@ class Save extends \Magento\Backend\App\Action
     }
 
     /**
-     * Save action
+     * @return mixed
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * Todo: Add field to identify job type when submitting new job
      */
     public function execute()
     {
         $data = $this->getRequest()->getPostValue();
 
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data) {
 
-            $productData = $this->getProductData($data['products'],$this->_storeManager->getStore()->getId());
+            $job = $this->_jobHelper->createJob($data)->generateProductJob()->save();
 
             try {
 
+                $this->_summitJob($job->getJob());
 
-                $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\Job');
-
-                $model->setData(
-                    [
-                        'job_type_id'=>$this->getJobTypeId('product'),
-                        'job_status_id'=>$this->getJobStatusId('queued'),
-                        'source_store_id'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_store'],
-                        'target_store_id'=>$data['destination_store'],
-                        'source_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/source_language'],
-                        'target_language'=>$this->_configHelper->getStoreInfo($data['destination_store'])['straker/general/destination_language']
-                    ]
-                );
-
-                $model->save();
-
-                $this->generateProductXML($productData, $model->getId(), $model->getData('job_type_id'),$model->getData('source_store_id'),$model->getData('target_store_id'));
-
-                $model->addData(['source_file'=>$this->_xmlHelper->getXMLFileName()]);
-
-                $model->save();
-
-                $this->saveProducts($productData,$model->getId());
-
-                $this->messageManager->addSuccess(__('You saved this job.'));
-
-                $this->_objectManager->get('Magento\Backend\Model\Session')->setFormData(false);
+                $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
 
                 if ($this->getRequest()->getParam('back')) {
 
-                    return $resultRedirect->setPath('*/*/edit', ['job_id' => $model->getId(), '_current' => true]);
+                    return $resultRedirect->setPath('*/*/edit', ['job_id' => $job->getId(), '_current' => true]);
                 }
                 return $resultRedirect->setPath('*/*/');
 
@@ -121,16 +117,20 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->messageManager->addError($e->getMessage());
 
+                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+
             } catch (\RuntimeException $e) {
 
                 $this->messageManager->addError($e->getMessage());
 
+                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+
             } catch (\Exception $e) {
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
-            }
 
-            $this->_getSession()->setFormData($data);
+                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+            }
 
             return $resultRedirect->setPath('*/*/edit', ['job_id' => $this->getRequest()->getParam('job_id')]);
         }
@@ -138,96 +138,41 @@ class Save extends \Magento\Backend\App\Action
     }
 
     /**
-     * @param $product_data
-     * @param $job_id
+     * @param $job_object
      * @return bool
      */
-    protected function saveProducts($product_data, $job_id)
-    {
+    protected function _summitJob($job_object){
 
-        try {
+        $store = $job_object->getData('source_store_id');
 
-            foreach ($product_data as $data) {
+        $defaultTitle = $job_object->getData('source_language').'_'.$job_object->getData('target_language').'_'.$store.'_'.$job_object->getData('job_id');
 
-                foreach ($data['attributes'] as $attribute) {
+        $job_object->setData('title',$defaultTitle);
 
-                    $model = $this->_objectManager->create('Straker\EasyTranslationPlatform\Model\AttributeTranslation');
+        $this->_jobRequest['title']       = $job_object->getTitle();
+        $this->_jobRequest['sl']          = $job_object->getSourceLanguage();
+        $this->_jobRequest['tl']          = $job_object->getTargetLanguage();
+        $this->_jobRequest['source_file'] = $job_object->getData('source_file');
+        $this->_jobRequest['token']       = $job_object->getId();
 
-                    $model->setData(
-                        [
-                            'job_id' => $job_id,
-                            'entity_id' => $data['product_id'],
-                            'attribute_id' => $attribute['attribute_id'],
-                            'original_value' => (is_array($attribute['value']) ? $attribute['label'] : $attribute['value']),
-                            'has_option' => is_array($attribute['value']) ? (bool)1 : (bool)0
-                        ]
-                    )->save();
+        $response = $this->_api->callTranslate($this->_jobRequest);
 
-                    if ($model->getData('has_option')) {
+        if($response->job_key) {
 
-                        $this->saveOptionValues($attribute['value'], $model->getId());
-                    }
+            $job_object->addData(['job_key'=>$response->job_key]);
 
-                }
-            }
-
-        } catch (Exception $e) {
-
-            $this->messageManager->addException($e, __('Something went wrong while saving the job.'));
-        }
-
-    }
-
-    /**
-     * @param $product_ids
-     * @param $store_id
-     * @return array
-     */
-    protected function getProductData($product_ids,$store_id)
-    {
-        $product_ids = explode('&',$product_ids);
-
-        $productCollection = $this->_objectManager->create('Magento\Catalog\Model\ResourceModel\Product\CollectionFactory');
-
-        $products = $productCollection->create()
-            ->addAttributeToSelect('*')
-            ->addIdFilter($product_ids)
-            ->load();
-
-        $attributes = array_merge($this->_configHelper->getDefaultAttributes(),$this->_configHelper->getCustomAttributes());
-
-        $productData = [];
-
-        foreach ($products as $product){
-
-            $attributeData = [];
-
-            foreach ($attributes as $attribute_id){
-
-                if(in_array($this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id)->getFrontendInput(),$this->_multiSelectInputTypes)){
-
-                    if($this->findMultiOptionAttributes($attribute_id,$product,$store_id)){
-
-                        array_push($attributeData,$this->findMultiOptionAttributes($attribute_id,$product,$store_id));
-                    }
-
-                }else{
-
-                    if($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$store_id)){
-
-                       array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$this->_attributeRepository->get('catalog_product',$attribute_id)->getFrontendLabel(),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$store_id)]);
-                    }
-
-                }
-            }
-
-            $productData[] = ['product_id'=>$product->getId(), 'product_name'=>$product->getName(),'product_url'=>$product->setStoreId($store_id)->getUrlInStore(),'attributes'=>$attributeData];
+            $job_object->save();
 
         }
 
-        return $productData;
+        else{
+
+            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$response->message,$response);
+        }
+
 
     }
+
 
     /**
      * @param $attribute_id
