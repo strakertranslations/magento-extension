@@ -98,6 +98,7 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
                     'name' => $jobName,
                     'content_context' => 'product_attribute_label',
                     'content_context_url' => $productData['product_url'],
+                    'translation_id'=>$attribute['label_translation_id'],
                     'source_store_id'=> $source_store_id,
                     'product_id' => $productData['product_id'],
                     'attribute_id'=>$attribute['attribute_id'],

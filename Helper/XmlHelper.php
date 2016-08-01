@@ -47,7 +47,7 @@ class XmlHelper extends AbstractHelper
         DomDocumentFactory $domDocumentFactory
     ) {
         $this->_dom = $domDocumentFactory->create();
-        $this->_xmlFilePath = $directoryList->getPath('var'). DIRECTORY_SEPARATOR . 'straker';
+        $this->_xmlFilePath = $directoryList->getPath('var'). DIRECTORY_SEPARATOR . 'straker/job-file';
         parent::__construct($context);
     }
 

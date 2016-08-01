@@ -264,8 +264,6 @@ class ProductHelper extends AbstractHelper
 
                         $job_name = $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'];
 
-                        $this->_attributeHelper->appendAttributeLabel($data,$attribute,$job_name,$source_store_id,$xmlHelper);
-
                         if(is_array($attribute['value']))
                         {
                             foreach ($attribute['value'] as $value)
@@ -275,6 +273,7 @@ class ProductHelper extends AbstractHelper
                                     'name' => $job_name.'_'.$value['option_id'],
                                     'content_context' => 'product_attribute_value',
                                     'content_context_url' => $data['product_url'],
+                                    'translation_id'=>$attribute['label_translation_id'],
                                     'source_store_id'=>$source_store_id,
                                     'product_id' => $data['product_id'],
                                     'attribute_id'=>$attribute['attribute_id'],
@@ -289,10 +288,13 @@ class ProductHelper extends AbstractHelper
 
                         }else{
 
+                            $this->_attributeHelper->appendAttributeLabel($data,$attribute,$job_name,$source_store_id,$xmlHelper);
+
                             $xmlHelper->appendDataToRoot([
                                 'name' => $job_name,
                                 'content_context' => 'product_attribute_value',
                                 'content_context_url' => $data['product_url'],
+                                'translation_id'=>$attribute['value_translation_id'],
                                 'source_store_id'=> $source_store_id,
                                 'product_id' => $data['product_id'],
                                 'attribute_id'=>$attribute['attribute_id'],
@@ -308,7 +310,11 @@ class ProductHelper extends AbstractHelper
 
             }catch (\Exception $e){
 
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+                var_dump($e->getMessage());
+
+                exit;
+
+                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
 
             }
         }
@@ -323,31 +329,58 @@ class ProductHelper extends AbstractHelper
      */
     public function saveProductData($job_id)
     {
-
         try {
 
-            foreach ($this->_productData as $data) {
+            foreach ($this->_productData as $product_key => $data) {
 
-                foreach ($data['attributes'] as $attribute) {
+                foreach ($data['attributes'] as $attribute_key => $attribute) {
 
                     $attributeTranslationModel = $this->_attributeTranslationFactory->create();
 
-                    $attributeTranslationModel->setData(
-                        [
-                            'job_id' => $job_id,
-                            'entity_id' => $data['product_id'],
-                            'attribute_id' => $attribute['attribute_id'],
-                            'original_value' => (is_array($attribute['value']) ? $attribute['label'] : $attribute['value']),
-                            'has_option' => is_array($attribute['value']) ? (bool)1 : (bool)0,
-                            'is_label' => is_array($attribute['value']) ? (bool)1 : (bool)0
-                        ]
-                    )->save();
+                    if (is_array($attribute['value'])) {
 
-                    if ($attributeTranslationModel->getData('has_option')) {
+                        $attributeTranslationModel->setData(
+                            [
+                                'job_id' => $job_id,
+                                'entity_id' => $data['product_id'],
+                                'attribute_id' => $attribute['attribute_id'],
+                                'original_value' => $attribute['label'],
+                                'has_option' => (bool)1,
+                                'is_label' => (bool)1
+                            ]
+                        )->save();
+
+                        $this->_productData[$product_key]['attributes'][$attribute_key]['label_translation_id'] = $attributeTranslationModel->getId();
 
                         $this->saveOptionValues($attribute['value'], $attributeTranslationModel->getId());
-                    }
 
+                    }else{
+
+                        $attributeTranslationModel->setData(
+                            [
+                                'job_id' => $job_id,
+                                'entity_id' => $data['product_id'],
+                                'attribute_id' => $attribute['attribute_id'],
+                                'original_value' => $attribute['label'],
+                                'is_label' => (bool)1
+                            ]
+                        )->save();
+
+                        $this->_productData[$product_key]['attributes'][$attribute_key]['label_translation_id'] = $attributeTranslationModel->getId();
+
+                        $attributeTranslationModel->setData(
+                            [
+                                'job_id' => $job_id,
+                                'entity_id' => $data['product_id'],
+                                'attribute_id' => $attribute['attribute_id'],
+                                'original_value' => $attribute['value'],
+                                'is_label' => (bool)0
+                            ]
+                        )->save();
+
+                        $this->_productData[$product_key]['attributes'][$attribute_key]['value_translation_id'] = $attributeTranslationModel->getId();
+
+                    }
                 }
             }
 

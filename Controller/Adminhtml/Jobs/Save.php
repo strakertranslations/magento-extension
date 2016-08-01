@@ -105,8 +105,6 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->_summitJob($job->getJob());
 
-                $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
-
                 if ($this->getRequest()->getParam('back')) {
 
                     return $resultRedirect->setPath('*/*/edit', ['job_id' => $job->getId(), '_current' => true]);
@@ -117,19 +115,22 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->messageManager->addError($e->getMessage());
 
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
 
             } catch (\RuntimeException $e) {
 
                 $this->messageManager->addError($e->getMessage());
 
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
             } catch (\Exception $e) {
 
+                var_dump($e->getMessage());
+
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
 
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
             }
 
             return $resultRedirect->setPath('*/*/edit', ['job_id' => $this->getRequest()->getParam('job_id')]);
@@ -155,21 +156,24 @@ class Save extends \Magento\Backend\App\Action
         $this->_jobRequest['source_file'] = $job_object->getData('source_file');
         $this->_jobRequest['token']       = $job_object->getId();
 
+
         $response = $this->_api->callTranslate($this->_jobRequest);
 
-        if($response->job_key) {
+        try {
 
             $job_object->addData(['job_key'=>$response->job_key]);
 
             $job_object->save();
 
+            $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
+
+
+        }catch (\Exception $e){
+
+            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message,array($response));
+
+            $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
-
-        else{
-
-            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$response->message,$response);
-        }
-
 
     }
 
