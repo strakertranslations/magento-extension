@@ -42,13 +42,13 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false,],
                 'Name'
             )->addColumn(
-                'creation_time',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
                 'Creation Time'
             )->addColumn(
-                'update_time',
+                'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
@@ -85,13 +85,13 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false,],
                 'Name'
             )->addColumn(
-                'creation_time',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
                 'Creation Time'
             )->addColumn(
-                'update_time',
+                'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
@@ -146,13 +146,13 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false],
                 'Job Number'
             )->addColumn(
-                'source_language',
+                'sl',
                 Table::TYPE_TEXT,
                 100,
                 ['nullable' => false],
                 'Source Language'
             )->addColumn(
-                'target_language',
+                'tl',
                 Table::TYPE_TEXT,
                 100,
                 ['nullable' => false],
@@ -182,13 +182,13 @@ class InstallSchema implements InstallSchemaInterface
                 [],
                 'Download Url'
             )->addColumn(
-                'creation_time',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
                 'Creation Time'
             )->addColumn(
-                'update_time',
+                'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
@@ -322,19 +322,19 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => true],
                 'Is Imported'
             )->addColumn(
-                'import_time',
+                'imported_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => true],
                 'Import Time'
             )->addColumn(
-                'creation_time',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
                 'Creation Time'
             )->addColumn(
-                'update_time',
+                'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
@@ -409,19 +409,19 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => true],
                 'Is Imported'
             )->addColumn(
-                'import_time',
+                'imported_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => true],
                 'Import Time'
             )->addColumn(
-                'creation_time',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
                 'Creation Time'
             )->addColumn(
-                'update_time',
+                'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
                 ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
