@@ -11,10 +11,12 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
-class JobRepository implements \Straker\EasyTranslationPlatform\Api\JobRepositoryInterface
+class JobRepository implements JobRepositoryInterface
 {
     protected $objectFactory;
     protected $collectionFactory;
+    protected $searchResultsFactory;
+    
     public function __construct(
         JobFactory $objectFactory,
         CollectionFactory $collectionFactory,

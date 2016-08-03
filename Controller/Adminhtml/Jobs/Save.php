@@ -126,7 +126,7 @@ class Save extends \Magento\Backend\App\Action
 
             } catch (\Exception $e) {
 
-                var_dump($e->getMessage());
+//                var_dump($e->getMessage());
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
 
@@ -151,12 +151,12 @@ class Save extends \Magento\Backend\App\Action
         $job_object->setData('title',$defaultTitle);
 
         $this->_jobRequest['title']       = $job_object->getTitle();
-        $this->_jobRequest['sl']          = $job_object->getSourceLanguage();
-        $this->_jobRequest['tl']          = $job_object->getTargetLanguage();
+        $this->_jobRequest['sl']          = $job_object->getData('sl');
+        $this->_jobRequest['tl']          = $job_object->getTl();
         $this->_jobRequest['source_file'] = $job_object->getData('source_file');
         $this->_jobRequest['token']       = $job_object->getId();
 
-
+//        var_dump($this->_jobRequest);exit();
         $response = $this->_api->callTranslate($this->_jobRequest);
 
         try {

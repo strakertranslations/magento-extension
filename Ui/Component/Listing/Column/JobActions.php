@@ -51,17 +51,27 @@ class JobActions extends Column
     public function prepareDataSource(array $dataSource)
     {
         if (isset($dataSource['data']['items'])) {
-            foreach ($dataSource['data']['items'] as &$item) {
-                if (array_key_exists('job_status_id', $item) && array_key_exists( 'job_id', $item )) {
+            foreach ($dataSource['data']['items'] as & $item) {
+                $name = $this->getData('name');
+                if (array_key_exists('job_status_id', $item) && array_key_exists('job_id', $item)) {
                     $statusId = $item['job_status_id'];
-                    if( $statusId == 4){
-                        $item[$this->getData('name')] = "<a href='#' class='straker-job-confirm-anchor' data-job-id='". $item['job_id'] ."' data-job-key='" . $item['job_key'] . "'> ".__( ucwords('confirm') )."</a>";
-                    }else{
-                        $item[$this->getData('name')] = "<a href='#' class='straker-job-view-anchor' data-job-id='". $item['job_id'] ."' data-job-key='" . $item['job_key'] . "'>" . __( ucwords('view') ) . "</a>";
+                    if ($statusId == 4) {
+                        $item[$name]['confirm'] = [
+                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Confirm',
+                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
+                            'label' => __('Confirm')
+                        ];
                     }
+
+                    $item[$name]['view'] = [
+                        'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                            ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
+                        'label' => __('View')
+                    ];
                 }
             }
         }
+
         return $dataSource;
     }
 }

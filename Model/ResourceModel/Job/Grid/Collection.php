@@ -157,8 +157,8 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
                 ['store' => $storeTable ],
                 'main_table.target_store_id = store.store_id',
                 [ 'name AS target_store_name' ]
-            );
-
+            )->order('main_table.created_at DESC');
+        
         parent::_beforeLoad();
     }
 }
