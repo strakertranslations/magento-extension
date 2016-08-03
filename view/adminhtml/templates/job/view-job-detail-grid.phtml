@@ -1,0 +1,27 @@
+<?php
+    echo $block->getChildHtml();
+?>
+<script>
+    require([
+        'jquery'
+    ], function ( $ ) {
+        $(function () {
+            var viewJobGrid = $('#straker-view-job-grid');
+
+            viewJobGrid.on('click', 'tr', function( e ){
+                e.preventDefault();
+                console.log( $(this).prop('class') );
+                var html = '<tr class="straker-job-attribute-option"><td>Red</td><td>hongse</td></tr>';
+                var attrOption = $('.straker-job-attribute-option');
+                if( typeof attrOption.get(0) === 'undefined' ){
+                    $(html).insertAfter($(this));
+                }else{
+                    $('.straker-job-attribute-option').remove();
+                }
+
+            });
+
+        });
+    });
+
+</script>
