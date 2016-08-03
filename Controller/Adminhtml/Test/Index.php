@@ -12,6 +12,9 @@ use Magento\Framework\Xml\Parser;
 
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
+
+use Magento\Framework\App\ResourceConnection;
 
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
@@ -38,6 +41,8 @@ class Index extends \Magento\Backend\App\Action
     protected $_attributeTranslationOptionCollection;
     protected $_productFactory;
     protected $_attributeRepository;
+    protected $_resourceConnection;
+    protected $_attributeOptionFactory;
 
     public function __construct(
         Context $context,
@@ -52,7 +57,9 @@ class Index extends \Magento\Backend\App\Action
         AttributeTranslationCollection $attributeTranslationCollection,
         AttributeOptionTranslationCollection $attributeOptionTranslationCollection,
         ProductAction $productFactory,
-        AttributeRepository $attributeRepository
+        AttributeRepository $attributeRepository,
+        ResourceConnection $connection,
+        OptionFactory $optionFactory
     )
     {
         $this->_attributeCollection = $attCollection;
@@ -67,6 +74,8 @@ class Index extends \Magento\Backend\App\Action
         $this->_attributeOptionTranslationCollection = $attributeOptionTranslationCollection;
         $this->_productFactory = $productFactory;
         $this->_attributeRepository = $attributeRepository;
+        $this->_resourceConnection = $connection;
+        $this->_attributeOptionFactory = $optionFactory;
 
         return parent::__construct($context);
     }
@@ -105,23 +114,13 @@ class Index extends \Magento\Backend\App\Action
 
         }
 
-        $this->updateAttributes();
-
-        exit;
-
-        var_dump($parsedData);
-
-        exit;
-
-        return $parsedArray['xmlNodeName'];
+        $this->importTranslatedProducts();
 
 
     }
 
-    public function updateAttributes()
+    public function importTranslatedProducts()
     {
-
-        $attData = [];
 
         $products = $this->_attributeTranslationCollection->create()
             ->addFieldToSelect(['attribute_id','translated_value'])
@@ -141,38 +140,9 @@ class Index extends \Magento\Backend\App\Action
             ->addFieldToFilter( 'entity_id',   array( 'eq' => 2045 ) )
             ->addFieldToFilter( 'has_option',   array( 'eq' => 1 ) );
 
-        //$options = $this->_attributeOptionTranslationCollection->create()
-           // ->addFieldToFilter( 'attribute_translation_id',   array( 'eq' => 1074 ) );
+        var_dump($options->getData());
 
-        //var_dump($products->getData());
-        //var_dump($labels->getData());
-        //var_dump($options->getData());
-
-        foreach ($options as $data)
-        {
-            $optionValues = $this->_attributeOptionTranslationCollection->create()
-             ->addFieldToFilter( 'attribute_translation_id',   array( 'eq' => $data->getId() ) )->toArray()['items'];
-
-            $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$data['attribute_id']);
-
-            foreach ($optionValues as $value ){
-
-                $transValue[0] = $value['original_value'];
-                $transValue[1] = $value['original_value'];
-                $transValue[2] = $value['translated_value'];
-
-                $att->setData('option',array('value'=>array(
-                    $value['option_id']=>$transValue)));
-
-                $att->save();
-            }
-
-        }
-
-        var_dump($optionValues);
-
-        exit;
-
+        $this->_updateAttributeOptionValues();
 
 
         foreach ($labels->toArray()['items'] as $data){
@@ -192,19 +162,24 @@ class Index extends \Magento\Backend\App\Action
             $attData[$data['attribute_id']] = $data['translated_value'];
         }
 
-//        var_dump($attData);
-//
-//        var_dump($products->getData());
-//
-//        exit;
-
-        //store 2
-
-        //$productFactory = $this->_productFactory->create();
 
         $this->_productFactory->updateAttributes(array('2045'),$attData,2);
 
-        exit;
+
+    }
+
+    protected function importTranslatedOptionValues()
+    {
+
+        $connection = $this->_resourceConnection->getConnection();
+
+        $table = $this->_resourceConnection->getTableName('eav_attribute_option_value');
+
+        $data[] = ['option_id' => '152', 'store_id' => '2', 'value' =>'test122'];
+        $data[] = ['option_id' => '153', 'store_id' => '2', 'value' =>'test122'];
+
+        $connection->insertMultiple($table, $data);
+
 
     }
 

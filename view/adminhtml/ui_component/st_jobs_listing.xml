@@ -16,7 +16,15 @@
         </item>
         <item name="spinner" xsi:type="string">jobs_grid_columns</item>
         <!-- the format here is columns name defined below -->
+
         <item name="buttons" xsi:type="array">
+            <!-- here we can add buttons -->
+            <item name="refresh" xsi:type="array">
+                <item name="name" xsi:type="string">refresh</item>
+                <item name="label" xsi:type="string" translate="true">Refresh All Jobs</item>
+                <item name="class" xsi:type="string">primary</item>
+                <item name="url" xsi:type="string">*/*/refreshjob</item>
+            </item>
             <!-- here we can add buttons -->
             <item name="add" xsi:type="array">
                 <item name="name" xsi:type="string">add</item>
@@ -24,7 +32,9 @@
                 <item name="class" xsi:type="string">primary</item>
                 <item name="url" xsi:type="string">*/*/new</item>
             </item>
+
         </item>
+
     </argument>
 
     <dataSource name="jobs_grid_data_source">
@@ -214,29 +224,39 @@
             </argument>
         </column>
 
-        <column name="creation_time" class="Magento\Ui\Component\Listing\Columns\Date">
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
                     <item name="sortOrder" xsi:type="number">30</item>
-                    <item name="label" xsi:type="string" translate="true">Created On</item>
+                    <item name="label" xsi:type="string" translate="true">Created At</item>
                 </item>
             </argument>
         </column>
 
-        <!--<column name="update_time" class="Magento\Ui\Component\Listing\Columns\Date">-->
-        <!--<argument name="data" xsi:type="array">-->
-        <!--<item name="config" xsi:type="array">-->
-        <!--<item name="filter" xsi:type="string">dateRange</item>-->
-        <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>-->
-        <!--<item name="dataType" xsi:type="string">date</item>-->
-        <!--<item name="sortOrder" xsi:type="number">40</item>-->
-        <!--<item name="label" xsi:type="string" translate="true">Updated On</item>-->
-        <!--</item>-->
-        <!--</argument>-->
-        <!--</column>-->
+        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="label" xsi:type="string" translate="true">Updated At</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="job_key">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="label" xsi:type="string" translate="true">Job Key</item>
+                </item>
+            </argument>
+        </column>
 
         <column name="job_type_name" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\StringFormatter">
             <argument name="data" xsi:type="array">
@@ -282,17 +302,6 @@
             </argument>
         </column>
 
-        <column name="action" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobActions">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="sortable" xsi:type="boolean">false</item>
-                    <item name="sortOrder" xsi:type="number">100</item>
-                    <item name="label" xsi:type="string" translate="true">Action</item>
-                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
-                </item>
-            </argument>
-        </column>
-
         <column name="job_status_name" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobStatus">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -304,6 +313,29 @@
                 </item>
             </argument>
         </column>
+
+        <column name="job_refresh" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobRefresh">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sortable" xsi:type="boolean">false</item>
+                    <item name="sortOrder" xsi:type="number">100</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Refresh</item>
+                </item>
+            </argument>
+        </column>
+
+        <actionsColumn name="action" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
+                    <item name="indexField" xsi:type="string">job_id</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
+                </item>
+            </argument>
+        </actionsColumn>
 
         <!--<actionsColumn name="actions" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobsActions">-->
         <!--<argument name="data" xsi:type="array">-->
@@ -317,14 +349,15 @@
         <!--</actionsColumn>-->
     </columns>
 
-    <container name="sticky">
-        <argument name="data" xsi:type="array">
-            <item name="config" xsi:type="array">
-                <item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>
-                <item name="toolbarProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top</item>
-                <item name="listingProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
-            </item>
-        </argument>
-    </container>
+    <!--fixed grid header-->
+    <!--<container name="sticky">-->
+    <!--<argument name="data" xsi:type="array">-->
+    <!--<item name="config" xsi:type="array">-->
+    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>-->
+    <!--<item name="toolbarProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top</item>-->
+    <!--<item name="listingProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>-->
+    <!--</item>-->
+    <!--</argument>-->
+    <!--</container>-->
 
 </listing>
