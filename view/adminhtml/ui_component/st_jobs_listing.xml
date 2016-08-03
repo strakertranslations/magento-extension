@@ -280,7 +280,7 @@
             </argument>
         </column>
 
-        <column name="source_language">
+        <column name="sl">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -291,7 +291,7 @@
             </argument>
         </column>
 
-        <column name="target_language">
+        <column name="tl">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -351,13 +351,13 @@
 
     <!--fixed grid header-->
     <!--<container name="sticky">-->
-    <!--<argument name="data" xsi:type="array">-->
-    <!--<item name="config" xsi:type="array">-->
-    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>-->
-    <!--<item name="toolbarProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top</item>-->
-    <!--<item name="listingProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>-->
-    <!--</item>-->
-    <!--</argument>-->
+        <!--<argument name="data" xsi:type="array">-->
+            <!--<item name="config" xsi:type="array">-->
+                <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>-->
+                <!--<item name="toolbarProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top</item>-->
+                <!--<item name="listingProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>-->
+            <!--</item>-->
+        <!--</argument>-->
     <!--</container>-->
 
 </listing>

@@ -131,7 +131,7 @@ class ConfigHelper extends AbstractHelper
         foreach ($collection as $item) {
             $dbStoreConfig[$item->getPath()] = $item->getValue();
         }
-
+//        var_dump( $dbStoreConfig);exit();
         return $dbStoreConfig;
 
     }

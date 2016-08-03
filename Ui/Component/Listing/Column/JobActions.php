@@ -50,7 +50,6 @@ class JobActions extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-
         if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as & $item) {
                 $name = $this->getData('name');
@@ -59,21 +58,14 @@ class JobActions extends Column
                     if ($statusId == 4) {
                         $item[$name]['confirm'] = [
                             'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Confirm',
-                                [
-                                    'job_id' => $item['job_id'],
-                                    'job_key' => $item['job_key'],
-                                    'job_type_id' => $item['job_type_id']
-                                ]),
+                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
                             'label' => __('Confirm')
                         ];
                     }
+
                     $item[$name]['view'] = [
                         'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
-                            [
-                                'job_id' => $item['job_id'],
-                                'job_key' => $item['job_key'],
-                                'job_type_id' => $item['job_type_id']
-                            ]),
+                            ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
                         'label' => __('View')
                     ];
                 }

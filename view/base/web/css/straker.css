@@ -36,13 +36,22 @@
     cursor: pointer;
 }
 
-/*a.straker-job-refresh{*/
-    /*display: inline-block;*/
-    /*width: 100%;*/
-    /*text-align: center;*/
-    /*color: #0a0a0a;*/
-    /*cursor: pointer;*/
-/*}*/
+a.straker-job-refresh-anchor{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #0a0a0a;
+    cursor: pointer;
+}
+
+.col-text{
+    width: 40%;
+    text-align: left;
+}
+
+.col-id{
+    width: 10%;
+}
 /*.straker_attribute_sub_fieldset .admin__legend{*/
     /*margin: 2rem 0 1rem 0;*/
 /*}*/

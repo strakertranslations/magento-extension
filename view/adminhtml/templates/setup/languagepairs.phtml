@@ -57,9 +57,9 @@
                                 </div>
                             </td>
                             <td>
-                                <div class="admin__field field required _required">
+                                <div class="admin__field field">
                                     <div class="admin__field-control control">
-                                        <select name="magento_source_store_id_<?php echo $store->getId()?>" class="required-entry _required select admin__control-select">
+                                        <select name="magento_source_store_id_<?php echo $store->getId()?>" class="select admin__control-select">
                                             <option value="<?php $data['source_store']? $data['source_store'] : '' ?>"><?php echo __('Select source store view') ?></option>
                                             <?php foreach ($block->getWebsites() as $website): ?>
                                                 <?php $showWebsite = false; ?>

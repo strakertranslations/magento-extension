@@ -49,7 +49,7 @@ class JobHelper extends AbstractHelper
     {
 
         $this->jobData = $data;
-
+//        var_dump( $data  );exit();
         $this->jobModel = $this->_jobFactory->create();
 
         $this->jobModel->setData(
@@ -57,11 +57,11 @@ class JobHelper extends AbstractHelper
                 'job_status_id'=>$this->getJobStatusId('queued'),
                 'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_store'],
                 'target_store_id'=>$this->jobData['destination_store'],
-                'source_language'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_language'],
-                'target_language'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/destination_language']
+                'sl'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_language'],
+                'tl'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/destination_language']
             ]
         );
-
+//        var_dump( $this->jobModel->getData() );exit();
         return $this;
     }
 
