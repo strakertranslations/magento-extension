@@ -3,17 +3,6 @@
     <body>
         <referenceContainer name="content" >
             <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob"  name="view_job_block" />
-                <!--&lt;!&ndash;&lt;!&ndash;<container htmlTag="div" htmlId="straker-view-attribute-grid">&ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;<block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute"&ndash;&gt;-->
-                           <!--&lt;!&ndash;name="view_job_attribute_grid"/>&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;</container>&ndash;&gt;&ndash;&gt;-->
-                <!--&lt;!&ndash;&lt;!&ndash;<container htmlTag="div" htmlId="straker-view-product-grid">&ndash;&gt;&ndash;&gt;-->
-                    <!--&lt;!&ndash;<block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Product"&ndash;&gt;-->
-                           <!--&lt;!&ndash;name="view_job_product_grid"/>&ndash;&gt;-->
-                <!--&lt;!&ndash;</container>&ndash;&gt;-->
-                <!---->
-            <!--</block>-->
-
         </referenceContainer>
     </body>
 </page>
