@@ -57,9 +57,9 @@ class RefreshJob extends \Magento\Backend\App\Action
     {
         $jobKey = $this->getRequest()->getParam('job_key');
         $jobId = $this->getRequest()->getParam('job_id');
-        $result = [ 'Success' => true, 'Action' => ''];
+        $result = [ 'Status' => true, 'Message' => ''];
         if(empty($jobKey)){
-            $result['Action'] = 'refresh all jobs';
+            $result['Message'] = 'refresh all jobs';
         }else{
             $return = $this->_strakerApi->getTranslation([
                 'job_key' => $jobKey
@@ -81,17 +81,17 @@ class RefreshJob extends \Magento\Backend\App\Action
                     }
                     else
                     {
-                        $result['Success'] = false;
-                        $result['Action'] = __('The Job has not been update.');
-                        $this->_logger->addInfo( $result['Action'],['job_id'=> $jobId] );
-                        $this->messageManager->addNoticeMessage( $result['Action'] );
+                        $result['Status'] = false;
+                        $result['Message'] = __('The status is up to date.');
+                        $this->_logger->addInfo( $result['Message'],['job_id'=> $jobId] );
+//                        $this->messageManager->addNoticeMessage( $result['Message''] );
                     }
                 }
             }else{
-                $result['Success'] = false;
-                $result['Action'] = __('There are problems in the Internet Connection');
-                $this->_logger->addError( $result['Action'], ['job_id'=>$jobId] );
-                $this->messageManager->addWarningMessage( $result['Action'] );
+                $result['Status'] = false;
+                $result['Message'] = __('There are problems in the Internet Connection');
+                $this->_logger->addError( $result['Message'], ['job_id'=>$jobId] );
+//                $this->messageManager->addWarningMessage( $result['Message''] );
             }
         }
         return $this->_resultJsonFactory->create()->setData( $result );
