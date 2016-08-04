@@ -1,6 +1,10 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model;
-class JobType extends \Magento\Framework\Model\AbstractModel implements JobTypeInterface, \Magento\Framework\DataObject\IdentityInterface
+
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
+
+class JobType extends AbstractModel implements JobTypeInterface, IdentityInterface
 {
     const CACHE_TAG             = 'straker_easytranslationplatform_jobtype';
     const ENTITY                = 'straker_job_type';

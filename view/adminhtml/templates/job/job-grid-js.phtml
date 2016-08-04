@@ -66,12 +66,13 @@
                             url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/RefreshJob'); ?>',
                             data: {job_key: jobKey, job_id: jobId},
                             dataType: 'json',
-                            success: function (response) {
-                                if (response.Success) {
-                                    console.log(response);
-//                                    console.log( transactionGridJsObject );
-                                    jobGrid.resetFilter();
-                                }
+                            context: $(this),
+                            showLoader: true,
+                            complete: function (response) {
+//                                if (response.Success) {
+//                                    console.log(response);
+//                                }
+                                location.reload();
                             }
 
                         });
