@@ -54,7 +54,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->setData(
             [
-                'job_status_id'=>$this->getJobStatusId('queued'),
+                'job_status_id'=>$this->getJobStatusId('init'),
                 'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_store'],
                 'target_store_id'=>$this->jobData['destination_store'],
                 'sl'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_language'],

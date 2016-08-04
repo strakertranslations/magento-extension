@@ -35,7 +35,7 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
     protected $_productCollectionFactory;
     protected $_attributeTranslationCollectionFactory;
     protected $_entities = [];
-    protected $_entityIds = [];
+    public    $_entityIds = [];
     protected $_entityCount;
     protected $_jobStatusFactory;
     protected $_jobTypeFactory;

@@ -146,7 +146,7 @@ class Save extends \Magento\Backend\App\Action
 
         $store = $job_object->getData('source_store_id');
 
-        $defaultTitle = $job_object->getData('source_language').'_'.$job_object->getData('target_language').'_'.$store.'_'.$job_object->getData('job_id');
+        $defaultTitle = $job_object->getData('sl').'_'.$job_object->getData('tl').'_'.$store.'_'.$job_object->getData('job_id');
 
         $job_object->setData('title',$defaultTitle);
 

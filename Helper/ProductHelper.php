@@ -285,6 +285,7 @@ class ProductHelper extends AbstractHelper
                                     'translate'=> (in_array($value['value'], $this->_translatedAttributeOptions) || is_numeric($value['value'])  ) ? 'false' : 'true'
                                 ]);
 
+
                                 array_push($this->_translatedAttributeOptions,$value['value']);
                             }
 
@@ -310,7 +311,7 @@ class ProductHelper extends AbstractHelper
 
             }catch (\Exception $e){
 
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
+                $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
 
             }
         }
@@ -384,7 +385,7 @@ class ProductHelper extends AbstractHelper
 
         } catch (Exception $e) {
 
-            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
+            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
         }
 
     }
