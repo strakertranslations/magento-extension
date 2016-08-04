@@ -119,19 +119,23 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
     function updateStatus( $jobData ){
         switch (strtolower( $jobData->status)){
             case 'queued':
-//                var_dump($this->getData('status')).'|'.$this->getData('job_id');exit();
-                $this->setData('job_status_id', JobStatus::JOB_STATUS_QUEUED )
-                    ->setData('job_number',  $jobData->tj_number )
-                    ->save();
+                if( !empty($jobData->quotation) && strcasecmp( $jobData->quotation, 'ready') === 0){
+                    $this->setData('job_status_id', JobStatus::JOB_STATUS_READY )
+                        ->save();
+                }else{
+                    $this->setData('job_status_id', JobStatus::JOB_STATUS_QUEUED )
+                        ->save();
+                }
+                if( empty( $this->getData('job_number'))){
+                    $this->setData('job_number', $jobData->tj_number )->save();
+                }
                 break;
-            case 'ready':
-                $this->setData('job_status_id', JobStatus::JOB_STATUS_READY );
-                break;
-            case 'in progress':
-                $this->setData('job_status_id', jobStatus::JOB_STATUS_INPROGRESS );
+            case 'in_progress':
+                $this->setData('job_status_id', JobStatus::JOB_STATUS_INPROGRESS )->save();
                 break;
             case 'completed':
-                $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED );
+                $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
+                //TODO: downloading file and ready to publish
                 break;
         }
     }

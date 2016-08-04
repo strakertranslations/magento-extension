@@ -1,10 +1,14 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model;
-class JobStatus extends \Magento\Framework\Model\AbstractModel implements JobStatusInterface, \Magento\Framework\DataObject\IdentityInterface
+
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
+
+class JobStatus extends AbstractModel implements JobStatusInterface, IdentityInterface
 {
     const CACHE_TAG                 = 'straker_easytranslationplatform_jobstatus';
     const ENTITY                    = 'straker_job_status';
-    const JOBSTATUS                 = ['init', 'queued','ready','in progress','completed','published'];
+    const JOBSTATUS                 = ['init', 'queued','ready','in_progress','completed','published'];
     const JOB_STATUS_INIT           = 1;
     const JOB_STATUS_QUEUED         = 2;
     const JOB_STATUS_READY          = 3;
