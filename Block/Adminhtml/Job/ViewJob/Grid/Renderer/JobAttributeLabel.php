@@ -43,11 +43,15 @@ class JobAttributeLabel extends AbstractRenderer
 
     protected function _getFieldLabel( $attributeId ){
         $data = $this->_jobAttributeCollection->addFieldToFilter( 'attribute_id', [ 'eq' => $attributeId ])->getData();
-        return count($data) > 0 ? $data[0]['original_value'] : null;
+        if (count($data) > 0) {
+            return $data[0]['original_value'];
+        }else{
+            return $this->_getFrontendLabel();
+        }
     }
 
     protected function _getFrontendLabel(){
         //TODO: Get Frontend Label
-        return 'Frontend Label';
+        return '<b>Label not found</b>';
     }
 }
