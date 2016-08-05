@@ -185,8 +185,6 @@ class Index extends \Magento\Backend\App\Action
             $this->_productFactory->updateAttributes(array($id),$attData,$this->_testRequest['target_store_id']);
         }
 
-        exit;
-
 
     }
 
