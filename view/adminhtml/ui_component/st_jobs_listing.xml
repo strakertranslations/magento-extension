@@ -23,7 +23,7 @@
                 <item name="name" xsi:type="string">refresh</item>
                 <item name="label" xsi:type="string" translate="true">Refresh All Jobs</item>
                 <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/refreshjob</item>
+                <item name="url" xsi:type="string">*/*/RefreshJob</item>
             </item>
             <!-- here we can add buttons -->
             <item name="add" xsi:type="array">

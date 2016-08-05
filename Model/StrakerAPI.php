@@ -249,7 +249,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         return $this->_call($this->_getPaymentUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getTranslation($data){
+    public function getTranslation($data = []){
         return $this->_call($this->_getTranslateUrl().'?'. $this->_buildQuery($data));
     }
 
