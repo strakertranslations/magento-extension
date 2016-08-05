@@ -9,7 +9,40 @@
             var jobGrid = $('#straker-job-grid');
             var quoteDiv = $('#straker-quote-frame');
             var loadingMask = $('.admin__data-grid-loading-mask');
+//            var refreshAllButton = $('#refresh-all-job');
+//            var formKey = $('input[name="form_key"]').val();
 
+//            if( typeof refreshAllButton.get(0) !== 'undefined' ){
+//                refreshAllButton.prop('onclick', null);
+//                refreshAllButton.on('click',function ( e ) {
+//                    e.preventDefault();
+//                    loadingMask.show();
+//                    $.ajax({
+//                        url: '<?php //echo $this->getUrl('EasyTranslationPlatform/Jobs/RefreshJob'); ?>//',
+//                        dataType: 'json',
+//                        data: { }
+//                    }).done(function (data, textStatus ) {
+//                        loadingMask.hide();
+//                        console.log(data);
+//                        if ( textStatus == 'success' && data.status) {
+//                            confirm({
+//                                title: '<?php //echo __("Please Confirm") ?>//',
+//                                content: '<?php //echo __('Do you want update the job(s)?') ?>//',
+//                                actions: {
+//                                    confirm: function () {
+//                                        location.reload();
+//                                    }
+//                                }
+//                            });
+//                        } else {
+//                            alert({
+//                                title: '',
+//                                content: data.message
+//                            });
+//                        }
+//                    });
+//                })
+//            }
 
             if (typeof jobGrid.get(0) !== 'undefined') {
                 anchorContent.on('click', 'a', function (e) {
@@ -75,7 +108,8 @@
                             dataType: 'json'
                         }).done(function (data, textStatus ) {
                             loadingMask.hide();
-                            if ( textStatus == 'success' && data.Status) {
+                            if ( textStatus == 'success' && data.status) {
+                                console.log(data);
                                 confirm({
                                     title: '<?php echo __("Please Confirm") ?>',
                                     content: '<?php echo __('Do you want update the job(s)?') ?>',
@@ -88,7 +122,7 @@
                             } else {
                                 alert({
                                     title: '',
-                                    content: data.Message
+                                    content: data.message
                                 });
                             }
                         });
