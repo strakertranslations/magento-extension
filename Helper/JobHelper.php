@@ -9,19 +9,22 @@ use Magento\Framework\Data\Collection;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\JobStatus;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory as JobStatusCollection;
 
 class JobHelper extends AbstractHelper
 {
-
     protected $jobModel;
-
     protected $jobData;
-
     protected $jobFileName;
-
     protected $productData;
+    protected $_directoryList;
+    protected $_jobTypeCollection;
+    protected $_jobFactory;
+    protected $_configHelper;
+    protected $_productHelper;
+    protected $_jobStatusCollection;
 
     public function __construct(
         Context $context,
@@ -54,7 +57,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->setData(
             [
-                'job_status_id'=>$this->getJobStatusId('queued'),
+                'job_status_id'=> JobStatus::JOB_STATUS_INIT,
                 'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_store'],
                 'target_store_id'=>$this->jobData['destination_store'],
                 'sl'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_language'],
@@ -138,5 +141,5 @@ class JobHelper extends AbstractHelper
 
         return $collection->getData('status_id');
     }
-
+    
 }

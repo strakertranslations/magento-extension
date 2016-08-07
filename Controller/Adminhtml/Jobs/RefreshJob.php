@@ -40,11 +40,7 @@ class RefreshJob extends \Magento\Backend\App\Action
         $this->_logger = $logger;
     }
 
-    /**
-     * Index action
-     *
-     * @return \Magento\Backend\Model\View\Result\Page
-     */
+
     public function execute()
     {
         $jobKey = $this->getRequest()->getParam('job_key');
@@ -54,74 +50,87 @@ class RefreshJob extends \Magento\Backend\App\Action
 
         if(empty($jobKey)){
             //refresh all jobs
-            $apiData = $this->_strakerApi->getTranslation();
-            $apiJobs = $apiData->job;
-            if( !empty( $apiData ) && count( $apiJobs ) > 0 ){
-                foreach ( $apiJobs as $apiJob ){
-                    if( $apiJob->job_key ){
-                        $localJobData = $this->_jobFactory->create()->getCollection()->addFieldToFilter('job_key', ['eq' => $apiJob->job_key ])->getItems();
+            try{
+                $apiData = $this->_strakerApi->getTranslation();
+                $apiJobs = $apiData->job;
+                if( !empty( $apiData ) && count( $apiJobs ) > 0 ){
+                    foreach ( $apiJobs as $apiJob ){
+                        if( $apiJob->job_key ){
+                            $localJobData = $this->_jobFactory->create()->getCollection()->addFieldToFilter('job_key', ['eq' => $apiJob->job_key ])->getItems();
 
-                        if(!empty($localJobData) ){
-                            $localJob = reset( $localJobData );
-                            $isUpdate = $this->_compareJobs( $apiJob, $localJob );
-                            if( $isUpdate ){
-                                array_push( $updatedJobs, $localJob->getId() );
+                            if(!empty($localJobData) ){
+                                $localJob = reset( $localJobData );
+                                $isUpdate = $this->_compareJobs( $apiJob, $localJob );
+                                if( $isUpdate['isSuccess'] ){
+                                    array_push( $updatedJobs, $localJob->getId() );
+                                }
                             }
                         }
                     }
-                }
 //                var_dump($updatedJobs );
-                if( count( $updatedJobs ) > 0 ){
-                    $this->messageManager->addSuccessMessage( __('The status of the jobs [Id: '. implode( $updatedJobs )  .'] has been updated!') );
-                }
-                else
-                {
+                    if( count( $updatedJobs ) > 0 ){
+                        $this->messageManager->addSuccessMessage( __('The status of the jobs [Id: '. implode(',', $updatedJobs )  .'] has been updated!') );
+                    }
+                    else
+                    {
+                        $result['status'] = false;
+                        $result['message'] = __('The Job is up to date.');
+                        $this->_logger->addInfo( $result['message'],['job_id'=> $jobId] );
+                        $this->messageManager->addSuccessMessage( $result['message'] );
+                    }
+                }else{
                     $result['status'] = false;
-                    $result['message'] = __('The Job is up to date.');
-                    $this->_logger->addInfo( $result['message'],['job_id'=> $jobId] );
-                    $this->messageManager->addSuccessMessage( $result['message'] );
+                    $result['message'] =  __('No job has been found or failed to connect server.');
+                    $this->messageManager->addErrorMessage( $result['message'] );
+                    $this->_logger->addError($result['message']);
                 }
-            }else{
+            }catch(\Exception $e){
                 $result['status'] = false;
-                $result['message'] =  __('No job has been found or failed to connect server.');
+                $result['message'] =  __('Failed to connect server.');
                 $this->messageManager->addErrorMessage( $result['message'] );
+                $this->_logger->addError($result['message']);
             }
-
             $redirect = $this->resultRedirectFactory->create()->setPath('EasyTranslationPlatform/jobs/Index');
             return $redirect;
 
         }else{
             //refresh single job
-            $apiData = $this->_strakerApi->getTranslation([
-                'job_key' => $jobKey
-            ]);
+            try{
+                $apiData = $this->_strakerApi->getTranslation([
+                    'job_key' => $jobKey
+                ]);
 
-            if( isset( $apiData->job) && count( $apiData->job) > 0 ){
-                $apiJob = reset($apiData->job);
-                if( !empty( $apiJob ) ){
-                    $localJob = $this->_jobFactory->create()->load( $jobId );
-                    $isUpdate = $this->_compareJobs($apiJob, $localJob );
-                    if( $isUpdate ){
-                        $result['message'] = $apiJob->status;
-                        $this->messageManager->addSuccessMessage( __('The status has been updated!') );
-                    }else{
-                        $result['status'] = false;
-                        $result['message'] = __('The status is up to date.');
+                if( isset( $apiData->job) && count( $apiData->job) > 0 ){
+                    $apiJob = reset($apiData->job);
+                    if( !empty( $apiJob ) ){
+                        $localJob = $this->_jobFactory->create()->load( $jobId );
+                        $isUpdate = $this->_compareJobs($apiJob, $localJob );
+                        if( $isUpdate['isSuccess'] ){
+                            $result['message'] = $apiJob->status;
+                        }else{
+                            $result['status'] = false;
+                            $result['message'] = $isUpdate['Message'];
+                        }
                     }
+                }else{
+                    $result['status'] = false;
+                    $result['message'] = __('There are problems in the Internet Connection');
+                    $this->_logger->addError( $result['message'], ['job_id'=>$jobId] );
                 }
-            }else{
+            }catch(\Exception $e){
                 $result['status'] = false;
-                $result['message'] = __('There are problems in the Internet Connection');
-                $this->_logger->addError( $result['message'], ['job_id'=>$jobId] );
+                $result['message'] =  __('Failed to connect server.');
+                $this->_logger->addError($result['message']);
             }
+
             return $this->_resultJsonFactory->create()->setData( $result );
         }
     }
 
     /**
-     * @param Json Object $apiJob
+     * @param $apiJob
      * @param \Straker\EasyTranslationPlatform\Model\Job $localJob
-     * @return bool
+     * @return array
      */
     protected function _compareJobs( $apiJob, $localJob ){
 //        if( strcasecmp($apiJob->status, $localJob->getJobStatus() ) !== 0
@@ -131,11 +140,10 @@ class RefreshJob extends \Magento\Backend\App\Action
 //        {
 
         if( $localJob->getJobStatusId() < $this->resolveApiStatus( $apiJob )) {
-            $localJob->updateStatus( $apiJob );
-            return true;
+            return $localJob->updateStatus( $apiJob );
         }
 
-        return false;
+        return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
     }
 
     protected function resolveApiStatus( $apiJob ){

@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Exception;
@@ -14,7 +15,7 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Config\Model\ResourceModel\Config;
 
-class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements StrakerAPIInterface
+class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 {
 
     protected $_config;
@@ -109,17 +110,23 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
 
         try {
+            $response = $httpClient->request();
 
-            $response = $httpClient->request()->getBody();
+            if(!$response->isError()){
+                $contentType = $response->getHeader('Content-Type');
+                $body = $response->getBody();
 
-            $debugData['response'] = $response;
+                $debugData['response'] = $body;
 
-            return json_decode($response);
-
+                if( strpos($contentType, 'json' )){
+                    return json_decode($body);
+                }else{
+                    return $body;
+                }
+            }
         } catch (Exception $e) {
 
             $debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
-
             throw $e;
         }
 
