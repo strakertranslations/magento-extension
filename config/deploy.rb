@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock '3.5.0'
+lock '3.6.0'
 
 set :application, 'straker_magento2_extension'
 set :repo_url, 'git@bitbucket.org:strakertranslations/magento2.git'

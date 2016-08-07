@@ -1294,3 +1294,628 @@ d720736391a45fe00b73fc18f3e04c9d598208db	refs/heads/master
   INFO [ba812f77] Running /usr/bin/env echo "Branch develop (at ff931b64928d0fdcfd636fdb4fdacc07d53b01bd) deployed as release 20160804090844 by jiro-mc" >> /mnt/data/apps/php/EasyTranslationPlatform/revisions.log as root@10.53.34.47
  DEBUG [ba812f77] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/releases && /usr/bin/env echo "Branch develop (at ff931b64928d0fdcfd636fdb4fdacc07d53b01bd) deployed as release 20160804090844 by jiro-mc" >> /mnt/data/apps/php/EasyTranslationPlatform/revisions.log
   INFO [ba812f77] Finished in 0.462 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2016-08-05 11:44:53 +1200 cap development deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [6dcbc035] Running /usr/bin/env mkdir -p /tmp as root@10.53.34.47
+ DEBUG [6dcbc035] Command: /usr/bin/env mkdir -p /tmp
+  INFO [6dcbc035] Finished in 21.650 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh 0.0%
+  INFO Uploading /tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh 100.0%
+  INFO [b5a4cd37] Running /usr/bin/env chmod 700 /tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh as root@10.53.34.47
+ DEBUG [b5a4cd37] Command: /usr/bin/env chmod 700 /tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh
+  INFO [b5a4cd37] Finished in 0.328 seconds with exit status 0 (successful).
+  INFO [ed61a633] Running /usr/bin/env git ls-remote --heads git@bitbucket.org:strakertranslations/magento2.git as root@10.53.34.47
+ DEBUG [ed61a633] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh" ; /usr/bin/env git ls-remote --heads git@bitbucket.org:strakertranslations/magento2.git )
+ DEBUG [ed61a633] 	e2d8874c1a21975f0f80db8ab6af51632850d6c0	refs/heads/develop
+d720736391a45fe00b73fc18f3e04c9d598208db	refs/heads/master
+  INFO [ed61a633] Finished in 1.971 seconds with exit status 0 (successful).
+  INFO [af6b6a42] Running /usr/bin/env mkdir -p /mnt/data/apps/php/EasyTranslationPlatform/shared /mnt/data/apps/php/EasyTranslationPlatform/releases as root@10.53.34.47
+ DEBUG [af6b6a42] Command: /usr/bin/env mkdir -p /mnt/data/apps/php/EasyTranslationPlatform/shared /mnt/data/apps/php/EasyTranslationPlatform/releases
+  INFO [af6b6a42] Finished in 0.330 seconds with exit status 0 (successful).
+ DEBUG [4eef2ff8] Running [ -f /mnt/data/apps/php/EasyTranslationPlatform/current/REVISION ] as root@10.53.34.47
+ DEBUG [4eef2ff8] Command: [ -f /mnt/data/apps/php/EasyTranslationPlatform/current/REVISION ]
+ DEBUG [4eef2ff8] Finished in 0.331 seconds with exit status 0 (successful).
+ DEBUG [7f7e0cff] Running /usr/bin/env cat /mnt/data/apps/php/EasyTranslationPlatform/current/REVISION 2>/dev/null as root@10.53.34.47
+ DEBUG [7f7e0cff] Command: /usr/bin/env cat /mnt/data/apps/php/EasyTranslationPlatform/current/REVISION 2>/dev/null
+ DEBUG [7f7e0cff] 	ff931b64928d0fdcfd636fdb4fdacc07d53b01bd
+ DEBUG [7f7e0cff] Finished in 0.330 seconds with exit status 0 (successful).
+ DEBUG [99cd7034] Running [ -f /mnt/data/apps/php/EasyTranslationPlatform/repo/HEAD ] as root@10.53.34.47
+ DEBUG [99cd7034] Command: [ -f /mnt/data/apps/php/EasyTranslationPlatform/repo/HEAD ]
+ DEBUG [99cd7034] Finished in 0.326 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /mnt/data/apps/php/EasyTranslationPlatform/repo
+ DEBUG [cee135bf] Running if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/repo; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/repo'" 1>&2; false; fi as root@10.53.34.47
+ DEBUG [cee135bf] Command: if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/repo; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/repo'" 1>&2; false; fi
+ DEBUG [cee135bf] Finished in 0.329 seconds with exit status 0 (successful).
+  INFO [8c24b0df] Running /usr/bin/env git remote update --prune as root@10.53.34.47
+ DEBUG [8c24b0df] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [8c24b0df] 	Fetching origin
+ DEBUG [8c24b0df] 	From bitbucket.org:strakertranslations/magento2
+ DEBUG [8c24b0df] 	   ff931b6..e2d8874  develop    -> develop
+  INFO [8c24b0df] Finished in 2.371 seconds with exit status 0 (successful).
+ DEBUG [0d67dfd8] Running if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/repo; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/repo'" 1>&2; false; fi as root@10.53.34.47
+ DEBUG [0d67dfd8] Command: if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/repo; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/repo'" 1>&2; false; fi
+ DEBUG [0d67dfd8] Finished in 0.327 seconds with exit status 0 (successful).
+  INFO [6776b773] Running /usr/bin/env mkdir -p /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 as root@10.53.34.47
+ DEBUG [6776b773] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh" ; /usr/bin/env mkdir -p /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 )
+  INFO [6776b773] Finished in 0.331 seconds with exit status 0 (successful).
+  INFO [00324ee9] Running /usr/bin/env git archive develop | tar -x -f - -C /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 as root@10.53.34.47
+ DEBUG [00324ee9] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh" ; /usr/bin/env git archive develop | tar -x -f - -C /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 )
+  INFO [00324ee9] Finished in 0.358 seconds with exit status 0 (successful).
+ DEBUG [cac03d38] Running if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/repo; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/repo'" 1>&2; false; fi as root@10.53.34.47
+ DEBUG [cac03d38] Command: if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/repo; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/repo'" 1>&2; false; fi
+ DEBUG [cac03d38] Finished in 0.327 seconds with exit status 0 (successful).
+ DEBUG [a672bc07] Running /usr/bin/env git rev-list --max-count=1 develop as root@10.53.34.47
+ DEBUG [a672bc07] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-development-rakeshmistry.sh" ; /usr/bin/env git rev-list --max-count=1 develop )
+ DEBUG [a672bc07] 	e2d8874c1a21975f0f80db8ab6af51632850d6c0
+ DEBUG [a672bc07] Finished in 0.341 seconds with exit status 0 (successful).
+ DEBUG [c7c9f702] Running if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519'" 1>&2; false; fi as root@10.53.34.47
+ DEBUG [c7c9f702] Command: if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519'" 1>&2; false; fi
+ DEBUG [c7c9f702] Finished in 0.327 seconds with exit status 0 (successful).
+  INFO [b90e2555] Running /usr/bin/env echo "e2d8874c1a21975f0f80db8ab6af51632850d6c0" >> REVISION as root@10.53.34.47
+ DEBUG [b90e2555] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 && /usr/bin/env echo "e2d8874c1a21975f0f80db8ab6af51632850d6c0" >> REVISION
+  INFO [b90e2555] Finished in 0.331 seconds with exit status 0 (successful).
+  INFO [3a2f5255] Running /usr/bin/env ln -s /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 /mnt/data/apps/php/EasyTranslationPlatform/releases/current as root@10.53.34.47
+ DEBUG [3a2f5255] Command: /usr/bin/env ln -s /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804234519 /mnt/data/apps/php/EasyTranslationPlatform/releases/current
+  INFO [3a2f5255] Finished in 0.328 seconds with exit status 0 (successful).
+  INFO [8edea443] Running /usr/bin/env mv /mnt/data/apps/php/EasyTranslationPlatform/releases/current /mnt/data/apps/php/EasyTranslationPlatform as root@10.53.34.47
+ DEBUG [8edea443] Command: /usr/bin/env mv /mnt/data/apps/php/EasyTranslationPlatform/releases/current /mnt/data/apps/php/EasyTranslationPlatform
+  INFO [8edea443] Finished in 0.348 seconds with exit status 0 (successful).
+  INFO [e75b060b] Running cd /mnt/data/apps/php/magento2/bin; php magento setup:upgrade as root@10.53.34.47
+ DEBUG [e75b060b] Command: cd /mnt/data/apps/php/magento2/bin; php magento setup:upgrade
+ DEBUG [e75b060b] 	Cache cleared successfully
+ DEBUG [e75b060b] 	File system cleanup:
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/var/generation/Composer
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/var/generation/Magento
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/var/generation/Straker
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/var/generation/Symfony
+ DEBUG [e75b060b] 	The directory '/mnt/data/apps/php/magento2/var/di/' doesn't exist - skipping cleanup
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/pub/static/_requirejs
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/pub/static/adminhtml
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/pub/static/frontend
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/var/view_preprocessed/css
+ DEBUG [e75b060b] 	/mnt/data/apps/php/magento2/var/view_preprocessed/source
+ DEBUG [e75b060b] 	Updating modules:
+ DEBUG [e75b060b] 	Schema creation/updates:
+ DEBUG [e75b060b] 	Module 'Magento_Store':
+ DEBUG [e75b060b] 	Module 'Magento_AdvancedPricingImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Directory':
+ DEBUG [e75b060b] 	Module 'Magento_Theme':
+ DEBUG [e75b060b] 	Module 'Magento_Backend':
+ DEBUG [e75b060b] 	Module 'Magento_Backup':
+ DEBUG [e75b060b] 	Module 'Magento_Eav':
+ DEBUG [e75b060b] 	Module 'Magento_Customer':
+ DEBUG [e75b060b] 	Module 'Magento_BundleImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_AdminNotification':
+ DEBUG [e75b060b] 	Module 'Magento_CacheInvalidate':
+ DEBUG [e75b060b] 	Module 'Magento_Indexer':
+ DEBUG [e75b060b] 	Module 'Magento_Cms':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Catalog':
+ DEBUG [e75b060b] 	Module 'Magento_Rule':
+ DEBUG [e75b060b] 	Module 'Magento_Msrp':
+ DEBUG [e75b060b] 	Module 'Magento_Search':
+ DEBUG [e75b060b] 	Module 'Magento_Bundle':
+ DEBUG [e75b060b] 	Module 'Magento_Quote':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Widget':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSequence':
+ DEBUG [e75b060b] 	Module 'Magento_CheckoutAgreements':
+ DEBUG [e75b060b] 	Module 'Magento_Payment':
+ DEBUG [e75b060b] 	Module 'Magento_SampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CmsUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Config':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Downloadable':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSearch':
+ DEBUG [e75b060b] 	Module 'Magento_Contact':
+ DEBUG [e75b060b] 	Module 'Magento_Cookie':
+ DEBUG [e75b060b] 	Module 'Magento_Cron':
+ DEBUG [e75b060b] 	Module 'Magento_CurrencySymbol':
+ DEBUG [e75b060b] 	Module 'Magento_User':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Deploy':
+ DEBUG [e75b060b] 	Module 'Magento_Developer':
+ DEBUG [e75b060b] 	Module 'Magento_Dhl':
+ DEBUG [e75b060b] 	Module 'Magento_Authorization':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogInventory':
+ DEBUG [e75b060b] 	Module 'Magento_ImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRule':
+ DEBUG [e75b060b] 	Module 'Magento_Sales':
+ DEBUG [e75b060b] 	Module 'Magento_Email':
+ DEBUG [e75b060b] 	Module 'Magento_EncryptionKey':
+ DEBUG [e75b060b] 	Module 'Magento_Fedex':
+ DEBUG [e75b060b] 	Module 'Magento_GiftMessage':
+ DEBUG [e75b060b] 	Module 'Magento_Checkout':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAnalytics':
+ DEBUG [e75b060b] 	Module 'Magento_Ui':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProduct':
+ DEBUG [e75b060b] 	Module 'Magento_Tax':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Vault':
+ DEBUG [e75b060b] 	Module 'Magento_Security':
+ DEBUG [e75b060b] 	Module 'Magento_LayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_Marketplace':
+ DEBUG [e75b060b] 	Module 'Magento_MediaStorage':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableProduct':
+ DEBUG [e75b060b] 	Module 'Magento_MsrpSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Multishipping':
+ DEBUG [e75b060b] 	Module 'Magento_NewRelicReporting':
+ DEBUG [e75b060b] 	Module 'Magento_Newsletter':
+ DEBUG [e75b060b] 	Module 'Magento_OfflinePayments':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRule':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShipping':
+ DEBUG [e75b060b] 	Module 'Magento_PageCache':
+ DEBUG [e75b060b] 	Module 'Magento_Weee':
+ DEBUG [e75b060b] 	Module 'Magento_Paypal':
+ DEBUG [e75b060b] 	Module 'Magento_Persistent':
+ DEBUG [e75b060b] 	Module 'Magento_ProductAlert':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductVideo':
+ DEBUG [e75b060b] 	Module 'Magento_Captcha':
+ DEBUG [e75b060b] 	Module 'Magento_Reports':
+ DEBUG [e75b060b] 	Module 'Magento_RequireJs':
+ DEBUG [e75b060b] 	Module 'Magento_Review':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Rss':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleConfigurable':
+ DEBUG [e75b060b] 	Module 'Magento_Authorizenet':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShippingSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_BundleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ThemeSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductLinksSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ReviewSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Integration':
+ DEBUG [e75b060b] 	Module 'Magento_SendFriend':
+ DEBUG [e75b060b] 	Module 'Magento_Shipping':
+ DEBUG [e75b060b] 	Module 'Magento_Sitemap':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Swagger':
+ DEBUG [e75b060b] 	Module 'Magento_Swatches':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesLayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProductSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_TaxImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_TaxSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAdwords':
+ DEBUG [e75b060b] 	Module 'Magento_CmsSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Translation':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleOptimizer':
+ DEBUG [e75b060b] 	Module 'Magento_Ups':
+ DEBUG [e75b060b] 	Module 'Magento_UrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Usps':
+ DEBUG [e75b060b] 	Module 'Magento_Variable':
+ DEBUG [e75b060b] 	Module 'Magento_Braintree':
+ DEBUG [e75b060b] 	Module 'Magento_Version':
+ DEBUG [e75b060b] 	Module 'Magento_Webapi':
+ DEBUG [e75b060b] 	Module 'Magento_WebapiSecurity':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogWidget':
+ DEBUG [e75b060b] 	Module 'Magento_WidgetSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Wishlist':
+ DEBUG [e75b060b] 	Module 'Magento_WishlistSampleData':
+ DEBUG [e75b060b] 	Module 'Straker_EasyTranslationPlatform':
+ DEBUG [e75b060b] 	Schema post-updates:
+ DEBUG [e75b060b] 	Module 'Magento_Store':
+ DEBUG [e75b060b] 	Module 'Magento_AdvancedPricingImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Directory':
+ DEBUG [e75b060b] 	Module 'Magento_Theme':
+ DEBUG [e75b060b] 	Module 'Magento_Backend':
+ DEBUG [e75b060b] 	Module 'Magento_Backup':
+Module 'Magento_Eav':
+Module 'Magento_Customer':
+Module 'Magento_BundleImportExport':
+Module 'Magento_AdminNotification':
+Module 'Magento_CacheInvalidate':
+Module 'Magento_Indexer':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_Cms':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Catalog':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_Rule':
+ DEBUG [e75b060b] 	Module 'Magento_Msrp':
+ DEBUG [e75b060b] 	Module 'Magento_Search':
+ DEBUG [e75b060b] 	Module 'Magento_Bundle':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+Module 'Magento_Quote':
+Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_CatalogUrlRewrite':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_Widget':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSequence':
+ DEBUG [e75b060b] 	Module 'Magento_CheckoutAgreements':
+ DEBUG [e75b060b] 	Module 'Magento_Payment':
+ DEBUG [e75b060b] 	Module 'Magento_SampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CmsUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Config':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Downloadable':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSearch':
+ DEBUG [e75b060b] 	Module 'Magento_Contact':
+ DEBUG [e75b060b] 	Module 'Magento_Cookie':
+ DEBUG [e75b060b] 	Module 'Magento_Cron':
+ DEBUG [e75b060b] 	Module 'Magento_CurrencySymbol':
+ DEBUG [e75b060b] 	Module 'Magento_User':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Deploy':
+ DEBUG [e75b060b] 	Module 'Magento_Developer':
+ DEBUG [e75b060b] 	Module 'Magento_Dhl':
+ DEBUG [e75b060b] 	Module 'Magento_Authorization':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogInventory':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_ImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRule':
+ DEBUG [e75b060b] 	Module 'Magento_Sales':
+ DEBUG [e75b060b] 	Module 'Magento_Email':
+ DEBUG [e75b060b] 	Module 'Magento_EncryptionKey':
+ DEBUG [e75b060b] 	Module 'Magento_Fedex':
+ DEBUG [e75b060b] 	Module 'Magento_GiftMessage':
+ DEBUG [e75b060b] 	Module 'Magento_Checkout':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAnalytics':
+ DEBUG [e75b060b] 	Module 'Magento_Ui':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProduct':
+ DEBUG [e75b060b] 	Module 'Magento_Tax':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Vault':
+ DEBUG [e75b060b] 	Module 'Magento_Security':
+ DEBUG [e75b060b] 	Module 'Magento_LayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_Marketplace':
+ DEBUG [e75b060b] 	Module 'Magento_MediaStorage':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableProduct':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+Module 'Magento_MsrpSampleData':
+Module 'Magento_Multishipping':
+Module 'Magento_NewRelicReporting':
+Module 'Magento_Newsletter':
+Module 'Magento_OfflinePayments':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRule':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShipping':
+ DEBUG [e75b060b] 	Module 'Magento_PageCache':
+ DEBUG [e75b060b] 	Module 'Magento_Weee':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_Paypal':
+ DEBUG [e75b060b] 	Module 'Magento_Persistent':
+ DEBUG [e75b060b] 	Module 'Magento_ProductAlert':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+Module 'Magento_CatalogSampleData':
+Module 'Magento_ProductVideo':
+Module 'Magento_Captcha':
+ DEBUG [e75b060b] 	Module 'Magento_Reports':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_RequireJs':
+ DEBUG [e75b060b] 	Module 'Magento_Review':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Rss':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleConfigurable':
+ DEBUG [e75b060b] 	Module 'Magento_Authorizenet':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShippingSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_BundleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ThemeSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductLinksSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ReviewSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Integration':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_SendFriend':
+ DEBUG [e75b060b] 	Module 'Magento_Shipping':
+ DEBUG [e75b060b] 	Module 'Magento_Sitemap':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Swagger':
+ DEBUG [e75b060b] 	Module 'Magento_Swatches':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesLayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProductSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_TaxImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_TaxSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAdwords':
+ DEBUG [e75b060b] 	Module 'Magento_CmsSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Translation':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleOptimizer':
+ DEBUG [e75b060b] 	Module 'Magento_Ups':
+ DEBUG [e75b060b] 	Module 'Magento_UrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Usps':
+ DEBUG [e75b060b] 	Module 'Magento_Variable':
+ DEBUG [e75b060b] 	Module 'Magento_Braintree':
+ DEBUG [e75b060b] 	Module 'Magento_Version':
+ DEBUG [e75b060b] 	Module 'Magento_Webapi':
+ DEBUG [e75b060b] 	Module 'Magento_WebapiSecurity':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogWidget':
+ DEBUG [e75b060b] 	Module 'Magento_WidgetSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Wishlist':
+ DEBUG [e75b060b] 	Running schema recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_WishlistSampleData':
+ DEBUG [e75b060b] 	Module 'Straker_EasyTranslationPlatform':
+ DEBUG [e75b060b] 	Data install/update:
+ DEBUG [e75b060b] 	Module 'Magento_Store':
+ DEBUG [e75b060b] 	Module 'Magento_AdvancedPricingImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Directory':
+ DEBUG [e75b060b] 	Module 'Magento_Theme':
+ DEBUG [e75b060b] 	Module 'Magento_Backend':
+ DEBUG [e75b060b] 	Module 'Magento_Backup':
+ DEBUG [e75b060b] 	Module 'Magento_Eav':
+ DEBUG [e75b060b] 	Module 'Magento_Customer':
+ DEBUG [e75b060b] 	Module 'Magento_BundleImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_AdminNotification':
+ DEBUG [e75b060b] 	Module 'Magento_CacheInvalidate':
+ DEBUG [e75b060b] 	Module 'Magento_Indexer':
+ DEBUG [e75b060b] 	Module 'Magento_Cms':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Catalog':
+ DEBUG [e75b060b] 	Module 'Magento_Rule':
+ DEBUG [e75b060b] 	Module 'Magento_Msrp':
+ DEBUG [e75b060b] 	Module 'Magento_Search':
+ DEBUG [e75b060b] 	Module 'Magento_Bundle':
+ DEBUG [e75b060b] 	Module 'Magento_Quote':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Widget':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSequence':
+ DEBUG [e75b060b] 	Module 'Magento_CheckoutAgreements':
+ DEBUG [e75b060b] 	Module 'Magento_Payment':
+ DEBUG [e75b060b] 	Module 'Magento_SampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CmsUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Config':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Downloadable':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSearch':
+ DEBUG [e75b060b] 	Module 'Magento_Contact':
+ DEBUG [e75b060b] 	Module 'Magento_Cookie':
+ DEBUG [e75b060b] 	Module 'Magento_Cron':
+ DEBUG [e75b060b] 	Module 'Magento_CurrencySymbol':
+ DEBUG [e75b060b] 	Module 'Magento_User':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Deploy':
+ DEBUG [e75b060b] 	Module 'Magento_Developer':
+ DEBUG [e75b060b] 	Module 'Magento_Dhl':
+ DEBUG [e75b060b] 	Module 'Magento_Authorization':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogInventory':
+ DEBUG [e75b060b] 	Module 'Magento_ImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRule':
+ DEBUG [e75b060b] 	Module 'Magento_Sales':
+ DEBUG [e75b060b] 	Module 'Magento_Email':
+ DEBUG [e75b060b] 	Module 'Magento_EncryptionKey':
+ DEBUG [e75b060b] 	Module 'Magento_Fedex':
+ DEBUG [e75b060b] 	Module 'Magento_GiftMessage':
+ DEBUG [e75b060b] 	Module 'Magento_Checkout':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAnalytics':
+ DEBUG [e75b060b] 	Module 'Magento_Ui':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProduct':
+ DEBUG [e75b060b] 	Module 'Magento_Tax':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Vault':
+ DEBUG [e75b060b] 	Module 'Magento_Security':
+ DEBUG [e75b060b] 	Module 'Magento_LayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_Marketplace':
+ DEBUG [e75b060b] 	Module 'Magento_MediaStorage':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableProduct':
+ DEBUG [e75b060b] 	Module 'Magento_MsrpSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Multishipping':
+ DEBUG [e75b060b] 	Module 'Magento_NewRelicReporting':
+ DEBUG [e75b060b] 	Module 'Magento_Newsletter':
+ DEBUG [e75b060b] 	Module 'Magento_OfflinePayments':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRule':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShipping':
+ DEBUG [e75b060b] 	Module 'Magento_PageCache':
+ DEBUG [e75b060b] 	Module 'Magento_Weee':
+ DEBUG [e75b060b] 	Module 'Magento_Paypal':
+ DEBUG [e75b060b] 	Module 'Magento_Persistent':
+ DEBUG [e75b060b] 	Module 'Magento_ProductAlert':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductVideo':
+ DEBUG [e75b060b] 	Module 'Magento_Captcha':
+ DEBUG [e75b060b] 	Module 'Magento_Reports':
+ DEBUG [e75b060b] 	Module 'Magento_RequireJs':
+ DEBUG [e75b060b] 	Module 'Magento_Review':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Rss':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleConfigurable':
+ DEBUG [e75b060b] 	Module 'Magento_Authorizenet':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShippingSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_BundleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ThemeSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductLinksSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ReviewSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Integration':
+ DEBUG [e75b060b] 	Module 'Magento_SendFriend':
+ DEBUG [e75b060b] 	Module 'Magento_Shipping':
+ DEBUG [e75b060b] 	Module 'Magento_Sitemap':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Swagger':
+ DEBUG [e75b060b] 	Module 'Magento_Swatches':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesLayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProductSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_TaxImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_TaxSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAdwords':
+ DEBUG [e75b060b] 	Module 'Magento_CmsSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Translation':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleOptimizer':
+ DEBUG [e75b060b] 	Module 'Magento_Ups':
+ DEBUG [e75b060b] 	Module 'Magento_UrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Usps':
+ DEBUG [e75b060b] 	Module 'Magento_Variable':
+ DEBUG [e75b060b] 	Module 'Magento_Braintree':
+ DEBUG [e75b060b] 	Module 'Magento_Version':
+ DEBUG [e75b060b] 	Module 'Magento_Webapi':
+ DEBUG [e75b060b] 	Module 'Magento_WebapiSecurity':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogWidget':
+ DEBUG [e75b060b] 	Module 'Magento_WidgetSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Wishlist':
+ DEBUG [e75b060b] 	Module 'Magento_WishlistSampleData':
+ DEBUG [e75b060b] 	Module 'Straker_EasyTranslationPlatform':
+ DEBUG [e75b060b] 	Data post-updates:
+ DEBUG [e75b060b] 	Module 'Magento_Store':
+ DEBUG [e75b060b] 	Module 'Magento_AdvancedPricingImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Directory':
+ DEBUG [e75b060b] 	Module 'Magento_Theme':
+ DEBUG [e75b060b] 	Running data recurring...
+ DEBUG [e75b060b] 	
+ DEBUG [e75b060b] 	Module 'Magento_Backend':
+ DEBUG [e75b060b] 	Module 'Magento_Backup':
+ DEBUG [e75b060b] 	Module 'Magento_Eav':
+ DEBUG [e75b060b] 	Module 'Magento_Customer':
+ DEBUG [e75b060b] 	Module 'Magento_BundleImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_AdminNotification':
+ DEBUG [e75b060b] 	Module 'Magento_CacheInvalidate':
+ DEBUG [e75b060b] 	Module 'Magento_Indexer':
+ DEBUG [e75b060b] 	Module 'Magento_Cms':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Catalog':
+ DEBUG [e75b060b] 	Module 'Magento_Rule':
+ DEBUG [e75b060b] 	Module 'Magento_Msrp':
+ DEBUG [e75b060b] 	Module 'Magento_Search':
+ DEBUG [e75b060b] 	Module 'Magento_Bundle':
+ DEBUG [e75b060b] 	Module 'Magento_Quote':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Widget':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSequence':
+ DEBUG [e75b060b] 	Module 'Magento_CheckoutAgreements':
+ DEBUG [e75b060b] 	Module 'Magento_Payment':
+ DEBUG [e75b060b] 	Module 'Magento_SampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CmsUrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_Config':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Downloadable':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSearch':
+ DEBUG [e75b060b] 	Module 'Magento_Contact':
+ DEBUG [e75b060b] 	Module 'Magento_Cookie':
+ DEBUG [e75b060b] 	Module 'Magento_Cron':
+ DEBUG [e75b060b] 	Module 'Magento_CurrencySymbol':
+ DEBUG [e75b060b] 	Module 'Magento_User':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CustomerSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Deploy':
+ DEBUG [e75b060b] 	Module 'Magento_Developer':
+ DEBUG [e75b060b] 	Module 'Magento_Dhl':
+ DEBUG [e75b060b] 	Module 'Magento_Authorization':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogInventory':
+ DEBUG [e75b060b] 	Module 'Magento_ImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRule':
+ DEBUG [e75b060b] 	Module 'Magento_Sales':
+ DEBUG [e75b060b] 	Module 'Magento_Email':
+ DEBUG [e75b060b] 	Module 'Magento_EncryptionKey':
+ DEBUG [e75b060b] 	Module 'Magento_Fedex':
+ DEBUG [e75b060b] 	Module 'Magento_GiftMessage':
+ DEBUG [e75b060b] 	Module 'Magento_Checkout':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAnalytics':
+ DEBUG [e75b060b] 	Module 'Magento_Ui':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProduct':
+ DEBUG [e75b060b] 	Module 'Magento_Tax':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_Vault':
+ DEBUG [e75b060b] 	Module 'Magento_Security':
+ DEBUG [e75b060b] 	Module 'Magento_LayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_Marketplace':
+ DEBUG [e75b060b] 	Module 'Magento_MediaStorage':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableProduct':
+ DEBUG [e75b060b] 	Module 'Magento_MsrpSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Multishipping':
+ DEBUG [e75b060b] 	Module 'Magento_NewRelicReporting':
+ DEBUG [e75b060b] 	Module 'Magento_Newsletter':
+ DEBUG [e75b060b] 	Module 'Magento_OfflinePayments':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRule':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShipping':
+ DEBUG [e75b060b] 	Module 'Magento_PageCache':
+ DEBUG [e75b060b] 	Module 'Magento_Weee':
+ DEBUG [e75b060b] 	Module 'Magento_Paypal':
+ DEBUG [e75b060b] 	Module 'Magento_Persistent':
+ DEBUG [e75b060b] 	Module 'Magento_ProductAlert':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductVideo':
+ DEBUG [e75b060b] 	Module 'Magento_Captcha':
+ DEBUG [e75b060b] 	Module 'Magento_Reports':
+ DEBUG [e75b060b] 	Module 'Magento_RequireJs':
+ DEBUG [e75b060b] 	Module 'Magento_Review':
+ DEBUG [e75b060b] 	Module 'Magento_DownloadableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Rss':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleConfigurable':
+ DEBUG [e75b060b] 	Module 'Magento_Authorizenet':
+ DEBUG [e75b060b] 	Module 'Magento_OfflineShippingSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_BundleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ConfigurableSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ThemeSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ProductLinksSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_ReviewSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Integration':
+ DEBUG [e75b060b] 	Module 'Magento_SendFriend':
+ DEBUG [e75b060b] 	Module 'Magento_Shipping':
+ DEBUG [e75b060b] 	Module 'Magento_Sitemap':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Swagger':
+ DEBUG [e75b060b] 	Module 'Magento_Swatches':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesLayeredNavigation':
+ DEBUG [e75b060b] 	Module 'Magento_SwatchesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GroupedProductSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_TaxImportExport':
+ DEBUG [e75b060b] 	Module 'Magento_TaxSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleAdwords':
+ DEBUG [e75b060b] 	Module 'Magento_CmsSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Translation':
+ DEBUG [e75b060b] 	Module 'Magento_GoogleOptimizer':
+ DEBUG [e75b060b] 	Module 'Magento_Ups':
+ DEBUG [e75b060b] 	Module 'Magento_UrlRewrite':
+ DEBUG [e75b060b] 	Module 'Magento_SalesRuleSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Usps':
+ DEBUG [e75b060b] 	Module 'Magento_Variable':
+ DEBUG [e75b060b] 	Module 'Magento_Braintree':
+ DEBUG [e75b060b] 	Module 'Magento_Version':
+ DEBUG [e75b060b] 	Module 'Magento_Webapi':
+ DEBUG [e75b060b] 	Module 'Magento_WebapiSecurity':
+ DEBUG [e75b060b] 	Module 'Magento_SalesSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_CatalogWidget':
+ DEBUG [e75b060b] 	Module 'Magento_WidgetSampleData':
+ DEBUG [e75b060b] 	Module 'Magento_Wishlist':
+ DEBUG [e75b060b] 	Module 'Magento_WishlistSampleData':
+ DEBUG [e75b060b] 	Module 'Straker_EasyTranslationPlatform':
+ DEBUG [e75b060b] 	Please re-run Magento compile command
+  INFO [e75b060b] Finished in 9.687 seconds with exit status 0 (successful).
+  INFO [5d316260] Running chown -R www-data:www-data /mnt/data/apps/php/magento2 as root@10.53.34.47
+ DEBUG [5d316260] Command: chown -R www-data:www-data /mnt/data/apps/php/magento2
+  INFO [5d316260] Finished in 2.029 seconds with exit status 0 (successful).
+  INFO [7c765f56] Running service php5-fpm restart as root@10.53.34.47
+ DEBUG [7c765f56] Command: service php5-fpm restart
+ DEBUG [7c765f56] 	php5-fpm stop/waiting
+ DEBUG [7c765f56] 	php5-fpm start/running, process 31177
+  INFO [7c765f56] Finished in 0.415 seconds with exit status 0 (successful).
+ DEBUG [52222649] Running /usr/bin/env ls -xtr /mnt/data/apps/php/EasyTranslationPlatform/releases as root@10.53.34.47
+ DEBUG [52222649] Command: /usr/bin/env ls -xtr /mnt/data/apps/php/EasyTranslationPlatform/releases
+ DEBUG [52222649] 	20160804052848	20160804054844	20160804090255	20160804090501	20160804090844
+20160804234519
+ DEBUG [52222649] Finished in 0.325 seconds with exit status 0 (successful).
+  INFO Keeping 5 of 6 deployed releases on 10.53.34.47
+  INFO [fafbfba4] Running /usr/bin/env rm -rf /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804052848 as root@10.53.34.47
+ DEBUG [fafbfba4] Command: /usr/bin/env rm -rf /mnt/data/apps/php/EasyTranslationPlatform/releases/20160804052848
+  INFO [fafbfba4] Finished in 0.330 seconds with exit status 0 (successful).
+ DEBUG [d6eaa1a1] Running if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/releases; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/releases'" 1>&2; false; fi as root@10.53.34.47
+ DEBUG [d6eaa1a1] Command: if test ! -d /mnt/data/apps/php/EasyTranslationPlatform/releases; then echo "Directory does not exist '/mnt/data/apps/php/EasyTranslationPlatform/releases'" 1>&2; false; fi
+ DEBUG [d6eaa1a1] Finished in 0.326 seconds with exit status 0 (successful).
+  INFO [275d8475] Running /usr/bin/env echo "Branch develop (at e2d8874c1a21975f0f80db8ab6af51632850d6c0) deployed as release 20160804234519 by rakeshmistry" >> /mnt/data/apps/php/EasyTranslationPlatform/revisions.log as root@10.53.34.47
+ DEBUG [275d8475] Command: cd /mnt/data/apps/php/EasyTranslationPlatform/releases && /usr/bin/env echo "Branch develop (at e2d8874c1a21975f0f80db8ab6af51632850d6c0) deployed as release 20160804234519 by rakeshmistry" >> /mnt/data/apps/php/EasyTranslationPlatform/revisions.log
+  INFO [275d8475] Finished in 0.328 seconds with exit status 0 (successful).

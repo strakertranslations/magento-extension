@@ -57,6 +57,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->setData(
             [
+
                 'job_status_id'=> JobStatus::JOB_STATUS_INIT,
                 'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_store'],
                 'target_store_id'=>$this->jobData['destination_store'],

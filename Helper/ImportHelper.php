@@ -1,163 +1,168 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
+namespace Straker\EasyTranslationPlatform\Helper;
 
-use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
+use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Xml\Parser;
-
+use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
-use Magento\Eav\Model\AttributeRepository;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
-
 use Magento\Framework\App\ResourceConnection;
 
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
+
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
+use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 
+use Straker\EasyTranslationPlatform\Model\AttributeTranslation;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
-
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
-use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
-
-use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation;
+use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollection;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeOptionTranslation\CollectionFactory as AttributeOptionTranslationCollection;
 
-class Index extends \Magento\Backend\App\Action
+class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
-    protected $_attributeCollection;
-    protected $_jsonFactory;
-    protected $_resultPageFactory;
-    protected $_configHelper;
+
+    protected $_logger;
+    protected $_xmlParser;
     protected $_xmlHelper;
     protected $_attributeTranslationFactory;
     protected $_attributeOptionTranslationFactory;
     protected $_attributeTranslationCollection;
-    protected $_attributeTranslationOptionCollection;
-    protected $_productFactory;
-    protected $_attributeRepository;
-    protected $_resourceConnection;
-    protected $_attributeOptionFactory;
+    protected $_attributeOptionTranslationCollection;
     protected $_jobFactory;
+    protected $_attributeRepository;
+    protected $_productAction;
+    protected $_resourceConnection;
+    protected $_attributeCollection;
+    protected $optionCollection;
+
+
+    protected $_jobModel;
+    protected $_parsedFileData = [];
     protected $_translatedOptions;
     protected $_translatedOptionIds;
 
-    protected $_testRequest =
-        [
-            'job_id' => 12,
-            'job_key' => 1,
-            'job_type_id' => 1,
-            'target_store_id'=>2
-        ];
-
-    protected $_testFilePath = '/straker_job_12_1470260999.xml';
-
     public function __construct(
+
         Context $context,
-        PageFactory $pageFactory,
-        JsonFactory $jsonFactory,
-        AttributeCollection $attCollection,
-        OptionCollection $attOptCollection,
-        ConfigHelper $configHelper,
-        XmlHelper $xmlHelper,
+        Logger $logger,
         Parser $xmlParser,
+        XmlHelper $xmlHelper,
+        JobFactory $jobFactory,
         AttributeTranslationFactory $attributeTranslationFactory,
         AttributeOptionTranslationFactory $attributeOptionTranslationFactory,
         AttributeTranslationCollection $attributeTranslationCollection,
         AttributeOptionTranslationCollection $attributeOptionTranslationCollection,
-        ProductAction $productFactory,
-        AttributeRepository $attributeRepository,
-        ResourceConnection $connection,
-        OptionFactory $optionFactory,
-        JobFactory $jobFactory
-    )
-    {
-        $this->_attributeCollection = $attCollection;
-        $this->_attributeOptionCollection = $attOptCollection;
-        $this->_resultPageFactory = $pageFactory;
-        $this->_jsonFactory = $jsonFactory;
-        $this->_configHelper = $configHelper;
-        $this->_xmlHelper = $xmlHelper;
+        AttributeRepositoryInterface $attributeRepository,
+        ProductAction $productAction,
+        ResourceConnection $resourceConnection,
+        AttributeCollection $attributeCollection,
+        OptionCollection $optionCollection
+
+    ) {
+
+        $this->_logger = $logger;
         $this->_xmlParser = $xmlParser;
+        $this->_xmlHelper = $xmlHelper;
+        $this->_jobFactory = $jobFactory;
         $this->_attributeTranslationFactory = $attributeTranslationFactory;
         $this->_attributeOptionTranslationFactory = $attributeOptionTranslationFactory;
         $this->_attributeTranslationCollection = $attributeTranslationCollection;
         $this->_attributeOptionTranslationCollection = $attributeOptionTranslationCollection;
-        $this->_productFactory = $productFactory;
         $this->_attributeRepository = $attributeRepository;
-        $this->_resourceConnection = $connection;
-        $this->_attributeOptionFactory = $optionFactory;
-        $this->_jobFactory = $jobFactory;
+        $this->_productAction = $productAction;
+        $this->_resourceConnection = $resourceConnection;
+        $this->_attributeCollection = $attributeCollection;
+        $this->_optionCollection = $optionCollection;
 
-        return parent::__construct($context);
+        parent::__construct($context);
     }
 
-    public function execute()
+    public function create($job_id)
     {
+        $this->_jobModel = $this->_jobFactory->create()->load($job_id);
 
-        $filePath = str_replace('job-file','translated-file',$this->_xmlHelper->getXmlFilePath());
+        return $this;
 
-        $parsedArray = $this->_xmlParser->load($filePath.$this->_testFilePath)->xmlToArray();
+    }
 
-        $parsedData = $parsedArray['root']['data'];
+    public function parseTranslatedFile()
+    {
+        $filePath = str_replace('job-file','translated-file',$this->_jobModel->getSourceFile());
 
-        foreach ($parsedData as $key => $data){
+        $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 
-            if(array_key_exists('attribute_translation_id',$parsedData[$key]['_attribute']) && $parsedData[$key]['_value']['value'] != $parsedData[$key]['_attribute']['attribute_label'] )
+        $this->_parsedFileData = $parsedData['root']['data'];
+
+        return $this;
+    }
+
+    public function saveTranslatedProductData()
+    {
+        foreach ($this->_parsedFileData as $key => $data){
+
+            if(array_key_exists('attribute_translation_id',$this->_parsedFileData[$key]['_attribute']) && $this->_parsedFileData[$key]['_value']['value'] != $this->_parsedFileData[$key]['_attribute']['attribute_label'] )
             {
-                $data = $this->_attributeTranslationFactory->create()->load($parsedData[$key]['_attribute']['attribute_translation_id']);
 
-                $data->addData(['is_imported'=>1,'translated_value'=>$parsedData[$key]['_value']['value']]);
+                try
+                {
+                    $data = $this->_attributeTranslationFactory->create()->load($this->_parsedFileData[$key]['_attribute']['attribute_translation_id']);
 
-                $data->save();
+                    $data->addData(['is_imported'=>1,'translated_value'=>$this->_parsedFileData[$key]['_value']['value']]);
 
-            }
+                    $data->save();
 
-            if(array_key_exists('option_translation_id',$parsedData[$key]['_attribute']) && $parsedData[$key]['_value']['value'] != $parsedData[$key]['_attribute']['attribute_label']){
-
-                $data = $this->_attributeOptionTranslationFactory->create()->load($parsedData[$key]['_attribute']['option_translation_id']);
-
-                $data->addData(['is_imported'=>1,'translated_value'=>$parsedData[$key]['_value']['value']]);
-
-                $data->save();
+                }catch (\Exception $e)
+                {
+                    $this->_logger->error('error'.__FILE__.' '.__LINE__.' '.$e->getMessage(),array($e));
+                }
 
             }
 
+            if(array_key_exists('option_translation_id',$this->_parsedFileData[$key]['_attribute']) && $this->_parsedFileData[$key]['_value']['value'] != $this->_parsedFileData[$key]['_attribute']['attribute_label']){
+
+                try
+                {
+                    $data = $this->_attributeOptionTranslationFactory->create()->load($this->_parsedFileData[$key]['_attribute']['option_translation_id']);
+
+                    $data->addData(['is_imported'=>1,'translated_value'=>$this->_parsedFileData[$key]['_value']['value']]);
+
+                    $data->save();
+
+                }catch (\Exception $e)
+                {
+                    $this->_logger->error('error'.__FILE__.' '.__LINE__.' '.$e->getMessage(),array($e));
+                }
+
+
+            }
 
         }
 
-        $this->importTranslatedProducts($this->_testRequest['job_id']);
-
-
+        return $this;
     }
 
-    //add target store id
-    public function importTranslatedProducts($job_id)
+    public function publishTranslatedProductData()
     {
+        $product_ids = $this->getProductIds($this->_jobModel->getId());
 
-        $product_ids = $this->getProductIds($job_id);
-
-        $this->importTranslatedOptionValues($job_id);
+        $this->importTranslatedOptionValues($this->_jobModel->getId());
 
         foreach ($product_ids as $id)
         {
             $products = $this->_attributeTranslationCollection->create()
                 ->addFieldToSelect(['attribute_id','original_value','translated_value'])
-                ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id ) )
+                ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
                 ->addFieldToFilter( 'entity_id',   array( 'eq' => $id ) )
                 ->addFieldToFilter( 'is_label',   array( 'eq' => 0 ) );
 
             $labels = $this->_attributeTranslationCollection->create()
                 ->addFieldToSelect(['attribute_id','original_value','translated_value'])
-                ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id ) )
+                ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
                 ->addFieldToFilter( 'entity_id',   array( 'eq' => $id ) )
                 ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
                 ->addFieldToFilter( 'translated_value',   array( 'notnull' => true ) );
@@ -169,7 +174,7 @@ class Index extends \Magento\Backend\App\Action
 
                 $new_labels = $att->getStoreLabels();
 
-                $new_labels[$this->_testRequest['target_store_id']] = $data['translated_value'];
+                $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
 
                 $att->setStoreLabels($new_labels)->save();
             }
@@ -182,10 +187,10 @@ class Index extends \Magento\Backend\App\Action
             }
 
 
-            $this->_productFactory->updateAttributes(array($id),$attData,$this->_testRequest['target_store_id']);
+            $this->_productAction->updateAttributes(array($id),$attData,$this->_jobModel->getTargetStoreId());
         }
 
-
+        return $this;
     }
 
     protected function importTranslatedOptionValues($job_id)
@@ -289,8 +294,8 @@ class Index extends \Magento\Backend\App\Action
         });
 
         //Filter out options which have already been translated for a store - checking Magento's options table (eav_attribute_option).
-        $existingOptions = $this->_attributeOptionCollection->create()
-            ->SetStoreFilter($this->_testRequest['target_store_id'])
+        $existingOptions = $this->_optionCollection->create()
+            ->SetStoreFilter($this->_jobModel->getTargetStoreId())
             ->SetIdFilter($translatedOptionIds)
             ->toOptionArray();
 
@@ -311,9 +316,9 @@ class Index extends \Magento\Backend\App\Action
             {
                 if($existingOptions[$key]['label'] !== $translatedOptions[$key]['translated_value'])
                 {
-                  $this->_translatedOptions[] = ['t_value'=> $translatedOptions[$key]['translated_value'],'o_value'=>$existingOptions[$key]['label']];
+                    $this->_translatedOptions[] = ['t_value'=> $translatedOptions[$key]['translated_value'],'o_value'=>$existingOptions[$key]['label']];
 
-                  $this->_translatedOptionIds[] = $translatedOptions[$key]['option_id'];
+                    $this->_translatedOptionIds[] = $translatedOptions[$key]['option_id'];
                 };
             }
 
@@ -325,11 +330,9 @@ class Index extends \Magento\Backend\App\Action
 
         }else{
 
-            return [];
+            return $translatedOptionValues = [];
         }
 
-
     }
-
 
 }

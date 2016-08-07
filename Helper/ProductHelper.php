@@ -186,7 +186,7 @@ class ProductHelper extends AbstractHelper
 
                     if($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$this->_storeId)){
 
-                        array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$this->_attributeRepository->get('catalog_product',$attribute_id)->getFrontendLabel(),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$this->_storeId)]);
+                        array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$product->getResource()->getAttribute($attribute_id)->getStoreLabel($this->_storeId),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$this->_storeId)]);
                     }
 
                 }
@@ -264,6 +264,8 @@ class ProductHelper extends AbstractHelper
 
                         $job_name = $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'];
 
+                        $this->_attributeHelper->appendAttributeLabel($data,$attribute,$job_name,$source_store_id,$xmlHelper);
+
                         if(is_array($attribute['value']))
                         {
                             foreach ($attribute['value'] as $value)
@@ -273,7 +275,7 @@ class ProductHelper extends AbstractHelper
                                     'name' => $job_name.'_'.$value['option_id'],
                                     'content_context' => 'product_attribute_value',
                                     'content_context_url' => $data['product_url'],
-                                    'translation_id'=>$attribute['label_translation_id'],
+                                    'option_translation_id'=>$value['translation_id'],
                                     'source_store_id'=>$source_store_id,
                                     'product_id' => $data['product_id'],
                                     'attribute_id'=>$attribute['attribute_id'],
@@ -283,18 +285,17 @@ class ProductHelper extends AbstractHelper
                                     'translate'=> (in_array($value['value'], $this->_translatedAttributeOptions) || is_numeric($value['value'])  ) ? 'false' : 'true'
                                 ]);
 
+
                                 array_push($this->_translatedAttributeOptions,$value['value']);
                             }
 
                         }else{
 
-                            $this->_attributeHelper->appendAttributeLabel($data,$attribute,$job_name,$source_store_id,$xmlHelper);
-
                             $xmlHelper->appendDataToRoot([
                                 'name' => $job_name,
                                 'content_context' => 'product_attribute_value',
                                 'content_context_url' => $data['product_url'],
-                                'translation_id'=>$attribute['value_translation_id'],
+                                'attribute_translation_id'=>$attribute['value_translation_id'],
                                 'source_store_id'=> $source_store_id,
                                 'product_id' => $data['product_id'],
                                 'attribute_id'=>$attribute['attribute_id'],
@@ -310,11 +311,7 @@ class ProductHelper extends AbstractHelper
 
             }catch (\Exception $e){
 
-                var_dump($e->getMessage());
-
-                exit;
-
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
+                $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
 
             }
         }
@@ -352,7 +349,7 @@ class ProductHelper extends AbstractHelper
 
                         $this->_productData[$product_key]['attributes'][$attribute_key]['label_translation_id'] = $attributeTranslationModel->getId();
 
-                        $this->saveOptionValues($attribute['value'], $attributeTranslationModel->getId());
+                        $this->saveOptionValues($attribute['value'], $attributeTranslationModel->getId(),$product_key,$attribute_key);
 
                     }else{
 
@@ -388,7 +385,7 @@ class ProductHelper extends AbstractHelper
 
         } catch (Exception $e) {
 
-            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
         }
 
     }
@@ -399,13 +396,15 @@ class ProductHelper extends AbstractHelper
      */
     protected function saveOptionValues(
         $option_values,
-        $attribute_translation_id
+        $attribute_translation_id,
+        $product_key,
+        $attribute_key
     )
     {
 
         try{
 
-            foreach ($option_values as $option){
+            foreach ($option_values as $option_key => $option){
 
                 $attributeTranslationOptionModel = $this->_attributeOptionTranslationFactory->create();
 
@@ -417,12 +416,13 @@ class ProductHelper extends AbstractHelper
                     ]
                 )->save();
 
+                $this->_productData[$product_key]['attributes'][$attribute_key]['value'][$option_key]['translation_id'] = $attributeTranslationOptionModel->getId();
+
             }
 
         }catch (Exception $e) {
 
-
-            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+            $this->_logger->error('error'.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
         }
 
     }
