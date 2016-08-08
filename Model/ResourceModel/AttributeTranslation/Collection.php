@@ -11,6 +11,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             'Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation');
     }
 
+    public function massUpdate(array $data)
+    {
+        $this->getConnection()->update($this->getResource()->getMainTable(), $data, $this->getResource()->getIdFieldName() . ' IN(' . implode(',', $this->getAllIds()) . ')');
+
+        return $this;
+    }
+
 //    function _renderFiltersBefore()
 //    {
 //        $this->_setIdFieldName( 'website_group_store' );

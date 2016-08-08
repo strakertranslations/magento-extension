@@ -43,6 +43,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     protected $_jobModel;
     protected $_parsedFileData = [];
+    protected $_translatedLabels = [];
     protected $_translatedOptions;
     protected $_translatedOptionIds;
 
@@ -103,6 +104,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function saveTranslatedProductData()
     {
+
         foreach ($this->_parsedFileData as $key => $data){
 
             if(array_key_exists('attribute_translation_id',$this->_parsedFileData[$key]['_attribute']) && $this->_parsedFileData[$key]['_value']['value'] != $this->_parsedFileData[$key]['_attribute']['attribute_label'] )
@@ -115,6 +117,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
                     $data->addData(['is_imported'=>1,'translated_value'=>$this->_parsedFileData[$key]['_value']['value']]);
 
                     $data->save();
+
+                    (strpos($this->_parsedFileData[$key]['_attribute']['content_context'],'label')) ? $this->saveLabel($this->_parsedFileData[$key]['_attribute']['attribute_id'],$this->_parsedFileData[$key]['_value']['value']) : false;
 
                 }catch (\Exception $e)
                 {
@@ -144,13 +148,17 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         }
 
         return $this;
+
     }
+
 
     public function publishTranslatedProductData()
     {
         $product_ids = $this->getProductIds($this->_jobModel->getId());
 
         $this->importTranslatedOptionValues($this->_jobModel->getId());
+
+        $this->importTranslatedAttributeLabels($this->_jobModel->getId());
 
         foreach ($product_ids as $id)
         {
@@ -159,25 +167,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
                 ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
                 ->addFieldToFilter( 'entity_id',   array( 'eq' => $id ) )
                 ->addFieldToFilter( 'is_label',   array( 'eq' => 0 ) );
-
-            $labels = $this->_attributeTranslationCollection->create()
-                ->addFieldToSelect(['attribute_id','original_value','translated_value'])
-                ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
-                ->addFieldToFilter( 'entity_id',   array( 'eq' => $id ) )
-                ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
-                ->addFieldToFilter( 'translated_value',   array( 'notnull' => true ) );
-
-
-            foreach ($labels->toArray()['items'] as $data){
-
-                $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$data['attribute_id']);
-
-                $new_labels = $att->getStoreLabels();
-
-                $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
-
-                $att->setStoreLabels($new_labels)->save();
-            }
 
             $attData = [];
 
@@ -193,6 +182,50 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
+    public function saveLabel($label_id,$value)
+    {
+
+        $labels = $this->_attributeTranslationCollection->create()
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
+            ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
+            ->addFieldtoFilter( 'attribute_id', array('eq'=>$label_id))
+            ->addFieldToFilter( 'translated_value',   array( 'null' => true ) );
+
+        try
+        {
+            $labels->massUpdate(array('translated_value' => $value));
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error'.__FILE__.' '.__LINE__.' '.$e->getMessage(),array($e));
+        }
+
+
+    }
+
+    protected function importTranslatedAttributeLabels($job_id)
+    {
+
+        $labels = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect(['attribute_id','original_value','translated_value'])
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id))
+            ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
+            ->addFieldToFilter( 'translated_value',   array( 'notnull' => true ) );
+
+        $labels->getSelect()->group('attribute_id');
+
+        foreach ($labels->toArray()['items'] as $data){
+
+            $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$data['attribute_id']);
+
+            $new_labels = $att->getStoreLabels();
+
+            $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
+
+            $att->setStoreLabels($new_labels)->save();
+        }
+    }
+
     protected function importTranslatedOptionValues($job_id)
     {
 
@@ -204,7 +237,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             foreach ($translatedOptionData as $data){
 
-                $insertData[] = ['option_id' => $data['option_id'], 'store_id' => '2', 'value' =>$data['translated_value']];
+                $insertData[] = ['option_id' => $data['option_id'], 'store_id' => $this->_jobModel->getTargetStoreId(), 'value' =>$data['translated_value']];
             }
 
             $connection = $this->_resourceConnection->getConnection();
@@ -324,7 +357,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             $translatedOptionValues = $this->_attributeOptionTranslationCollection->create()
                 ->addFieldToSelect(['option_id','original_value','translated_value'])
-                ->addFieldToFilter('option_id', array('in'=>$this->_translatedOptionIds))->toArray()['items'];
+                ->addFieldToFilter('option_id', array('in'=>$this->_translatedOptionIds))
+                ->toArray()['items'];
 
             return $translatedOptionValues;
 
