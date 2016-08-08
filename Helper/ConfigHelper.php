@@ -6,18 +6,22 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
 
 class ConfigHelper extends AbstractHelper
 {
     protected $_scopeFactory;
+    protected $_directoryList;
 
     public function __construct(
         Context $context,
-        ScopedFactory $scopedFactory
+        ScopedFactory $scopedFactory,
+        DirectoryList $directoryList
     )
     {
         $this->_scopeFactory = $scopedFactory;
+        $this->_directoryList = $directoryList;
         parent::__construct( $context );
     }
 
@@ -156,6 +160,14 @@ class ConfigHelper extends AbstractHelper
     public function getSourceStore($storeId = null)
     {
         return $this->scopeConfig->getValue('straker/general/source_store',\Magento\Store\Model\ScopeInterface::SCOPE_STORE,$storeId);
+    }
+
+    public function getOriginalXMLFilePath(){
+        return $this->_directoryList->getPath('app').'/code/Straker/EasyTranslationPlatform/Api/Data/Original';
+    }
+
+    public function getTranslatedXMLFilePath(){
+        return $this->_directoryList->getPath('app').'/code/Straker/EasyTranslationPlatform/Api/Data/Translated';
     }
 
 }

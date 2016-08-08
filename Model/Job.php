@@ -3,14 +3,18 @@
 namespace Straker\EasyTranslationPlatform\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
+use Straker\EasyTranslationPlatform\Helper\JobHelper;
+use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
 use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
 
-class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface, IdentityInterface
+class Job extends AbstractModel implements JobInterface, IdentityInterface
 {
     const ENTITY = 'straker_job';
 
@@ -39,6 +43,9 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
     protected $_entityCount;
     protected $_jobStatusFactory;
     protected $_jobTypeFactory;
+    protected $_configHelper;
+    protected $_strakerApi;
+    protected $_logger;
 
     public function __construct(
         Context $context,
@@ -47,12 +54,18 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         JobStatusFactory $jobStatusFactory,
         JobTypeFactory $jobTypeFactory,
+        ConfigHelper $configHelper,
+        StrakerAPI $strakerAPI,
+        Logger $logger,
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_attributeTranslationCollectionFactory = $attributeTranslationCollectionFactory;
         $this->_jobStatusFactory = $jobStatusFactory;
         $this->_jobTypeFactory = $jobTypeFactory;
+        $this->_configHelper = $configHelper;
+        $this->_strakerApi = $strakerAPI;
+        $this->_logger = $logger;
         parent::__construct($context, $registry);
     }
 
@@ -116,8 +129,9 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
         }
     }
 
-    function updateStatus( $jobData ){
-        switch (strtolower( $jobData->status)){
+    public function updateStatus( $jobData ){
+        $return = [ 'isSuccess' => true, 'Message' => ''];
+        switch (strtolower( $jobData->status) ){
             case 'queued':
                 if( !empty($jobData->quotation) && strcasecmp( $jobData->quotation, 'ready') === 0){
                     $this->setData('job_status_id', JobStatus::JOB_STATUS_READY )
@@ -134,10 +148,42 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
                 $this->setData('job_status_id', JobStatus::JOB_STATUS_INPROGRESS )->save();
                 break;
             case 'completed':
-                $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
-                //TODO: downloading file and ready to publish
+                if( !empty($jobData->translated_file) && count( $jobData->translated_file)){
+                    $downloadUrl = reset($jobData->translated_file)->download_url;
+                    if( !empty( $downloadUrl )){
+                        $fileContent = $this->_strakerApi->getTranslatedFile( $downloadUrl );
+                        $filePath = $this->_configHelper->getTranslatedXMLFilePath();
+                        if( !file_exists( $filePath )){
+                            mkdir( $filePath);
+                        }
+                        $fileName = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
+                        $result = file_put_contents( $fileName, $fileContent );
+                        if($result == false ){
+                            $return['isSuccess'] = false;
+                            $return['Message'] = __('Failed to write content to ' . $fileName);
+                            $this->_logger->addError( $return['Message'] );
+                        }else{
+                            //TODO save new filename to database
+                            $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
+                        }
+                    }else{
+                        $return['isSuccess'] = false;
+                        $return['Message'] = __('Download url is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').' );
+                        $this->_logger->addError( $return['Message'] );
+                    }
+                }else{
+                    $return['isSuccess'] = false;
+                    $return['Message'] = __('Download file is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
+                    $this->_logger->addError( $return['Message'] );
+                }
+                break;
+            default:
+                $return['isSuccess'] = false;
+                $return['Message'] = __('Unknown status is found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
+                $this->_logger->addError( $return['Message'] );
                 break;
         }
+        return $return;
     }
 
     public function getJobStatus(){
@@ -146,5 +192,15 @@ class Job extends \Magento\Framework\Model\AbstractModel implements JobInterface
 
     public function getJobType(){
         return $this->_jobTypeFactory->create()->load($this->getJobTypeId())->getTypeName();
+    }
+
+    private function _renameTranslatedFileName( $filePath, $originalFileName ){
+        $fileName = substr_replace( $originalFileName, '_translated', stripos( $originalFileName, '.xml'));
+        if( file_exists( $filePath.DIRECTORY_SEPARATOR.$fileName.'.xml' )){
+            $suffix = date('Y-m-d H:i:s',time());
+            return $filePath.DIRECTORY_SEPARATOR.$fileName.'_'. $suffix  .'.xml';
+        }else{
+            return $filePath.DIRECTORY_SEPARATOR.$fileName.'.xml';
+        }
     }
 }

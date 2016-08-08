@@ -5,7 +5,6 @@ namespace Straker\EasyTranslationPlatform\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\DomDocument\DomDocumentFactory;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 class XmlHelper extends AbstractHelper
 {
@@ -30,6 +29,9 @@ class XmlHelper extends AbstractHelper
     /** @var \DOMElement $_xmlFileName */
     private $_data;
 
+    /** @var JobHelper $_jobHelper */
+    private $_configHelper;
+
     private $_elemAttributes = [
         'name',
         'content_context',
@@ -43,11 +45,12 @@ class XmlHelper extends AbstractHelper
 
     public function __construct(
         Context $context,
-        DirectoryList $directoryList,
+        ConfigHelper $configHelper,
         DomDocumentFactory $domDocumentFactory
     ) {
         $this->_dom = $domDocumentFactory->create();
-        $this->_xmlFilePath = $directoryList->getPath('var'). DIRECTORY_SEPARATOR . 'straker/job-file';
+        $this->_configHelper = $configHelper;
+        $this->_xmlFilePath = $this->_configHelper->getOriginalXMLFilePath();
         parent::__construct($context);
     }
 

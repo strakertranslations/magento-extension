@@ -32,6 +32,9 @@ class JobStatus extends Column
                             $item[$this->getData('name')] = __(ucwords('in progress'));
                             break;
                         case 'completed':
+                            $item[$this->getData('name')] = __(ucwords('please confirm'));
+                            break;
+                        case 'confirmed':
                             $item[$this->getData('name')] = __(ucwords('ready to publish'));
                             break;
                         case 'published':
