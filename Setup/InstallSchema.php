@@ -174,7 +174,13 @@ class InstallSchema implements InstallSchemaInterface
                 Table::TYPE_TEXT,
                 255,
                 [],
-                'Source Fileh'
+                'Source File'
+            )->addColumn(
+                'translated_file',
+                Table::TYPE_TEXT,
+                255,
+                [],
+                'Translated File'
             )->addColumn(
                 'download_url',
                 Table::TYPE_TEXT,

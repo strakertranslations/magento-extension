@@ -72,6 +72,8 @@
                         });
                     }
 
+
+
                     if ($(this).hasClass('straker-view-quote-anchor')) {
                         loadingMask.show();
                         var quoteFrame = quoteDiv.find('iframe');
@@ -112,7 +114,7 @@
                                 console.log(data);
                                 confirm({
                                     title: '<?php echo __("Please Confirm") ?>',
-                                    content: '<?php echo __('The job have a new status, please refresh the page by press [OK]') ?>',
+                                    content: '<?php echo __('The job have a new status, please refresh the page by pressing [OK]') ?>',
                                     actions: {
                                         confirm: function () {
                                             location.reload();

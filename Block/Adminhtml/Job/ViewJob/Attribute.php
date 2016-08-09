@@ -38,7 +38,8 @@ class Attribute extends Container
     {
         $this->addChild(
             'straker_job_attribute_grid',
-            'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute\Grid'
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute\Grid',
+            ['id' => 'straker_job_attribute_grid']
         );
 
         return parent::_prepareLayout();

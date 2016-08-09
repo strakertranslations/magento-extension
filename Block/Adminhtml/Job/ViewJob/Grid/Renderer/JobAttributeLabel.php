@@ -26,16 +26,21 @@ class JobAttributeLabel extends AbstractRenderer
     {
         $isLabel = $row->getData('is_label');
         $jobId = $row->getData('job_id');
+        $hasOption = $row->getData('has_option');
+        $attrLabel = '';
         $this->_jobAttributeCollection = $this->_attributeTranslationCollectionFactory->create()
             ->addFieldToFilter('job_id', ['eq' => $jobId] )
             ->addfieldtofilter('is_label', ['eq' => true ]);
 
         if( strcasecmp($isLabel, 'yes') === 0 ){
-            $attrLabel = $row->getData('original_value');
+            if($hasOption){
+                $attrLabel = '<a data-attr-id=\''. $row->getData('attribute_translation_id'). '\' class=\'straker-view-option-anchor\'>' . $row->getData('original_value').  '</a>';
+            }else{
+                $attrLabel = $row->getData('original_value');
+            }
         }else{
             $attrLabel = $this->_getFieldLabel( $row->getData('attribute_id'));
         }
-
 
         $row->setData('label', $attrLabel );
         return parent::render($row);
