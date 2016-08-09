@@ -97,7 +97,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function parseTranslatedFile()
     {
-        $filePath = $this->configHelper->getTranslatedXMLFilePath().DIRECTORY_SEPARATOR.$this->_jobModel->getData('translated_file');
+        $filePath = $this->configHelper->getTranlatedXMLFilePath().DIRECTORY_SEPARATOR.$this->_jobModel->getData('translated_file');
 
         $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 
@@ -209,7 +209,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             foreach ($translatedOptionData as $data){
 
-                $insertData[] = ['option_id' => $data['option_id'], 'store_id' => '2', 'value' =>$data['translated_value']];
+                $insertData[] = ['option_id' => $data['option_id'], 'store_id' => $this->_jobModel->getTargetStoreId(), 'value' =>$data['translated_value']];
             }
 
             $connection = $this->_resourceConnection->getConnection();
