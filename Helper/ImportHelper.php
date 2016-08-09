@@ -14,6 +14,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 use Straker\EasyTranslationPlatform\Model\AttributeTranslation;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -26,9 +27,12 @@ use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeOptionTranslati
 class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
+    public $configHelper;
+
     protected $_logger;
     protected $_xmlParser;
     protected $_xmlHelper;
+
     protected $_attributeTranslationFactory;
     protected $_attributeOptionTranslationFactory;
     protected $_attributeTranslationCollection;
@@ -39,7 +43,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_resourceConnection;
     protected $_attributeCollection;
     protected $optionCollection;
-
 
     protected $_jobModel;
     protected $_parsedFileData = [];
@@ -52,6 +55,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         Logger $logger,
         Parser $xmlParser,
         XmlHelper $xmlHelper,
+        ConfigHelper $configHelper,
         JobFactory $jobFactory,
         AttributeTranslationFactory $attributeTranslationFactory,
         AttributeOptionTranslationFactory $attributeOptionTranslationFactory,
@@ -68,6 +72,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_logger = $logger;
         $this->_xmlParser = $xmlParser;
         $this->_xmlHelper = $xmlHelper;
+        $this->configHelper = $configHelper;
         $this->_jobFactory = $jobFactory;
         $this->_attributeTranslationFactory = $attributeTranslationFactory;
         $this->_attributeOptionTranslationFactory = $attributeOptionTranslationFactory;
@@ -92,7 +97,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function parseTranslatedFile()
     {
-        $filePath = str_replace('job-file','translated-file',$this->_jobModel->getSourceFile());
+        $filePath = $this->configHelper->getTranslatedXMLFilePath().DIRECTORY_SEPARATOR.$this->_jobModel->getData('translated_file');
 
         $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 

@@ -6,8 +6,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Straker\EasyTranslationPlatform\Helper\JobHelper;
+use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
 use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
@@ -35,7 +34,6 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
      */
     protected $_eventPrefix = 'st_products_grid';
 
-    protected $configHelper ;
     protected $_productCollectionFactory;
     protected $_attributeTranslationCollectionFactory;
     protected $_entities = [];
@@ -43,7 +41,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     protected $_entityCount;
     protected $_jobStatusFactory;
     protected $_jobTypeFactory;
-    protected $_configHelper;
+    protected $_importHelper;
     protected $_strakerApi;
     protected $_logger;
 
@@ -54,7 +52,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         JobStatusFactory $jobStatusFactory,
         JobTypeFactory $jobTypeFactory,
-        ConfigHelper $configHelper,
+        ImportHelper $importHelper,
         StrakerAPI $strakerAPI,
         Logger $logger,
         array $data = []
@@ -63,7 +61,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $this->_attributeTranslationCollectionFactory = $attributeTranslationCollectionFactory;
         $this->_jobStatusFactory = $jobStatusFactory;
         $this->_jobTypeFactory = $jobTypeFactory;
-        $this->_configHelper = $configHelper;
+        $this->_importHelper = $importHelper;
         $this->_strakerApi = $strakerAPI;
         $this->_logger = $logger;
         parent::__construct($context, $registry);
@@ -152,18 +150,23 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                     $downloadUrl = reset($jobData->translated_file)->download_url;
                     if( !empty( $downloadUrl )){
                         $fileContent = $this->_strakerApi->getTranslatedFile( $downloadUrl );
-                        $filePath = $this->_configHelper->getTranslatedXMLFilePath();
+                        $filePath = $this->_importHelper->configHelper->getTranslatedXMLFilePath();
                         if( !file_exists( $filePath )){
                             mkdir( $filePath);
                         }
                         $fileName = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
-                        $result = file_put_contents( $fileName, $fileContent );
+                        $result = file_put_contents( implode(DIRECTORY_SEPARATOR, $fileName), $fileContent );
                         if($result == false ){
                             $return['isSuccess'] = false;
                             $return['Message'] = __('Failed to write content to ' . $fileName);
                             $this->_logger->addError( $return['Message'] );
                         }else{
                             //TODO save new filename to database
+                            $this->setData('download_url', $downloadUrl)
+                                ->setData('translated_file', $fileName['name'])->save();
+                            $this->_importHelper->create( $this->getId() )
+                                ->parseTranslatedFile()
+                                ->saveTranslatedProductData();
                             $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
                         }
                     }else{
@@ -196,11 +199,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     private function _renameTranslatedFileName( $filePath, $originalFileName ){
         $fileName = substr_replace( $originalFileName, '_translated', stripos( $originalFileName, '.xml'));
-        if( file_exists( $filePath.DIRECTORY_SEPARATOR.$fileName.'.xml' )){
-            $suffix = date('Y-m-d H:i:s',time());
-            return $filePath.DIRECTORY_SEPARATOR.$fileName.'_'. $suffix  .'.xml';
-        }else{
-            return $filePath.DIRECTORY_SEPARATOR.$fileName.'.xml';
-        }
+        $suffix = date('Y-m-d H:i:s',time());
+        return [ 'path' => $filePath, 'name' => $fileName.'_'. $suffix  .'.xml'];
     }
 }
