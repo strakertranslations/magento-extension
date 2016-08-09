@@ -26,4 +26,11 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         return $this->addFieldToFilter('main_table.attribute_translation_id', ['eq' => $attributeTranslationId ]);
     }
+
+    public function massUpdate(array $data)
+    {
+        $this->getConnection()->update($this->getResource()->getMainTable(), $data, $this->getResource()->getIdFieldName() . ' IN(' . implode(',', $this->getAllIds()) . ')');
+
+        return $this;
+    }
 }
