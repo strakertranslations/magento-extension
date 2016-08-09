@@ -97,7 +97,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function parseTranslatedFile()
     {
-        $filePath = $this->configHelper->getTranlatedXMLFilePath().DIRECTORY_SEPARATOR.$this->_jobModel->getData('translated_file');
+        $filePath = $this->configHelper->getTranslatedXMLFilePath().DIRECTORY_SEPARATOR.$this->_jobModel->getData('translated_file');
 
         $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 
