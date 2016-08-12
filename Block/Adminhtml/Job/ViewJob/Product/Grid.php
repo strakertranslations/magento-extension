@@ -145,6 +145,7 @@ class Grid extends Extended
                 'job_id' => $this->_job->getJobId(),
                 'job_type_id' => $this->_jobTypeId,
                 'entity_id' => $row->getEntityId(),
+                'job_type_referrer' => Model\JobType::JOB_TYPE_PRODUCT
             ]
         );
     }

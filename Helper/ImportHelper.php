@@ -43,7 +43,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_optionCollection;
     protected $_storeManager;
 
-
     protected $_jobModel;
     protected $_parsedFileData = [];
     protected $_translatedLabels = [];
