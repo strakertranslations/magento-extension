@@ -38,21 +38,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         parent::_construct();
 
         $this->buttonList->update('save', 'label', __('Save Job'));
-        $this->buttonList->add(
-            'saveandcontinue',
-            [
-                'label' => __('Save and Continue Edit'),
-                'class' => 'save',
-                'data_attribute' => [
-                    'mage-init' => [
-                        'button' => ['event' => 'saveAndContinueEdit', 'target' => '#edit_form'],
-                    ],
-                ]
-            ],
-            -100
-        );
 
-        $this->buttonList->update('delete', 'label', __('Delete Job'));
+        $this->buttonList->remove('reset');
+
     }
 
     /**
@@ -66,15 +54,5 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
         return $this->_authorization->isAllowed($resourceId);
     }
 
-    /**
-     * Getter of url for "Save and Continue" button
-     * tab_id will be replaced by desired by JS later
-     *
-     * @return string
-     */
-    protected function _getSaveAndContinueUrl()
-    {
-        return $this->getUrl('EasyTranslationPlatform/*/save', ['_current' => true, 'back' => 'edit', 'active_tab' => '']);
-    }
 
 }

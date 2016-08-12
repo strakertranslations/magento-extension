@@ -1,0 +1,74 @@
+<script>
+    require([
+        'jquery'
+
+    ], function ($) {
+
+        $(document).ajaxSend(function( event, jqxhr, settings ) {
+
+            var target_store_id = $('select[name="destination_store"]').val();
+
+            window.ajax_url = settings.url;
+
+            if(window.ajax_url.toLowerCase().search('easytranslationplatform/jobs/products')>-1)
+            {
+               settings.data = settings.data+'&target_store_id='+target_store_id;
+            }
+
+        });
+
+        $('#job_tabs_attachment_products').on("click",function(){
+
+            if($(this).attr('href') == '#Select_Products'){
+
+                $('div#productsGrid').empty();
+
+                $.ajax({
+                    url: ajax_url,
+                    data: {form_key: window.FORM_KEY},
+                    type: 'POST',
+                    showLoader:true
+
+                }).success(function(response_html) {
+
+                    $('div#productsGrid').html(response_html);
+                });
+            }
+        });
+
+        $('select[name="destination_store"]').on( "change", function () {
+
+            var optionSelected = $(this).find("option:selected");
+            var valueSelected  = optionSelected.val();
+            var textSelected   = optionSelected.text();
+
+            console.log(valueSelected);
+            console.log(textSelected);
+
+            $.ajax({
+                url: '<?php echo $block->getUrl('EasyTranslationPlatform/Jobs/CheckLanguagePairs') ?>',
+                data: {
+                    form_key: window.FORM_KEY,
+                    target_store_id: valueSelected
+                },
+                type: 'POST'
+
+            }).done(function(response) {
+
+                console.log(response.success);
+
+                $('#job_tabs_attachment_products').hide();
+
+                console.log(response.redirect_url);
+
+                if(!response.success)
+                {
+                    window.location.replace(response.redirect_url)
+                }
+
+            })
+        });
+
+    });
+
+</script>

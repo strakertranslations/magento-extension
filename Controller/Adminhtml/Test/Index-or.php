@@ -87,7 +87,9 @@ class Index extends \Magento\Backend\App\Action
         OptionFactory $optionFactory,
         JobFactory $jobFactory,
         ImportHelper $importHelper,
-        configAttributeCollection $configAttributeCollection
+        configAttributeCollection $configAttributeCollection,
+        \Magento\Framework\File\Csv $fileCsv,
+        \Magento\Framework\App\Filesystem\DirectoryList $directory_list
     )
     {
         $this->_attributeCollection = $attCollection;
@@ -109,32 +111,30 @@ class Index extends \Magento\Backend\App\Action
         $this->_importHelper = $importHelper;
         $this->_configAttributeCollection = $configAttributeCollection;
         $this->_productFactory = $productFactory;
+        $this->_csv = $fileCsv;
+        $this->_directory = $directory_list;
 
+        return parent::__construct($context);
     }
 
     public function execute()
     {
+        var_dump(__FUNCTION__);
 
-        var_dump($this->getUrl('straker/setup_languagepairs/index',['target_store_id'=>1]));
+        $catalog_file_path = $this->_directory->getPath('var').'/csv/catalog_product_20160731_044409.csv';
 
-        exit;
+        $data = $this->_csv->getData($catalog_file_path);
 
-        $productData = $this->_productFactory->getById(2045);
+        var_dump($data[0]);
+        var_dump($data[1]);
 
-        $config = $this->_configAttributeCollection->addFieldToFilter( 'attribute_id',   array( 'eq' => 90 ) );
+        $productData =
+            [
+                ['sku','name','price','categories','product_type','attribute_set_code','tax_class_name','weight','description','short_description'],
+                ['p-100','test_product','34.000','Default Category/Lights','simple','Default','None',0,'This is a test product for magento','Test Product']
+            ];
 
-        var_dump($config->getData());
-
-        exit;
-
-
-        $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,'color');
-
-        $att->setData('label','颜色');
-
-        var_dump($att->getStoreLabels());
-
-        $this->_importHelper->saveConfigLabel($att,2);
+        $this->_csv->saveData($this->_directory->getPath('var').'/csv/test.csv',$productData);
 
         exit;
 

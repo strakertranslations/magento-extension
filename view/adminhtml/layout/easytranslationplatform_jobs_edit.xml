@@ -24,19 +24,20 @@
                     <argument name="block" xsi:type="array">
                         <item name="label" xsi:type="string">Select Products</item>
                         <item name="title" xsi:type="string">Select Products</item>
-                        <item name="url"
-                              xsi:type="helper"
-                              helper="Straker\EasyTranslationPlatform\Helper\Data::getEasyTranslationPlatformUrl"/>
+                        <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getEasyTranslationPlatformUrl"/>
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
                 </action>
-                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Attributes"
-                       name="easytranslationplatform_job_edit_tabs_attributes"/>
-                <action method="addTab">
-                    <argument name="name" xsi:type="string">select_attributes</argument>
-                    <argument name="block" xsi:type="string">easytranslationplatform_job_edit_tabs_attributes</argument>
-                </action>
+                <!--<block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Attributes"-->
+                       <!--name="easytranslationplatform_job_edit_tabs_attributes"/>-->
+                <!--<action method="addTab">-->
+                    <!--<argument name="name" xsi:type="string">select_attributes</argument>-->
+                    <!--<argument name="block" xsi:type="string">easytranslationplatform_job_edit_tabs_attributes</argument>-->
+                <!--</action>-->
             </block>
+        </referenceContainer>
+        <referenceContainer name="js">
+            <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::job/test.phtml"/>
         </referenceContainer>
     </body>
 </page>

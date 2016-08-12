@@ -1,7 +1,6 @@
 .site-group-name{
     font-weight: 700;
     line-height: 35px;
-    padding: 0 ! important;
 }
 
 .store-view-list{
@@ -24,12 +23,25 @@
     padding: 0.3rem 0.6rem 0.3rem;
 }
 
+.language-pair-message{
+    padding-top: 2rem;
+}
+
+.language-pair-message h4{
+
+    background-color: #eb5202;
+    padding: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+}
+
 #language_pairs_table{
     margin-top: 2rem;
 }
 
-#language_pairs_table td {
-    padding: 1rem 1rem 0 0;
+.store-row td{
+    padding-top: 1rem;
+    padding-right: 2rem;
 }
 
 #straker-job-grid a{

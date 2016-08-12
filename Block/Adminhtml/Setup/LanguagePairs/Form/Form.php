@@ -9,8 +9,13 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Backend\Model\Session;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Magento\Framework\Locale\ListsInterface;
+use Magento\Framework\App\RequestInterface;
 
 class Form extends Template{
+
+
+    protected $_storeInfoData;
+    protected $_request;
 
     public function __construct(
         Context $context,
@@ -19,6 +24,7 @@ class Form extends Template{
         Session $session,
         ConfigHelper $configHelper,
         ListsInterface $localeList,
+        RequestInterface $request,
         array $data = []
     ) {
 
@@ -27,6 +33,7 @@ class Form extends Template{
         $this->session = $session;
         $this->configHelper = $configHelper;
         $this->localeList = $localeList;
+        $this->_request = $request;
         parent::__construct($context);
     }
 
@@ -51,11 +58,41 @@ class Form extends Template{
         return false;
     }
 
-    public function getSourceLanguage($storeId)
+    public function getStoreInfo($storeId)
     {
-        $language = $this->configHelper->getStoreViewLanguage($storeId);
 
-        return $language;
+        $storeData = $this->configHelper->getStoreInfo($storeId);
+
+        $this->_storeInfoData = $storeData;
+
+        return $storeData;
+    }
+
+    public function getTranslationLanguage()
+    {
+
+        return $this->_storeInfoData['straker/general/destination_language'];
+    }
+
+    public function getSourceLanguage()
+    {
+        return $this->_storeInfoData['straker/general/source_language'];
+
+    }
+
+    public function getSourceStore()
+    {
+        return $this->_storeInfoData['straker/general/source_store'];
+    }
+
+    public function getMessage($store_id)
+    {
+        if($this->_request->get('target_store_id') && $this->_request->get('target_store_id') == $store_id ){
+
+            return true;
+        };
+
+        return false;
     }
 
 }
