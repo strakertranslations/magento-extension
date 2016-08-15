@@ -4,7 +4,7 @@
         'Magento_Ui/js/modal/confirm'
     ], function( $, confirm ){
 
-        var $resetButton = $('#straker_general_backup_product_data_button');
+        var $resetButton = $('#demonstration_data_backup_product_data_button');
 
         $resetButton.on('click', function(){
 
@@ -26,4 +26,6 @@
         });
     });
 </script>
-<?php echo $block->getButtonHtml();
+<?php
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'. __('It only backup the tables that contain translatable data.') .'</span>';

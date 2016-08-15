@@ -15,14 +15,19 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as
 use Magento\Framework\Xml\Parser;
 
 use Magento\Catalog\Model\Product\Action as ProductAction;
+use Magento\Catalog\Api\ProductRepositoryInterface as ProductFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
+
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection as configAttributeCollection;
 
 use Magento\Framework\App\ResourceConnection;
 
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
+
+use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\StrakerAPI;
@@ -53,9 +58,16 @@ class Index extends \Magento\Backend\App\Action
     protected $_jobFactory;
     protected $_translatedOptions;
     protected $_translatedOptionIds;
+<<<<<<< HEAD
     /** @var  \Magento\Catalog\Model\Product $_product */
     protected $_product;
     protected $_api;
+=======
+    protected $_configurableAttribute;
+    protected $_importHelper;
+    protected $_configAttributeCollection;
+
+>>>>>>> 4471e94501c8697eceb17a5168ba94a37e88aa6c
     protected $_testRequest =
         [
             'job_id' => 12,
@@ -79,15 +91,20 @@ class Index extends \Magento\Backend\App\Action
         AttributeOptionTranslationFactory $attributeOptionTranslationFactory,
         AttributeTranslationCollection $attributeTranslationCollection,
         AttributeOptionTranslationCollection $attributeOptionTranslationCollection,
-        ProductAction $productFactory,
+        ProductFactory $productFactory,
         AttributeRepository $attributeRepository,
         ResourceConnection $connection,
         OptionFactory $optionFactory,
         JobFactory $jobFactory,
+<<<<<<< HEAD
         ProductFactory $productFactory1,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
         StrakerAPI $api
 
+=======
+        ImportHelper $importHelper,
+        configAttributeCollection $configAttributeCollection
+>>>>>>> 4471e94501c8697eceb17a5168ba94a37e88aa6c
     )
     {
         $this->_attributeCollection = $attCollection;
@@ -106,11 +123,18 @@ class Index extends \Magento\Backend\App\Action
         $this->_resourceConnection = $connection;
         $this->_attributeOptionFactory = $optionFactory;
         $this->_jobFactory = $jobFactory;
+<<<<<<< HEAD
         $this->_api = $api;
 
         echo $this->_api->getLanguageName('Chinese_Simplified');
         exit;
         return parent::__construct($context);
+=======
+        $this->_importHelper = $importHelper;
+        $this->_configAttributeCollection = $configAttributeCollection;
+        $this->_productFactory = $productFactory;
+
+>>>>>>> 4471e94501c8697eceb17a5168ba94a37e88aa6c
     }
 
 //    function multiArrayValueSearch($haystack, $needle, &$result, &$aryPath=NULL, $currentKey='') {
@@ -142,38 +166,28 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
 
-        $filePath = str_replace('job-file','translated-file',$this->_xmlHelper->getXmlFilePath());
+        var_dump($this->getUrl('straker/setup_languagepairs/index',['target_store_id'=>1]));
 
-        $parsedArray = $this->_xmlParser->load($filePath.$this->_testFilePath)->xmlToArray();
+        exit;
 
-        $parsedData = $parsedArray['root']['data'];
+        $productData = $this->_productFactory->getById(2045);
 
-        foreach ($parsedData as $key => $data){
+        $config = $this->_configAttributeCollection->addFieldToFilter( 'attribute_id',   array( 'eq' => 90 ) );
 
-            if(array_key_exists('attribute_translation_id',$parsedData[$key]['_attribute']) && $parsedData[$key]['_value']['value'] != $parsedData[$key]['_attribute']['attribute_label'] )
-            {
-                $data = $this->_attributeTranslationFactory->create()->load($parsedData[$key]['_attribute']['attribute_translation_id']);
+        var_dump($config->getData());
 
-                $data->addData(['is_imported'=>1,'translated_value'=>$parsedData[$key]['_value']['value']]);
-
-                $data->save();
-
-            }
-
-            if(array_key_exists('option_translation_id',$parsedData[$key]['_attribute']) && $parsedData[$key]['_value']['value'] != $parsedData[$key]['_attribute']['attribute_label']){
-
-                $data = $this->_attributeOptionTranslationFactory->create()->load($parsedData[$key]['_attribute']['option_translation_id']);
-
-                $data->addData(['is_imported'=>1,'translated_value'=>$parsedData[$key]['_value']['value']]);
-
-                $data->save();
-
-            }
+        exit;
 
 
-        }
+        $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,'color');
 
-        $this->importTranslatedProducts($this->_testRequest['job_id']);
+        $att->setData('label','颜色');
+
+        var_dump($att->getStoreLabels());
+
+        $this->_importHelper->saveConfigLabel($att,2);
+
+        exit;
 
 
     }
@@ -350,9 +364,9 @@ class Index extends \Magento\Backend\App\Action
             {
                 if($existingOptions[$key]['label'] !== $translatedOptions[$key]['translated_value'])
                 {
-                  $this->_translatedOptions[] = ['t_value'=> $translatedOptions[$key]['translated_value'],'o_value'=>$existingOptions[$key]['label']];
+                    $this->_translatedOptions[] = ['t_value'=> $translatedOptions[$key]['translated_value'],'o_value'=>$existingOptions[$key]['label']];
 
-                  $this->_translatedOptionIds[] = $translatedOptions[$key]['option_id'];
+                    $this->_translatedOptionIds[] = $translatedOptions[$key]['option_id'];
                 };
             }
 

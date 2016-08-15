@@ -9,14 +9,14 @@
     ], function( $, alert, confirm ){
 
         var saveButton = $('.save');
-        var translateButton = $('#straker_complete_job_translate_job');
+        var translateButton = $('#demonstration_complete_job_translate_job');
 
         if( saveButton.get(0) !== 'undefined' ){
             saveButton.prop('disabled','disabled');
         }
 
         translateButton.on('click', function ( e ) {
-            var tjNumberInput = $('#straker_complete_job_tj_number');
+            var tjNumberInput = $('#demonstration_complete_job_tj_number');
             var tjNumber = tjNumberInput.val();
             $.ajax({
                 url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/CompleteJob'); ?>',

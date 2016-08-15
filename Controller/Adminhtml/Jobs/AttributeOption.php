@@ -55,7 +55,7 @@ class AttributeOption extends \Magento\Backend\App\Action
             array_push($options, [
                 'attribute_option_translation_id'   => $option->getData('attribute_option_translation_id'),
                 'original_value'                    => $option->getData('original_value'),
-                'translated_value'                  => $option->getData('translated_value')
+                'translated_value'                  => empty($option->getData('translated_value')) ? '':$option->getData('translated_value')
             ] );
         }
 

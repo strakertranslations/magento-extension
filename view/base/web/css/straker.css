@@ -14,7 +14,7 @@
 }
 
 .site-group-name{
-    font-weight: 700;
+    font-weight: 600;
     line-height: 35px;
 }
 
@@ -34,8 +34,8 @@
 }
 
 .action-default.scalable.straker-reset-store-button{
-    font-size: 1rem;
-    padding: 0.3rem 0.6rem 0.3rem;
+    font-size: 1.3rem;
+    padding: 0.3rem 0.6rem;
 }
 
 .language-pair-message{
@@ -80,6 +80,7 @@ a.straker-job-refresh-anchor{
     width: 10%;
 }
 
+/* straker logo */
 @font-face {
     font-family: 'straker';
     src:  url('../fonts/icomoon.eot?p7jbk9');

@@ -53,7 +53,7 @@ class ResetStore extends Action
         if( isset( $storeId ) && is_numeric( $storeId ) ){
             if($this->_configHelper->getStoreSetup( $storeId ) ){
                 //remove all applied translations from database
-                $this->_strakerSetup->clearTranslations( $storeId );
+                //$this->_strakerSetup->clearTranslations( $storeId );
                 $this->_strakerSetup->saveStoreSetup($storeId, '', '', '');
                 $message = __('Language settings has been reset.');
                 $this->_messageManager->addSuccess( $message );
