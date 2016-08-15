@@ -129,7 +129,6 @@ class Setup extends AbstractModel implements SetupInterface
             $this->_configModel->SaveConfig('straker/general/source_language', $source_language, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
             $this->_configModel->SaveConfig('straker/general/destination_language', $destination_language, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
 
-
             $this->_errorManager->_error = false;
 
             return $this->_errorManager;

@@ -2,51 +2,35 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 
 class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 {
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
+
     protected $productCollectionFactory;
-
-    /**
-     * Job factory
-     *
-     * @var JobFactory
-     */
     protected $jobFactory;
+    protected $sourceStoreId;
 
-    /**
-     * @var  \Magento\Framework\Registry
-     */
-    protected $registry;
+    protected $_configHelper;
 
-    protected $_objectManager = null;
 
-    /**
-     *
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Framework\Registry $registry
-     * @param JobFactory $attachmentFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param array $data
-     */
+
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\ObjectManagerInterface $objectManager,
+        Context $context,
+        Data $backendHelper,
         JobFactory $jobFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
+        CollectionFactory $productCollectionFactory,
+        ConfigHelper $configHelper,
         array $data = []
     ) {
         $this->jobFactory = $jobFactory;
         $this->productCollectionFactory = $productCollectionFactory;
-        $this->_objectManager = $objectManager;
-        $this->registry = $registry;
+        $this->_configHelper = $configHelper;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -62,45 +46,47 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
-        if ($this->getRequest()->getParam('job_id')) {
-            $this->setDefaultFilter(array('in_product' => 1));
+        if ($this->getRequest()->getParam('target_store_id')) {
+
+            $store_info = $this->_configHelper->getStoreInfo($this->getRequest()->getParam('target_store_id'));
+
+            $this->sourceStoreId = $store_info['straker/general/source_store'];
         }
     }
 
     /**
      * add Column Filter To Collection
      */
-    protected function _addColumnFilterToCollection($column)
-    {
-        if ($column->getId() == 'in_product') {
-            //$productIds = $this->_getSelectedProducts();
+//    protected function _addColumnFilterToCollection($column)
+//    {
+//        if ($column->getId() == 'in_product') {
+//            //$productIds = $this->_getSelectedProducts();
+//
+//            if (empty($productIds)) {
+//                $productIds = 0;
+//            }
+//            if ($column->getFilter()->getValue()) {
+//                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
+//            } else {
+//                if ($productIds) {
+//                    $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
+//                }
+//            }
+//        } else {
+//            parent::_addColumnFilterToCollection($column);
+//        }
+//
+//        return $this;
+//    }
 
-            if (empty($productIds)) {
-                $productIds = 0;
-            }
-            if ($column->getFilter()->getValue()) {
-                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
-            } else {
-                if ($productIds) {
-                    $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
-                }
-            }
-        } else {
-            parent::_addColumnFilterToCollection($column);
-        }
 
-        return $this;
-    }
-
-    /**
-     * prepare collection
-     */
     protected function _prepareCollection()
     {
         $collection = $this->productCollectionFactory->create();
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('sku');
         $collection->addAttributeToSelect('price');
+        $collection->setStore($this->sourceStoreId);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -110,8 +96,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-        /* @var $model \Straker\EasyTranslationPlatform\Model\Slide */
-        $model = $this->_objectManager->get('\Straker\EasyTranslationPlatform\Model\Job');
 
         $this->addColumn(
             'in_product',
@@ -120,8 +104,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'checkbox',
                 'name' => 'in_product',
                 'align' => 'center',
-                'index' => 'entity_id',
-                'values' => $this->_getSelectedProducts(),
+                'index' => 'entity_id'
             ]
         );
 
@@ -172,47 +155,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     public function getGridUrl()
     {
         return $this->getUrl('*/*/productsgrid', ['_current' => true]);
-    }
-
-    /**
-     * @param  object $row
-     * @return string
-     */
-    public function getRowUrl($row)
-    {
-        return '';
-    }
-
-    protected function _getSelectedProducts()
-    {
-        $job = $this->getJob();
-        return $job->getProducts($job);
-    }
-
-    /**
-     * Retrieve selected products
-     *
-     * @return array
-     */
-    public function getSelectedProducts()
-    {
-        $job = $this->getJob();
-        $selected = $job->getProducts($job);
-
-        if (!is_array($selected)) {
-            $selected = [];
-        }
-        return $selected;
-    }
-
-    protected function getJob()
-    {
-        $jobId = $this->getRequest()->getParam('job_id');
-        $job   = $this->jobFactory->create();
-        if ($jobId) {
-            $job->load($jobId);
-        }
-        return $job;
     }
 
     /**

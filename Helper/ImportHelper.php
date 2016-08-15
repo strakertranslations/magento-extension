@@ -14,7 +14,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 use Straker\EasyTranslationPlatform\Model\AttributeTranslation;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -32,7 +31,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_logger;
     protected $_xmlParser;
     protected $_xmlHelper;
-
     protected $_attributeTranslationFactory;
     protected $_attributeOptionTranslationFactory;
     protected $_attributeTranslationCollection;
@@ -43,11 +41,18 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_resourceConnection;
     protected $_attributeCollection;
     protected $_optionCollection;
+    protected $_storeManager;
 
     protected $_jobModel;
     protected $_parsedFileData = [];
-    protected $_translatedOptions;
-    protected $_translatedOptionIds;
+    protected $_translatedLabels = [];
+    protected $_attributeTranslationIds;
+    protected $_saveOptionIds = [];
+
+
+    protected $_selectQuery = 'select option_id from %1$s where option_id = %2$s and store_id = %3$s';
+    protected $_updateQuery = 'update %1$s set value = "%2$s" where option_id = %3$s and store_id = %4$s';
+    protected $_labelTable  = 'catalog_product_super_attribute_label';
 
     public function __construct(
 
@@ -108,18 +113,21 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function saveTranslatedProductData()
     {
-        foreach ($this->_parsedFileData as $key => $data){
+        $this->getOptionIds($this->_jobModel->getId());
 
-            if(array_key_exists('attribute_translation_id',$this->_parsedFileData[$key]['_attribute']) && $this->_parsedFileData[$key]['_value']['value'] != $this->_parsedFileData[$key]['_attribute']['attribute_label'] )
-            {
+        foreach ($this->_parsedFileData as $data){
+
+            if(array_key_exists('attribute_translation_id',$data['_attribute'])){
 
                 try
                 {
-                    $data = $this->_attributeTranslationFactory->create()->load($this->_parsedFileData[$key]['_attribute']['attribute_translation_id']);
+                    $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
 
-                    $data->addData(['is_imported'=>1,'translated_value'=>$this->_parsedFileData[$key]['_value']['value']]);
+                    $att_trans_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
 
-                    $data->save();
+                    $att_trans_model->save();
+
+                    strpos($data['_attribute']['content_context'],'label') ? $this->saveLabel($data['_attribute']['attribute_id'],$data['_value']['value']) : false;
 
                 }catch (\Exception $e)
                 {
@@ -128,21 +136,33 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             }
 
-            if(array_key_exists('option_translation_id',$this->_parsedFileData[$key]['_attribute']) && $this->_parsedFileData[$key]['_value']['value'] != $this->_parsedFileData[$key]['_attribute']['attribute_label']){
+            if(array_key_exists('option_translation_id',$data['_attribute'])){
 
                 try
                 {
-                    $data = $this->_attributeOptionTranslationFactory->create()->load($this->_parsedFileData[$key]['_attribute']['option_translation_id']);
+                    $att_opt_model = $this->_attributeOptionTranslationFactory->create()->load($data['_attribute']['option_translation_id']);
 
-                    $data->addData(['is_imported'=>1,'translated_value'=>$this->_parsedFileData[$key]['_value']['value']]);
+                    $att_opt_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
 
-                    $data->save();
+                    $att_opt_model->save();
+
+                    if(!in_array($att_opt_model->getData('option_id'),$this->_saveOptionIds))
+                    {
+                        $translatedOptions = $this->_attributeOptionTranslationCollection->create()
+                            ->addFieldToSelect(['option_id','translated_value'])
+                            ->addFieldToFilter('attribute_translation_id', array('in'=>$this->_attributeTranslationIds))
+                            ->addFieldToFilter('option_id', array('eq'=>$att_opt_model->getData('option_id')));
+
+                        $translatedOptions->massUpdate(array('translated_value' => $att_opt_model->getData('translated_value')));
+
+                        $this->_saveOptionIds[] = $att_opt_model->getData('option_id');
+
+                    }
 
                 }catch (\Exception $e)
                 {
                     $this->_logger->error('error'.__FILE__.' '.__LINE__.' '.$e->getMessage(),array($e));
                 }
-
 
             }
 
@@ -151,11 +171,14 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
+
     public function publishTranslatedProductData()
     {
         $product_ids = $this->getProductIds($this->_jobModel->getId());
 
         $this->importTranslatedOptionValues($this->_jobModel->getId());
+
+        $this->importTranslatedAttributeLabels($this->_jobModel->getId());
 
         foreach ($product_ids as $id)
         {
@@ -164,25 +187,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
                 ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
                 ->addFieldToFilter( 'entity_id',   array( 'eq' => $id ) )
                 ->addFieldToFilter( 'is_label',   array( 'eq' => 0 ) );
-
-            $labels = $this->_attributeTranslationCollection->create()
-                ->addFieldToSelect(['attribute_id','original_value','translated_value'])
-                ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
-                ->addFieldToFilter( 'entity_id',   array( 'eq' => $id ) )
-                ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
-                ->addFieldToFilter( 'translated_value',   array( 'notnull' => true ) );
-
-
-            foreach ($labels->toArray()['items'] as $data){
-                /** \Magento\Eav\ var $att */
-                $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$data['attribute_id']);
-
-                $new_labels = $att->getStoreLabels();
-
-                $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
-
-                $att->setStoreLabels($new_labels)->save();
-            }
 
             $attData = [];
 
@@ -198,25 +202,85 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
+    public function saveLabel($label_id,$value)
+    {
+
+        $labels = $this->_attributeTranslationCollection->create()
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )
+            ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
+            ->addFieldtoFilter( 'attribute_id', array('eq'=>$label_id))
+            ->addFieldToFilter( 'translated_value',   array( 'null' => true ) );
+
+        try
+        {
+            $labels->massUpdate(array('translated_value' => $value));
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error'.__FILE__.' '.__LINE__.' '.$e->getMessage(),array($e));
+        }
+
+
+    }
+
+    protected function importTranslatedAttributeLabels($job_id)
+    {
+
+        $labels = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect(['attribute_id','original_value','translated_value'])
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id))
+            ->addFieldToFilter( 'is_label',   array( 'eq' => 1 ) )
+            ->addFieldToFilter( 'translated_value',   array( 'notnull' => true ) );
+
+        $labels->getSelect()->group('attribute_id');
+
+        foreach ($labels->toArray()['items'] as $data){
+
+            $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$data['attribute_id']);
+
+            $new_labels = $att->getStoreLabels();
+
+            $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
+
+            $att->setStoreLabels($new_labels)->save();
+        }
+    }
+
     protected function importTranslatedOptionValues($job_id)
     {
 
-        $translatedOptionData = $this->getOptionValues($job_id);
+        $this->getOptionIds($job_id);
+
+        $translatedOptions = $this->_attributeOptionTranslationCollection->create()
+            ->addFieldToSelect(['option_id','original_value','translated_value'])
+            ->addFieldToFilter('attribute_translation_id', array('in'=>$this->_attributeTranslationIds));
+
+        $translatedOptions->getSelect()->group('option_id');
+
+        $translatedOptionData = $translatedOptions->toArray()['items'];
+
+        $connection = $this->_resourceConnection->getConnection();
+
+        $table = $this->_resourceConnection->getTableName('eav_attribute_option_value');
 
         if(!empty($translatedOptionData))
         {
-            $insertData = [];
 
-            foreach ($translatedOptionData as $data){
+            foreach ($translatedOptionData as $data)
+            {
+                $select_query = sprintf($this->_selectQuery,$table,$data['option_id'],$this->_jobModel->getTargetStoreId());
 
-                $insertData[] = ['option_id' => $data['option_id'], 'store_id' => $this->_jobModel->getTargetStoreId(), 'value' =>$data['translated_value']];
+                if($connection->fetchOne($select_query))
+                {
+                    $update_query = sprintf($this->_updateQuery,$table,$data['translated_value'],$data['option_id'],$this->_jobModel->getTargetStoreId());
+
+                    $connection->query($update_query);
+
+                }else{
+
+                    $connection->insertArray($table,['option_id','store_id','eav_attribute_option_value.value'],[[$data['option_id'],$this->_jobModel->getTargetStoreId(),$data['translated_value']]]);
+                };
             }
-
-            $connection = $this->_resourceConnection->getConnection();
-
-            $table = $this->_resourceConnection->getTableName('eav_attribute_option_value');
-
-            $connection->insertMultiple($table, $insertData);
 
         }
 
@@ -240,31 +304,25 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
-     * This function compares two arrays. An array of existing option attribute values for the target store
-     * and the translated option attribute values. This is to avoid duplicate attribute values
-     * for a target language store in Magento.
-     *
      * @param $job_id
-     * @return array - ids of translated options to be inserted in to the options table.
-     *
+     * @return $this
      */
-    protected function getOptionValues($job_id)
+    protected function getOptionIds($job_id)
     {
+
         //Straker Translation Translation Ids
         $translatedOptionKeys = [];
-
-        //Magento Option Id's
-        $translatedOptionIds = [];
 
         //Find Attributes with translated Options
         $translatedAttributes = $this->_attributeTranslationCollection->create()
             ->addFieldToSelect(['attribute_id','original_value','translated_value'])
             ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id ) )
             ->addFieldToFilter( 'has_option',   array( 'eq' => 1 ))
-            ->toArray();
+            ->toArray()['items'];
+
 
         //Walk over array Array to get a single array of Straker's attribute_translation id (primary key)
-        array_walk_recursive($translatedAttributes['items'], function($value,$key) use (&$translatedOptionKeys) {
+        array_walk_recursive($translatedAttributes, function($value,$key) use (&$translatedOptionKeys) {
 
             if($key == 'attribute_translation_id'){
 
@@ -273,71 +331,28 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
             }
         });
 
-        //Find the Foreign Key (attribute_translation_id) in the Straker attribute option translation table
-        $translatedOptions = $this->_attributeOptionTranslationCollection->create()
-            ->addFieldToSelect(['option_id','original_value','translated_value'])
-            ->addFieldToFilter('attribute_translation_id', array('in'=>$translatedOptionKeys))
-            ->toArray();
+        $this->_attributeTranslationIds = $translatedOptionKeys;
 
+        return $this;
 
-        //Sort Array by Option Id Asc
-        usort($translatedOptions['items'], function($a, $b) {
+    }
 
-            return $a['option_id'] - $b['option_id'];
+    public function saveConfigLabel($attribute,$store_id)
+    {
+        $connection = $this->_resourceConnection->getConnection();
 
-        });
+        $connection->insertOnDuplicate(
+            $this->_labelTable,
+            [
+                'product_super_attribute_id' => (int)$attribute->getId(),
+                'use_default' => (int)0,
+                'store_id' => $store_id,
+                'value' => $attribute->getLabel(),
+            ],
+            ['value', 'use_default']
+        );
 
-        //Walk over array Array to get a single array of Straker's attribute_translation ids (primary key)
-        array_walk_recursive($translatedOptions['items'], function($value,$key) use (&$translatedOptionIds) {
-
-            if($key == 'option_id'){
-
-                $translatedOptionIds[] = $value;
-
-            }
-
-        });
-
-        //Filter out options which have already been translated for a store - checking Magento's options table (eav_attribute_option).
-        $existingOptions = $this->_optionCollection->create()
-            ->SetStoreFilter($this->_jobModel->getTargetStoreId())
-            ->SetIdFilter($translatedOptionIds)
-            ->toOptionArray();
-
-        //Sort Array by Option Id (option value) Asc
-        usort($existingOptions, function($a, $b) {
-
-            return $a['value'] - $b['value'];
-
-        });
-
-
-        //Check Length of both Arrays
-        if(count($existingOptions) == count($translatedOptions['items']))
-        {
-            $translatedOptions = array_slice($translatedOptions['items'],0);
-
-            foreach ($existingOptions as $key => $value)
-            {
-                if($existingOptions[$key]['label'] !== $translatedOptions[$key]['translated_value'])
-                {
-                    $this->_translatedOptions[] = ['t_value'=> $translatedOptions[$key]['translated_value'],'o_value'=>$existingOptions[$key]['label']];
-
-                    $this->_translatedOptionIds[] = $translatedOptions[$key]['option_id'];
-                };
-            }
-
-            $translatedOptionValues = $this->_attributeOptionTranslationCollection->create()
-                ->addFieldToSelect(['option_id','original_value','translated_value'])
-                ->addFieldToFilter('option_id', array('in'=>$this->_translatedOptionIds))->toArray()['items'];
-
-            return $translatedOptionValues;
-
-        }else{
-
-            return $translatedOptionValues = [];
-        }
-
+        return $this;
     }
 
 }

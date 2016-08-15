@@ -49,7 +49,6 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
             '', []
         );
 
-
         $renderer = $this->getLayout()->createBlock(
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\Field'
         );

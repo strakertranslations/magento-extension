@@ -56,7 +56,7 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
     public function findMultiOptionAttributes($attribute_id, $product, $store_id)
     {
 
-        $attribute = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id);
+        $attribute = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id)->setStoreFilter($store_id);
 
         $options = $product->getResource()->getAttributeRawValue($product->getId(), $attribute, $store_id);
 

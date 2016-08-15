@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Attribute\CollectionFactory as A
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollection;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
+use Magento\Store\Model\StoreManagerInterface;
 
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
@@ -24,17 +25,13 @@ class ProductHelper extends AbstractHelper
 {
 
     protected $_productFactory;
-
     protected $_collectionFactory;
-
     protected $_attributeTranslationModel;
-
     protected $_attributeOptionTranslationModel;
+    protected $_storeManager;
 
     protected $_entityTypeId;
-
     protected $_productData;
-
     protected $_storeId;
 
     protected $_translatedAttributeOptions = [];
@@ -83,7 +80,8 @@ class ProductHelper extends AbstractHelper
         ConfigHelper $configHelper,
         AttributeHelper $attributeHelper,
         XmlHelper $xmlHelper,
-        Logger $logger
+        Logger $logger,
+        StoreManagerInterface $storeManager
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_productCollectionFactory = $productCollectionFactory;
@@ -95,6 +93,7 @@ class ProductHelper extends AbstractHelper
         $this->_xmlHelper = $xmlHelper;
         $this->_logger = $logger;
         $this->_entityTypeId =  $eavConfig->getEntityType(ProductAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
+        $this->_storeManager = $storeManager;
 
         parent::__construct($context);
     }
@@ -138,17 +137,22 @@ class ProductHelper extends AbstractHelper
      */
     public function getProducts(
         $product_ids,
-        $store_id
+        $target_store_id
     )
     {
-        $product_ids = explode('&',$product_ids);
+        if(strpos($product_ids,'&'))
+        {
+            $product_ids = explode('&',$product_ids);
+        }
+
+        $this->_storeManager->setCurrentStore($target_store_id);
 
         $products = $this->_productCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addIdFilter($product_ids)
             ->load();
 
-        $this->_storeId = $store_id;
+        $this->_storeId = $target_store_id;
 
         $this->_productData = $products;
 
@@ -184,7 +188,7 @@ class ProductHelper extends AbstractHelper
 
                 }else{
 
-                    if($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$this->_storeId)){
+                    if($product->getResource()->getAttributeRawValue($product->getId(),$attribute_id,$this->_storeId)){
 
                         array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$product->getResource()->getAttribute($attribute_id)->getStoreLabel($this->_storeId),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$this->_storeId)]);
                     }

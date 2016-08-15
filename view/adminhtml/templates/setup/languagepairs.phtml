@@ -1,5 +1,3 @@
-<?php $data = $block->_formData()? $block->_formData():false ?>
-
 <h1>Setup Language Pairs</h1>
 <p>Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each Store View.</p>
 
@@ -10,31 +8,36 @@
             foreach ($website->getGroups() as $group) { ?>
                 <tr>
                     <td colspan="2" class="site-group-name">
-                        <span> <?php echo $website->getName() . ' - ' . $group->getName(); ?> </span>
+                        <h2> <?php echo $website->getName() . ' - ' . $group->getName(); ?> </h2>
                     </td>
                 </tr>
                 <tr>
-                    <td><h4>Store View</h4></td>
-                    <td><h4>Select Target Language </h4></td>
-                    <td><h4>Select Source Language</h4></td>
-                    <td><h4>Select Source Store View</h4></td>
+                    <td><h3>Store View</h3></td>
+                    <td><h3>Select Translation Language </h3></td>
+                    <td><h3>Select Source Language</h3></td>
+                    <td><h3>Select Source Store View</h3></td>
                 </tr>
                 <?php $stores = $group->getStores();
                 if( count( $stores ) > 0 ) {
                     foreach ($stores as $store) { ?>
-                        <tr>
-                            <td><?php echo $store->getName() ?></td>
+                        <?php $block->getStoreInfo($store->getId()) ?>
+                        <?php if($block->getMessage($store->getId())):?>
+                        <tr><td class="language-pair-message"><h4>Please Select Language Pairs for <?php echo $store->getName()?> store view:</h4></td></tr>
+                        <?php endif ?>
+                        <tr class="store-row">
+                            <td><h4><?php echo $store->getName() ?></h4></td>
                             <td>
                                 <div class="admin__field field">
                                     <div class="admin__field-control control">
                                         <select name="straker_target_language_store_id_<?php echo $store->getId()?>" id="source-language" class="select admin__control-select">
                                             <option value=""><?php echo __('Select target language') ?></option>
                                             <?php foreach ($block->_getOptions() as $languages): ?>
-                                                <?php if($languages->code == $data['destination_language']):?>
-                                                    <option value="<?php echo $languages->code ?>" selected="selected"><?php echo $languages->name ?></option>
-                                                <?php else: ?>
-                                                    <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
-                                                <?php endif;?>
+                                                <option value="<?php echo $languages->code ?>"
+                                                        <?php if ($block->getTranslationLanguage() && $block->getTranslationLanguage() == $languages->code): ?>
+                                                        <?php echo "selected"?>
+                                                        <?php endif ?>>
+                                                    <?php echo $languages->name ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -46,11 +49,12 @@
                                         <select name="straker_source_language_store_id_<?php echo $store->getId()?>" id="target-language" class="select admin__control-select">
                                             <option value=""><?php echo __('Select source language') ?></option>
                                             <?php foreach ($block->_getOptions() as $languages): ?>
-                                                <?php if($languages->code == $data['destination_language']):?>
-                                                    <option value="<?php echo $languages->code ?>" selected="selected"><?php echo $languages->name ?></option>
-                                                <?php else: ?>
-                                                    <option value="<?php echo $languages->code ?>"><?php echo $languages->name ?></option>
-                                                <?php endif;?>
+                                                <option value="<?php echo $languages->code ?>"
+                                                    <?php if ($block->getSourceLanguage() && $block->getSourceLanguage() == $languages->code): ?>
+                                                        <?php echo "selected"?>
+                                                    <?php endif ?>>
+                                                    <?php echo $languages->name ?>
+                                                </option>
                                             <?php endforeach; ?>
                                         </select>
                                     </div>
@@ -60,7 +64,7 @@
                                 <div class="admin__field field">
                                     <div class="admin__field-control control">
                                         <select name="magento_source_store_id_<?php echo $store->getId()?>" class="select admin__control-select">
-                                            <option value="<?php $data['source_store']? $data['source_store'] : '' ?>"><?php echo __('Select source store view') ?></option>
+                                            <option value=""><?php echo __('Select source store view') ?></option>
                                             <?php foreach ($block->getWebsites() as $website): ?>
                                                 <?php $showWebsite = false; ?>
                                                 <?php foreach ($website->getGroups() as $group): ?>
@@ -74,11 +78,12 @@
                                                             <?php $showGroup = true; ?>
                                                             <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
                                                         <?php endif; ?>
-                                                        <?php if($store->getId() == $data['source_store']):?>
-                                                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>" selected="selected"><?php echo $this->escapeHtml($store->getName()) ?></option>
-                                                        <?php else: ?>
-                                                            <option value="<?php echo $this->escapeHtml($store->getId()) ?>"><?php echo $this->escapeHtml($store->getName()) ?></option>
-                                                        <?php endif ?>
+                                                        <option value="<?php echo $this->escapeHtml($store->getId()) ?>"
+                                                            <?php if ($block->getSourceStore() && $block->getSourceStore() == $store->getId()): ?>
+                                                                <?php echo "selected"?>
+                                                            <?php endif ?>>
+                                                            <?php echo $this->escapeHtml($store->getName()) ?>
+                                                        </option>
                                                     <?php endforeach; ?>
                                                     <?php if ($showGroup): ?>
                                                         </optgroup>
@@ -89,7 +94,6 @@
                                     </div>
                                 </div>
                             </td>
-                            <input type="hidden" name="magento_store_view_language_store_id_<?php echo $store->getId()?>" value="<?php echo $block->getSourcelanguage($store->getId())?>">
                         </tr>
                     <?php }
                 }else{ ?>
