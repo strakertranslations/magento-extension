@@ -50,13 +50,13 @@ class CheckLanguagePairs extends Action
     public function execute()
     {
 
-        $target_store_id = $this->getRequest()->getPostValue('target_store_id');
+        $target_store_id = $this->getRequest()->getPost('target_store_id');
 
         $store_data = $this->_configHelper->getStoreInfo($target_store_id);
 
         $result['store_data'] = $store_data;
 
-        if(!isset($store_data) || !isset($store_data['straker/general/source_store']))
+        if(empty($store_data['straker/general/source_store']))
         {
             $result['success'] = false;
 
