@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+    <default>
+        <straker>
+            <api_url>
+                <register>https://dev-app.strakertranslations.com/v1/ta4ma/register</register>
+                <languages>https://dev-app.strakertranslations.com/v1/ta4ma/languages</languages>
+                <translate>https://dev-app.strakertranslations.com/v1/ta4ma/translate</translate>
+                <quote>https://dev-app.strakertranslations.com/v1/ta4ma/quote</quote>
+                <payment>https://dev-app.strakertranslations.com/v1/ta4ma/payment</payment>
+                <countries>https://dev-app.strakertranslations.com/v1/ta4ma/countries</countries>
+                <payment>https://dev-app.strakertranslations.com/v1/ta4ma/payment</payment>
+                <payment_page>https://myaccount.strakertranslations.com/o/?action=api.quote</payment_page>
+                <support>https://dev-app.strakertranslations.com/v1/ta4ma/support</support>
+            </api_url>
+        </straker>
+    </default>
+</config>

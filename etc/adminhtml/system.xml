@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../Magento/Backend/etc/system_file.xsd">
+    <system>
+        <tab id="easytranslationplatform" translate="label" sortOrder="700">
+            <label>Straker Translations</label>
+        </tab>
+        <section id="easytranslationplatform" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Configuration</label>
+            <tab>easytranslationplatform</tab>
+            <resource>Straker_EasyTranslationPlatform::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="dropdown_example" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dropdown with custom source model example</label>
+                    <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\Custom</source_model>
+                </field>
+                <field id="text_example" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Text example</label>
+                </field>
+                <field id="logo" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Image example (with a comment)</label>
+                    <backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>
+                    <upload_dir config="system/filesystem/media" scope_info="1">logo</upload_dir>
+                    <base_url type="media" scope_info="1">logo</base_url>
+                    <comment><![CDATA[Allowed file types: jpeg, gif, png.]]></comment>
+                </field>
+                <field id="depends_example" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dependant text field example with validation</label>
+                    <depends>
+                        <field id="*/*/dropdown_example">1</field>
+                    </depends>
+                    <validate>validate-no-empty</validate>
+                </field>
+                <field id="textarea_example" translate="label" type="textarea" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Textarea example</label>
+                </field>
+            </group>
+            <group id="txt" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>txtsample</label>
+                <field id="textsample" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>text sample</label>
+                </field>
+            </group>
+            <group id="yn" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>ynsample</label>
+                <field id="ynsample" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Yes no sample</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
