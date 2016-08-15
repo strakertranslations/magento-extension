@@ -1,0 +1,136 @@
+/* setting page */
+.straker-value{
+    padding-top: 7px;
+}
+
+#back-to-grid{
+    font-size: 1.2em;
+    font-weight: 900;
+    color:#eb5202;
+}
+
+#straker-quote-frame iframe{
+    margin-top: 10px;
+}
+
+.site-group-name{
+    font-weight: 700;
+    line-height: 35px;
+}
+
+.store-view-list{
+    line-height: 20px;
+}
+
+.store-view-name{
+    width: 45%;
+    padding: 0.5rem 0 ! important;
+    vertical-align: middle;
+    /*text-align: right;*/
+}
+
+.clear-language{
+    padding: 0.5rem 0 ! important;
+}
+
+.action-default.scalable.straker-reset-store-button{
+    font-size: 1rem;
+    padding: 0.3rem 0.6rem 0.3rem;
+}
+
+.language-pair-message{
+    padding-top: 2rem;
+}
+
+.language-pair-message h4{
+
+    background-color: #eb5202;
+    padding: 0.5rem;
+    color: #ffffff;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.25);
+}
+
+#language_pairs_table{
+    margin-top: 2rem;
+}
+
+.store-row td{
+    padding-top: 1rem;
+    padding-right: 2rem;
+}
+
+#straker-job-grid a{
+    cursor: pointer;
+}
+
+a.straker-job-refresh-anchor{
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    color: #0a0a0a;
+    cursor: pointer;
+}
+
+.col-text{
+    width: 40%;
+    text-align: left;
+}
+
+.col-id{
+    width: 10%;
+}
+
+@font-face {
+    font-family: 'straker';
+    src:  url('../fonts/icomoon.eot?p7jbk9');
+    src:  url('../fonts/icomoon.eot?p7jbk9#iefix') format('embedded-opentype'),
+    url('../fonts/icomoon.ttf?p7jbk9') format('truetype'),
+    url('../fonts/icomoon.woff?p7jbk9') format('woff'),
+    url('../fonts/icomoon.svg?p7jbk9#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.admin__menu .item-custommenu.parent.level-0 > a:before {
+    font-family: 'straker' ! Important;
+    content: "\e900";
+}
+
+.attr-option-td{
+    padding: 5px ! important;
+}
+.attr-option-table tr:not(.data-grid-editable-row):last-child td,
+.attr-option-table td
+{
+    border-bottom: 0px none transparent ! important;
+}
+
+.attr-option-table td:first-child{
+    border-left: 0px none transparent ! important;
+    border-right: 0.1rem dashed #d6d6d6 ! important;
+}
+
+.attr-option-table td:last-child{
+    border-right: 0px none transparent ! important;
+    border-left: 0.1rem dashed #d6d6d6 ! important;
+}
+
+#straker_job_attribute_grid{
+    position: relative;
+}
+
+#straker_job_attribute_grid tr{
+    cursor: pointer;
+}
+
+#straker_job_attribute_grid tr:nth-child(even) td {
+    background-color: transparent;
+}
+
+#straker_job_attribute_grid tr.even td {
+    background-color: #f5f5f5;
+}
+
+#straker_job_attribute_grid_table>tbody>tr:not(.job-option) {
+    border-bottom: 0.1rem solid #d6d6d6;
+}

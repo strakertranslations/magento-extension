@@ -1,0 +1,33 @@
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/confirm'
+    ], function( $, confirm ){
+
+        var $resetButton = $('#straker_general_reset_account_button');
+
+        $resetButton.on('click', function(){
+
+            confirm({
+                title: '<?php echo __("Please Confirm") ?>',
+                content: '<?php echo __('Do you want to reset all settings?') ?>',
+                actions: {
+                    confirm: function(){
+                        $.ajax({
+                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                            method   : 'get',
+                            dataType : 'json',
+                            complete : function(){
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<?php
+    echo $block->getButtonHtml();
+    echo '<p class="note"><span>'.__('Be careful, it will remove all of the data saved by Straker Translations, including registration, settings, translated texts and jobs').'</span></p>';

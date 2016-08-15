@@ -11,4 +11,8 @@ interface StrakerAPIInterface
 
     public function callRegister($data);
 
+    public function callTranslate($request);
+
+    public function getLanguageName( $code );
+
 }

@@ -2,8 +2,8 @@
 
 namespace Straker\EasyTranslationPlatform\Plugin\Registration;
 
+use Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs\NewAction;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Straker\EasyTranslationPlatform\Controller\Adminhtml\NewJob\Index;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Backend\Model\View\Factory;
@@ -21,7 +21,7 @@ class Plugin
     }
 
     public function aroundDispatch(
-        Index $subject,
+        NewAction $subject,
         Closure $proceed,
         RequestInterface $request
     )
@@ -29,7 +29,7 @@ class Plugin
 
         if(!$this->_configHelper->getAccessToken()) {
 
-            $url = $this->_url->getUrl("EasyTranslationPlatform/Setup_registration/Index/");
+            $url = $this->_url->getUrl("*/Setup_registration/index/");
 
             $resultRedirect = $subject->resultRedirectFactory->create();
 

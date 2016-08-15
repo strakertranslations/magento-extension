@@ -8,6 +8,10 @@ interface SetupInterface
 
     public function saveAccessToken($accessToken);
 
-    public function saveStoreSetup($source_id, $source_language, $destination_id, $destination_language);
+    public function saveStoreSetup($storeId, $source_store, $source_language, $destination_language);
+
+    public function saveClientData($data);
+
+    public function saveProductAttributes($attributes);
 
 }

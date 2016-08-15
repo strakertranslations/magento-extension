@@ -4,6 +4,7 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\LanguagePai
 
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Model\Error;
+use Straker\EasyTranslationPlatform\Logger\Logger;
 
 use Magento\Framework\App\Action\Context;
 
@@ -13,7 +14,8 @@ class Save extends \Magento\Backend\App\Action
     public function __construct(
         Context $context,
         SetupInterface $setupInterface,
-        Error $error
+        Error $error,
+        Logger $logger
     )
     {
 
@@ -21,6 +23,7 @@ class Save extends \Magento\Backend\App\Action
 
         $this->_setup = $setupInterface;
         $this->_errorManager = $error;
+        $this->_logger = $logger;
     }
 
 
@@ -33,21 +36,27 @@ class Save extends \Magento\Backend\App\Action
 
         if ($data) {
 
+            $data = $this->sortData($data);
+
             try {
 
-                $this->_setup->saveStoreSetup($data['source_store'],$data['source_language'],$data['destination_store'],$data['destination_language']);
+                foreach ($data as $key => $value){
+
+                    $this->_setup->saveStoreSetup(substr($key,-1),$data[substr($key,-1)]['magento_source_store_id_'.substr($key,-1)], $data[substr($key,-1)]['straker_source_language_store_id_'.substr($key,-1)],$data[substr($key,-1)]['straker_target_language_store_id_'.substr($key,-1)]);
+
+                }
 
                 if($this->_errorManager->_error){
 
                     $this->_getSession()->setFormData($data);
 
-                    $resultRedirect->setPath('/*/index/');
+                    $resultRedirect->setPath('*/*/index/');
 
                     $this->messageManager->addError($this->_errorManager->getErrorMessage());
 
                 }else{
 
-                    $resultRedirect->setPath('/NewJob/index/');
+                    $resultRedirect->setPath('/Setup_productattributes/index/');
 
                 }
 
@@ -73,10 +82,27 @@ class Save extends \Magento\Backend\App\Action
                 $this->messageManager->addException($e, __('Something went wrong while saving the language configuration.'));
             }
 
-            $resultRedirect->setPath('/*/index/');
+            $resultRedirect->setPath('*/*/index/');
 
         }
 
         return $resultRedirect;
+    }
+
+    private function sortData($data){
+
+        $language_pair_data = [];
+
+        foreach ($data as $key => $value){
+
+            if(ctype_digit(substr($key,-1))){
+
+                $language_pair_data[substr($key,-1)][$key] = $value;
+
+            };
+
+        }
+
+        return $language_pair_data;
     }
 }

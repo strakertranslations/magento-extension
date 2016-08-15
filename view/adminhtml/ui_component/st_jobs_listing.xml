@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+    <argument name="context" xsi:type="configurableObject">
+        <argument name="class" xsi:type="string">Magento\Framework\View\Element\UiComponent\Context</argument>
+        <argument name="namespace" xsi:type="string">st_jobs_listing</argument>
+        <!-- this should be same as the file name or uicomponentname -->
+    </argument>
+
+    <argument name="data" xsi:type="array">
+        <item name="js_config" xsi:type="array">
+            <item name="provider" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>
+            <!-- the format here is uicomponentname.datasourcename -->
+            <!--<item name="deps" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>-->
+            <!-- the format here is uicomponentname.datasourcename -->
+        </item>
+        <item name="spinner" xsi:type="string">jobs_grid_columns</item>
+        <!-- the format here is columns name defined below -->
+
+        <item name="buttons" xsi:type="array">
+            <!-- here we can add buttons -->
+            <!--<item name="refresh" xsi:type="array">-->
+                <!--<item name="name" xsi:type="string">refresh</item>-->
+                <!--<item name="label" xsi:type="string" translate="true">Refresh All Jobs</item>-->
+                <!--<item name="class" xsi:type="string">primary</item>-->
+                <!--<item name="url" xsi:type="string">*/*/RefreshJob</item>-->
+            <!--</item>-->
+            <!-- here we can add buttons -->
+            <item name="add" xsi:type="array">
+                <item name="name" xsi:type="string">add</item>
+                <item name="label" xsi:type="string" translate="true">Add New Job</item>
+                <item name="class" xsi:type="string">primary</item>
+                <item name="url" xsi:type="string">*/*/new</item>
+            </item>
+
+        </item>
+
+    </argument>
+
+    <dataSource name="jobs_grid_data_source">
+        <argument name="dataProvider" xsi:type="configurableObject">
+            <argument name="class" xsi:type="string">JobGridDataProvider</argument>
+            <argument name="name" xsi:type="string">jobs_grid_data_source</argument>
+            <argument name="primaryFieldName" xsi:type="string">job_id</argument>
+            <argument name="requestFieldName" xsi:type="string">job_id</argument>
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="update_url" xsi:type="url" path="mui/index/render"/>
+                </item>
+            </argument>
+        </argument>
+        <argument name="data" xsi:type="array">
+            <item name="js_config" xsi:type="array">
+                <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
+            </item>
+        </argument>
+    </dataSource>
+
+    <container name="listing_top">
+
+        <argument name="data" xsi:type="array">
+            <item name="config" xsi:type="array">
+                <item name="template" xsi:type="string">ui/grid/toolbar</item>
+                <item name="stickyTmpl" xsi:type="string">ui/grid/sticky/toolbar</item>
+            </item>
+        </argument>
+
+        <bookmark name="bookmarks">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="namespace" xsi:type="string">st_jobs_listing</item>
+                    </item>
+                </item>
+            </argument>
+        </bookmark>
+
+        <component name="columns_controls">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="columnsData" xsi:type="array">
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
+                    </item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
+                    <item name="displayArea" xsi:type="string">dataGridActions</item>
+                </item>
+            </argument>
+        </component>
+
+        <!--<filterSearch name="fulltext">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="provider" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>-->
+                    <!--<item name="chipsProvider" xsi:type="string">-->
+                        <!--st_jobs_listing.st_jobs_listing.listing_top.listing_filters_chips-->
+                    <!--</item>-->
+                    <!--<item name="storageConfig" xsi:type="array">-->
+                        <!--<item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks-->
+                        <!--</item>-->
+                        <!--<item name="namespace" xsi:type="string">current.search</item>-->
+                    <!--</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</filterSearch>-->
+
+        <!--<filters name="listing_filters">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="columnsProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns-->
+                    <!--</item>-->
+                    <!--<item name="storageConfig" xsi:type="array">-->
+                        <!--<item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks-->
+                        <!--</item>-->
+                        <!--<item name="namespace" xsi:type="string">current.filters</item>-->
+                    <!--</item>-->
+                    <!--<item name="childDefaults" xsi:type="array">-->
+                        <!--<item name="provider" xsi:type="string">-->
+                            <!--st_jobs_listing.st_jobs_listing.listing_top.listing_filters-->
+                        <!--</item>-->
+                        <!--<item name="imports" xsi:type="array">-->
+                            <!--<item name="visible" xsi:type="string">-->
+                                <!--st_jobs_listing.st_jobs_listing.jobs_grid_columns.${ $.index }:visible-->
+                            <!--</item>-->
+                        <!--</item>-->
+                    <!--</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+            <!--<filterSelect name="uiSelect">-->
+                <!--<argument name="optionsProvider" xsi:type="configurableObject">-->
+                    <!--<argument name="class" xsi:type="string">Magento\Cms\Model\Page\Source\PageLayout</argument>-->
+                <!--</argument>-->
+                <!--<argument name="data" xsi:type="array">-->
+                    <!--<item name="config" xsi:type="array">-->
+                        <!--<item name="component" xsi:type="string">Magento_Ui/js/form/element/ui-select</item>-->
+                        <!--<item name="template" xsi:type="string">ui/grid/filters/elements/ui-select</item>-->
+                        <!--<item name="dataScope" xsi:type="string">uiSelect</item>-->
+                        <!--<item name="label" xsi:type="string" translate="true">uiSelect</item>-->
+                        <!--<item name="chipsEnabled" xsi:type="boolean">1</item>-->
+                    <!--</item>-->
+                <!--</argument>-->
+            <!--</filterSelect>-->
+        <!--</filters>-->
+
+        <filters name="listing_filters">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="columnsProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks</item>
+                        <item name="namespace" xsi:type="string">current.filters</item>
+                    </item>
+                </item>
+            </argument>
+            <filterSelect name="job_id">
+                <!--<argument name="optionsProvider" xsi:type="configurableObject">-->
+                    <!--<argument name="class" xsi:type="string">Magento\Store\Ui\Component\Listing\Column\Store\Options</argument>-->
+                <!--</argument>-->
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.listing_filters</item>
+                        <item name="dataScope" xsi:type="string">job_id</item>
+                        <item name="caption" xsi:type="string" translate="true">All Store Views</item>
+                        <item name="label" xsi:type="string" translate="true">Store View</item>
+                    </item>
+                </argument>
+            </filterSelect>
+        </filters>
+
+        <!--<massaction name="listing_massaction">-->
+        <!--<argument name="data" xsi:type="array">-->
+        <!--<item name="config" xsi:type="array">-->
+        <!--<item name="selectProvider" xsi:type="string">-->
+        <!--st_jobs_listing.st_jobs_listing.jobs_grid_columns.ids-->
+        <!--</item>-->
+        <!--<item name="indexField" xsi:type="string">job_id</item>-->
+        <!--</item>-->
+        <!--</argument>-->
+        <!--<action name="delete">-->
+        <!--<argument name="data" xsi:type="array">-->
+        <!--<item name="config" xsi:type="array">-->
+        <!--<item name="type" xsi:type="string">delete</item>-->
+        <!--<item name="label" xsi:type="string" translate="true">Delete</item>-->
+        <!--<item name="url" xsi:type="url" path="stslider/slider/massDelete"/>-->
+        <!--<item name="confirm" xsi:type="array">-->
+        <!--<item name="title" xsi:type="string" translate="true">Delete items</item>-->
+        <!--<item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete-->
+        <!--selected items?-->
+        <!--</item>-->
+        <!--</item>-->
+        <!--</item>-->
+        <!--</argument>-->
+        <!--</action>-->
+        <!--</massaction>-->
+
+        <paging name="listing_paging">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="storageConfig" xsi:type="array">
+                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks
+                        </item>
+                        <item name="namespace" xsi:type="string">current.paging</item>
+                    </item>
+                    <item name="selectProvider" xsi:type="string">
+                        st_jobs_listing.st_jobs_listing.jobs_grid_columns.ids
+                    </item>
+                </item>
+            </argument>
+        </paging>
+
+    </container>
+
+    <columns name="jobs_grid_columns">
+        <!-- this is columns section name, used above in spinner -->
+        <!--<selectionsColumn name="ids">-->
+        <!--<argument name="data" xsi:type="array">-->
+        <!--<item name="config" xsi:type="array">-->
+        <!--<item name="indexField" xsi:type="string">job_id</item>-->
+        <!--</item>-->
+        <!--</argument>-->
+        <!--</selectionsColumn>-->
+        <!-- this is for the first column which allost to select multiple columns -->
+        <!-- below are different column types based on our models -->
+
+        <column name="job_id">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">desc</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                    <item name="visible" xsi:type="boolean">false</item>
+                    <item name="label" xsi:type="string" translate="true">ID</item>
+                    <item name="fieldClass" xsi:type="string">job-id</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="job_number">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sortOrder" xsi:type="number">20</item>
+                    <item name="label" xsi:type="string" translate="true">Job Number</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="created_at" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="sortOrder" xsi:type="number">30</item>
+                    <item name="label" xsi:type="string" translate="true">Created At</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="updated_at">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">dateRange</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="dataType" xsi:type="string">date</item>
+                    <item name="sortOrder" xsi:type="number">40</item>
+                    <item name="label" xsi:type="string" translate="true">Updated At</item>
+                </item>
+            </argument>
+        </column>
+
+        <!--<column name="job_key">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">text</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">40</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Job Key</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+
+        <!--<column name="job_type_name" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\StringFormatter">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">text</item>-->
+                    <!--<item name="sorting" xsi:type="string">asc</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">50</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Content Type</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+
+        <column name="job_type_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\Collection</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Content Type</item>
+                    <item name="sortOrder" xsi:type="number">50</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="target_store_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Magento\Store\Model\ResourceModel\Store\Collection</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="label" xsi:type="string" translate="true">Store View</item>
+                    <item name="sortOrder" xsi:type="number">60</item>
+                    <item name="headerClass" xsi:type="string">no-display</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="sl">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sortOrder" xsi:type="number">70</item>
+                    <item name="label" xsi:type="string" translate="true">Source Language</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="tl">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">text</item>
+                    <item name="sorting" xsi:type="string">asc</item>
+                    <item name="sortOrder" xsi:type="number">80</item>
+                    <item name="label" xsi:type="string" translate="true">Target Language</item>
+                </item>
+            </argument>
+        </column>
+
+        <column name="job_status_id">
+            <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\Collection</item>
+                <item name="config" xsi:type="array">
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortOrder" xsi:type="number">90</item>
+                    <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="label" xsi:type="string" translate="true">Status</item>
+                </item>
+            </argument>
+        </column>
+
+        <!--<column name="job_status_name" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobStatus">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">text</item>-->
+                    <!--<item name="sorting" xsi:type="string">asc</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">90</item>-->
+                    <!--<item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Status</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+
+        <!--<column name="job_refresh" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobRefresh">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="filter" xsi:type="string">text</item>-->
+                    <!--<item name="sortable" xsi:type="boolean">false</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">100</item>-->
+                    <!--<item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>-->
+                    <!--<item name="label" xsi:type="string" translate="true">Refresh</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+
+        <!--<column name="action" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobActions">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="bodyTmpl" xsi:type="string">ui/grid/cells/actions</item>-->
+                    <!--<item name="sortOrder" xsi:type="number">110</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</column>-->
+
+        <actionsColumn name="actions" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobActions">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="resizeEnabled" xsi:type="boolean">false</item>
+                    <item name="resizeDefaultWidth" xsi:type="string">107</item>
+                    <item name="indexField" xsi:type="string">job_id</item>
+                    <item name="sortOrder" xsi:type="number">110</item>
+                </item>
+            </argument>
+        </actionsColumn>
+
+        <!--<actionsColumn name="actions" class="Straker\EasyTranslationPlatform\Ui\Component\Listing\Column\JobsActions">-->
+        <!--<argument name="data" xsi:type="array">-->
+        <!--<item name="config" xsi:type="array">-->
+        <!--<item name="resizeEnabled" xsi:type="boolean">false</item>-->
+        <!--<item name="resizeDefaultWidth" xsi:type="string">107</item>-->
+        <!--<item name="indexField" xsi:type="string">job_id</item>-->
+        <!--<item name="sortOrder" xsi:type="number">110</item>-->
+        <!--</item>-->
+        <!--</argument>-->
+        <!--</actionsColumn>-->
+    </columns>
+
+    <!--fixed grid header-->
+    <!--<container name="sticky">-->
+    <!--<argument name="data" xsi:type="array">-->
+    <!--<item name="config" xsi:type="array">-->
+    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/sticky/sticky</item>-->
+    <!--<item name="toolbarProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top</item>-->
+    <!--<item name="listingProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>-->
+    <!--</item>-->
+    <!--</argument>-->
+    <!--</container>-->
+
+</listing>

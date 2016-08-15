@@ -1,18 +1,29 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../Store/etc/config.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
     <default>
         <straker>
-            <api_url>
-                <register>https://dev-app.strakertranslations.com/v1/ta4ma/register</register>
-                <languages>https://dev-app.strakertranslations.com/v1/ta4ma/languages</languages>
-                <translate>https://dev-app.strakertranslations.com/v1/ta4ma/translate</translate>
-                <quote>https://dev-app.strakertranslations.com/v1/ta4ma/quote</quote>
-                <payment>https://dev-app.strakertranslations.com/v1/ta4ma/payment</payment>
-                <countries>https://dev-app.strakertranslations.com/v1/ta4ma/countries</countries>
-                <payment>https://dev-app.strakertranslations.com/v1/ta4ma/payment</payment>
-                <payment_page>https://myaccount.strakertranslations.com/o/?action=api.quote</payment_page>
-                <support>https://dev-app.strakertranslations.com/v1/ta4ma/support</support>
-            </api_url>
+            <general>
+                <version>uat</version>
+                <domain>
+                    <dev>https://dev-app.strakertranslations.com</dev>
+                    <uat>https://uat-app.strakertranslations.com</uat>
+                    <live>https://app.strakertranslations.com</live>
+                </domain>
+                <my_account_domain>
+                    <dev>https://dev-myaccount.strakertranslations.com/</dev>
+                    <uat>https://uat-myaccount.strakertranslations.com/</uat>
+                    <live>https://myaccount.strakertranslations.com/</live>
+                </my_account_domain>
+                <api_url>
+                    <register>v1/ta4ma/register</register>
+                    <languages>v1/ta4ma/languages</languages>
+                    <translate>v1/ta4ma/translate</translate>
+                    <payment>v1/ta4ma/payment</payment>
+                    <countries>v1/ta4ma/countries</countries>
+                    <payment_page>o/?action=api.quote</payment_page>
+                    <support>v1/ta4ma/support</support>
+                </api_url>
+            </general>
         </straker>
     </default>
 </config>

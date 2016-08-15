@@ -2,6 +2,10 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Exception;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -11,7 +15,7 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Config\Model\ResourceModel\Config;
 
-class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements StrakerAPIInterface
+class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 {
 
     protected $_config;
@@ -35,8 +39,15 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     protected $_headers = [];
 
     protected $_options = [];
+    protected $_configHelper;
+    protected $_configModel;
+    protected $_httpClient;
+    protected $_errorManager;
+    protected $_storeManager;
 
     public function __construct(
+        Context $context,
+        Registry $registry,
         ConfigHelper $configHelper,
         Config $configModel,
         ZendClientFactory $httpClient,
@@ -45,6 +56,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         Error $error
     )
     {
+        parent::__construct( $context, $registry );
         $this->_configHelper = $configHelper;
         $this->_configModel = $configModel;
         $this->_httpClient = $httpClient;
@@ -74,6 +86,11 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
                 $httpClient->setParameterPost($request);
 
+                if(!empty($request['source_file'])){
+
+                    $httpClient->setFileUpload($request['source_file'],'source_file');
+                }
+
                 break;
 
             case 'get' :
@@ -87,23 +104,29 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
         $httpClient->setConfig(['timeout' => 60,'verifypeer'=>0]);
 
-        //$httpClient->setHeaders($this->_headers);
+        $httpClient->setHeaders($this->getHeaders());
 
         $httpClient->setMethod($method);
 
 
         try {
+            $response = $httpClient->request();
 
-            $response = $httpClient->request()->getBody();
+            if(!$response->isError()){
+                $contentType = $response->getHeader('Content-Type');
+                $body = $response->getBody();
 
-            $debugData['response'] = $response;
+                $debugData['response'] = $body;
 
-            return json_decode($response);
-
+                if( strpos($contentType, 'json' )){
+                    return json_decode($body);
+                }else{
+                    return $body;
+                }
+            }
         } catch (Exception $e) {
 
             $debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
-
             throw $e;
         }
 
@@ -144,7 +167,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
      * Handle logical errors
      *
      * @param array $response
-     * @throws Mage_Core_Exception
+     * @throst Mage_Core_Exception
      */
     protected function _handleCallErrors($response)
     {
@@ -159,34 +182,42 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
     }
 
     protected  function _getRegisterUrl(){
-
-        return $this->_configHelper->getConfig('/api_url/register');
+        return $this->_configHelper->getRegisterUrl();
     }
 
     protected  function _getLanguagesUrl(){
-        return $this->_configHelper->getConfig('/api_url/languages');
+        return $this->_configHelper->getLanguagesUrl();
     }
 
-    protected  function _getCountiresUrl(){
+    protected  function _getCountriesUrl(){
 
-        return $this->_configHelper->getConfig('/api_url/countries');
+        return $this->_configHelper->getCountriesUrl();
     }
 
     protected  function _getTranslateUrl(){
-        return Mage::getStoreConfig('straker/api_url/translate');
+        return $this->_configHelper->getTranslateUrl();
     }
 
     protected  function _getQuoteUrl(){
-        return Mage::getStoreConfig('straker/api_url/quote');
+        return $this->_configHelper->getQuoteUrl();
     }
 
     protected  function _getPaymentUrl(){
-        return Mage::getStoreConfig('straker/api_url/payment');
+        return $this->_configHelper->getPaymentUrl();
     }
 
     protected  function _getSupportUrl(){
-        return Mage::getStoreConfig('straker/api_url/support');
+        return $this->_configHelper->getSupportUrl();
     }
+
+    public function getHeaders(){
+
+        $this->_headers[] = 'Authorization: Bearer '.$this->_configHelper->getAccessToken();
+        $this->_headers[] = 'X-Auth-App: '. $this->_configHelper->getApplicationKey();
+
+        return $this->_headers;
+    }
+
 
     public function callRegister($data){
 
@@ -196,7 +227,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
         }catch (\Exception $e){
 
-            $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e);
+            $this->_logger->error('error'.__FILE__.' '.__LINE__.'', array($e));
 
             $this->_errorManager->_errorMessage = 'There was an error registering your details';
 
@@ -224,7 +255,7 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
         return $this->_call($this->_getPaymentUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getTranslation($data){
+    public function getTranslation($data = []){
         return $this->_call($this->_getTranslateUrl().'?'. $this->_buildQuery($data));
     }
 
@@ -234,14 +265,39 @@ class StrakerAPI extends \Magento\Framework\Model\AbstractModel implements Strak
 
     public function getCountries(){
 
-        $result = $this->_call($this->_getCountiresUrl());
+        $countriesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'countries.json';
+
+        if(file_exists( $countriesFilePath )){
+            $result = json_decode(file_get_contents($countriesFilePath));
+        }else{
+            $result = $this->_call($this->_getCountriesUrl());
+        }
 
         return $result->country;
     }
 
     public function getLanguages(){
-        $result = $this->_call($this->_getLanguagesUrl());
+        $languagesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'languages.json';
+
+        if(file_exists( $languagesFilePath )){
+            $result = json_decode(file_get_contents($languagesFilePath));
+        }else{
+            $result = $this->_call($this->_getLanguagesUrl());
+        }
+
         return $result->languages ? $result->languages : false;
     }
 
+    public function getLanguageName( $code = ''){
+        foreach ( $this->getLanguages() as $language ) {
+            if (strcasecmp($code, $language->code) === 0) {
+                return $language->native_name;
+            }
+        }
+        return '';
+    }
+
+    public function completeJob( $jobNumber, $url ){
+        return $this->_call( $url, 'post', ['job_id' => $jobNumber] );
+    }
 }

@@ -3,11 +3,23 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Backend::content">
-                    <resource id="Straker_EasyTranslationPlatform::blog_content" title="EasyTranslationPlatform" sortOrder="10" >
-                        <resource id="Straker_EasyTranslationPlatform::post" title="EasyTranslationPlatform Posts" sortOrder="40">
-                            <resource id="Straker_EasyTranslationPlatform::save" title="Save EasyTranslationPlatform Post" sortOrder="10" />
-                            <resource id="Straker_EasyTranslationPlatform::post_delete" title="Delete EasyTranslationPlatform Post" sortOrder="20" />
+            <resource id="Magento_Backend::system">
+                <resource id="Straker_EasyTranslationPlatform::customMenu" title="Custom Menu">
+                    <resource id="Straker_EasyTranslationPlatform::post" title="EasyTranslationPlatform Posts" sortOrder="10"/>
+                        <resource id="Straker_EasyTranslationPlatform::save" title="Save EasyTranslationPlatform Post" sortOrder="10" />
+                        <resource id="Straker_EasyTranslationPlatform::post_delete" title="Delete EasyTranslationPlatform Post" sortOrder="20" />
+                        <resource id="Straker_EasyTranslationPlatform::sampleOne" title="One" sortOrder="10" />
+                        <resource id="Straker_EasyTranslationPlatform::sampleTwo" title="Two" sortOrder="10" />
+                        <resource id="Straker_EasyTranslationPlatform::sampleThree" title="Three" sortOrder="10" />
+                        <resource id="Straker_EasyTranslationPlatform::sampleFour" title="Four" sortOrder="10" />
+                        <resource id="Straker_EasyTranslationPlatform::sampleFive" title="Five" sortOrder="10" />
+                        <resource id="Straker_EasyTranslationPlatform::sampleSix" title="Five" sortOrder="10" />
+                    </resource>
+                </resource>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Straker_EasyTranslationPlatform::config" title="EasyTranslationPlatformConfig"/>
                         </resource>
                     </resource>
                 </resource>

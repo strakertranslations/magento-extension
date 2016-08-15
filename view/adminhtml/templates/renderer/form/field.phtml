@@ -1,0 +1,31 @@
+    <div>
+        <h3><?php echo __('Please Select Your Destination Store View') ?></h3>
+        <p><?php echo __('Which store view would you like your translation to show ?') ?></p>
+    </div>
+    <div class="admin__field-control control">
+        <select name="destination_store" class="required-entry _required select admin__control-select">
+            <option value=""><?php echo __('Pick a store view') ?></option>
+            <?php foreach ($block->getWebsites() as $website): ?>
+                <?php $showWebsite = false; ?>
+                <?php foreach ($website->getGroups() as $group): ?>
+                    <?php $showGroup = false; ?>
+                    <?php foreach ($group->getStores() as $store): ?>
+                        <?php if ($showWebsite == false): ?>
+                            <?php $showWebsite = true; ?>
+                            <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                        <?php endif; ?>
+                        <?php if ($showGroup == false): ?>
+                            <?php $showGroup = true; ?>
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                        <?php endif; ?>
+                        <option
+                            value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                    <?php endforeach; ?>
+                    <?php if ($showGroup): ?>
+                        </optgroup>
+                    <?php endif; ?>
+                <?php endforeach; ?>
+            <?php endforeach; ?>
+        </select>
+    </div>
