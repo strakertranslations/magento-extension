@@ -37,7 +37,7 @@
             </block>
         </referenceContainer>
         <referenceContainer name="js">
-            <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::job/test.phtml"/>
+            <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::job/language-pairs.phtml"/>
         </referenceContainer>
     </body>
 </page>
