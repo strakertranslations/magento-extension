@@ -20,21 +20,6 @@ class JobActions extends Column
                 $name = $this->getData('name');
                 if (array_key_exists('job_status_id', $item) && array_key_exists('job_id', $item)) {
                     $statusId = $item['job_status_id'];
-                    if ($statusId == Model\JobStatus::JOB_STATUS_COMPLETED) {
-                        $item[$name]['confirm'] = [
-                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Confirm',
-                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
-                            'label' => __('Confirm')
-                        ];
-                    }
-
-                    if ($statusId == Model\JobStatus::JOB_STATUS_CONFIRMED){
-                        $item[$name]['publish'] = [
-                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Publish',
-                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
-                            'label' => __('Publish')
-                        ];
-                    }
 
                     $url = 'EasyTranslationPlatform/Jobs/ViewJob';
 
@@ -50,6 +35,33 @@ class JobActions extends Column
                             ),
                         'label' => __('View')
                     ];
+
+                    if( $statusId >= Model\JobStatus::JOB_STATUS_READY ){
+                        $item[$name]['view_quote'] = [
+                            'href' => 'javascript:void(0)',
+                            'label' => __('View Quote')
+                        ];
+                    }
+
+//                    $item[$name]['view_quote'] = '<a>323432</a>';
+
+                    if ($statusId == Model\JobStatus::JOB_STATUS_COMPLETED) {
+                        $item[$name]['confirm'] = [
+                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Confirm',
+                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
+                            'label' => __('Confirm')
+                        ];
+                    }
+
+//                    if ($statusId == Model\JobStatus::JOB_STATUS_CONFIRMED){
+//                        $item[$name]['publish'] = [
+//                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Publish',
+//                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
+//                            'label' => __('Publish')
+//                        ];
+//                    }
+
+
                 }
             }
         }

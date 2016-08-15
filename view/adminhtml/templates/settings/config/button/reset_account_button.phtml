@@ -28,4 +28,6 @@
     });
 </script>
 
-<?php echo $block->getButtonHtml();
+<?php
+    echo $block->getButtonHtml();
+    echo '<p class="note"><span>'.__('Be careful, it will remove all of the data saved by Straker Translations, including registration, settings, translated texts and jobs').'</span></p>';

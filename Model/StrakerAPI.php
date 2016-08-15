@@ -265,14 +265,39 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     public function getCountries(){
 
-        $result = $this->_call($this->_getCountriesUrl());
+        $countriesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'countries.json';
+
+        if(file_exists( $countriesFilePath )){
+            $result = json_decode(file_get_contents($countriesFilePath));
+        }else{
+            $result = $this->_call($this->_getCountriesUrl());
+        }
 
         return $result->country;
     }
 
     public function getLanguages(){
-        $result = $this->_call($this->_getLanguagesUrl());
+        $languagesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'languages.json';
+
+        if(file_exists( $languagesFilePath )){
+            $result = json_decode(file_get_contents($languagesFilePath));
+        }else{
+            $result = $this->_call($this->_getLanguagesUrl());
+        }
+
         return $result->languages ? $result->languages : false;
     }
 
+    public function getLanguageName( $code = ''){
+        foreach ( $this->getLanguages() as $language ) {
+            if (strcasecmp($code, $language->code) === 0) {
+                return $language->native_name;
+            }
+        }
+        return '';
+    }
+
+    public function completeJob( $jobNumber, $url ){
+        return $this->_call( $url, 'post', ['job_id' => $jobNumber] );
+    }
 }

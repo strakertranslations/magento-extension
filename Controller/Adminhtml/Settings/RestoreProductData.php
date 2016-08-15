@@ -51,7 +51,7 @@ class RestoreProductData extends Action
                 $this->_connection = $this->_resourceConnection->getConnection();
             }
 
-            foreach( $this->_dataHelper->getProductTableArray() as $tableName ){
+            foreach( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
                 $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
 
                 if( $this->_connection->isTableExists( $tableName )
@@ -89,7 +89,7 @@ class RestoreProductData extends Action
         try{
 
             if($this->_hasBackupData()){
-                $this->_truncateProductData();
+                $this->_truncateMagentoDataTables();
             }else{
                 $message = __( 'There is no backup data to restore.' );
                 $this->_logger->error( $message );
@@ -127,7 +127,7 @@ class RestoreProductData extends Action
             $this->_connection = $this->_resourceConnection->getConnection();
         }
 
-        foreach ( $this->_dataHelper->getProductTableArray() as $tableName ){
+        foreach ( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
 
             $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
 
@@ -150,13 +150,13 @@ class RestoreProductData extends Action
         return $result;
     }
 
-    private function _truncateProductData()
+    private function _truncateMagentoDataTables()
     {
         if( !isset($this->_connection) ){
             $this->_connection = $this->_resourceConnection->getConnection();
         }
 
-        foreach ( $this->_dataHelper->getProductTableArray() as $tableName ){
+        foreach ( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
             if($this->_connection->isTableExists( $tableName )){
                 $this->_connection->truncateTable( $tableName );
             }

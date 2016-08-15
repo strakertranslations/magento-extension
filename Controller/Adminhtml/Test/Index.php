@@ -3,6 +3,9 @@
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -22,6 +25,7 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\StrakerAPI;
 
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
@@ -49,7 +53,9 @@ class Index extends \Magento\Backend\App\Action
     protected $_jobFactory;
     protected $_translatedOptions;
     protected $_translatedOptionIds;
-
+    /** @var  \Magento\Catalog\Model\Product $_product */
+    protected $_product;
+    protected $_api;
     protected $_testRequest =
         [
             'job_id' => 12,
@@ -77,7 +83,11 @@ class Index extends \Magento\Backend\App\Action
         AttributeRepository $attributeRepository,
         ResourceConnection $connection,
         OptionFactory $optionFactory,
-        JobFactory $jobFactory
+        JobFactory $jobFactory,
+        ProductFactory $productFactory1,
+        \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
+        StrakerAPI $api
+
     )
     {
         $this->_attributeCollection = $attCollection;
@@ -96,9 +106,38 @@ class Index extends \Magento\Backend\App\Action
         $this->_resourceConnection = $connection;
         $this->_attributeOptionFactory = $optionFactory;
         $this->_jobFactory = $jobFactory;
+        $this->_api = $api;
 
+        echo $this->_api->getLanguageName('Chinese_Simplified');
+        exit;
         return parent::__construct($context);
     }
+
+//    function multiArrayValueSearch($haystack, $needle, &$result, &$aryPath=NULL, $currentKey='') {
+//        if (is_array($haystack)) {
+//            $count = count($haystack);
+//            $iterator = 0;
+//            foreach($haystack as $location => $straw) {
+//                $iterator++;
+//                $next = ($iterator == $count)?false:true;
+//                if (is_array($straw)) $aryPath[$location] = $location;
+//                multiArrayValueSearch($straw,$needle,$result,$aryPath,$location);
+//                if (!$next) {
+//                    unset($aryPath[$currentKey]);
+//                }
+//            }
+//        } else {
+//            $straw = $haystack;
+//            if ($straw == $needle) {
+//                if (!isset($aryPath)) {
+//                    $strPath = "\$result[$currentKey] = \$needle;";
+//                } else {
+//                    $strPath = "\$result['".join("']['",$aryPath)."'][$currentKey] = \$needle;";
+//                }
+//                eval($strPath);
+//            }
+//        }
+//    }
 
     public function execute()
     {

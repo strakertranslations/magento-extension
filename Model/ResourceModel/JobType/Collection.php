@@ -12,4 +12,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->_init('Straker\EasyTranslationPlatform\Model\JobType','Straker\EasyTranslationPlatform\Model\ResourceModel\JobType');
     }
+
+    /**
+     * Convert items array to array for select options
+     *
+     * @return array
+     */
+    public function toOptionArray()
+    {
+        return $this->_toOptionArray('type_id', 'type_name');
+    }
+
 }

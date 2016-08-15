@@ -163,6 +163,11 @@ class Save extends \Magento\Backend\App\Action
 
             $job_object->addData(['job_key'=>$response->job_key]);
 
+            $job_object->setData('sl', $this->_api->getLanguageName( $job_object->getData('sl')));
+
+            $job_object->setData('tl', $this->_api->getLanguageName( $job_object->getData('tl')));
+
+
             $job_object->save();
 
             $this->messageManager->addSuccess(__('Your job was submitted successfully.'));

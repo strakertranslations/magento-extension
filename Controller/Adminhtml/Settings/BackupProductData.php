@@ -47,7 +47,7 @@ class BackupProductData extends Action
                 $this->_connection = $this->_resourceConnection->getConnection();
             }
 
-            foreach ($this->_dataHelper->getProductTableArray() as $productTableName ){
+            foreach ($this->_dataHelper->getMagentoDataTableArray() as $productTableName ){
 
                 if( $this->_connection->isTableExists( $productTableName )){
                     $backupTableName = $this->_dataHelper->getBackupTableNames( $productTableName );

@@ -6,9 +6,7 @@ use Magento\Framework\App\Action\Action;
 use \Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config;
 use \Magento\Framework\Message\ManagerInterface;
-use \Magento\Store\Model\StoreManagerInterface;
 use \Magento\Framework\App\CacheInterface;
-use \Magento\Framework\App\ObjectManager;
 use \Magento\Framework\Controller\Result\Json;
 use \Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use \Straker\EasyTranslationPlatform\Model\Setup;
@@ -19,7 +17,6 @@ class ResetStore extends Action
 {
 
     protected $_messageManager;
-    protected $_storeManager;
     protected $_storeCache;
     protected $_resultJson;
     protected $_configHelper;
@@ -32,7 +29,6 @@ class ResetStore extends Action
         Context $context,
         Json $resultJson,
         ManagerInterface $messageManager,
-        StoreManagerInterface $storeManager,
         CacheInterface $storeCache,
         ConfigHelper $configHelper,
         Setup $strakerSetup,
@@ -40,7 +36,6 @@ class ResetStore extends Action
     )
     {
         $this->_messageManager = $messageManager;
-        $this->_storeManager = $storeManager;
         $this->_storeCache = $storeCache;
         $this->_resultJson = $resultJson;
         $this->_configHelper = $configHelper;
@@ -57,6 +52,8 @@ class ResetStore extends Action
 
         if( isset( $storeId ) && is_numeric( $storeId ) ){
             if($this->_configHelper->getStoreSetup( $storeId ) ){
+                //remove all applied translations from database
+                $this->_strakerSetup->clearTranslations( $storeId );
                 $this->_strakerSetup->saveStoreSetup($storeId, '', '', '');
                 $message = __('Language settings has been reset.');
                 $this->_messageManager->addSuccess( $message );

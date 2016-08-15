@@ -174,7 +174,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
 
             foreach ($labels->toArray()['items'] as $data){
-
+                /** \Magento\Eav\ var $att */
                 $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$data['attribute_id']);
 
                 $new_labels = $att->getStoreLabels();

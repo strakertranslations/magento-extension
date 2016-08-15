@@ -5,96 +5,33 @@
         <tab id="easytranslationplatform" translate="label" sortOrder="700">
             <label>Straker Translations</label>
         </tab>
-        <section id="straker" translate="label" sortOrder="500" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="straker" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Configuration</label>
             <!-- should be the same as the tab's id above -->
             <tab>easytranslationplatform</tab>
             <resource>Straker_EasyTranslationPlatform::config</resource>
-            <!--<group id="example" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                <!--<label>General</label>-->
-                <!--<field id="dropdown_example" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<label>Dropdown with custom source model example</label>-->
-                    <!--<source_model>Straker\EasyTranslationPlatform\Model\Config\Source\Custom</source_model>-->
-                <!--</field>-->
-                <!--<field id="text_example" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<label>Text example</label>-->
-                <!--</field>-->
-                <!--<field id="logo" translate="label" type="image" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<label>Image example (with a comment)</label>-->
-                    <!--<backend_model>Magento\Config\Model\Config\Backend\Image</backend_model>-->
-                    <!--<upload_dir config="system/filesystem/media" scope_info="1">logo</upload_dir>-->
-                    <!--<base_url type="media" scope_info="1">logo</base_url>-->
-                    <!--<comment><![CDATA[Allowed file types: jpeg, gif, png.]]></comment>-->
-                <!--</field>-->
-                <!--<field id="depends_example" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<label>Dependant text field example with validation</label>-->
-                    <!--<depends>-->
-                        <!--<field id="*/*/dropdown_example">1</field>-->
-                    <!--</depends>-->
-                    <!--<validate>validate-no-empty</validate>-->
-                <!--</field>-->
-                <!--<field id="textarea_example" translate="label" type="textarea" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<label>Textarea example</label>-->
-                <!--</field>-->
-            <!--</group>-->
-            <!--<group id="txt" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">-->
-                <!--<label>txtsample</label>-->
-                <!--<field id="textsample" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">-->
-                    <!--<label>text sample</label>-->
-                <!--</field>-->
-            <!--</group>-->
-            <!--<group id="yn" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">-->
-                <!--<label>ynsample</label>-->
-                <!--<field id="ynsample" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">-->
-                    <!--<label>Yes no sample</label>-->
-                    <!--<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
-                <!--</field>-->
-            <!--</group>-->
-            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="general" translate="label" type="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Account Information</label>
-                <field id="version" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Environment</label>
-                </field>
-                <field id="name" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <!--<field id="version" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">-->
+                    <!--<label>Environment</label>-->
+                    <!--<frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>-->
+                <!--</field>-->
+                <field id="name" translate="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Name</label>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\FiledDisabled</frontend_model>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>
                 </field>
-                <field id="email" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Login</label>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\FiledDisabled</frontend_model>
-                </field>
-                <field id="access_token" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Access Token</label>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\FiledDisabled</frontend_model>
-                </field>
-                <field id="reset_account_button" type="button" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <depends>
-                        <field id="*/*/version" negative="1">live</field>
-                    </depends>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetAccountButton</frontend_model>
-                </field>
-                <field id="reset_store" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Reset Language Settings for a Store</label>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetStore</frontend_model>
-                </field>
-                <field id="backup_product_data_button" translate="label" type="button" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Backup Product Data</label>
-                    <depends>
-                        <field id="*/*/version" negative="1">live</field>
-                    </depends>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\BackupProductData</frontend_model>
-                </field>
-                <field id="restore_product_data_button" translate="label" type="button" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Restore Product Data</label>
-                    <depends>
-                        <field id="*/*/version" negative="1">live</field>
-                    </depends>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData</frontend_model>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>
                 </field>
             </group>
-            <group id="attributes" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Attribute Defaults</label>
+            <group id="settings" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Translation Settings</label>
+                <field id="reset_store" translate="label" type="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <!--<label>Language Pairs Setting</label>-->
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetStore</frontend_model>
+                </field>
                 <field id="default" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Default Attributes</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\DefaultAttributeSource</source_model>
@@ -102,6 +39,36 @@
                 <field id="custom" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Custom Attributes</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\CustomAttributeSource</source_model>
+                </field>
+            </group>
+        </section>
+        <section id="demonstration" translate="label" sortOrder="20" showInWebsite="1" showInDefault="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Demonstration</label>
+            <tab>easytranslationplatform</tab>
+            <resource>Straker_EasyTranslationPlatform::config</resource>
+            <group id="complete_job" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Complete Job</label>
+                <field id="tj_number" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>TJ Number</label>
+                </field>
+                <field id="translate_job" translate="label" type="button" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\CompleteJob</frontend_model>
+                </field>
+            </group>
+            <group id="data" translate="label" showInDefault="1" showInStore="1" showInWebsite="1" sortOrder="20">
+                <label>Translation Data</label>
+                <field id="reset_account_button" type="button" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Reset All</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetAccountButton</frontend_model>
+                </field>
+                <field id="backup_product_data_button" translate="label" type="button" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Backup Product Data</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\BackupProductData</frontend_model>
+                </field>
+                <field id="restore_product_data_button" translate="label" type="button" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Restore Product Data</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData</frontend_model>
                 </field>
             </group>
         </section>

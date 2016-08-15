@@ -12,6 +12,12 @@ use Magento\Framework\Locale\ListsInterface;
 
 class Form extends Template{
 
+    protected $_storeManager;
+    protected $_strakerAPIinterface;
+    protected $session;
+    protected $configHelper;
+    protected $localeList;
+
     public function __construct(
         Context $context,
         StoreManagerInterface $storeManager,

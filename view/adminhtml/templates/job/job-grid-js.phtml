@@ -9,6 +9,7 @@
             var jobGrid = $('#straker-job-grid');
             var quoteDiv = $('#straker-quote-frame');
             var loadingMask = $('.admin__data-grid-loading-mask');
+
 //            var refreshAllButton = $('#refresh-all-job');
 //            var formKey = $('input[name="form_key"]').val();
 
@@ -72,15 +73,14 @@
                         });
                     }
 
-
-
-                    if ($(this).hasClass('straker-view-quote-anchor')) {
+                    if ($(this).text() == 'View Quote') {
+                        var viewJobId = $(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text();
                         loadingMask.show();
                         var quoteFrame = quoteDiv.find('iframe');
 
                         $.ajax({
                             url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/ViewQuote'); ?>',
-                            data: {job_key: jobKey},
+                            data: { job_id: viewJobId },
                             dataType: 'json',
                             success: function (response) {
                                 if (response.Success) {

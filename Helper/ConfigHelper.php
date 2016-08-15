@@ -163,11 +163,15 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getOriginalXMLFilePath(){
-        return $this->_directoryList->getPath('app').'/code/Straker/EasyTranslationPlatform/Api/Data/Original';
+        return $this->getDataFilePath().DIRECTORY_SEPARATOR.'Original';
     }
 
     public function getTranslatedXMLFilePath(){
-        return $this->_directoryList->getPath('app').'/code/Straker/EasyTranslationPlatform/Api/Data/Translated';
+        return $this->getDataFilePath().DIRECTORY_SEPARATOR.'Translated';
+    }
+
+    public function getDataFilePath(){
+        return $this->_directoryList->getPath('app').DIRECTORY_SEPARATOR.'/code/Straker/EasyTranslationPlatform/Api/Data';
     }
 
 }

@@ -1,14 +1,28 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
+use Magento\Backend\Block\System\Store\Store;
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
-class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
+class CompleteJob extends Field
 {
-    const BUTTON_TEMPLATE = 'settings/config/button/reset_account_button.phtml';
-
+    const BUTTON_TEMPLATE = 'settings/config/complete_job.phtml';
+    protected $_configHelper;
     private $_buttonId;
     private $_buttonName;
+
+    public function __construct(
+        Context $context,
+        ConfigHelper $configHelper,
+        array $data = []
+    ) {
+        $this->_configHelper = $configHelper;
+        parent::__construct($context, $data);
+    }
 
     /**
      * Set template to itself
@@ -44,16 +58,16 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function getAjaxResetUrl()
     {
-        return $this->getUrl('EasyTranslationPlatform/Settings/ResetAccount'); 
+        return $this->getUrl('EasyTranslationPlatform/Settings/ResetStore'); //hit controller by ajax call on button click.
     }
 
     /**
      * Get the button and scripts contents
      *
-     * @param AbstractElement $element
+     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(AbstractElement $element)
+    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_buttonId = $element->getId();
         $this->_buttonName = $element->getName();
@@ -61,19 +75,17 @@ class ResetAccountButton extends \Magento\Config\Block\System\Config\Form\Field
         return $this->_toHtml();
 
     }
-
     public function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->addData([
             'id' => $this->_buttonId,
-                'name' => $this->_buttonName,
-                'label' => __('Reset All'),
-                'type' => 'button'
+            'name' => $this->_buttonName,
+            'label' => __('Complete a Test Job'),
+            'type' => 'button'
         ]);
 
         return $button->toHtml();
     }
-
 }

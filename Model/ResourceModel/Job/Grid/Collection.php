@@ -138,27 +138,27 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
         return $this;
     }
 
-    protected function _beforeLoad() {
-
-        $jobStatusTable = $this->getTable(Model\JobStatus::ENTITY);
-        $jobTypeTable = $this->getTable( Model\JobType::ENTITY );
-        $storeTable = $this->getTable( 'store' );
-
-        $this->getSelect()
-            ->join(
-                ['status' => $jobStatusTable ],
-                'main_table.job_status_id = status.status_id',
-                ['status_name AS job_status_name']
-            )->join(
-                ['type' => $jobTypeTable ],
-                'main_table.job_type_id = type.type_id',
-                ['type_name AS job_type_name']
-            )->join(
-                ['store' => $storeTable ],
-                'main_table.target_store_id = store.store_id',
-                [ 'name AS target_store_name' ]
-            )->order('main_table.created_at DESC');
-        
-        parent::_beforeLoad();
-    }
+//    protected function _beforeLoad() {
+//
+//        $jobStatusTable = $this->getTable(Model\JobStatus::ENTITY);
+//        $jobTypeTable = $this->getTable( Model\JobType::ENTITY );
+//        $storeTable = $this->getTable( 'store' );
+//
+//        $this->getSelect()
+//            ->join(
+//                ['status' => $jobStatusTable ],
+//                'main_table.job_status_id = status.status_id',
+//                ['status_name AS job_status_name']
+//            )->join(
+//                ['type' => $jobTypeTable ],
+//                'main_table.job_type_id = type.type_id',
+//                ['type_name AS job_type_name']
+//            )->join(
+//                ['store' => $storeTable ],
+//                'main_table.target_store_id = store.store_id',
+//                [ 'name AS target_store_name' ]
+//            )->order('main_table.created_at DESC');
+////        var_dump($this->getSelect()->__toString());exit;
+//        parent::_beforeLoad();
+//    }
 }

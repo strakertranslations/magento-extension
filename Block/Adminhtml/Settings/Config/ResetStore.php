@@ -6,18 +6,22 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
 class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
 {
     const BUTTON_TEMPLATE = 'settings/config/button/reset_store_button.phtml';
     protected $_configHelper;
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
         ConfigHelper $configHelper,
+        StrakerAPIInterface $strakerAPI,
         array $data = []
     ) {
         $this->_configHelper = $configHelper;
+        $this->_strakerApi = $strakerAPI;
         parent::__construct($context, $data);
     }
 
@@ -74,6 +78,11 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
      */
     public function getWebsites() {
         return $this->_storeManager->getWebsites();
+    }
+
+    public function _getOptions(
+    ){
+        return $this->_strakerApi->getLanguages();
     }
 
     /**

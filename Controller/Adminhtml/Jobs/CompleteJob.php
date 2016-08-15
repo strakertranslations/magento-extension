@@ -2,19 +2,22 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
+use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Registry;
+use Straker\EasyTranslationPlatform\Model\StrakerAPI;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 
-class ViewQuote extends \Magento\Backend\App\Action
+class CompleteJob extends Action
 {
 
     protected $_coreRegistry;
     protected $_resultJsonFactory;
     protected $_configHelper;
     protected $_jobFactory;
+    protected $_strakerAPI;
 
     /**
      * ViewQuote constructor.
@@ -29,22 +32,23 @@ class ViewQuote extends \Magento\Backend\App\Action
         Registry $coreRegistry,
         ConfigHelper $configHelper,
         JsonFactory $resultJsonFactory,
-        JobFactory $jobFactory
+        JobFactory $jobFactory,
+        StrakerAPI $strakerAPI
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
         $this->_configHelper = $configHelper;
         $this->_resultJsonFactory = $resultJsonFactory;
         $this->_jobFactory = $jobFactory;
+        $this->_strakerAPI = $strakerAPI;
     }
 
 
     public function execute()
     {
-        $jobId = $this->getRequest()->getParam('job_id');
-        $jobKey = $this->_jobFactory->create()->load( $jobId )->getJobKey();
-        $quoteUrl = $this->_configHelper->getPaymentPageUrl().'&job_key='.$jobKey;
-        $result = [ 'Success'=> true, 'JobKey' => $quoteUrl ];
+        $url = 'https://uat-app.strakertranslations.com/v1/ta2wo/test/complete';
+        $tjNumber = $this->getRequest()->getParam('job_id');
+        $result = $this->_strakerAPI->completeJob( $tjNumber, $url );
         return $this->_resultJsonFactory->create()->setData( $result );
     }
 

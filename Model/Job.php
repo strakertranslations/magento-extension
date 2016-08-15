@@ -115,6 +115,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         foreach ($collection->getData() as $item){
             array_push($this->_entityIds, $item['entity_id']);
         }
+        return $this->_entities;
     }
 
     protected function _loadEntities()

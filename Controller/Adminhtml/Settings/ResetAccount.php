@@ -56,6 +56,11 @@ class ResetAccount extends Action
             $this->_strakerSetup->saveAccessToken('');
             $this->_strakerSetup->saveAppKey('');
 
+            //clear translations for all stores
+            $this->_strakerSetup->clearTranslations();
+            //clear all translation jobs
+            $this->_strakerSetup->clearStrakerData();
+
             $data = ['first_name' => '', 'last_name' => '', 'email' => '', 'url' => ''];
             $this->_strakerSetup->saveClientData( $data );
 

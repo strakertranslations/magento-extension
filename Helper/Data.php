@@ -2,38 +2,44 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Magento\Backend\Model\UrlInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Store\Model\StoreManagerInterface;
+
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
     /**
-     * @var \Magento\Backend\Model\UrlInterface
+     * @var UrlInterface
      */
     protected $_backendUrl;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface $storeManager
+     * @var StoreManagerInterface $storeManager
      */
     protected $storeManager;
 
-    protected $_productTables = array(
+    protected $_magentoDataTables = array(
         'catalog_product_entity_varchar',
         'catalog_product_entity_text',
         'catalog_category_entity_varchar',
         'catalog_category_entity_text',
-        'eav_attribute_option_value'
+        'eav_attribute_option_value',
+        'catalog_product_super_attribute_label'
     );
 
     const BACKUP_TABLE_SUFFIX = '_back';
 
 
     /**
-     * @param \Magento\Framework\App\Helper\Context   $context
-     * @param \Magento\Backend\Model\UrlInterface $backendUrl
+     * @param Context $context
+     * @param UrlInterface $backendUrl
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\Backend\Model\UrlInterface $backendUrl,
-        \Magento\Store\Model\StoreManagerInterface $storeManager
+        Context $context,
+        UrlInterface $backendUrl,
+        StoreManagerInterface $storeManager
     ) {
         parent::__construct($context);
         $this->_backendUrl = $backendUrl;
@@ -49,8 +55,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/products', ['_current' => true]);
     }
 
-    public function getProductTableArray(){
-        return $this->_productTables;
+    public function getMagentoDataTableArray(){
+        return $this->_magentoDataTables;
     }
 
     public function getBackupTableNames( $tableName ){

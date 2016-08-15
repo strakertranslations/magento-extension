@@ -1,3 +1,18 @@
+/* setting page */
+.straker-value{
+    padding-top: 7px;
+}
+
+#back-to-grid{
+    font-size: 1.2em;
+    font-weight: 900;
+    color:#eb5202;
+}
+
+#straker-quote-frame iframe{
+    margin-top: 10px;
+}
+
 .site-group-name{
     font-weight: 700;
     line-height: 35px;
