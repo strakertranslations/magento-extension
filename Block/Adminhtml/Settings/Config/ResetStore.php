@@ -90,13 +90,13 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getClearStoreButtonHtml( $store )
+    public function getRemoveTranslationButtonHtml( $store )
     {
         if ($store->getId() && $this->_configHelper->getStoreSetup($store->getId())) {
             $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData([
                     'id' => 'straker_reset_store_button_' . $store->getCode(),
-                    'label' => __('Clear'),
+                    'label' => __('Remove Translation'),
                     'class' => 'straker-reset-store-button'
                 ]);
             return $button->toHtml();
