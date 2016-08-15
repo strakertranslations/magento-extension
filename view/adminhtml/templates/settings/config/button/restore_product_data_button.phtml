@@ -4,7 +4,7 @@
         'Magento_Ui/js/modal/confirm'
     ], function( $, confirm ){
 
-        var $resetButton = $('#straker_general_restore_product_data_button');
+        var $resetButton = $('#demonstration_data_restore_product_data_button');
 
         $resetButton.on('click', function(){
 
@@ -27,4 +27,6 @@
     });
 </script>
 
-<?php echo $block->getButtonHtml();
+<?php
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'.__('It only restore the data from the last backup.').'</span></p>';

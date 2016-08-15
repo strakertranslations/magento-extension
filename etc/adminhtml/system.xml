@@ -29,7 +29,7 @@
             <group id="settings" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Translation Settings</label>
                 <field id="reset_store" translate="label" type="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <!--<label>Language Pairs Setting</label>-->
+                    <label>Language</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetStore</frontend_model>
                 </field>
                 <field id="default" translate="label" type="multiselect" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">

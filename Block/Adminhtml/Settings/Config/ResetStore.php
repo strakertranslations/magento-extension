@@ -48,7 +48,7 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
     public function render(AbstractElement $element)
     {
         // Remove scope label
-        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
+//        $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
         return parent::render($element);
     }
 
