@@ -70,6 +70,7 @@ class Index extends Action
 
     protected function refreshJobs(){
         $updatedJobs = [];
+        $localJobIds = [];
         //refresh all jobs
         try{
             $apiData = $this->_strakerApi->getTranslation();
@@ -82,6 +83,7 @@ class Index extends Action
 
                             if(!empty($localJobData) ){
                                 $localJob = reset( $localJobData );
+                                array_push( $localJobIds, $localJob->getId() );
                                 $isUpdate = $this->_compareJobs( $apiJob, $localJob );
                                 if( $isUpdate['isSuccess'] ){
                                     array_push( $updatedJobs, $localJob->getId() );
@@ -91,6 +93,12 @@ class Index extends Action
                     }
                     if( count( $updatedJobs ) > 0 ){
                         $this->messageManager->addSuccessMessage( __('The status of the jobs [Id: '. implode(',', $updatedJobs )  .'] has been updated!') );
+                    }
+                    elseif (count($localJobIds) <= 0){
+                        $result['status'] = false;
+                        $result['message'] = __('You have not created any job.');
+                        $this->_logger->addInfo( $result['message']);
+                        $this->messageManager->addNoticeMessage( $result['message'] );
                     }
                     else
                     {

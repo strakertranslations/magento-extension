@@ -113,16 +113,15 @@ class ConfigHelper extends AbstractHelper
         return ($source_store && $source_language && $destination_language) ? true : false;
 
     }
-    
-    //test
+
     public function getDefaultAttributes(){
 
-        return  explode(',', $this->scopeConfig->getValue('straker/attributes/default'));
+        return  explode(',', $this->scopeConfig->getValue('straker_attribute/settings/default'));
     }
 
     public function getCustomAttributes(){
 
-        return  explode(',', $this->scopeConfig->getValue('straker/attributes/custom'));
+        return  explode(',', $this->scopeConfig->getValue('straker_attribute/settings/custom'));
     }
 
     public function getStoreInfo( $storeId )
