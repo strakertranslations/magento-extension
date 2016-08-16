@@ -41,9 +41,13 @@ class Grid extends Extended
      */
     protected function _prepareCollection()
     {
+        $sourceStoreId = $this->getRequest()->getParam('source_store_id');
         $productCollection = $this->_job->getProductCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price');
+        if( !empty($sourceStoreId) && is_numeric($sourceStoreId)){
+            $productCollection->addStoreFilter( $sourceStoreId );
+        }
         $this->setCollection($productCollection);
         return parent::_prepareCollection();
     }
