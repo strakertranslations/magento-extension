@@ -52,20 +52,20 @@ class JobHelper extends AbstractHelper
     {
 
         $this->jobData = $data;
-//        var_dump( $data  );exit();
+
         $this->jobModel = $this->_jobFactory->create();
 
         $this->jobModel->setData(
             [
 
                 'job_status_id'=> JobStatus::JOB_STATUS_INIT,
-                'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_store'],
-                'target_store_id'=>$this->jobData['destination_store'],
-                'sl'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/source_language'],
-                'tl'=>$this->_configHelper->getStoreInfo($this->jobData['destination_store'])['straker/general/destination_language']
+                'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
+                'target_store_id'=>$this->jobData['magento_destination_store'],
+                'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
+                'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
             ]
         );
-//        var_dump( $this->jobModel->getData() );exit();
+
         return $this;
     }
 
