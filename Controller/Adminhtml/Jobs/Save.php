@@ -12,6 +12,7 @@ use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\JobRepository;
 use Straker\EasyTranslationPlatform\Helper\JobHelper;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 
 class Save extends \Magento\Backend\App\Action
@@ -20,6 +21,8 @@ class Save extends \Magento\Backend\App\Action
      * @var \Magento\Backend\Helper\Js
      */
     protected $_jsHelper;
+
+    protected $_setupInterface;
 
     /**
      * @var \Straker\EasyTranslationPlatform\Helper\ConfigHelper
@@ -34,6 +37,10 @@ class Save extends \Magento\Backend\App\Action
 
     protected $_multiSelectInputTypes = array(
         'select', 'multiselect'
+    );
+
+    protected $_storeConfigKeys = array(
+        'magento_destination_store','straker_target_language','magento_source_store','straker_source_language'
     );
 
     protected  $_translatedAttributeLabels = [];
@@ -58,6 +65,7 @@ class Save extends \Magento\Backend\App\Action
         JobType $jobType,
         JobHelper $jobHelper,
         StrakerAPIInterface $API,
+        SetupInterface $setup,
         Logger $logger,
         \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
     ) {
@@ -70,6 +78,7 @@ class Save extends \Magento\Backend\App\Action
         $this->_jobTypeModel = $jobType;
         $this->jobRepository = $jobRepository;
         $this->_api = $API;
+        $this->_setupInterface = $setup;
         $this->_jobHelper = $jobHelper;
         $this->_logger = $logger;
 
@@ -98,6 +107,8 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data) {
+
+            $this->_saveStoreConfigData($data);
 
             $job = $this->_jobHelper->createJob($data)->generateProductJob()->save();
 
@@ -136,6 +147,41 @@ class Save extends \Magento\Backend\App\Action
             return $resultRedirect->setPath('*/*/edit', ['job_id' => $this->getRequest()->getParam('job_id')]);
         }
         return $resultRedirect->setPath('*/*/');
+    }
+
+    protected function _saveStoreConfigData($data)
+    {
+        $count = 0;
+
+        foreach ($this->_storeConfigKeys as $key ) {
+
+            if (isset($data[$key])) {
+                $count ++;
+            }
+        }
+
+        if($count==4)
+        {
+
+            try {
+
+                $this->_setupInterface->saveStoreSetup(
+                    $data['magento_destination_store'],
+                    $data['magento_source_store'],
+                    $data['straker_source_language'],
+                    $data['straker_target_language']
+                );
+
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+
+                $this->messageManager->addError($e->getMessage());
+
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+
+
+            }
+
+        }
     }
 
     /**

@@ -59,9 +59,7 @@ class CheckLanguagePairs extends Action
         if(empty($store_data['straker/general/source_store']))
         {
             $result['success'] = false;
-
-            $result['redirect_url'] = $this->_dataHelper->getUrl('EasyTranslationPlatform/Setup_LanguagePairs/Index',['target_store_id'=>$target_store_id]);
-
+            
         }else{
 
             $result['success'] = true;
