@@ -30,7 +30,8 @@ class JobActions extends Column
                                 [
                                     'job_id' => $item['job_id'],
                                     'job_key' => $item['job_key'],
-                                    'job_type_id' => $item['job_type_id']
+                                    'job_type_id' => $item['job_type_id'],
+                                    'source_store_id' => $item['source_store_id']
                                 ]
                             ),
                         'label' => __('View')
@@ -42,8 +43,6 @@ class JobActions extends Column
                             'label' => __('View Quote')
                         ];
                     }
-
-//                    $item[$name]['view_quote'] = '<a>323432</a>';
 
                     if ($statusId == Model\JobStatus::JOB_STATUS_COMPLETED) {
                         $item[$name]['confirm'] = [
