@@ -21,12 +21,12 @@
                     <label>Name</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>
                 </field>
-                <field id="email" translate="label" type="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="email" translate="label" type="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Login</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>
                 </field>
             </group>
-            <group id="settings" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="settings" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Translation Settings</label>
                 <field id="reset_store" translate="label" type="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Language</label>
