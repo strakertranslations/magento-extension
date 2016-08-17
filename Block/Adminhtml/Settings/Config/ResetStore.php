@@ -96,8 +96,9 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
             $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
                 ->setData([
                     'id' => 'straker_reset_store_button_' . $store->getCode(),
-                    'label' => __('Remove Translation'),
-                    'class' => 'straker-reset-store-button'
+                    'label' => __('Clear'),
+                    'class' => 'straker-reset-store-button',
+                    'title' => __('Clear the language setting only.')
                 ]);
             return $button->toHtml();
         }
