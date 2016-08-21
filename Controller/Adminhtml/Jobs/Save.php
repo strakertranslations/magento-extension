@@ -4,6 +4,7 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Js;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Store\Model\StoreManagerInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
@@ -14,11 +15,12 @@ use Straker\EasyTranslationPlatform\Helper\JobHelper;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory;
 
 class Save extends \Magento\Backend\App\Action
 {
     /**
-     * @var \Magento\Backend\Helper\Js
+     * @var Js
      */
     protected $_jsHelper;
 
@@ -30,7 +32,7 @@ class Save extends \Magento\Backend\App\Action
     protected $_configHelper;
 
     /**
-     * @var \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_jobCollectionFactory;
 
@@ -48,16 +50,36 @@ class Save extends \Magento\Backend\App\Action
     protected  $_translatedAttributeOptions = [];
 
     protected $_jobRequest;
+    protected $_attributeRepository;
+    protected $_xmlHelper;
+    protected $_storeManager;
+    protected $_jobTypeModel;
+    protected $jobRepository;
+    protected $_api;
+    protected $_jobHelper;
+    protected $_logger;
 
 
     /**
-     * \Magento\Backend\Helper\Js $jsHelper
-     * @param Action\Context $context
+     * Save constructor.
+     * @param Context $context
+     * @param ConfigHelper $configHelper
+     * @param Js $jsHelper
+     * @param AttributeRepository $attributeRepository
+     * @param StoreManagerInterface $storeManager
+     * @param XmlHelper $xmlHelper
+     * @param JobRepository $jobRepository
+     * @param JobType $jobType
+     * @param JobHelper $jobHelper
+     * @param StrakerAPIInterface $API
+     * @param SetupInterface $setup
+     * @param Logger $logger
+     * @param CollectionFactory $jobCollectionFactory
      */
     public function __construct(
         Context $context,
         ConfigHelper $configHelper,
-        \Magento\Backend\Helper\Js $jsHelper,
+        Js $jsHelper,
         AttributeRepository $attributeRepository,
         StoreManagerInterface $storeManager,
         XmlHelper $xmlHelper,
@@ -67,7 +89,7 @@ class Save extends \Magento\Backend\App\Action
         StrakerAPIInterface $API,
         SetupInterface $setup,
         Logger $logger,
-        \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
+        CollectionFactory $jobCollectionFactory
     ) {
         $this->_configHelper = $configHelper;
         $this->_jsHelper = $jsHelper;

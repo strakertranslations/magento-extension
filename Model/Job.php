@@ -11,6 +11,7 @@ use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
 use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
 
 class Job extends AbstractModel implements JobInterface, IdentityInterface
@@ -35,6 +36,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     protected $_eventPrefix = 'st_products_grid';
 
     protected $_productCollectionFactory;
+    protected $_categoryCollectionFactory;
     protected $_attributeTranslationCollectionFactory;
     protected $_entities = [];
     public    $_entityIds = [];
@@ -49,6 +51,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         Context $context,
         Registry $registry,
         ProductCollectionFactory $productCollectionFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         JobStatusFactory $jobStatusFactory,
         JobTypeFactory $jobTypeFactory,
@@ -58,6 +61,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
+        $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_attributeTranslationCollectionFactory = $attributeTranslationCollectionFactory;
         $this->_jobStatusFactory = $jobStatusFactory;
         $this->_jobTypeFactory = $jobTypeFactory;
@@ -89,8 +93,12 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
-    public function getEntities(){
-        $this->_loadEntities();
+    /**
+     * @param int $type, either JobType::JOB_TYPE_PRODUCT (default) or (JobType::JOB_TYPE_CATEGORY)
+     * @return array
+     */
+    public function getEntities( $type = JobType::JOB_TYPE_PRODUCT ){
+        $this->_loadEntities( $type );
         return $this->_entities;
     }
 
@@ -100,6 +108,15 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     public function getProductCollection(){
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_productCollectionFactory->create()
+            ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
+
+//        var_dump($collection->getData());exit();
+        return $collection;
+    }
+
+    public function getCategoryCollection(){
+        $this->getAttributeTranslationEntityArray();
+        $collection = $this->_categoryCollectionFactory->create()
             ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
 
 //        var_dump($collection->getData());exit();
@@ -118,13 +135,22 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         return $this->_entityIds;
     }
 
-    protected function _loadEntities()
+    protected function _loadEntities( $type = JobType::JOB_TYPE_PRODUCT )
     {
         $this->_entities = [];
         $this->_entityCount = 0;
-        foreach ($this->getProductCollection() as $product) {
-            $this->_entities[$product->getEntityId()] = $product;
-            $this->_entityCount++;
+
+        if( $type == JobType::JOB_TYPE_CATEGORY ){
+            foreach ($this->getCategoryCollection() as $category) {
+                $this->_entities[$category->getEntityId()] = $category;
+                $this->_entityCount++;
+            }
+
+        }else{
+            foreach ($this->getProductCollection() as $product) {
+                $this->_entities[$product->getEntityId()] = $product;
+                $this->_entityCount++;
+            }
         }
     }
 

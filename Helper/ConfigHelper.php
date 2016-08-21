@@ -124,6 +124,11 @@ class ConfigHelper extends AbstractHelper
         return  explode(',', $this->scopeConfig->getValue('straker_attribute/settings/custom'));
     }
 
+    public function getCategoryAttributes(){
+
+        return  explode(',', $this->scopeConfig->getValue('straker_attribute/settings/category'));
+    }
+
     public function getStoreInfo( $storeId )
     {
         $collection = $this->_scopeFactory->create(
