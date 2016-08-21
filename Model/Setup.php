@@ -184,6 +184,7 @@ class Setup extends AbstractModel implements SetupInterface
 
         try {
             foreach ($this->_dataHelper->getMagentoDataTableArray() as $table) {
+                $table = $connection->getTableName($table);
                 if ($connection->isTableExists($table)) {
                     if (empty($storeId)) {
                         //CLEAR FOR ALL STORES
@@ -219,6 +220,7 @@ class Setup extends AbstractModel implements SetupInterface
 
         try {
             foreach ($tables as $table) {
+                $table = $connection->getTableName($table);
                 if ($connection->isTableExists($table)) {
                     $deleteCount = $connection->delete($table);
                     $deleteCount++;

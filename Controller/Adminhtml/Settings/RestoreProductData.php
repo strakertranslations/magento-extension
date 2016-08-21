@@ -52,6 +52,7 @@ class RestoreProductData extends Action
             }
 
             foreach( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
+                $tableName = $this->_connection->getTableName($tableName);
                 $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
 
                 if( $this->_connection->isTableExists( $tableName )

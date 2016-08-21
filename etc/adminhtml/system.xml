@@ -13,10 +13,6 @@
             <resource>Straker_EasyTranslationPlatform::config</resource>
             <group id="general" translate="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Account Information</label>
-                <!--<field id="version" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">-->
-                    <!--<label>Environment</label>-->
-                    <!--<frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>-->
-                <!--</field>-->
                 <field id="name" translate="label" type="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Name</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\LabelValue</frontend_model>
@@ -44,12 +40,16 @@
             <group id="settings" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Attribute Settings</label>
                 <field id="default" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Default Attributes</label>
+                    <label>Product Default Attributes</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\DefaultAttributeSource</source_model>
                 </field>
                 <field id="custom" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Custom Attributes</label>
+                    <label>Product Custom Attributes</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\CustomAttributeSource</source_model>
+                </field>
+                <field id="category" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category Attributes</label>
+                    <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\CategoryAttributeSource</source_model>
                 </field>
             </group>
         </section>
