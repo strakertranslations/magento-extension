@@ -1,0 +1,599 @@
+<?xml version="1.0" encoding="UTF-8"?><root>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1293" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_70" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[名称]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1294" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_70" product_id="21" source_store_id="1">
+    <value><![CDATA[雪碧泡沫瑜伽砖]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1295" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_72" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[描述]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1296" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_72" product_id="21" source_store_id="1">
+    <value><![CDATA[<p>我们最畅销的瑜伽道具，4英寸，高品质的雪碧泡沫瑜伽砖是瑜伽初学者和工作室的专业人士的青睐。 一个基本的瑜伽配件，瑜伽砖是许多常见的瑜伽姿势平衡寻找和调整的一个重要工具。 选择5种颜色可供选择。</p>
+<ul><li>标准大尺寸：4“×6”×9“。
+</li><li>斜面边缘的轮廓理想的抓地力。
+</li><li>耐用柔软，防划伤泡沫。
+</li><li>独立包装。
+</li><li>十颜色选择。
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1297" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_130" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[活动]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_130_8" option_id="8" option_translation_id="1002" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[瑜伽]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_130_9" option_id="9" option_translation_id="1003" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[娱乐]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_130_17" option_id="17" option_translation_id="1004" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[体育]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_130_11" option_id="11" option_translation_id="1005" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[健身房]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1298" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_132" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[材料]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_132_42" option_id="42" option_translation_id="1006" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[泡沫]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1299" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_135" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[性别]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_135_80" option_id="80" option_translation_id="1007" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[人]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_135_81" option_id="81" option_translation_id="1008" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[妇女]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_135_84" option_id="84" option_translation_id="1009" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[男女皆宜的]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1300" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_136" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[齿轮类]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-yoga-brick.html" name="70_1_3_21_136_87" option_id="87" option_translation_id="1010" product_id="21" source_store_id="1" translate="true">
+    <value><![CDATA[行使]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1301" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_70" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1302" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_70" product_id="22" source_store_id="1">
+    <value><![CDATA[雪碧泡沫轴]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1303" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_72" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1304" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_72" product_id="22" source_store_id="1">
+    <value><![CDATA[<p>它伤害了这么好的使用雪碧泡沫辊上疼痛的，疲惫的肌肉肌筋膜按摩疗法。 或者你可以这个根本件添加到您的普拉提和瑜伽饰物，或申请对核心稳定，加强和平衡锻炼。 </p>
+<ul><li>6&#39;&#39;宽12英寸长。</li><li>安全的肌筋膜发布。</li><li>EPP或PE泡沫选项。</li><li>固体，致密，闭孔泡沫。</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1305" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_130" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_130_8" option_id="8" option_translation_id="1011" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_130_11" option_id="11" option_translation_id="1012" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Gym]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1306" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_132" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_132_42" option_id="42" option_translation_id="1013" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Foam]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1307" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_135" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_135_80" option_id="80" option_translation_id="1014" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_135_81" option_id="81" option_translation_id="1015" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_135_84" option_id="84" option_translation_id="1016" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1308" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_136" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-foam-roller.html" name="70_1_3_22_136_87" option_id="87" option_translation_id="1017" product_id="22" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1309" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_70" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1310" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_70" product_id="26" source_store_id="1">
+    <value><![CDATA[雪碧瘀球55厘米]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1311" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_72" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1312" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_72" product_id="26" source_store_id="1">
+    <value><![CDATA[<p>雪碧瘀球为您提供了调子腹肌，侧面和背面您想通过功放您的核心锻炼。 随着鲜艳的色彩和耐爆设计，这是一个必须具备的每一个硬核锻炼上瘾。 使用腹调理，平衡训练，瑜伽，甚至是物理治疗。</p>
+<ul><li>耐用的，突发性的设计。</li><li>手泵包括在内。</li></ul>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1313" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_90" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_90_50" option_id="50" option_translation_id="1018" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[蓝色]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1314" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_130" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_130_8" option_id="8" option_translation_id="1019" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_130_11" option_id="11" option_translation_id="1020" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Gym]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1315" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_132" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_132_44" option_id="44" option_translation_id="1021" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[塑料]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1316" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_135" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_135_80" option_id="80" option_translation_id="1022" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_135_81" option_id="81" option_translation_id="1023" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_135_82" option_id="82" option_translation_id="1024" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[男孩]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_135_83" option_id="83" option_translation_id="1025" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[女孩]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_135_84" option_id="84" option_translation_id="1026" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1317" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_136" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_136_87" option_id="87" option_translation_id="1027" product_id="26" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1318" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_137" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[尺寸]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-55-cm-blue.html" name="70_1_3_26_137_91" option_id="91" option_translation_id="1028" product_id="26" source_store_id="1" translate="true">
+    <value><![CDATA[55厘米]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1319" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_70" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1320" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_70" product_id="29" source_store_id="1">
+    <value><![CDATA[雪碧瘀球65厘米]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1321" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_72" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1322" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_72" product_id="29" source_store_id="1">
+    <value><![CDATA[<p>雪碧瘀球为您提供了调子腹肌，侧面和背面您想通过功放您的核心锻炼。 随着鲜艳的色彩和耐爆设计，这是一个必须具备的每一个硬核锻炼上瘾。 使用腹调理，平衡训练，瑜伽，甚至是物理治疗。</p>
+<ul><li>65厘米塑料外壳。</li><li>耐用的，突发性的设计。</li><li>手泵包括在内。</li></ul>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1323" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_90" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_90_50" option_id="50" option_translation_id="1029" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Blue]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1324" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_130" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_130_8" option_id="8" option_translation_id="1030" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_130_11" option_id="11" option_translation_id="1031" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Gym]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1325" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_132" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_132_44" option_id="44" option_translation_id="1032" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Plastic]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1326" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_135" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_135_80" option_id="80" option_translation_id="1033" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_135_81" option_id="81" option_translation_id="1034" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_135_82" option_id="82" option_translation_id="1035" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Boys]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_135_83" option_id="83" option_translation_id="1036" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Girls]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_135_84" option_id="84" option_translation_id="1037" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1327" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_136" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_136_87" option_id="87" option_translation_id="1038" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1328" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_137" product_id="29" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-65-cm-blue.html" name="70_1_3_29_137_92" option_id="92" option_translation_id="1039" product_id="29" source_store_id="1" translate="true">
+    <value><![CDATA[65厘米]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1329" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_70" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1330" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_70" product_id="32" source_store_id="1">
+    <value><![CDATA[雪碧瘀球75厘米]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1331" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_72" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1332" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_72" product_id="32" source_store_id="1">
+    <value><![CDATA[<p>雪碧瘀球为您提供了调子腹肌，侧面和背面您想通过功放您的核心锻炼。 随着鲜艳的色彩和耐爆设计，这是一个必须具备的每一个硬核锻炼上瘾。 使用腹调理，平衡训练，瑜伽，甚至是物理治疗。</p>
+<ul><li>75厘米塑料外壳。</li><li>耐用的，突发性的设计。</li><li>手泵包括在内。</li></ul>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1333" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_90" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_90_50" option_id="50" option_translation_id="1040" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Blue]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1334" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_130" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_130_8" option_id="8" option_translation_id="1041" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_130_11" option_id="11" option_translation_id="1042" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Gym]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1335" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_132" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_132_44" option_id="44" option_translation_id="1043" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Plastic]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1336" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_135" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_135_80" option_id="80" option_translation_id="1044" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_135_81" option_id="81" option_translation_id="1045" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_135_82" option_id="82" option_translation_id="1046" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Boys]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_135_83" option_id="83" option_translation_id="1047" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Girls]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_135_84" option_id="84" option_translation_id="1048" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1337" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_136" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_136_87" option_id="87" option_translation_id="1049" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1338" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_137" product_id="32" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-stasis-ball-75-cm-blue.html" name="70_1_3_32_137_93" option_id="93" option_translation_id="1050" product_id="32" source_store_id="1" translate="true">
+    <value><![CDATA[75厘米]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1339" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_70" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1340" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_70" product_id="33" source_store_id="1">
+    <value><![CDATA[雪碧瑜伽带6英尺]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1341" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_72" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1342" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_72" product_id="33" source_store_id="1">
+    <value><![CDATA[<p>雪碧瑜伽带是在苛刻的延伸你的不懈的合作伙伴，持有和校准例程。 表带的100％有机棉织物编织紧密，形成一个柔软的，但纹理防滑表面。 塑料表扣是容易调节，轻巧耐用受到压力。</p>
+<ul><li>100％柔软耐用棉。
+</li><li>塑料肚带扣易于使用。
+</li><li>从邻苯二甲酸酯和重金属免费染料制成三种自然的色彩。
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1343" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_130" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_130_8" option_id="8" option_translation_id="1051" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1344" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_132" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_132_32" option_id="32" option_translation_id="1052" product_id="33" source_store_id="1" translate="true">
+    <value><![CDATA[帆布]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_132_44" option_id="44" option_translation_id="1053" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Plastic]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1345" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_135" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_135_80" option_id="80" option_translation_id="1054" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_135_81" option_id="81" option_translation_id="1055" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_135_84" option_id="84" option_translation_id="1056" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1346" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_136" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_136_87" option_id="87" option_translation_id="1057" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1347" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_137" product_id="33" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-6-foot.html" name="70_1_3_33_137_94" option_id="94" option_translation_id="1058" product_id="33" source_store_id="1" translate="true">
+    <value><![CDATA[6英尺]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1348" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_70" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1349" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_70" product_id="34" source_store_id="1">
+    <value><![CDATA[雪碧瑜伽带8英尺]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1350" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_72" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1351" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_72" product_id="34" source_store_id="1">
+    <value><![CDATA[<p>雪碧瑜伽带是在苛刻的延伸你的不懈的合作伙伴，持有和校准例程。 表带的100％有机棉织物编织紧密，形成一个柔软的，但纹理防滑表面。 塑料表扣是容易调节，轻巧耐用受到压力。</p>
+<ul><li>8英尺长×1.0“宽。
+</li><li>100％柔软耐用棉。
+</li><li>塑料肚带扣易于使用。
+</li><li>从邻苯二甲酸酯和重金属免费染料制成三种自然的色彩。
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1352" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_130" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_130_8" option_id="8" option_translation_id="1059" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1353" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_132" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_132_32" option_id="32" option_translation_id="1060" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Canvas]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_132_44" option_id="44" option_translation_id="1061" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Plastic]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1354" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_135" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_135_80" option_id="80" option_translation_id="1062" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_135_81" option_id="81" option_translation_id="1063" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_135_84" option_id="84" option_translation_id="1064" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1355" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_136" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_136_87" option_id="87" option_translation_id="1065" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1356" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_137" product_id="34" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-8-foot.html" name="70_1_3_34_137_95" option_id="95" option_translation_id="1066" product_id="34" source_store_id="1" translate="true">
+    <value><![CDATA[8英尺]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1357" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_70" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1358" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_70" product_id="35" source_store_id="1">
+    <value><![CDATA[雪碧瑜伽带10英尺]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1359" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_72" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1360" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_72" product_id="35" source_store_id="1">
+    <value><![CDATA[<p>雪碧瑜伽带是在苛刻的延伸你的不懈的合作伙伴，持有和校准例程。 表带的100％有机棉织物编织紧密，形成一个柔软的，但纹理防滑表面。 塑料表扣是容易调节，轻巧耐用受到压力。</p>
+<ul><li>10&#39;长×1.0“宽。
+</li><li>100％柔软耐用棉。
+</li><li>塑料肚带扣易于使用。
+</li><li>从邻苯二甲酸酯和重金属免费染料制成三种自然的色彩。
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1361" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_130" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_130_8" option_id="8" option_translation_id="1067" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1362" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_132" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_132_32" option_id="32" option_translation_id="1068" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Canvas]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_132_44" option_id="44" option_translation_id="1069" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Plastic]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1363" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_135" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_135_80" option_id="80" option_translation_id="1070" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_135_81" option_id="81" option_translation_id="1071" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_135_84" option_id="84" option_translation_id="1072" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1364" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_136" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_136_87" option_id="87" option_translation_id="1073" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1365" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_137" product_id="35" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-strap-10-foot.html" name="70_1_3_35_137_96" option_id="96" option_translation_id="1074" product_id="35" source_store_id="1" translate="true">
+    <value><![CDATA[10足]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1366" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_70" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1367" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_70" product_id="45" source_store_id="1">
+    <value><![CDATA[雪碧瑜伽伴侣套件]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1368" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_72" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1369" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_72" product_id="45" source_store_id="1">
+    <value><![CDATA[<p>一个成熟的瑜伽锻炼时间超过一垫多。 雪碧瑜伽伴侣套件有助于你需要一个全方位的锻炼的基础知识储备你的工作室。 该套件由四个最畅销的亮度雪碧配件在一个简单的包：统计的球，泡沫块，瑜伽带，泡沫辊。 选择大小和颜色，其余的交给我们。 该套件包括：</p>
+<ul><li> 雪碧统计的球
+</li><li> 雪碧泡沫瑜伽砖
+</li><li> 雪碧瑜伽带
+</li><li> 雪碧泡沫轴
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1370" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_130" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_130_8" option_id="8" option_translation_id="1075" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_130_11" option_id="11" option_translation_id="1076" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Gym]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1371" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_135" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_135_80" option_id="80" option_translation_id="1077" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_135_81" option_id="81" option_translation_id="1078" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_135_84" option_id="84" option_translation_id="1079" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1372" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_136" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="70_1_3_45_136_87" option_id="87" option_translation_id="1080" product_id="45" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1373" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_70" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1374" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_70" product_id="2046" source_store_id="1">
+    <value><![CDATA[设置雪碧瑜伽带子]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1375" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_72" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1376" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_72" product_id="2046" source_store_id="1">
+    <value><![CDATA[<p>每一个伟大的舒展雪碧集瑜伽带子和保持你的需要。 有三个带在这组：6&#39;，8&#39;和10&#39;。</p>
+<ul><li> 100％柔软耐用棉。
+</li><li> 塑料肚带扣易于使用。
+</li><li> 从邻苯二甲酸酯和重金属免费染料进行了三次自然的色彩选择。
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1377" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_90" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_90_49" option_id="49" option_translation_id="1081" product_id="2046" source_store_id="1" translate="true">
+    <value><![CDATA[黑色]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="1378" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_130" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Activity]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_130_8" option_id="8" option_translation_id="1082" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Yoga]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1379" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_132" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_132_32" option_id="32" option_translation_id="1083" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Canvas]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_132_44" option_id="44" option_translation_id="1084" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Plastic]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="1380" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_135" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Gender]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_135_80" option_id="80" option_translation_id="1085" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Men]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_135_81" option_id="81" option_translation_id="1086" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Women]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_135_84" option_id="84" option_translation_id="1087" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Unisex]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="1381" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_136" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Category Gear]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/set-of-sprite-yoga-straps.html" name="70_1_3_2046_136_87" option_id="87" option_translation_id="1088" product_id="2046" source_store_id="1" translate="false">
+    <value><![CDATA[Exercise]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1382" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_70" product_id="2047" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1383" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_70" product_id="2047" source_store_id="1">
+    <value><![CDATA[测试袋]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1384" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_72" product_id="2047" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1385" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_72" product_id="2047" source_store_id="1">
+    <value><![CDATA[<p>这是一个好包包</p>]]></value>
+  </data>
+  <data attribute_id="81" attribute_label="Meta Title" attribute_translation_id="1386" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_81" product_id="2047" source_store_id="1" translate="true">
+    <value><![CDATA[元标题]]></value>
+  </data>
+  <data attribute_id="81" attribute_label="Meta Title" attribute_translation_id="1387" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_81" product_id="2047" source_store_id="1">
+    <value><![CDATA[测试袋]]></value>
+  </data>
+  <data attribute_id="82" attribute_label="Meta Keywords" attribute_translation_id="1388" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_82" product_id="2047" source_store_id="1" translate="true">
+    <value><![CDATA[元关键词]]></value>
+  </data>
+  <data attribute_id="82" attribute_label="Meta Keywords" attribute_translation_id="1389" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_82" product_id="2047" source_store_id="1">
+    <value><![CDATA[测试袋]]></value>
+  </data>
+  <data attribute_id="83" attribute_label="Meta Description" attribute_translation_id="1390" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_83" product_id="2047" source_store_id="1" translate="true">
+    <value><![CDATA[meta描述]]></value>
+  </data>
+  <data attribute_id="83" attribute_label="Meta Description" attribute_translation_id="1391" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_83" product_id="2047" source_store_id="1">
+    <value><![CDATA[测试袋 <p>这是一个好包包</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1392" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_90" product_id="2047" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/test-bag.html" name="70_1_3_2047_90_49" option_id="49" option_translation_id="1089" product_id="2047" source_store_id="1" translate="false">
+    <value><![CDATA[Black]]></value>
+  </data>
+</root>

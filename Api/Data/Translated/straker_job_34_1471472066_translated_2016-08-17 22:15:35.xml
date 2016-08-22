@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?><root>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="378" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_70" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[名称]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="379" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_70" product_id="45" source_store_id="1">
+    <value><![CDATA[雪碧瑜伽伴侣套件]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="380" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_72" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[描述]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="381" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_72" product_id="45" source_store_id="1">
+    <value><![CDATA[<p>一个成熟的瑜伽锻炼时间超过一垫多。 雪碧瑜伽伴侣套件有助于你需要一个全方位的锻炼的基础知识储备你的工作室。 该套件由四个最畅销的亮度雪碧配件在一个简单的包：统计的球，泡沫块，瑜伽带，泡沫辊。 选择大小和颜色，其余的交给我们。 该套件包括：</p>
+<ul><li> 雪碧统计的球
+</li><li> 雪碧泡沫瑜伽砖
+</li><li> 雪碧瑜伽带
+</li><li> 雪碧泡沫轴
+</li></ul>]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" attribute_translation_id="382" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_130" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[活动]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_130_8" option_id="8" option_translation_id="232" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[瑜伽]]></value>
+  </data>
+  <data attribute_id="130" attribute_label="Activity" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_130_11" option_id="11" option_translation_id="233" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[健身房]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" attribute_translation_id="383" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_135" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[性别]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_135_80" option_id="80" option_translation_id="234" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[人]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_135_81" option_id="81" option_translation_id="235" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[妇女]]></value>
+  </data>
+  <data attribute_id="135" attribute_label="Gender" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_135_84" option_id="84" option_translation_id="236" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[男女皆宜的]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" attribute_translation_id="384" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_136" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[齿轮类]]></value>
+  </data>
+  <data attribute_id="136" attribute_label="Category Gear" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/sprite-yoga-companion-kit.html" name="34_1_3_45_136_87" option_id="87" option_translation_id="237" product_id="45" source_store_id="1" translate="true">
+    <value><![CDATA[行使]]></value>
+  </data>
+</root>

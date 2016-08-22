@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?><root>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1421" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_70" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[名称]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1422" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_70" product_id="1996" source_store_id="1">
+    <value><![CDATA[WSH07-28黑]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1423" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_72" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[描述]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1424" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_72" product_id="1996" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1425" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_90" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_90_49" option_id="49" option_translation_id="1138" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[黑色]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1426" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_137" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[尺寸]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_137_172" option_id="172" option_translation_id="1139" product_id="1996" source_store_id="1" translate="false">
+    <value><![CDATA[28]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1427" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_151" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[测试]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-black.html" name="83_1_3_1996_151_213" option_id="213" option_translation_id="1140" product_id="1996" source_store_id="1" translate="true">
+    <value><![CDATA[TEST1]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1428" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_70" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1429" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_70" product_id="1997" source_store_id="1">
+    <value><![CDATA[WSH07-28蓝]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1430" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_72" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1431" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_72" product_id="1997" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1432" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_90" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_90_50" option_id="50" option_translation_id="1141" product_id="1997" source_store_id="1" translate="true">
+    <value><![CDATA[蓝色]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1433" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_137" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_137_172" option_id="172" option_translation_id="1142" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[28]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1434" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_151" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[Test]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-blue.html" name="83_1_3_1997_151_213" option_id="213" option_translation_id="1143" product_id="1997" source_store_id="1" translate="false">
+    <value><![CDATA[test1]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1435" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_70" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1436" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_70" product_id="1998" source_store_id="1">
+    <value><![CDATA[WSH07-28紫]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1437" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_72" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1438" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_72" product_id="1998" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1439" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_90" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_90_57" option_id="57" option_translation_id="1144" product_id="1998" source_store_id="1" translate="true">
+    <value><![CDATA[紫色]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1440" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_137" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_137_172" option_id="172" option_translation_id="1145" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[28]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1441" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_151" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[Test]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-28-purple.html" name="83_1_3_1998_151_213" option_id="213" option_translation_id="1146" product_id="1998" source_store_id="1" translate="false">
+    <value><![CDATA[test1]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1442" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_70" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1443" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_70" product_id="1999" source_store_id="1">
+    <value><![CDATA[WSH07-29黑]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1444" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_72" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1445" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_72" product_id="1999" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1446" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_90" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_90_49" option_id="49" option_translation_id="1147" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[Black]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1447" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_137" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_137_173" option_id="173" option_translation_id="1148" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[29]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1448" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_151" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[Test]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-black.html" name="83_1_3_1999_151_213" option_id="213" option_translation_id="1149" product_id="1999" source_store_id="1" translate="false">
+    <value><![CDATA[test1]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1449" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_70" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1450" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_70" product_id="2000" source_store_id="1">
+    <value><![CDATA[WSH07-29蓝]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1451" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_72" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1452" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_72" product_id="2000" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1453" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_90" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_90_50" option_id="50" option_translation_id="1150" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[Blue]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1454" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_137" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_137_173" option_id="173" option_translation_id="1151" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[29]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1455" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_151" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[Test]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short-29-blue.html" name="83_1_3_2000_151_213" option_id="213" option_translation_id="1152" product_id="2000" source_store_id="1" translate="false">
+    <value><![CDATA[test1]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1456" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_70" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1457" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_70" product_id="2002" source_store_id="1">
+    <value><![CDATA[回声飞度压缩短]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1458" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_72" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1459" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_72" product_id="2002" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color" attribute_translation_id="1460" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_90" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[颜色]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_90_49" option_id="49" option_translation_id="1153" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[Black]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_90_50" option_id="50" option_translation_id="1154" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[Blue]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_90_51" option_id="51" option_translation_id="1155" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[棕色]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_90_57" option_id="57" option_translation_id="1156" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[Purple]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1461" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_132" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[材料]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_132_149" option_id="149" option_translation_id="1157" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[LYCRA®]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_132_151" option_id="151" option_translation_id="1158" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[斯潘德克斯弹性纤维]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_132_159" option_id="159" option_translation_id="1159" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[羊毛]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1462" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_137" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_137_172" option_id="172" option_translation_id="1160" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[28]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_137_173" option_id="173" option_translation_id="1161" product_id="2002" source_store_id="1" translate="false">
+    <value><![CDATA[29]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" attribute_translation_id="1463" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_144" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[风格底]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_144_105" option_id="105" option_translation_id="1162" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[基层]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_144_108" option_id="108" option_translation_id="1163" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[压缩]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_144_112" option_id="112" option_translation_id="1164" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[舒适]]></value>
+  </data>
+  <data attribute_id="148" attribute_label="Pattern" attribute_translation_id="1464" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_148" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[模式]]></value>
+  </data>
+  <data attribute_id="148" attribute_label="Pattern" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_148_197" option_id="197" option_translation_id="1165" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[固体]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" attribute_translation_id="1465" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_149" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[气候]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_149_202" option_id="202" option_translation_id="1166" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[全天候]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_149_205" option_id="205" option_translation_id="1167" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[室内]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_149_206" option_id="206" option_translation_id="1168" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[温和]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_149_209" option_id="209" option_translation_id="1169" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[暖]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/echo-fit-compression-short.html" name="83_1_3_2002_149_212" option_id="212" option_translation_id="1170" product_id="2002" source_store_id="1" translate="true">
+    <value><![CDATA[热]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1466" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_70" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1467" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_70" product_id="2050" source_store_id="1">
+    <value><![CDATA[WSH07  - 布朗-28]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1468" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_72" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1469" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_72" product_id="2050" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1470" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_90" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_90_51" option_id="51" option_translation_id="1171" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Brown]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1471" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_132" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_132_149" option_id="149" option_translation_id="1172" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Lycra&reg;]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_132_151" option_id="151" option_translation_id="1173" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Spandex]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_132_159" option_id="159" option_translation_id="1174" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Wool]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1472" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_137" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_137_172" option_id="172" option_translation_id="1175" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[28]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" attribute_translation_id="1473" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_144" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Style Bottom]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_144_105" option_id="105" option_translation_id="1176" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Base Layer]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_144_108" option_id="108" option_translation_id="1177" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Compression]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_144_112" option_id="112" option_translation_id="1178" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Snug]]></value>
+  </data>
+  <data attribute_id="148" attribute_label="Pattern" attribute_translation_id="1474" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_148" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Pattern]]></value>
+  </data>
+  <data attribute_id="148" attribute_label="Pattern" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_148_197" option_id="197" option_translation_id="1179" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Solid]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" attribute_translation_id="1475" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_149" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Climate]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_149_202" option_id="202" option_translation_id="1180" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[All-Weather]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_149_205" option_id="205" option_translation_id="1181" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Indoor]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_149_206" option_id="206" option_translation_id="1182" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Mild]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_149_209" option_id="209" option_translation_id="1183" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Warm]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_149_212" option_id="212" option_translation_id="1184" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Hot]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1476" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_151" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[Test]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2050/s/wsh07-brown-28/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2050_151_213" option_id="213" option_translation_id="1185" product_id="2050" source_store_id="1" translate="false">
+    <value><![CDATA[test1]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1477" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_70" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Name]]></value>
+  </data>
+  <data attribute_id="70" attribute_label="Name" attribute_translation_id="1478" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_70" product_id="2051" source_store_id="1">
+    <value><![CDATA[WSH07  - 布朗-29]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1479" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_72" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Description]]></value>
+  </data>
+  <data attribute_id="72" attribute_label="Description" attribute_translation_id="1480" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_72" product_id="2051" source_store_id="1">
+    <value><![CDATA[<p>你的肌肉知道它的时间去拉你的回音飞度压缩短第二。 公司的平衡，刺激挤压与透气性，它提供了你需要给它所有的支持和安慰。</p>
+<p>•黑色短裤压缩。<br />•高腰剪裁。<br />•压缩配合。<br />•裤腿长：1.0“。 <br />•可机洗/干。</p>]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" attribute_translation_id="1481" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_90" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Color000]]></value>
+  </data>
+  <data attribute_id="90" attribute_label="Color000" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_90_51" option_id="51" option_translation_id="1186" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Brown]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" attribute_translation_id="1482" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_132" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Material]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_132_149" option_id="149" option_translation_id="1187" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Lycra&reg;]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_132_151" option_id="151" option_translation_id="1188" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Spandex]]></value>
+  </data>
+  <data attribute_id="132" attribute_label="Material" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_132_159" option_id="159" option_translation_id="1189" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Wool]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" attribute_translation_id="1483" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_137" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Size]]></value>
+  </data>
+  <data attribute_id="137" attribute_label="Size" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_137_173" option_id="173" option_translation_id="1190" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[29]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" attribute_translation_id="1484" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_144" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Style Bottom]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_144_105" option_id="105" option_translation_id="1191" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Base Layer]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_144_108" option_id="108" option_translation_id="1192" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Compression]]></value>
+  </data>
+  <data attribute_id="144" attribute_label="Style Bottom" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_144_112" option_id="112" option_translation_id="1193" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Snug]]></value>
+  </data>
+  <data attribute_id="148" attribute_label="Pattern" attribute_translation_id="1485" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_148" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Pattern]]></value>
+  </data>
+  <data attribute_id="148" attribute_label="Pattern" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_148_197" option_id="197" option_translation_id="1194" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Solid]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" attribute_translation_id="1486" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_149" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Climate]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_149_202" option_id="202" option_translation_id="1195" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[All-Weather]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_149_205" option_id="205" option_translation_id="1196" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Indoor]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_149_206" option_id="206" option_translation_id="1197" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Mild]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_149_209" option_id="209" option_translation_id="1198" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Warm]]></value>
+  </data>
+  <data attribute_id="149" attribute_label="Climate" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_149_212" option_id="212" option_translation_id="1199" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Hot]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" attribute_translation_id="1487" content_context="product_attribute_label" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_151" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[Test]]></value>
+  </data>
+  <data attribute_id="151" attribute_label="Test" content_context="product_attribute_value" content_context_url="http://192.168.99.100:8080/index.php/admin/catalog/product/view/id/2051/s/wsh07-brown-29/key/65a3edcc44a5673bbea24eb331d870c3b9f18eb32c5f3aaedbbe81b0a51bc7a6/" name="83_1_3_2051_151_213" option_id="213" option_translation_id="1200" product_id="2051" source_store_id="1" translate="false">
+    <value><![CDATA[test1]]></value>
+  </data>
+</root>
