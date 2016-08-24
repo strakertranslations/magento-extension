@@ -4,6 +4,7 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+
 use Magento\Backend\Helper\Js;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Store\Model\StoreManagerInterface;
@@ -17,8 +18,9 @@ use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
+
     /**
      * @var Js
      */
@@ -36,6 +38,8 @@ class Save extends \Magento\Backend\App\Action
      */
     protected $_jobCollectionFactory;
 
+    protected $_setupInterface;
+
 
     protected $_multiSelectInputTypes = array(
         'select', 'multiselect'
@@ -45,9 +49,6 @@ class Save extends \Magento\Backend\App\Action
         'magento_destination_store','straker_target_language','magento_source_store','straker_source_language'
     );
 
-    protected  $_translatedAttributeLabels = [];
-
-    protected  $_translatedAttributeOptions = [];
 
     protected $_jobRequest;
     protected $_attributeRepository;
@@ -58,7 +59,6 @@ class Save extends \Magento\Backend\App\Action
     protected $_api;
     protected $_jobHelper;
     protected $_logger;
-
 
     /**
      * Save constructor.
@@ -91,14 +91,7 @@ class Save extends \Magento\Backend\App\Action
         Logger $logger,
         CollectionFactory $jobCollectionFactory
     ) {
-        $this->_configHelper = $configHelper;
-        $this->_jsHelper = $jsHelper;
-        $this->_jobCollectionFactory = $jobCollectionFactory;
-        $this->_attributeRepository = $attributeRepository;
-        $this->_xmlHelper = $xmlHelper;
-        $this->_storeManager = $storeManager;
-        $this->_jobTypeModel = $jobType;
-        $this->jobRepository = $jobRepository;
+
         $this->_api = $API;
         $this->_setupInterface = $setup;
         $this->_jobHelper = $jobHelper;
@@ -124,25 +117,38 @@ class Save extends \Magento\Backend\App\Action
     {
         $data = $this->getRequest()->getPostValue();
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-
         $resultRedirect = $this->resultRedirectFactory->create();
+
+        $jobData = [];
 
         if ($data) {
 
-            $this->_saveStoreConfigData($data);
 
-            $job = $this->_jobHelper->createJob($data)->generateProductJob()->save();
+            if(strlen($data['magento_source_store'])>0)
+            {
+                $this->_saveStoreConfigData($data);
+            }
+
+            if(isset($data['products']) && strlen($data['products'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob()->save();
+            }
+
+            if(strlen ($data['categories'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob()->save();
+            }
+
 
             try {
 
-                $this->_summitJob($job->getJob());
+                foreach ($jobData as $job){
 
-                if ($this->getRequest()->getParam('back')) {
-
-                    return $resultRedirect->setPath('*/*/edit', ['job_id' => $job->getId(), '_current' => true]);
+                    $this->_summitJob($job->getJob());
                 }
+
                 return $resultRedirect->setPath('*/*/');
+
 
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
@@ -158,8 +164,6 @@ class Save extends \Magento\Backend\App\Action
                 $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
             } catch (\Exception $e) {
-
-//                var_dump($e->getMessage());
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
 
@@ -212,6 +216,7 @@ class Save extends \Magento\Backend\App\Action
      */
     protected function _summitJob($job_object){
 
+
         $store = $job_object->getData('source_store_id');
 
         $defaultTitle = $job_object->getData('sl').'_'.$job_object->getData('tl').'_'.$store.'_'.$job_object->getData('job_id');
@@ -224,7 +229,6 @@ class Save extends \Magento\Backend\App\Action
         $this->_jobRequest['source_file'] = $job_object->getData('source_file');
         $this->_jobRequest['token']       = $job_object->getId();
 
-//        var_dump($this->_jobRequest);exit();
         $response = $this->_api->callTranslate($this->_jobRequest);
 
         try {

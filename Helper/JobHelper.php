@@ -2,12 +2,14 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
+use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
@@ -24,12 +26,14 @@ class JobHelper extends AbstractHelper
     protected $_jobFactory;
     protected $_configHelper;
     protected $_productHelper;
+    protected $_categoryHelper;
     protected $_jobStatusCollection;
 
     public function __construct(
         Context $context,
         JobFactory $jobFactory,
         ProductHelper $productHelper,
+        CategoryHelper $categoryHelper,
         ConfigHelper $configHelper,
         JobTypeCollection $jobTypeCollectionFactory,
         JobStatusCollection $jobStatusFactory
@@ -39,6 +43,7 @@ class JobHelper extends AbstractHelper
         $this->_jobFactory = $jobFactory;
         $this->_configHelper = $configHelper;
         $this->_productHelper = $productHelper;
+        $this->_categoryHelper = $categoryHelper;
         $this->_jobTypeCollection = $jobTypeCollectionFactory;
         $this->_jobStatusCollection = $jobStatusFactory;
         parent::__construct($context);
@@ -69,9 +74,6 @@ class JobHelper extends AbstractHelper
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     public function generateProductJob()
     {
 
@@ -83,6 +85,29 @@ class JobHelper extends AbstractHelper
             ->getSelectedProductAttributes()
             ->saveProductData($this->jobModel->getId())
             ->generateProductXML($this->jobModel);
+
+        $this->jobModel->addData(['source_file'=>$jobFile]);
+
+        $this->jobModel->save();
+
+        return $this;
+    }
+
+    /**
+     * @return $this
+     */
+
+    public function generateCategoryJob()
+    {
+
+        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('category')]);
+
+        $this->jobModel->save();
+
+        $jobFile = $this->_categoryHelper->getCategories($this->jobData['categories'],$this->jobModel->getData('source_store_id'))
+            ->getSelectedCategoryAttributes()
+            ->saveCategoryData($this->jobModel->getId())
+            ->generateCategoryXML($this->jobModel);
 
         $this->jobModel->addData(['source_file'=>$jobFile]);
 

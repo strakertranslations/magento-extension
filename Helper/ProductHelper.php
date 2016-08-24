@@ -155,6 +155,7 @@ class ProductHelper extends AbstractHelper
         $product_ids,
         $target_store_id,
         $includeChildren = true
+        $source_store_id
     )
     {
         if(strpos($product_ids,'&'))
@@ -162,7 +163,7 @@ class ProductHelper extends AbstractHelper
             $product_ids = explode('&',$product_ids);
         }
 
-        $this->_storeManager->setCurrentStore($target_store_id);
+        $this->_storeManager->setCurrentStore($source_store_id);
 
         if( $includeChildren ){
             $childrenIds = $this->_getChildrenProducts( $product_ids );
@@ -178,7 +179,7 @@ class ProductHelper extends AbstractHelper
             ->addIdFilter($product_ids)
             ->load();
 
-        $this->_storeId = $target_store_id;
+        $this->_storeId = $source_store_id;
 
         $this->_productData = $products;
 
