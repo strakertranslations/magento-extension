@@ -45,3 +45,8 @@ Temporary Items
 # Straker Job Files
 Api/Data/Original/*
 Api/Data/Translated/*
+Block/Adminhtml/Test/
+Controller/Adminhtml/Test/
+view/adminhtml/layout/easytranslationplatform_test_index.xml
+view/adminhtml/templates/test/
+view/adminhtml/web/js/test/
