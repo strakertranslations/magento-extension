@@ -137,7 +137,7 @@ class ProductHelper extends AbstractHelper
      */
     public function getProducts(
         $product_ids,
-        $target_store_id
+        $source_store_id
     )
     {
         if(strpos($product_ids,'&'))
@@ -145,14 +145,14 @@ class ProductHelper extends AbstractHelper
             $product_ids = explode('&',$product_ids);
         }
 
-        $this->_storeManager->setCurrentStore($target_store_id);
+        $this->_storeManager->setCurrentStore($source_store_id);
 
         $products = $this->_productCollectionFactory->create()
             ->addAttributeToSelect('*')
             ->addIdFilter($product_ids)
             ->load();
 
-        $this->_storeId = $target_store_id;
+        $this->_storeId = $source_store_id;
 
         $this->_productData = $products;
 

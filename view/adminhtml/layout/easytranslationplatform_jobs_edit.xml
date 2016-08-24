@@ -22,8 +22,8 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">attachment_products</argument>
                     <argument name="block" xsi:type="array">
-                        <item name="label" xsi:type="string">Select Products</item>
-                        <item name="title" xsi:type="string">Select Products</item>
+                        <item name="label" xsi:type="string">Translate Products</item>
+                        <item name="title" xsi:type="string">Translate Products</item>
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getEasyTranslationPlatformUrl"/>
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>

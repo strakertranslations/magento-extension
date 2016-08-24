@@ -430,7 +430,7 @@ class Categories extends \Magento\Catalog\Block\Adminhtml\Category\AbstractCateg
      */
     public function getTabLabel()
     {
-        return __('Select Categories');
+        return __('Translate Categories');
     }
 
     /**

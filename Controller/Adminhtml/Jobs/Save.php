@@ -67,26 +67,38 @@ class Save extends Action
     {
         $data = $this->getRequest()->getPostValue();
 
-        var_dump($data);
-        exit;
-
         $resultRedirect = $this->resultRedirectFactory->create();
+
+        $jobData = [];
 
         if ($data) {
 
-            $this->_saveStoreConfigData($data);
 
-            $job = $this->_jobHelper->createJob($data)->generateProductJob()->save();
+            if(strlen($data['magento_source_store'])>0)
+            {
+                $this->_saveStoreConfigData($data);
+            }
+
+            if(isset($data['products']) && strlen($data['products'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob()->save();
+            }
+
+            if(strlen ($data['categories'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob()->save();
+            }
+
 
             try {
 
-                $this->_summitJob($job->getJob());
+                foreach ($jobData as $job){
 
-                if ($this->getRequest()->getParam('back')) {
-
-                    return $resultRedirect->setPath('*/*/edit', ['job_id' => $job->getId(), '_current' => true]);
+                    $this->_summitJob($job->getJob());
                 }
+
                 return $resultRedirect->setPath('*/*/');
+
 
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
@@ -153,6 +165,7 @@ class Save extends Action
      * @return bool
      */
     protected function _summitJob($job_object){
+
 
         $store = $job_object->getData('source_store_id');
 
