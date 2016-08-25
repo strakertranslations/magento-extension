@@ -153,9 +153,8 @@ class ProductHelper extends AbstractHelper
      */
     public function getProducts(
         $product_ids,
-        $target_store_id,
+        $source_store_id,
         $includeChildren = true
-        $source_store_id
     )
     {
         if(strpos($product_ids,'&'))

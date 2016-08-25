@@ -76,7 +76,6 @@ class JobHelper extends AbstractHelper
 
     public function generateProductJob()
     {
-
         $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('product')]);
 
         $this->jobModel->save();
@@ -89,8 +88,7 @@ class JobHelper extends AbstractHelper
         $this->jobModel->addData(['source_file'=>$jobFile]);
 
         $this->jobModel->save();
-
-        return $this;
+        return $this->jobModel;
     }
 
     /**
@@ -99,7 +97,6 @@ class JobHelper extends AbstractHelper
 
     public function generateCategoryJob()
     {
-
         $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('category')]);
 
         $this->jobModel->save();
@@ -112,8 +109,7 @@ class JobHelper extends AbstractHelper
         $this->jobModel->addData(['source_file'=>$jobFile]);
 
         $this->jobModel->save();
-
-        return $this;
+        return $this->jobModel;
     }
 
     /**

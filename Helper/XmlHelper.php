@@ -126,6 +126,8 @@ class XmlHelper extends AbstractHelper
         }
         $this->_dom->appendChild( $this->_root );
         $this->_dom->save( $this->_xmlFileName );
+        $this->_dom->documentElement->parentNode->removeChild($this->_root);
+
         return true;
     }
 

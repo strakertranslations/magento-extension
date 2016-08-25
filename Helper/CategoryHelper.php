@@ -28,6 +28,7 @@ class CategoryHelper extends AbstractHelper
     protected $_categoryCollectionFactory;
     protected $_attributeTranslationModel;
     protected $_attributeOptionTranslationModel;
+    protected $_attributeCollectionFactory;
     protected $_storeManager;
 
     protected $_entityTypeId;
@@ -35,8 +36,9 @@ class CategoryHelper extends AbstractHelper
     protected $_storeId;
 
     protected $_translatableFrontendLabel = array(
-        'name', 'description', 'meta title', 'meta keywords', 'meta description', 'short description'
+        'name','description','meta_title','meta_keywords','meta_description'
     );
+
     protected $_translatableBackendType = array (
         'varchar', 'text','int'
     );
@@ -87,11 +89,10 @@ class CategoryHelper extends AbstractHelper
         parent::__construct($context);
     }
 
-    public function _getAttributes()
+    public function getAttributes()
     {
         $collection = $this->_attributeCollectionFactory->setEntityTypeFilter($this->_entityTypeId)
-            ->addFieldToFilter( 'frontend_label',  array( 'in' => $this->_translatableFrontendLabel ));
-
+            ->addFieldToFilter( 'attribute_code',  array( 'in' => $this->_translatableFrontendLabel ));
         return $collection;
     }
 
@@ -138,7 +139,7 @@ class CategoryHelper extends AbstractHelper
         {
             $attributeData = [];
 
-            foreach ($this->_getAttributes() as $attribute)
+            foreach ($this->getAttributes() as $attribute)
             {
                 array_push($attributeData,['attribute_id'=>$attribute->getId(),'label'=>$category->getResource()->getAttribute($attribute->getId())->getStoreLabel($this->_storeId),'value'=>$category->getResource()->getAttributeRawValue($category->getId(), $attribute->getId(),$this->_storeId)]);
 
@@ -163,7 +164,6 @@ class CategoryHelper extends AbstractHelper
      */
     public function generateCategoryXML($jobModel)
     {
-
         $this->_xmlHelper->create('_'.$jobModel->getId().'_'.time());
 
         $this->appendCategoryAttributes(

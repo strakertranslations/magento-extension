@@ -38,9 +38,6 @@ class Save extends Action
      */
     protected $_jobCollectionFactory;
 
-    protected $_setupInterface;
-
-
     protected $_multiSelectInputTypes = array(
         'select', 'multiselect'
     );
@@ -122,8 +119,7 @@ class Save extends Action
         $jobData = [];
 
         if ($data) {
-
-
+//var_dump($data);exit;
             if(strlen($data['magento_source_store'])>0)
             {
                 $this->_saveStoreConfigData($data);
@@ -131,20 +127,19 @@ class Save extends Action
 
             if(isset($data['products']) && strlen($data['products'])>0)
             {
-                $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob()->save();
+                $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
             }
 
             if(strlen ($data['categories'])>0)
             {
-                $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob()->save();
+                $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
             }
-
 
             try {
 
                 foreach ($jobData as $job){
 
-                    $this->_summitJob($job->getJob());
+                    $this->_summitJob($job);
                 }
 
                 return $resultRedirect->setPath('*/*/');
@@ -216,7 +211,7 @@ class Save extends Action
      */
     protected function _summitJob($job_object){
 
-
+//        var_dump(($job_object));
         $store = $job_object->getData('source_store_id');
 
         $defaultTitle = $job_object->getData('sl').'_'.$job_object->getData('tl').'_'.$store.'_'.$job_object->getData('job_id');
