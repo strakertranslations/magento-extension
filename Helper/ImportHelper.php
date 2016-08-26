@@ -355,4 +355,25 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
+    //Todo: Finish
+    public function importTranslatedCategoryData($job_id)
+    {
+
+        $catIds = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect(array('entity_id'))
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id ) );
+
+        $categories = $this->_categoryCollection->create()
+            ->addAttributeToSelect('*')
+            ->addIdFilter($catIds)
+            ->load();
+
+        foreach ($categories as $category)
+        {
+            $category->setStoreId(2);
+            $category->setData('name','慢長');
+            $category->getResource()->saveAttribute($category,'name');
+        }
+    }
+
 }
