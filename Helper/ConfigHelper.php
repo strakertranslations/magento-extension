@@ -124,6 +124,11 @@ class ConfigHelper extends AbstractHelper
         return  explode(',', $this->scopeConfig->getValue('straker_attribute/settings/custom'));
     }
 
+    public function getCategoryAttributes(){
+
+        return  explode(',', $this->scopeConfig->getValue('straker_attribute/settings/category'));
+    }
+
     public function getStoreInfo( $storeId )
     {
         $collection = $this->_scopeFactory->create(
@@ -171,7 +176,7 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getDataFilePath(){
-        return $this->_directoryList->getPath('app').DIRECTORY_SEPARATOR.'/code/Straker/EasyTranslationPlatform/Api/Data';
+        return $this->_directoryList->getPath('app').DIRECTORY_SEPARATOR.'code/Straker/EasyTranslationPlatform/Api/Data';
     }
 
 }

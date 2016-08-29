@@ -75,17 +75,17 @@
             </argument>
         </bookmark>
 
-        <component name="columns_controls">
-            <argument name="data" xsi:type="array">
-                <item name="config" xsi:type="array">
-                    <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>
-                    </item>
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
-                    <item name="displayArea" xsi:type="string">dataGridActions</item>
-                </item>
-            </argument>
-        </component>
+        <!--<component name="columns_controls">-->
+            <!--<argument name="data" xsi:type="array">-->
+                <!--<item name="config" xsi:type="array">-->
+                    <!--<item name="columnsData" xsi:type="array">-->
+                        <!--<item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns</item>-->
+                    <!--</item>-->
+                    <!--<item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>-->
+                    <!--<item name="displayArea" xsi:type="string">dataGridActions</item>-->
+                <!--</item>-->
+            <!--</argument>-->
+        <!--</component>-->
 
         <!--<filterSearch name="fulltext">-->
             <!--<argument name="data" xsi:type="array">-->
@@ -227,7 +227,6 @@
                     <item name="filter" xsi:type="string">text</item>
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="sortOrder" xsi:type="number">10</item>
-                    <item name="visible" xsi:type="boolean">false</item>
                     <item name="label" xsi:type="string" translate="true">ID</item>
                     <item name="fieldClass" xsi:type="string">job-id</item>
                 </item>

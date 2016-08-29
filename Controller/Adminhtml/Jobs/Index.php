@@ -82,11 +82,18 @@ class Index extends Action
                             $localJobData = $this->_jobFactory->create()->getCollection()->addFieldToFilter('job_key', ['eq' => $apiJob->job_key ])->getItems();
 
                             if(!empty($localJobData) ){
-                                $localJob = reset( $localJobData );
-                                array_push( $localJobIds, $localJob->getId() );
-                                $isUpdate = $this->_compareJobs( $apiJob, $localJob );
-                                if( $isUpdate['isSuccess'] ){
-                                    array_push( $updatedJobs, $localJob->getId() );
+//                                $localJob = reset( $localJobData );
+//                                array_push( $localJobIds, $localJob->getId() );
+//                                $isUpdate = $this->_compareJobs( $apiJob, $localJob );
+//                                if( $isUpdate['isSuccess'] ){
+//                                    array_push( $updatedJobs, $localJob->getId() );
+//                                }
+                                foreach( $localJobData as $key => $localJob ){
+                                    array_push( $localJobIds, $localJob->getId() );
+                                    $isUpdate = $this->_compareJobs( $apiJob, $localJob );
+                                    if( $isUpdate['isSuccess'] ){
+                                        array_push( $updatedJobs, $localJob->getId() );
+                                    }
                                 }
                             }
                         }
@@ -154,11 +161,12 @@ class Index extends Action
     /**
      * @param $apiJob
      * @param \Straker\EasyTranslationPlatform\Model\Job $localJob
+     * @param bool $isPartOfJob
      * @return array
      */
-    protected function _compareJobs( $apiJob, $localJob ){
+    protected function _compareJobs( $apiJob, $localJob){
 
-        if( $localJob->getJobStatusId() < $this->resolveApiStatus( $apiJob )) {
+        if( $localJob->getJobStatusId() < $this->resolveApiStatus( $apiJob ) ){
             return $localJob->updateStatus( $apiJob );
         }
         return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];

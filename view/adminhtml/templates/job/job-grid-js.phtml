@@ -77,7 +77,7 @@
                         var viewJobId = $(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text();
                         loadingMask.show();
                         var quoteFrame = quoteDiv.find('iframe');
-
+console.log($(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text());
                         $.ajax({
                             url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/ViewQuote'); ?>',
                             data: { job_id: viewJobId },

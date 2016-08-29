@@ -3,9 +3,12 @@
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Test;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductRepository;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -15,7 +18,6 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as
 use Magento\Framework\Xml\Parser;
 
 use Magento\Catalog\Model\Product\Action as ProductAction;
-use Magento\Catalog\Api\ProductRepositoryInterface as ProductFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\OptionFactory;
 
@@ -26,10 +28,12 @@ use Magento\Framework\App\ResourceConnection;
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
+use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory;
 use Straker\EasyTranslationPlatform\Model\StrakerAPI;
 
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
@@ -58,16 +62,16 @@ class Index extends \Magento\Backend\App\Action
     protected $_jobFactory;
     protected $_translatedOptions;
     protected $_translatedOptionIds;
-<<<<<<< HEAD
     /** @var  \Magento\Catalog\Model\Product $_product */
     protected $_product;
+    protected $_registry;
     protected $_api;
-=======
     protected $_configurableAttribute;
     protected $_importHelper;
     protected $_configAttributeCollection;
-
->>>>>>> 4471e94501c8697eceb17a5168ba94a37e88aa6c
+    protected $_categoryFactory;
+    protected $_categoryCollection;
+    protected $_categoryHelper;
     protected $_testRequest =
         [
             'job_id' => 12,
@@ -96,15 +100,14 @@ class Index extends \Magento\Backend\App\Action
         ResourceConnection $connection,
         OptionFactory $optionFactory,
         JobFactory $jobFactory,
-<<<<<<< HEAD
-        ProductFactory $productFactory1,
         \Magento\Framework\Api\DataObjectHelper $dataObjectHelper,
-        StrakerAPI $api
-
-=======
+        StrakerAPI $api,
         ImportHelper $importHelper,
-        configAttributeCollection $configAttributeCollection
->>>>>>> 4471e94501c8697eceb17a5168ba94a37e88aa6c
+        configAttributeCollection $configAttributeCollection,
+        \Magento\Catalog\Model\CategoryFactory $categoryFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
+        CategoryHelper $categoryHelper,
+        \Magento\Framework\Registry $registry
     )
     {
         $this->_attributeCollection = $attCollection;
@@ -123,18 +126,46 @@ class Index extends \Magento\Backend\App\Action
         $this->_resourceConnection = $connection;
         $this->_attributeOptionFactory = $optionFactory;
         $this->_jobFactory = $jobFactory;
-<<<<<<< HEAD
         $this->_api = $api;
-
-        echo $this->_api->getLanguageName('Chinese_Simplified');
-        exit;
-        return parent::__construct($context);
-=======
         $this->_importHelper = $importHelper;
         $this->_configAttributeCollection = $configAttributeCollection;
-        $this->_productFactory = $productFactory;
+        $this->_categoryFactory = $categoryFactory;
+        $this->_categoryHelper = $categoryHelper;
+        $this->_registry = $registry;
 
->>>>>>> 4471e94501c8697eceb17a5168ba94a37e88aa6c
+//        foreach ($this->_categoryHelper->getAttributes()->getData() as $item){
+//            var_dump($item['attribute_code']);
+//        }
+//exit;
+//        $attr = [
+//            'name','description','meta_title','meta_keywords','meta_description'
+//        ];
+//        $collection = $this->_categoryCollection = $categoryCollectionFactory->create();
+////            ->addFieldToFilter('entity_id', ['eq'=>20]);
+//        foreach ($attr as $item){
+//            $collection->addFieldToSelect($item);
+//        }
+//        foreach ($this->_categoryCollection->getItems() as $category){
+//            foreach ( $attr as $item ){
+////                var_dump($category->getData($item));
+//            }
+//            var_dump($category->getData('name'));
+//        }
+//        var_dump($this->_categoryCollection->getData());
+
+//        $category = $this->_categoryFactory->create()->load(20);
+//        var_dump($category->getData('name'));
+//        foreach ( $attr as $item ){
+//            var_dump($category->getData($item));
+//        }
+
+//        $p = $productFactory->create()->load(2002);
+//        foreach($p->getTypeInstance()->getChildrenIds($p->getId()) as $item){
+//            var_dump($item);
+//        }
+
+//exit;
+        return parent::__construct($context);
     }
 
 //    function multiArrayValueSearch($haystack, $needle, &$result, &$aryPath=NULL, $currentKey='') {
@@ -165,29 +196,35 @@ class Index extends \Magento\Backend\App\Action
 
     public function execute()
     {
-
-        var_dump($this->getUrl('straker/setup_languagepairs/index',['target_store_id'=>1]));
-
-        exit;
-
-        $productData = $this->_productFactory->getById(2045);
-
-        $config = $this->_configAttributeCollection->addFieldToFilter( 'attribute_id',   array( 'eq' => 90 ) );
-
-        var_dump($config->getData());
-
-        exit;
-
-
-        $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,'color');
-
-        $att->setData('label','颜色');
-
-        var_dump($att->getStoreLabels());
-
-        $this->_importHelper->saveConfigLabel($att,2);
-
-        exit;
+        $p = $this->_productFactory->create()->load(2002);
+        $this->_registry->register('current_product', $p);
+        $resultPage = $this->_resultPageFactory->create();
+        //$resultPage->setActiveMenu('Straker_EasyTranslationPlatform::managejobs');
+        $resultPage->getConfig()->getTitle()->prepend(__('Straker Translations'));
+        return $resultPage;
+//
+//        var_dump($this->getUrl('straker/setup_languagepairs/index',['target_store_id'=>1]));
+//
+//        exit;
+//
+//        $productData = $this->_productFactory->getById(2045);
+//
+//        $config = $this->_configAttributeCollection->addFieldToFilter( 'attribute_id',   array( 'eq' => 90 ) );
+//
+//        var_dump($config->getData());
+//
+//        exit;
+//
+//
+//        $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,'color');
+//
+//        $att->setData('label','颜色');
+//
+//        var_dump($att->getStoreLabels());
+//
+//        $this->_importHelper->saveConfigLabel($att,2);
+//
+//        exit;
 
 
     }

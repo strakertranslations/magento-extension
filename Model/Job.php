@@ -6,11 +6,13 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
 use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory as CategoryCollectionFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
 
 class Job extends AbstractModel implements JobInterface, IdentityInterface
@@ -35,6 +37,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     protected $_eventPrefix = 'st_products_grid';
 
     protected $_productCollectionFactory;
+    protected $_categoryCollectionFactory;
     protected $_attributeTranslationCollectionFactory;
     protected $_entities = [];
     public    $_entityIds = [];
@@ -49,6 +52,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         Context $context,
         Registry $registry,
         ProductCollectionFactory $productCollectionFactory,
+        CategoryCollectionFactory $categoryCollectionFactory,
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         JobStatusFactory $jobStatusFactory,
         JobTypeFactory $jobTypeFactory,
@@ -58,6 +62,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         array $data = []
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
+        $this->_categoryCollectionFactory = $categoryCollectionFactory;
         $this->_attributeTranslationCollectionFactory = $attributeTranslationCollectionFactory;
         $this->_jobStatusFactory = $jobStatusFactory;
         $this->_jobTypeFactory = $jobTypeFactory;
@@ -89,8 +94,12 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
-    public function getEntities(){
-        $this->_loadEntities();
+    /**
+     * @param int $type, either JobType::JOB_TYPE_PRODUCT (default) or (JobType::JOB_TYPE_CATEGORY)
+     * @return array
+     */
+    public function getEntities( $type = JobType::JOB_TYPE_PRODUCT ){
+        $this->_loadEntities( $type );
         return $this->_entities;
     }
 
@@ -106,25 +115,50 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         return $collection;
     }
 
+    /**
+     * @return \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection
+     */
+    public function getCategoryCollection(){
+        $collection = $this->_getAttributeTranslationEntityCollection();
+//        $collection = $this->_categoryCollectionFactory->create()
+//            ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
+        return $collection;
+    }
+
     public function getAttributeTranslationEntityArray(){
         /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
-        $collection = $this->_attributeTranslationCollectionFactory->create()
-            ->distinct(true)
-            ->addFieldToSelect('entity_id')
-            ->addFieldToFilter( 'job_id', [ 'eq' => $this->getId()] );
+        $collection = $this->_getAttributeTranslationEntityCollection();
         foreach ($collection->getData() as $item){
             array_push($this->_entityIds, $item['entity_id']);
         }
         return $this->_entityIds;
     }
 
-    protected function _loadEntities()
+    private function _getAttributeTranslationEntityCollection(){
+        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
+        $collection = $this->_attributeTranslationCollectionFactory->create()
+            ->distinct(true)
+            ->addFieldToSelect('entity_id')
+            ->addFieldToFilter( 'job_id', [ 'eq' => $this->getId()] );
+        return $collection;
+    }
+
+    protected function _loadEntities( $type = JobType::JOB_TYPE_PRODUCT )
     {
         $this->_entities = [];
         $this->_entityCount = 0;
-        foreach ($this->getProductCollection() as $product) {
-            $this->_entities[$product->getEntityId()] = $product;
-            $this->_entityCount++;
+
+        if( $type == JobType::JOB_TYPE_CATEGORY ){
+            foreach ($this->getCategoryCollection() as $category) {
+                $this->_entities[$category->getEntityId()] = $category;
+                $this->_entityCount++;
+            }
+
+        }else{
+            foreach ($this->getProductCollection() as $product) {
+                $this->_entities[$product->getEntityId()] = $product;
+                $this->_entityCount++;
+            }
         }
     }
 
@@ -132,15 +166,20 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $return = [ 'isSuccess' => true, 'Message' => ''];
         switch (strtolower( $jobData->status) ){
             case 'queued':
+                if( empty( $this->getData('job_number')) && !empty($jobData->tj_number) ){
+                    $this->setData('job_number', $jobData->tj_number )->save();
+                }
+
+                if( empty($this->getData('job_number')) ){
+                    return false;
+                }
+
                 if( !empty($jobData->quotation) && strcasecmp( $jobData->quotation, 'ready') === 0){
                     $this->setData('job_status_id', JobStatus::JOB_STATUS_READY )
                         ->save();
                 }else{
                     $this->setData('job_status_id', JobStatus::JOB_STATUS_QUEUED )
                         ->save();
-                }
-                if( empty( $this->getData('job_number'))){
-                    $this->setData('job_number', $jobData->tj_number )->save();
                 }
                 break;
             case 'in_progress':
@@ -155,16 +194,22 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                         if( !file_exists( $filePath )){
                             mkdir( $filePath);
                         }
-                        $fileName = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
-                        $result = file_put_contents( implode(DIRECTORY_SEPARATOR, $fileName), $fileContent );
+                        $fileNameArray = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
+                        $fileFullName = implode(DIRECTORY_SEPARATOR, $fileNameArray);
+                        $result = true;
+
+                        if( !file_exists( $fileFullName )){
+                            $result = file_put_contents( $fileFullName, $fileContent );
+                        }
+
                         if($result == false ){
                             $return['isSuccess'] = false;
-                            $return['Message'] = __('Failed to write content to ' . $fileName);
+                            $return['Message'] = __('Failed to write content to ' . $fileFullName);
                             $this->_logger->addError( $return['Message'] );
                         }else{
                             //TODO save new filename to database
                             $this->setData('download_url', $downloadUrl)
-                                ->setData('translated_file', $fileName['name'])->save();
+                                ->setData('translated_file', $fileNameArray['name'])->save();
                             $this->_importHelper->create( $this->getId() )
                                 ->parseTranslatedFile()
                                 ->saveTranslatedProductData();
@@ -200,7 +245,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     private function _renameTranslatedFileName( $filePath, $originalFileName ){
         $fileName = substr_replace( $originalFileName, '_translated', stripos( $originalFileName, '.xml'));
-        $suffix = date('Y-m-d H:i:s',time());
+//        $suffix = date('Y-m-d H:i',time());
+        $suffix = '';
         return [ 'path' => $filePath, 'name' => $fileName.'_'. $suffix  .'.xml'];
     }
 }

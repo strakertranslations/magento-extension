@@ -8,14 +8,14 @@
             foreach ($website->getGroups() as $group) { ?>
                 <tr>
                     <td colspan="2" class="site-group-name">
-                        <h2> <?php echo $website->getName() . ' - ' . $group->getName(); ?> </h2>
+                        <h4> <?php echo $website->getName() . ' - ' . $group->getName(); ?> </h4>
                     </td>
                 </tr>
                 <tr>
-                    <td><h3>Store View</h3></td>
-                    <td><h3>Select Translation Language </h3></td>
-                    <td><h3>Select Source Language</h3></td>
-                    <td><h3>Select Source Store View</h3></td>
+                    <td><h4>Store View</h4></td>
+                    <td><h4>Language </h4></td>
+                    <td><h4>Source Language</h4></td>
+                    <td><h4>Source Store View</h4></td>
                 </tr>
                 <?php $stores = $group->getStores();
                 if( count( $stores ) > 0 ) {

@@ -4,8 +4,12 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
+
+use Magento\Backend\Helper\Js;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Xml\Parser;
+
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Model\JobType;
@@ -14,11 +18,13 @@ use Straker\EasyTranslationPlatform\Helper\JobHelper;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
+
     /**
-     * @var \Magento\Backend\Helper\Js
+     * @var Js
      */
     protected $_jsHelper;
 
@@ -30,10 +36,9 @@ class Save extends \Magento\Backend\App\Action
     protected $_configHelper;
 
     /**
-     * @var \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_jobCollectionFactory;
-
 
     protected $_multiSelectInputTypes = array(
         'select', 'multiselect'
@@ -43,44 +48,57 @@ class Save extends \Magento\Backend\App\Action
         'magento_destination_store','straker_target_language','magento_source_store','straker_source_language'
     );
 
-    protected  $_translatedAttributeLabels = [];
-
-    protected  $_translatedAttributeOptions = [];
 
     protected $_jobRequest;
-
+    protected $_attributeRepository;
+    protected $_xmlHelper;
+    protected $_xmlParser;
+    protected $_storeManager;
+    protected $_jobTypeModel;
+    protected $jobRepository;
+    protected $_api;
+    protected $_jobHelper;
+    protected $_logger;
 
     /**
-     * \Magento\Backend\Helper\Js $jsHelper
-     * @param Action\Context $context
+     * Save constructor.
+     * @param Context $context
+     * @param ConfigHelper $configHelper
+     * @param Js $jsHelper
+     * @param AttributeRepository $attributeRepository
+     * @param StoreManagerInterface $storeManager
+     * @param XmlHelper $xmlHelper
+     * @param JobRepository $jobRepository
+     * @param JobType $jobType
+     * @param JobHelper $jobHelper
+     * @param StrakerAPIInterface $API
+     * @param SetupInterface $setup
+     * @param Logger $logger
+     * @param CollectionFactory $jobCollectionFactory
      */
     public function __construct(
         Context $context,
         ConfigHelper $configHelper,
-        \Magento\Backend\Helper\Js $jsHelper,
+        Js $jsHelper,
         AttributeRepository $attributeRepository,
         StoreManagerInterface $storeManager,
         XmlHelper $xmlHelper,
+        Parser $xmlParser,
         JobRepository $jobRepository,
         JobType $jobType,
         JobHelper $jobHelper,
         StrakerAPIInterface $API,
         SetupInterface $setup,
         Logger $logger,
-        \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
+        CollectionFactory $jobCollectionFactory
     ) {
-        $this->_configHelper = $configHelper;
-        $this->_jsHelper = $jsHelper;
-        $this->_jobCollectionFactory = $jobCollectionFactory;
-        $this->_attributeRepository = $attributeRepository;
-        $this->_xmlHelper = $xmlHelper;
-        $this->_storeManager = $storeManager;
-        $this->_jobTypeModel = $jobType;
-        $this->jobRepository = $jobRepository;
+
         $this->_api = $API;
         $this->_setupInterface = $setup;
         $this->_jobHelper = $jobHelper;
         $this->_logger = $logger;
+        $this->_xmlHelper = $xmlHelper;
+        $this->_xmlParser = $xmlParser;
 
         parent::__construct($context);
     }
@@ -102,25 +120,33 @@ class Save extends \Magento\Backend\App\Action
     {
         $data = $this->getRequest()->getPostValue();
 
-        /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-
         $resultRedirect = $this->resultRedirectFactory->create();
+
+        $jobData = [];
 
         if ($data) {
 
-            $this->_saveStoreConfigData($data);
+            if(strlen($data['magento_source_store'])>0)
+            {
+                $this->_saveStoreConfigData($data);
+            }
 
-            $job = $this->_jobHelper->createJob($data)->generateProductJob()->save();
+            if(isset($data['products']) && strlen($data['products'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
+            }
+
+            if(strlen ($data['categories'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
+            }
 
             try {
 
-                $this->_summitJob($job->getJob());
+                $this->_summitJob($jobData);
 
-                if ($this->getRequest()->getParam('back')) {
-
-                    return $resultRedirect->setPath('*/*/edit', ['job_id' => $job->getId(), '_current' => true]);
-                }
                 return $resultRedirect->setPath('*/*/');
+
 
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
@@ -136,8 +162,6 @@ class Save extends \Magento\Backend\App\Action
                 $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
             } catch (\Exception $e) {
-
-//                var_dump($e->getMessage());
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
 
@@ -190,31 +214,36 @@ class Save extends \Magento\Backend\App\Action
      */
     protected function _summitJob($job_object){
 
-        $store = $job_object->getData('source_store_id');
+        $sourcefile = $this->mergeJobData($job_object);
 
-        $defaultTitle = $job_object->getData('sl').'_'.$job_object->getData('tl').'_'.$store.'_'.$job_object->getData('job_id');
+        $strakerJobData = current($job_object);
 
-        $job_object->setData('title',$defaultTitle);
+        $defaultTitle = $strakerJobData->getData('sl').'_'.$strakerJobData->getData('tl').'_'.$strakerJobData->getData('source_store_id').'_'.$strakerJobData->getData('job_id');
 
-        $this->_jobRequest['title']       = $job_object->getTitle();
-        $this->_jobRequest['sl']          = $job_object->getData('sl');
-        $this->_jobRequest['tl']          = $job_object->getTl();
-        $this->_jobRequest['source_file'] = $job_object->getData('source_file');
-        $this->_jobRequest['token']       = $job_object->getId();
+        $strakerJobData->setData('title',$defaultTitle);
 
-//        var_dump($this->_jobRequest);exit();
+        $this->_jobRequest['title']       = $strakerJobData->getTitle();
+        $this->_jobRequest['sl']          = $strakerJobData->getData('sl');
+        $this->_jobRequest['tl']          = $strakerJobData->getTl();
+        $this->_jobRequest['source_file'] = $sourcefile;
+        $this->_jobRequest['token']       = $strakerJobData->getId();
+
         $response = $this->_api->callTranslate($this->_jobRequest);
 
         try {
 
-            $job_object->addData(['job_key'=>$response->job_key]);
+            foreach ($job_object as $job)
+            {
+                $job->addData(['job_key'=>$response->job_key]);
 
-            $job_object->setData('sl', $this->_api->getLanguageName( $job_object->getData('sl')));
+                $job->setData('sl', $this->_api->getLanguageName( $job->getData('sl')));
 
-            $job_object->setData('tl', $this->_api->getLanguageName( $job_object->getData('tl')));
+                $job->setData('tl', $this->_api->getLanguageName( $job->getData('tl')));
 
+                $job->setData('source_file',$sourcefile);
 
-            $job_object->save();
+                $job->save();
+            }
 
             $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
 
@@ -226,6 +255,39 @@ class Save extends \Magento\Backend\App\Action
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
 
+    }
+
+    protected function mergeJobData($job_object)
+    {
+
+        $jobMergeData = [];
+
+        $id = '';
+
+        foreach ($job_object as $key => $data)
+        {
+            $jobMergeData[$key]['id'] =  $data->getData('job_id');
+            $jobMergeData[$key]['file_name'] =  $data->getData('source_file');
+            $id.=  $data->getData('job_id').'&';
+        }
+
+        $this->_xmlHelper->create('_'.rtrim($id,"&").'_'.time());
+
+        foreach ($jobMergeData as $file)
+        {
+            $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
+
+            foreach ($fileData['root']['data'] as $data)
+            {
+                $mergeData = array_merge_recursive($data['_value'],$data['_attribute']);
+
+                $this->_xmlHelper->appendDataToRoot($mergeData);
+            }
+        }
+
+        $this->_xmlHelper->saveXmlFile();
+
+        return $this->_xmlHelper->getXmlFileName();
     }
 
 }

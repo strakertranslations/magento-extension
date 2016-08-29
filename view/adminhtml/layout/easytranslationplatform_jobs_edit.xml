@@ -22,18 +22,17 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">attachment_products</argument>
                     <argument name="block" xsi:type="array">
-                        <item name="label" xsi:type="string">Select Products</item>
-                        <item name="title" xsi:type="string">Select Products</item>
+                        <item name="label" xsi:type="string">Translate Products</item>
+                        <item name="title" xsi:type="string">Translate Products</item>
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getEasyTranslationPlatformUrl"/>
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
                 </action>
-                <!--<block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Attributes"-->
-                       <!--name="easytranslationplatform_job_edit_tabs_attributes"/>-->
-                <!--<action method="addTab">-->
-                    <!--<argument name="name" xsi:type="string">select_attributes</argument>-->
-                    <!--<argument name="block" xsi:type="string">easytranslationplatform_job_edit_tabs_attributes</argument>-->
-                <!--</action>-->
+                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab\Categories" name="tab_categories" template="Straker_EasyTranslationPlatform::job/categoryTree.phtml"/>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">categories</argument>
+                    <argument name="block" xsi:type="string">tab_categories</argument>
+                </action>
             </block>
         </referenceContainer>
         <referenceContainer name="js">

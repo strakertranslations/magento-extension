@@ -1,5 +1,5 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <referenceContainer name="content">
-        <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\StoreLanguage\FormContainer" name="storelanguage_container"/>
+        <block class="Magento\Catalog\Block\Adminhtml\Category\Tree" name=""/>
     </referenceContainer>
 </page>
