@@ -133,6 +133,36 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
+    public function saveData()
+    {
+        if(!empty($this->_productData))
+        {
+            $this->saveTranslatedProductData();
+        }
+        if(!empty($this->_categoryData))
+        {
+            $this->saveTranslatedCategoryData();
+        }
+
+        return $this;
+    }
+
+    public function publishTranslatedData()
+    {
+        if($this->_jobModel->getJobType() == 'product')
+        {
+            $this->publishTranslatedProductData();
+        }
+
+        if($this->_jobModel->getJobType() == 'category')
+        {
+            $this->publishTranslatedCategoryData();
+        }
+
+        return $this;
+    }
+
+
     public function saveTranslatedProductData()
     {
         $this->getOptionIds($this->_jobModel->getId());
