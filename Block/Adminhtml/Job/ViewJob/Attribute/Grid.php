@@ -53,16 +53,16 @@ class Grid extends Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn(
-            'in_attribute',
-            [
-                'type' => 'checkbox',
-                'name' => 'in_attribute',
-                'align' => 'center',
-                'index' => 'attribute_id',
-                'width' => '100px'
-            ]
-        );
+//        $this->addColumn(
+//            'in_attribute',
+//            [
+//                'type' => 'checkbox',
+//                'name' => 'in_attribute',
+//                'align' => 'center',
+//                'index' => 'attribute_id',
+//                'width' => '100px'
+//            ]
+//        );
 
         $this->addColumn(
             'job_id',
