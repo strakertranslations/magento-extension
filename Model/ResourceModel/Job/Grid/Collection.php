@@ -140,7 +140,7 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
 
     protected function _beforeLoad() {
 
-        $this->getSelect()->order('created_at DESC')->__toString();
+        $this->getSelect()->order('created_at DESC')->group('job_key');
 //        var_dump($sql);exit;
         parent::_beforeLoad();
     }

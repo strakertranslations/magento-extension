@@ -54,6 +54,16 @@ class ViewJob extends Template
                     );
                     $this->_childName = 'view_job_category_grid';
                     break;
+                default:
+                    $this->addChild(
+                        'view_job_type_grid',
+                        'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Type',
+                        [
+                            'id' => 'view-job-type-grid'
+                        ]
+                    );
+                    $this->_childName = 'view_job_type_grid';
+                    break;
             }
         }
         return parent::_prepareLayout();

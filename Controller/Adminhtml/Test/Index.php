@@ -64,7 +64,6 @@ class Index extends \Magento\Backend\App\Action
     protected $_translatedOptionIds;
     /** @var  \Magento\Catalog\Model\Product $_product */
     protected $_product;
-    protected $_registry;
     protected $_api;
     protected $_configurableAttribute;
     protected $_importHelper;
@@ -106,8 +105,7 @@ class Index extends \Magento\Backend\App\Action
         configAttributeCollection $configAttributeCollection,
         \Magento\Catalog\Model\CategoryFactory $categoryFactory,
         CategoryCollectionFactory $categoryCollectionFactory,
-        CategoryHelper $categoryHelper,
-        \Magento\Framework\Registry $registry
+        CategoryHelper $categoryHelper
     )
     {
         $this->_attributeCollection = $attCollection;
@@ -131,100 +129,16 @@ class Index extends \Magento\Backend\App\Action
         $this->_configAttributeCollection = $configAttributeCollection;
         $this->_categoryFactory = $categoryFactory;
         $this->_categoryHelper = $categoryHelper;
-        $this->_registry = $registry;
 
-//        foreach ($this->_categoryHelper->getAttributes()->getData() as $item){
-//            var_dump($item['attribute_code']);
-//        }
-//exit;
-//        $attr = [
-//            'name','description','meta_title','meta_keywords','meta_description'
-//        ];
-//        $collection = $this->_categoryCollection = $categoryCollectionFactory->create();
-////            ->addFieldToFilter('entity_id', ['eq'=>20]);
-//        foreach ($attr as $item){
-//            $collection->addFieldToSelect($item);
-//        }
-//        foreach ($this->_categoryCollection->getItems() as $category){
-//            foreach ( $attr as $item ){
-////                var_dump($category->getData($item));
-//            }
-//            var_dump($category->getData('name'));
-//        }
-//        var_dump($this->_categoryCollection->getData());
-
-//        $category = $this->_categoryFactory->create()->load(20);
-//        var_dump($category->getData('name'));
-//        foreach ( $attr as $item ){
-//            var_dump($category->getData($item));
-//        }
-
-//        $p = $productFactory->create()->load(2002);
-//        foreach($p->getTypeInstance()->getChildrenIds($p->getId()) as $item){
-//            var_dump($item);
-//        }
-
-//exit;
         return parent::__construct($context);
     }
 
-//    function multiArrayValueSearch($haystack, $needle, &$result, &$aryPath=NULL, $currentKey='') {
-//        if (is_array($haystack)) {
-//            $count = count($haystack);
-//            $iterator = 0;
-//            foreach($haystack as $location => $straw) {
-//                $iterator++;
-//                $next = ($iterator == $count)?false:true;
-//                if (is_array($straw)) $aryPath[$location] = $location;
-//                multiArrayValueSearch($straw,$needle,$result,$aryPath,$location);
-//                if (!$next) {
-//                    unset($aryPath[$currentKey]);
-//                }
-//            }
-//        } else {
-//            $straw = $haystack;
-//            if ($straw == $needle) {
-//                if (!isset($aryPath)) {
-//                    $strPath = "\$result[$currentKey] = \$needle;";
-//                } else {
-//                    $strPath = "\$result['".join("']['",$aryPath)."'][$currentKey] = \$needle;";
-//                }
-//                eval($strPath);
-//            }
-//        }
-//    }
-
     public function execute()
     {
-        $p = $this->_productFactory->create()->load(2002);
-        $this->_registry->register('current_product', $p);
-        $resultPage = $this->_resultPageFactory->create();
-        //$resultPage->setActiveMenu('Straker_EasyTranslationPlatform::managejobs');
-        $resultPage->getConfig()->getTitle()->prepend(__('Straker Translations'));
-        return $resultPage;
-//
-//        var_dump($this->getUrl('straker/setup_languagepairs/index',['target_store_id'=>1]));
-//
-//        exit;
-//
-//        $productData = $this->_productFactory->getById(2045);
-//
-//        $config = $this->_configAttributeCollection->addFieldToFilter( 'attribute_id',   array( 'eq' => 90 ) );
-//
-//        var_dump($config->getData());
-//
-//        exit;
-//
-//
-//        $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,'color');
-//
-//        $att->setData('label','颜色');
-//
-//        var_dump($att->getStoreLabels());
-//
-//        $this->_importHelper->saveConfigLabel($att,2);
-//
-//        exit;
+
+        $this->_importHelper->create('252')->parseTranslatedFile()->saveTranslatedCategoryData()->publishTranslatedCategoryData();
+
+        exit;
 
 
     }
