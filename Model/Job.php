@@ -6,6 +6,7 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
@@ -193,16 +194,22 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                         if( !file_exists( $filePath )){
                             mkdir( $filePath);
                         }
-                        $fileName = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
-                        $result = file_put_contents( implode(DIRECTORY_SEPARATOR, $fileName), $fileContent );
+                        $fileNameArray = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
+                        $fileFullName = implode(DIRECTORY_SEPARATOR, $fileNameArray);
+                        $result = true;
+
+                        if( !file_exists( $fileFullName )){
+                            $result = file_put_contents( $fileFullName, $fileContent );
+                        }
+
                         if($result == false ){
                             $return['isSuccess'] = false;
-                            $return['Message'] = __('Failed to write content to ' . $fileName);
+                            $return['Message'] = __('Failed to write content to ' . $fileFullName);
                             $this->_logger->addError( $return['Message'] );
                         }else{
                             //TODO save new filename to database
                             $this->setData('download_url', $downloadUrl)
-                                ->setData('translated_file', $fileName['name'])->save();
+                                ->setData('translated_file', $fileNameArray['name'])->save();
                             $this->_importHelper->create( $this->getId() )
                                 ->parseTranslatedFile()
                                 ->saveTranslatedProductData();
@@ -238,7 +245,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     private function _renameTranslatedFileName( $filePath, $originalFileName ){
         $fileName = substr_replace( $originalFileName, '_translated', stripos( $originalFileName, '.xml'));
-        $suffix = date('Y-m-d H:i:s',time());
+//        $suffix = date('Y-m-d H:i',time());
+        $suffix = '';
         return [ 'path' => $filePath, 'name' => $fileName.'_'. $suffix  .'.xml'];
     }
 }
