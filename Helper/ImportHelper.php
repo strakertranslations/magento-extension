@@ -8,8 +8,10 @@ use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Framework\App\ResourceConnection;
 
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
+use Magento\Catalog\Model\CategoryFactory;
 
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -35,6 +37,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_attributeOptionTranslationFactory;
     protected $_attributeTranslationCollection;
     protected $_attributeOptionTranslationCollection;
+    protected $_categoryCollection;
     protected $_jobFactory;
     protected $_attributeRepository;
     protected $_productAction;
@@ -48,6 +51,9 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_translatedLabels = [];
     protected $_attributeTranslationIds;
     protected $_saveOptionIds = [];
+
+    protected $_productData;
+    protected $_categoryData;
 
 
     protected $_selectQuery = 'select option_id from %1$s where option_id = %2$s and store_id = %3$s';
@@ -69,6 +75,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         AttributeRepositoryInterface $attributeRepository,
         ProductAction $productAction,
         ResourceConnection $resourceConnection,
+        CategoryCollectionFactory $categoryCollectionFactory,
+        CategoryFactory $categoryFactory,
         AttributeCollection $attributeCollection,
         OptionCollection $optionCollection
 
@@ -83,6 +91,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_attributeOptionTranslationFactory = $attributeOptionTranslationFactory;
         $this->_attributeTranslationCollection = $attributeTranslationCollection;
         $this->_attributeOptionTranslationCollection = $attributeOptionTranslationCollection;
+        $this->_categoryCollection = $categoryCollectionFactory;
+        $this->_categoryFactory = $categoryFactory;
         $this->_attributeRepository = $attributeRepository;
         $this->_productAction = $productAction;
         $this->_resourceConnection = $resourceConnection;
@@ -108,6 +118,18 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
         $this->_parsedFileData = $parsedData['root']['data'];
 
+        $this->_categoryData = array_filter($this->_parsedFileData, function($v) {
+
+            return  preg_match('/category/',$v['_attribute']['content_context']);
+
+        });
+
+        $this->_productData = array_filter($this->_parsedFileData, function($v) {
+
+            return  preg_match('/product/',$v['_attribute']['content_context']);
+
+        });
+
         return $this;
     }
 
@@ -115,7 +137,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $this->getOptionIds($this->_jobModel->getId());
 
-        foreach ($this->_parsedFileData as $data){
+        foreach ($this->_productData as $data){
 
             if(array_key_exists('attribute_translation_id',$data['_attribute'])){
 
@@ -355,25 +377,40 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
-    //Todo: Finish
-    public function importTranslatedCategoryData($job_id)
+    public function saveTranslatedCategoryData()
     {
 
-        $catIds = $this->_attributeTranslationCollection->create()
-            ->addFieldToSelect(array('entity_id'))
-            ->addFieldToFilter( 'job_id',   array( 'eq' => $job_id ) );
-
-        $categories = $this->_categoryCollection->create()
-            ->addAttributeToSelect('*')
-            ->addIdFilter($catIds)
-            ->load();
-
-        foreach ($categories as $category)
+        foreach ($this->_categoryData as $data)
         {
-            $category->setStoreId(2);
-            $category->setData('name','慢長');
-            $category->getResource()->saveAttribute($category,'name');
+
+            $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
+
+            $att_trans_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
+
+            $att_trans_model->save();
+
         }
+
+        return $this;
+    }
+
+    public function publishTranslatedCategoryData()
+    {
+
+        $translatedCategories = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect('*')
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) )->toArray();
+
+
+        foreach ($translatedCategories['items'] as $data)
+        {
+
+            $attribute_code = $this->_attributeRepository->get(\Magento\Catalog\Model\Category::ENTITY,$data['attribute_id'])->setStoreId($this->_jobModel->getTargetStoreId())->getAttributeCode();
+            $category = $this->_categoryFactory->create()->load($data['entity_id']);
+            $category->setData($attribute_code,$data['translated_value'])->getResource()->saveAttribute($category,$attribute_code);
+        }
+
+        return $this;
     }
 
 }
