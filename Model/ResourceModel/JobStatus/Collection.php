@@ -33,7 +33,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $frontEndLabel = __(ucwords('waiting for quote'));
                 break;
             case 'ready':
-                $frontEndLabel =  __(ucwords('ready'));
+                $frontEndLabel =  __(ucwords('quote ready'));
                 break;
             case 'in_progress':
                 $frontEndLabel = __(ucwords('in progress'));
