@@ -50,7 +50,7 @@ class JobActions extends Column
                         'label' => __('View')
                     ];
 
-                    if( $statusId >= Model\JobStatus::JOB_STATUS_READY ){
+                    if( $statusId == Model\JobStatus::JOB_STATUS_READY ){
                         $item[$name]['view_quote'] = [
                             'href' => 'javascript:void(0)',
                             'label' => __('View Quote')
