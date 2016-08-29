@@ -16,11 +16,18 @@ class Category extends Container
 
     public function _construct()
     {
+        $requestData = $this->getRequest()->getParams();
         $this->addButton(
             'back',
             [
                 'label' => __('Back'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/') . '\') ',
+                'onclick' => 'setLocation(\''
+                    . $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                        [
+                            'job_key'=> $requestData['job_key'],
+                            'job_type_id' => 0,
+                            'source_store_id' => $requestData['source_store_id']
+                        ])  . '\') ',
                 'class' => 'back'
             ],
             -1

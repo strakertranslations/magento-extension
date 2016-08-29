@@ -16,7 +16,9 @@ class Grid extends Extended
     protected $_job;
     protected $_entityId;
     protected $_jobTypeId = Model\JobType::JOB_TYPE_ATTRIBUTE;
-
+    protected $_jobKey;
+    protected $_jobId;
+    protected $_sourceStoreId;
 
     public function __construct(
         Context $context,
@@ -31,8 +33,10 @@ class Grid extends Extended
     public function _construct()
     {
         $requestData = $this->getRequest()->getParams();
-        $jobId = $requestData['job_id'];
-        $this->_job = $this->_jobFactory->create()->load( $jobId );
+        $this->_jobId = $requestData['job_id'];
+        $this->_jobKey = $requestData['job_key'];
+        $this->_sourceStoreId = $this->getRequest()->getParam('source_store_id');
+        $this->_job = $this->_jobFactory->create()->load( $this->_jobId );
         parent::_construct();
     }
 
@@ -59,15 +63,15 @@ class Grid extends Extended
      */
     protected function _prepareColumns()
     {
-        $this->addColumn(
-            'in_category',
-            [
-                'type' => 'checkbox',
-                'name' => 'in_category',
-                'align' => 'center',
-                'index' => 'entity_id'
-            ]
-        );
+//        $this->addColumn(
+//            'in_category',
+//            [
+//                'type' => 'checkbox',
+//                'name' => 'in_category',
+//                'align' => 'center',
+//                'index' => 'entity_id'
+//            ]
+//        );
 
         $this->addColumn(
             'entity_id',
@@ -103,7 +107,9 @@ class Grid extends Extended
                             'params' => [
                                 'job_id' => $this->_job->getJobId(),
                                 'job_type_id' => $this->_jobTypeId,
-                                'job_type_referrer' => Model\JobType::JOB_TYPE_CATEGORY
+                                'job_type_referrer' => Model\JobType::JOB_TYPE_CATEGORY,
+                                'job_key' => $this->_jobKey,
+                                'source_store_id' => $this->_sourceStoreId
                             ]
                         ],
                         'field' => 'entity_id'
@@ -132,7 +138,9 @@ class Grid extends Extended
                 'job_id' => $this->_job->getJobId(),
                 'job_type_id' => $this->_jobTypeId,
                 'entity_id' => $row->getEntityId(),
-                'job_type_referrer' => Model\JobType::JOB_TYPE_CATEGORY
+                'job_type_referrer' => Model\JobType::JOB_TYPE_CATEGORY,
+                'job_key' => $this->_jobKey,
+                'source_store_id' => $this->_sourceStoreId
             ]
         );
     }

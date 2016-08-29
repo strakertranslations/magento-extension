@@ -7,7 +7,7 @@ use Magento\Framework\View\Element\Template;
 use Straker\EasyTranslationPlatform\Model;
 
 
-class Product extends Container
+class Type extends Container
 {
     /** @var \Straker\EasyTranslationPlatform\Model\Job $_job */
     protected $_job;
@@ -16,18 +16,11 @@ class Product extends Container
 
     public function _construct()
     {
-        $requestData = $this->getRequest()->getParams();
         $this->addButton(
             'back',
             [
                 'label' => __('Back'),
-                'onclick' => 'setLocation(\''
-                    . $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
-                        [
-                            'job_key'=> $requestData['job_key'],
-                            'job_type_id' => 0,
-                            'source_store_id' => $requestData['source_store_id']
-                        ]) . '\') ',
+                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/') . '\') ',
                 'class' => 'back'
             ],
             -1
@@ -39,8 +32,8 @@ class Product extends Container
     protected function _prepareLayout()
     {
         $this->addChild(
-            'straker_job_product_grid',
-            'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Product\Grid'
+            'straker_job_type_grid',
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Type\Grid'
         );
 
         return parent::_prepareLayout();
@@ -48,7 +41,7 @@ class Product extends Container
 
     function _toHtml()
     {
-        return $this->getChildHtml('straker_job_product_grid');
+        return $this->getChildHtml('straker_job_type_grid');
     }
 
 }
