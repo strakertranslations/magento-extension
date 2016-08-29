@@ -42,12 +42,14 @@ class Grid extends Extended
     protected function _prepareCollection()
     {
         $sourceStoreId = $this->getRequest()->getParam('source_store_id');
-        $categoryCollection = $this->_job->getProductCollection()
-            ->addAttributeToSelect('name');
+        $categoryCollection = $this->_job->getCategoryCollection();
+
         if( !empty($sourceStoreId) && is_numeric($sourceStoreId)){
-            $categoryCollection->addStoreFilter( $sourceStoreId );
+            $this->setCollection($categoryCollection->addCategoryName( $sourceStoreId ));
+        }else{
+            $this->setCollection($categoryCollection->addCategoryName());
         }
-        $this->setCollection($categoryCollection);
+
         return parent::_prepareCollection();
     }
 
@@ -92,7 +94,7 @@ class Grid extends Extended
             [
                 'header' => __('Action'),
                 'type' => 'action',
-                'getter' => 'getId',
+                'getter' => 'getEntityId',
                 'actions' => [
                     [
                         'caption' => __('View'),

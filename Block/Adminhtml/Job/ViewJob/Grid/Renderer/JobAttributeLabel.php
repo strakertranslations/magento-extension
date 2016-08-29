@@ -6,19 +6,23 @@ use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollection;
+use Magento\Eav\Model\Entity\AttributeFactory;
 
 class JobAttributeLabel extends AbstractRenderer
 {
     protected $_attributeTranslationCollectionFactory;
     /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection AttributeTranslationCollection  */
     protected $_jobAttributeCollection;
+    protected $_attributeFactory;
 
     public function __construct(
         Context $context,
-        AttributeTranslationCollection $attributeTranslationCollection
+        AttributeTranslationCollection $attributeTranslationCollection,
+        AttributeFactory $attributeFactory
     )
     {
         $this->_attributeTranslationCollectionFactory = $attributeTranslationCollection;
+        $this->_attributeFactory = $attributeFactory;
         parent::__construct( $context );
     }
 
@@ -51,12 +55,7 @@ class JobAttributeLabel extends AbstractRenderer
         if (count($data) > 0) {
             return $data[0]['original_value'];
         }else{
-            return $this->_getFrontendLabel();
+            return $this->_attributeFactory->create()->load( $attributeId )->getFrontend()->getLabel();
         }
-    }
-
-    protected function _getFrontendLabel(){
-        //TODO: Get Frontend Label
-        return '<b>Label not found</b>';
     }
 }

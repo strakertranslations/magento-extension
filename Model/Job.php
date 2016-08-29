@@ -11,7 +11,7 @@ use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
 use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory as CategoryCollectionFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
 
 class Job extends AbstractModel implements JobInterface, IdentityInterface
@@ -114,25 +114,32 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         return $collection;
     }
 
+    /**
+     * @return \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection
+     */
     public function getCategoryCollection(){
-        $this->getAttributeTranslationEntityArray();
-        $collection = $this->_categoryCollectionFactory->create()
-            ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
-
-//        var_dump($collection->getData());exit();
+        $collection = $this->_getAttributeTranslationEntityCollection();
+//        $collection = $this->_categoryCollectionFactory->create()
+//            ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
         return $collection;
     }
 
     public function getAttributeTranslationEntityArray(){
         /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
-        $collection = $this->_attributeTranslationCollectionFactory->create()
-            ->distinct(true)
-            ->addFieldToSelect('entity_id')
-            ->addFieldToFilter( 'job_id', [ 'eq' => $this->getId()] );
+        $collection = $this->_getAttributeTranslationEntityCollection();
         foreach ($collection->getData() as $item){
             array_push($this->_entityIds, $item['entity_id']);
         }
         return $this->_entityIds;
+    }
+
+    private function _getAttributeTranslationEntityCollection(){
+        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
+        $collection = $this->_attributeTranslationCollectionFactory->create()
+            ->distinct(true)
+            ->addFieldToSelect('entity_id')
+            ->addFieldToFilter( 'job_id', [ 'eq' => $this->getId()] );
+        return $collection;
     }
 
     protected function _loadEntities( $type = JobType::JOB_TYPE_PRODUCT )
@@ -158,15 +165,20 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $return = [ 'isSuccess' => true, 'Message' => ''];
         switch (strtolower( $jobData->status) ){
             case 'queued':
+                if( empty( $this->getData('job_number')) && !empty($jobData->tj_number) ){
+                    $this->setData('job_number', $jobData->tj_number )->save();
+                }
+
+                if( empty($this->getData('job_number')) ){
+                    return false;
+                }
+
                 if( !empty($jobData->quotation) && strcasecmp( $jobData->quotation, 'ready') === 0){
                     $this->setData('job_status_id', JobStatus::JOB_STATUS_READY )
                         ->save();
                 }else{
                     $this->setData('job_status_id', JobStatus::JOB_STATUS_QUEUED )
                         ->save();
-                }
-                if( empty( $this->getData('job_number'))){
-                    $this->setData('job_number', $jobData->tj_number )->save();
                 }
                 break;
             case 'in_progress':
