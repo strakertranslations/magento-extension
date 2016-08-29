@@ -45,7 +45,7 @@ class Confirm extends \Magento\Backend\App\Action
 
         try{
 
-            $this->_importHelper->create($job_id)->parseTranslatedFile()->saveTranslatedProductData()->publishTranslatedProductData();
+            $this->_importHelper->create($job_id)->publishTranslatedData();
 
             $job->addData(['job_status_id'=>6]);
 

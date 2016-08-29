@@ -212,7 +212,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                                 ->setData('translated_file', $fileNameArray['name'])->save();
                             $this->_importHelper->create( $this->getId() )
                                 ->parseTranslatedFile()
-                                ->saveTranslatedProductData();
+                                ->saveData();
                             $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
                         }
                     }else{
