@@ -23,7 +23,9 @@ class Attribute extends Container
                         [
                             'job_id' => $requestData['job_id'],
                             'job_type_id' => $requestData['job_type_referrer'],
-                            'entity_id' => $requestData['entity_id']
+                            'entity_id' => $requestData['entity_id'],
+                            'job_key' => $requestData['job_key'],
+                            'source_store_id' => $requestData['source_store_id']
                         ]
                     ) . '\') ',
                 'class' => 'back'

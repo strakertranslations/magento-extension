@@ -3,6 +3,7 @@ namespace Straker\EasyTranslationPlatform\Model;
 
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
+use Symfony\CS\Fixer\Symfony\SelfAccessorFixer;
 
 class JobType extends AbstractModel implements JobTypeInterface, IdentityInterface
 {
