@@ -35,6 +35,7 @@ class Confirm extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
+    //Todo: Loop over jobs
     public function execute()
     {
         $job_id = $this->getRequest()->getParam('job_id');

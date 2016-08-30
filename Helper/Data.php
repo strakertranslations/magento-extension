@@ -50,9 +50,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * get products tab Url in admin
      * @return string
      */
-    public function getEasyTranslationPlatformUrl()
+    public function getProductUrl()
     {
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/products', ['_current' => true]);
+    }
+
+    public function getPagesUrl()
+    {
+        return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/pages', ['_current' => true]);
     }
 
     public function getMagentoDataTableArray(){

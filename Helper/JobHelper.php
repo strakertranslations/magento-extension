@@ -10,6 +10,7 @@ use Magento\Framework\Data\Collection;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
+use Straker\EasyTranslationPlatform\Helper\PageHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
@@ -27,6 +28,7 @@ class JobHelper extends AbstractHelper
     protected $_configHelper;
     protected $_productHelper;
     protected $_categoryHelper;
+    protected $_pageHelper;
     protected $_jobStatusCollection;
 
     public function __construct(
@@ -34,6 +36,7 @@ class JobHelper extends AbstractHelper
         JobFactory $jobFactory,
         ProductHelper $productHelper,
         CategoryHelper $categoryHelper,
+        PageHelper $pageHelper,
         ConfigHelper $configHelper,
         JobTypeCollection $jobTypeCollectionFactory,
         JobStatusCollection $jobStatusFactory
@@ -44,6 +47,7 @@ class JobHelper extends AbstractHelper
         $this->_configHelper = $configHelper;
         $this->_productHelper = $productHelper;
         $this->_categoryHelper = $categoryHelper;
+        $this->_pageHelper = $pageHelper;
         $this->_jobTypeCollection = $jobTypeCollectionFactory;
         $this->_jobStatusCollection = $jobStatusFactory;
         parent::__construct($context);
@@ -109,6 +113,24 @@ class JobHelper extends AbstractHelper
         $this->jobModel->addData(['source_file'=>$jobFile]);
 
         $this->jobModel->save();
+        return $this->jobModel;
+    }
+
+    public function generatePagesJob()
+    {
+        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('pages')]);
+
+        $this->jobModel->save();
+
+        $jobFile = $this->_pageHelper->getPages($this->jobData['pages'],$this->jobModel->getData('source_store_id'))
+            ->getSelectedPageAttributes()
+            ->savePageData($this->jobModel->getId())
+            ->generateCategoryXML($this->jobModel);
+
+        $this->jobModel->addData(['source_file'=>$jobFile]);
+
+        $this->jobModel->save();
+
         return $this->jobModel;
     }
 

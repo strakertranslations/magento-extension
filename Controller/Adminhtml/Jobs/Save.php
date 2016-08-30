@@ -126,6 +126,12 @@ class Save extends Action
 
         if ($data) {
 
+            if(strlen($data['pages'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generatePagesJob();
+
+            }
+
             if(strlen($data['magento_source_store'])>0)
             {
                 $this->_saveStoreConfigData($data);

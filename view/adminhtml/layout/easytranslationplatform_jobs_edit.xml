@@ -2,9 +2,6 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left"
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="editor"/>
-    <head>
-        <link src="Straker_EasyTranslationPlatform::test.js"/>
-    </head>
     <body>
         <referenceContainer name="content">
             <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit"
@@ -24,7 +21,7 @@
                     <argument name="block" xsi:type="array">
                         <item name="label" xsi:type="string">Translate Products</item>
                         <item name="title" xsi:type="string">Translate Products</item>
-                        <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getEasyTranslationPlatformUrl"/>
+                        <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getProductUrl"/>
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
                 </action>
@@ -32,6 +29,15 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">categories</argument>
                     <argument name="block" xsi:type="string">tab_categories</argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">cms_pages</argument>
+                    <argument name="block" xsi:type="array">
+                        <item name="label" xsi:type="string">Translate Pages</item>
+                        <item name="title" xsi:type="string">Translate Pages</item>
+                        <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getPagesUrl"/>
+                        <item name="class" xsi:type="string">ajax</item>
+                    </argument>
                 </action>
             </block>
         </referenceContainer>
