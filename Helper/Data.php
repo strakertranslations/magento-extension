@@ -58,6 +58,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getPagesUrl()
     {
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/pages', ['_current' => true]);
+
+    public function getBlockUrl()
+    {
+        return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/Blocks', ['_current' => true]);
+
     }
 
     public function getMagentoDataTableArray(){

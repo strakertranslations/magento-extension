@@ -36,6 +36,15 @@
                         <item name="label" xsi:type="string">Translate Pages</item>
                         <item name="title" xsi:type="string">Translate Pages</item>
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getPagesUrl"/>
+                         <item name="class" xsi:type="string">ajax</item>
+                    </argument>
+                </action>
+                <action method="addTab">
+                    <argument name="name" xsi:type="string">cms_blocks</argument>
+                    <argument name="block" xsi:type="array">
+                        <item name="label" xsi:type="string">Translate Blocks</item>
+                        <item name="title" xsi:type="string">Translate Blocks</item>
+                        <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getBlockUrl"/>
                         <item name="class" xsi:type="string">ajax</item>
                     </argument>
                 </action>

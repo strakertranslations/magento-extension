@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Category;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Page;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
@@ -45,12 +45,10 @@ class Grid extends Extended
      */
     protected function _prepareCollection()
     {
-        $categoryCollection = $this->_job->getCategoryCollection();
+        $pageCollection = $this->_job->getPageCollection();
 
-        if( !empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)){
-            $this->setCollection($categoryCollection->addCategoryName( $this->_sourceStoreId ));
-        }else{
-            $this->setCollection($categoryCollection->addCategoryName());
+        if( !empty( $this->_sourceStoreId ) && is_numeric( $this->_sourceStoreId )){
+            $pageCollection->addStoreFilter( $this->_sourceStoreId );
         }
 
         return parent::_prepareCollection();
@@ -73,20 +71,20 @@ class Grid extends Extended
 //        );
 
         $this->addColumn(
-            'entity_id',
+            'page_id',
             [
-                'header' => __('Category ID'),
+                'header' => __('Page ID'),
                 'type' => 'number',
-                'index' => 'entity_id',
+                'index' => 'page_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id',
             ]
         );
         $this->addColumn(
-            'name',
+            'title',
             [
-                'header' => __('Name'),
-                'index' => 'name',
+                'header' => __('Title'),
+                'index' => 'title',
                 'class' => 'xxx',
                 'width' => '50px',
             ]
@@ -106,7 +104,7 @@ class Grid extends Extended
                             'params' => [
                                 'job_id' => $this->_job->getJobId(),
                                 'job_type_id' => $this->_jobTypeId,
-                                'job_type_referrer' => Model\JobType::JOB_TYPE_CATEGORY,
+                                'job_type_referrer' => Model\JobType::JOB_TYPE_PAGE,
                                 'job_key' => $this->_jobKey,
                                 'source_store_id' => $this->_sourceStoreId
                             ]
@@ -137,7 +135,7 @@ class Grid extends Extended
                 'job_id' => $this->_job->getJobId(),
                 'job_type_id' => $this->_jobTypeId,
                 'entity_id' => $row->getEntityId(),
-                'job_type_referrer' => Model\JobType::JOB_TYPE_CATEGORY,
+                'job_type_referrer' => Model\JobType::JOB_TYPE_PAGE,
                 'job_key' => $this->_jobKey,
                 'source_store_id' => $this->_sourceStoreId
             ]
