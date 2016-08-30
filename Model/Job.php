@@ -6,14 +6,13 @@ use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
-use Magento\Ui\Test\Block\Adminhtml\DataGrid;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
-use Straker\EasyTranslationPlatform\Model\JobStatusFactory;
-use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory as CategoryCollectionFactory;
-use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory                               as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory                             as CategoryCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory                                      as PageCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory                                     as BlockCollectionFactory;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory  as AttributeTranslationCollectionFactory;
 
 class Job extends AbstractModel implements JobInterface, IdentityInterface
 {
@@ -38,6 +37,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     protected $_productCollectionFactory;
     protected $_categoryCollectionFactory;
+    protected $_pageCollectionFactory;
+    protected $_blockCollectionFactory;
     protected $_attributeTranslationCollectionFactory;
     protected $_entities = [];
     public    $_entityIds = [];
@@ -53,6 +54,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         Registry $registry,
         ProductCollectionFactory $productCollectionFactory,
         CategoryCollectionFactory $categoryCollectionFactory,
+        PageCollectionFactory $pageCollectionFactory,
+        BlockCollectionFactory $blockCollectionFactory,
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         JobStatusFactory $jobStatusFactory,
         JobTypeFactory $jobTypeFactory,
@@ -63,6 +66,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     ) {
         $this->_productCollectionFactory = $productCollectionFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
+        $this->_pageCollectionFactory = $pageCollectionFactory;
+        $this->_blockCollectionFactory = $blockCollectionFactory;
         $this->_attributeTranslationCollectionFactory = $attributeTranslationCollectionFactory;
         $this->_jobStatusFactory = $jobStatusFactory;
         $this->_jobTypeFactory = $jobTypeFactory;
@@ -112,6 +117,27 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
             ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
 
 //        var_dump($collection->getData());exit();
+        return $collection;
+    }
+
+
+    /**
+     * @return \Magento\Cms\Model\ResourceModel\Page\Collection
+     */
+    public function getPageCollection(){
+        $this->getAttributeTranslationEntityArray();
+        $collection = $this->_pageCollectionFactory->create()
+            ->addFieldToFilter('entity_id', ['in' => $this->_entityIds]);
+        return $collection;
+    }
+
+    /**
+     * @return \Magento\Cms\Model\ResourceModel\Block\Collection
+     */
+    public function getBlockCollection(){
+        $this->getAttributeTranslationEntityArray();
+        $collection = $this->_blockCollectionFactory->create()
+            ->addFieldToFilter('entity_id', ['in' => $this->_entityIds]);
         return $collection;
     }
 

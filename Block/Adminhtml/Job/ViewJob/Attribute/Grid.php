@@ -46,8 +46,6 @@ class Grid extends Extended
         return parent::_prepareCollection();
     }
 
-
-
     /**
      * @return $this
      */
