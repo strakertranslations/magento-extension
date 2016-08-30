@@ -234,41 +234,6 @@ class InstallSchema implements InstallSchemaInterface
             $installer->getConnection()->createTable($table);
         }
 
-//        if (!$installer->tableExists('straker_product_attachment_rel')) {
-//            $table = $installer->getConnection()
-//                ->newTable($installer->getTable('straker_product_attachment_rel'))
-//                ->addColumn('job_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true])
-//                ->addColumn('product_id', Table::TYPE_INTEGER, 10, ['nullable' => false, 'unsigned' => true],
-//                    'Magento Product Id')
-//                ->addForeignKey(
-//                    $installer->getFkName(
-//                        'straker_job',
-//                        'job_id',
-//                        'straker_product_attachment_rel',
-//                        'job_id'
-//                    ),
-//                    'job_id',
-//                    $installer->getTable('straker_job'),
-//                    'job_id',
-//                    Table::ACTION_CASCADE
-//                )
-//                ->addForeignKey(
-//                    $installer->getFkName(
-//                        'straker_product_attachment_rel',
-//                        'job_id',
-//                        'catalog_product_entity',
-//                        'entity_id'
-//                    ),
-//                    'product_id',
-//                    $installer->getTable('catalog_product_entity'),
-//                    'entity_id',
-//                    Table::ACTION_CASCADE
-//                )
-//                ->setComment('Straker Product Attachment relation table');
-//
-//            $installer->getConnection()->createTable($table);
-//        }
-
         //START straker_attribute_translation setup
         if (!$installer->tableExists(Model\AttributeTranslation::ENTITY)) {
             $table = $installer->getConnection()->newTable(
@@ -362,14 +327,16 @@ class InstallSchema implements InstallSchemaInterface
                 Model\Job::ENTITY,
                 'job_id',
                 Table::ACTION_CASCADE
-            )->addForeignKey(
-                $installer->getFkName(Model\AttributeTranslation::ENTITY, 'attribute_id', 'eav_attribute',
-                    'attribute_id'),
-                'attribute_id',
-                'eav_attribute',
-                'attribute_id',
-                Table::ACTION_CASCADE
-            );
+            )
+//                ->addForeignKey(
+//                $installer->getFkName(Model\AttributeTranslation::ENTITY, 'attribute_id', 'eav_attribute',
+//                    'attribute_id'),
+//                'attribute_id',
+//                'eav_attribute',
+//                'attribute_id',
+//                Table::ACTION_CASCADE
+//            )
+            ;
             $installer->getConnection()->createTable($table);
         }
         //END   table setup
