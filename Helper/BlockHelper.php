@@ -9,7 +9,7 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection as AttributeCollection;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollection;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollection;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
 use Magento\Store\Model\StoreManagerInterface;
@@ -22,11 +22,10 @@ use Straker\EasyTranslationPlatform\Helper\AttributeHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 
-class PageHelper extends AbstractHelper
+class BlockHelper extends AbstractHelper
 {
 
-    protected $_productFactory;
-    protected $_pageCollectionFactory;
+    protected $_blockCollectionFactory;
     protected $_attributeTranslationModel;
     protected $_attributeOptionTranslationModel;
     protected $_attributeCollectionFactory;
@@ -39,22 +38,20 @@ class PageHelper extends AbstractHelper
     protected $_xmlHelper;
 
     protected $_entityTypeId;
-    protected $_pageData;
+    protected $_blockData;
     protected $_storeId;
 
-    const PageAttributes = [
+    const blockAttributes = [
         ['name'=>'title','label'=>'Title'],
-        ['name'=>'meta_keywords','label'=>'Meta Keywords'],
-        ['name'=>'meta_description','label'=>'Meta Description'],
-        ['name'=>'content_heading','label'=>'Content Heading'],
         ['name'=>'content','label'=>'Content']
     ];
+
 
     public function __construct(
         Context $context,
         AttributeRepository $attributeRepository,
         AttributeCollection $attributeCollectionFactory,
-        PageCollection $pageCollectionFactory,
+        BlockCollection $blockCollectionFactory,
         AttributeTranslationFactory $attributeTranslationFactory,
         AttributeOptionTranslationFactory $attributeOptionTranslationFactory,
         Config $eavConfig,
@@ -65,7 +62,7 @@ class PageHelper extends AbstractHelper
         StoreManagerInterface $storeManager
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
-        $this->_pageCollectionFactory = $pageCollectionFactory;
+        $this->_blockCollectionFactory = $blockCollectionFactory;
         $this->_attributeTranslationFactory = $attributeTranslationFactory;
         $this->_attributeOptionTranslationFactory = $attributeOptionTranslationFactory;
         $this->_attributeRepository = $attributeRepository;
@@ -81,7 +78,7 @@ class PageHelper extends AbstractHelper
 
     public function getAttributes()
     {
-        return array_column( self::PageAttributes, 'name');
+        return array_column( self::blockAttributes, 'name');
     }
 
     /**
@@ -92,23 +89,24 @@ class PageHelper extends AbstractHelper
      * @internal param $product_ids
      * @internal param $store_id
      */
-    public function getPages(
-        $page_ids,
+    public function getBlocks(
+        $block_ids,
         $source_store_id
     )
     {
-        if(strpos($page_ids,'&'))
+        if(strpos($block_ids,'&'))
         {
-            $page_ids = explode('&',$page_ids);
+            $block_ids = explode('&',$block_ids);
         }
 
         $this->_storeId = $source_store_id;
 
-        $pages = $this->_pageCollectionFactory->create()
-            ->addStoreFilter($this->_storeId)
-            ->addFieldToFilter( 'page_id',  array( 'in' => $page_ids ));
 
-        $this->_pageData = $pages->toArray()['items'];
+        $blocks = $this->_blockCollectionFactory->create()
+            ->addStoreFilter($source_store_id)
+            ->addFieldToFilter( 'main_table.block_id',  array( 'in' => $block_ids ));
+
+        $this->_blockData = $blocks->toArray()['items'];
 
         return $this;
     }
@@ -116,11 +114,11 @@ class PageHelper extends AbstractHelper
     /**
      * @return $this
      */
-    public function getSelectedPageAttributes()
+    public function getSelectedBlockAttributes()
     {
-        $pageData = [];
+        $blockData = [];
 
-        foreach ($this->_pageData as $page_key => $attribute_data)
+        foreach ($this->_blockData as $block_key => $attribute_data)
         {
 
             $attributeData = [];
@@ -139,15 +137,15 @@ class PageHelper extends AbstractHelper
 
             }
 
-            $pageData[] = [
-                'page_id'=>$this->_pageData[$page_key]['page_id'],
-                'page_title'=>$this->_pageData[$page_key]['title'],
-                'page_url'=>$this->_storeManager->getStore($this->_storeId)->getBaseUrl().$this->_pageData[$page_key]['identifier'].'.html',//check
+            $blockData[] = [
+                'block_id'=>$this->_blockData[$block_key]['block_id'],
+                'page_title'=>$this->_blockData[$block_key]['title'],
+                'page_url'=>$this->_storeManager->getStore($this->_storeId)->getBaseUrl().$this->_blockData[$block_key]['identifier'].'.html',//check
                 'attributes'=>$attributeData
             ];
         }
 
-        $this->_pageData = $pageData;
+        $this->_blockData = $blockData;
 
         return $this;
     }
@@ -156,12 +154,12 @@ class PageHelper extends AbstractHelper
      * @param $jobModel
      * @return string
      */
-    public function generatePageXML($jobModel)
+    public function generateBlockXML($jobModel)
     {
         $this->_xmlHelper->create('_'.$jobModel->getId().'_'.time());
 
-        $this->appendPageAttributes(
-            $this->_pageData,
+        $this->appendBlockAttributes(
+            $this->_blockData,
             $jobModel->getId(),
             $jobModel->getData('job_type_id'),
             $jobModel->getData('source_store_id'),
@@ -184,8 +182,8 @@ class PageHelper extends AbstractHelper
      * @param $xmlHelper
      * @return $this|bool
      */
-    protected function appendPageAttributes(
-        $pageData,
+    protected function appendBlockAttributes(
+        $blockData,
         $job_id,
         $jobType_id,
         $source_store_id,
@@ -193,29 +191,31 @@ class PageHelper extends AbstractHelper
         $xmlHelper
     )
     {
-        if($pageData)
+        if($blockData)
         {
-            foreach ($pageData as $data){
+            foreach ($blockData as $data){
 
                 foreach ($data['attributes'] as $attribute) {
 
-                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['page_id'].'_'.$attribute['attribute_id'];
+                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['block_id'].'_'.$attribute['attribute_id'];
 
                         $xmlHelper->appendDataToRoot([
                             'name' => $job_name,
-                            'content_context' => 'page_attribute_value',
+                            'content_context' => 'block_attribute_value',
                             'content_context_url' => $data['page_url'],
                             'attribute_translation_id'=>$attribute['value_translation_id'],
                             'source_store_id'=> $source_store_id,
-                            'page_id' => $data['page_id'],
+                            'block_id' => $data['block_id'],
                             'attribute_id'=>$attribute['attribute_id'],
                             'attribute_label'=>$attribute['label'],
                             'value' => $attribute['value']
                         ]);
                 }
             }
+
             return $this;
         }
+
         return false;
     }
 
@@ -223,10 +223,10 @@ class PageHelper extends AbstractHelper
      * @param $job_id
      * @return $this
      */
-    public function savePageData($job_id)
+    public function saveBlockData($job_id)
     {
 
-        foreach ($this->_pageData as $pageKey => $data) {
+        foreach ($this->_blockData as $blockKey => $data) {
 
             foreach ($data['attributes'] as $key => $attribute) {
 
@@ -237,15 +237,15 @@ class PageHelper extends AbstractHelper
                     $attributeTranslationModel->setData(
                         [
                             'job_id' => $job_id,
-                            'entity_id' => $data['page_id'],
+                            'entity_id' => $data['block_id'],
                             'attribute_id' => $attribute['attribute_id'],
                             'original_value' => $attribute['value'],
                             'is_label' => (bool)0
                         ]
                     )->save();
 
-                    $this->_pageData[$pageKey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
-                    $this->_pageData[$pageKey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
+                    $this->_blockData[$blockKey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
+                    $this->_blockData[$blockKey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
 
                 }catch (Exception $e){
 

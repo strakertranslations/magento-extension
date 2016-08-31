@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Model\ResourceModel;
 
+use Straker\EasyTranslationPlatform\Helper\BlockHelper;
 use Straker\EasyTranslationPlatform\Helper\PageHelper;
 
 class AttributeTranslation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
@@ -26,13 +27,22 @@ class AttributeTranslation extends \Magento\Framework\Model\ResourceModel\Db\Abs
     {
         $job_type = $this->_jobFactory->create()->load($object->getData('job_id'))->getJobTypeId();
 
-        if( $job_type == \Straker\EasyTranslationPlatform\Model\JobType::JOB_TYPE_PAGE || $job_type == \Straker\EasyTranslationPlatform\Model\JobType::JOB_TYPE_BLOCK )
+        if( $job_type == \Straker\EasyTranslationPlatform\Model\JobType::JOB_TYPE_PAGE )
         {
             if( !is_numeric( $object->getAttributeId()) ){
                 $key = array_search( $object->getAttributeId(),array_column( PageHelper::PageAttributes, 'name'));
                 $object->setAttributeId($key);
             }
         }
+
+        if( $job_type == \Straker\EasyTranslationPlatform\Model\JobType::JOB_TYPE_BLOCK )
+        {
+            if( !is_numeric( $object->getAttributeId()) ){
+                $key = array_search( $object->getAttributeId(),array_column( BlockHelper::blockAttributes, 'name'));
+                $object->setAttributeId($key);
+            }
+        }
+
         return parent::_beforeSave($object);
     }
 }

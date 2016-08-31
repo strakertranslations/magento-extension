@@ -11,6 +11,7 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 use Straker\EasyTranslationPlatform\Helper\PageHelper;
+use Straker\EasyTranslationPlatform\Helper\BlockHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
@@ -30,6 +31,7 @@ class JobHelper extends AbstractHelper
     protected $_productHelper;
     protected $_categoryHelper;
     protected $_pageHelper;
+    protected $_blockHelper;
     protected $_jobStatusCollection;
 
     public function __construct(
@@ -39,6 +41,7 @@ class JobHelper extends AbstractHelper
         CategoryHelper $categoryHelper,
         PageHelper $pageHelper,
         ConfigHelper $configHelper,
+        BlockHelper $blockHelper,
         JobTypeCollection $jobTypeCollectionFactory,
         JobStatusCollection $jobStatusFactory
 
@@ -49,6 +52,7 @@ class JobHelper extends AbstractHelper
         $this->_productHelper = $productHelper;
         $this->_categoryHelper = $categoryHelper;
         $this->_pageHelper = $pageHelper;
+        $this->_blockHelper = $blockHelper;
         $this->_jobTypeCollection = $jobTypeCollectionFactory;
         $this->_jobStatusCollection = $jobStatusFactory;
         parent::__construct($context);
@@ -118,7 +122,7 @@ class JobHelper extends AbstractHelper
         return $this->jobModel;
     }
 
-    public function generatePagesJob()
+    public function generatePageJob()
     {
         $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PAGE]);
 
@@ -127,7 +131,25 @@ class JobHelper extends AbstractHelper
         $jobFile = $this->_pageHelper->getPages($this->jobData['pages'],$this->jobModel->getData('source_store_id'))
             ->getSelectedPageAttributes()
             ->savePageData($this->jobModel->getId())
-            ->generateCategoryXML($this->jobModel);
+            ->generatePageXML($this->jobModel);
+
+        $this->jobModel->addData(['source_file'=>$jobFile]);
+
+        $this->jobModel->save();
+
+        return $this->jobModel;
+    }
+
+    public function generateBlockJob()
+    {
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_BLOCK]);
+
+        $this->jobModel->save();
+
+        $jobFile = $this->_blockHelper->getBlocks($this->jobData['blocks'],$this->jobModel->getData('source_store_id'))
+            ->getSelectedBlockAttributes()
+            ->saveBlockData($this->jobModel->getId())
+            ->generateBlockXML($this->jobModel);
 
         $this->jobModel->addData(['source_file'=>$jobFile]);
 

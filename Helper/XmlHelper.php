@@ -91,6 +91,7 @@ class XmlHelper extends AbstractHelper
      */
     public function appendDataToRoot( $attributes = [] ){
 
+
         $this->_data = $this->_dom->createElement( 'data' );
 
         foreach ($attributes as $key => $value){
@@ -125,7 +126,9 @@ class XmlHelper extends AbstractHelper
             return false;
         }
         $this->_dom->appendChild( $this->_root );
-        $this->_dom->save( $this->_xmlFileName );
+        $saveData = $this->_dom->save( $this->_xmlFileName );
+        //var_dump($saveData);
+        //exit;
         $this->_dom->documentElement->parentNode->removeChild($this->_root);
 
         return true;
