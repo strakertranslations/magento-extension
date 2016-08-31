@@ -127,7 +127,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     public function getPageCollection(){
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_pageCollectionFactory->create()
-            ->addFieldToFilter('entity_id', ['in' => $this->_entityIds]);
+            ->addFieldToFilter('page_id', ['in' => $this->_entityIds]);
         return $collection;
     }
 
@@ -137,7 +137,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     public function getBlockCollection(){
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_blockCollectionFactory->create()
-            ->addFieldToFilter('entity_id', ['in' => $this->_entityIds]);
+            ->addFieldToFilter('block_id', ['in' => $this->_entityIds]);
         return $collection;
     }
 

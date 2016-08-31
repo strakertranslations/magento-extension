@@ -126,7 +126,7 @@ class Save extends Action
 
         if ($data) {
 
-            if(strlen($data['pages'])>0)
+            if(isset($data['pages']) && strlen($data['pages'])>0)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generatePagesJob();
 

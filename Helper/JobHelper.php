@@ -13,6 +13,7 @@ use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 use Straker\EasyTranslationPlatform\Helper\PageHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
+use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory as JobStatusCollection;
 
@@ -59,7 +60,6 @@ class JobHelper extends AbstractHelper
      */
     public function createJob($data)
     {
-
         $this->jobData = $data;
 
         $this->jobModel = $this->_jobFactory->create();
@@ -80,7 +80,8 @@ class JobHelper extends AbstractHelper
 
     public function generateProductJob()
     {
-        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('product')]);
+
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PRODUCT]);
 
         $this->jobModel->save();
 
@@ -101,7 +102,7 @@ class JobHelper extends AbstractHelper
 
     public function generateCategoryJob()
     {
-        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('category')]);
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_CATEGORY]);
 
         $this->jobModel->save();
 
@@ -118,7 +119,7 @@ class JobHelper extends AbstractHelper
 
     public function generatePagesJob()
     {
-        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('pages')]);
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PAGE]);
 
         $this->jobModel->save();
 
@@ -160,30 +161,30 @@ class JobHelper extends AbstractHelper
         return $this;
     }
 
-    /**
-     * @param $jobType
-     * @return mixed
-     */
-    protected function getJobTypeId($jobType){
+//    /**
+//     * @param $jobType
+//     * @return mixed
+//     */
+//    protected function getJobTypeId($jobType){
+//
+//        $collection = $this->_jobTypeCollection->create()
+//            ->addFieldToFilter('type_name',array('eq'=>$jobType))
+//            ->getFirstItem();
+//
+//        return $collection->getData('type_id');
+//    }
 
-        $collection = $this->_jobTypeCollection->create()
-            ->addFieldToFilter('type_name',array('eq'=>$jobType))
-            ->getFirstItem();
-
-        return $collection->getData('type_id');
-    }
-
-    /**
-     * @param $jobStatus
-     * @return mixed
-     */
-    protected function getJobStatusId($jobStatus){
-
-        $collection = $this->_jobStatusCollection->create()
-            ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
-            ->getFirstItem();
-
-        return $collection->getData('status_id');
-    }
+//    /**
+//     * @param $jobStatus
+//     * @return mixed
+//     */
+//    protected function getJobStatusId($jobStatus){
+//
+//        $collection = $this->_jobStatusCollection->create()
+//            ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
+//            ->getFirstItem();
+//
+//        return $collection->getData('status_id');
+//    }
     
 }

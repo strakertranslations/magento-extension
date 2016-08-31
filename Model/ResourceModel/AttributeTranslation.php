@@ -2,6 +2,8 @@
 
 namespace Straker\EasyTranslationPlatform\Model\ResourceModel;
 
+//use Straker\EasyTranslationPlatform\Model\JobType;
+
 class AttributeTranslation extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     protected $_jobFactory;
@@ -29,9 +31,9 @@ class AttributeTranslation extends \Magento\Framework\Model\ResourceModel\Db\Abs
 
     protected function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        $job_type = $this->_jobFactory->create()->load($object->getData('job_id'))->getJobType();
+        $job_type = $this->_jobFactory->create()->load($object->getData('job_id'))->getJobTypeId();
 
-        if($job_type == 'pages')
+        if( $job_type == \Straker\EasyTranslationPlatform\Model\JobType::JOB_TYPE_PAGE )
         {
             $key = array_search( $object->getAttributeId(),array_column(self::PageAttributes, 'name'));
             $object->setAttributeId($key);
