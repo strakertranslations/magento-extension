@@ -136,9 +136,17 @@ class Index extends \Magento\Backend\App\Action
     public function execute()
     {
 
-        $this->_importHelper->create('252')->parseTranslatedFile()->saveTranslatedCategoryData()->publishTranslatedCategoryData();
+        $pageAttributes = [
+            ['name'=>'title','label'=>'Title'],
+            ['name'=>'meta_keywords','label'=>'Meta Keywords'],
+            ['name'=>'content_heading','label'=>'Meta Description'],
+            ['name'=>'content','label'=>'Content']
+        ];
 
-        exit;
+        echo( array_search('title', array_column($pageAttributes, 'name') ));
+//        $this->_importHelper->create('252')->parseTranslatedFile()->saveTranslatedCategoryData()->publishTranslatedCategoryData();
+//
+//        exit;
 
 
     }

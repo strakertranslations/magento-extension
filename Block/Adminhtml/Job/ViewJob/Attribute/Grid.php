@@ -63,7 +63,7 @@ class Grid extends Extended
 //        );
 
         $this->addColumn(
-            'job_id',
+            'attribute_translation_id',
             [
                 'header' => __( 'ID'),
                 'type' => 'html',

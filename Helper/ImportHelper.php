@@ -467,16 +467,13 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function saveTranslatedPageData()
     {
-
         foreach ($this->_pageData as $data)
         {
-
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
             $att_trans_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
             $att_trans_model->save();
 
         }
-
         return $this;
     }
 
@@ -516,7 +513,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             foreach ($attributes as $key => $value)
             {
-                $saveData[AttributeTranslationResourceModel::PageAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
+                $saveData[PageHelper::PageAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
             }
 
             $page = $this->_pageFactory->create()->setData($saveData)->save();
