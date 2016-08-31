@@ -42,6 +42,7 @@ class JobActions extends Column
                             ->getUrl(
                                 $url,
                                 [
+                                    'job_id' => $item['job_id'],
                                     'job_key' => $item['job_key'],
                                     'job_type_id' => 0,
                                     'source_store_id' => $item['source_store_id']
@@ -60,7 +61,11 @@ class JobActions extends Column
                     if ($statusId == Model\JobStatus::JOB_STATUS_COMPLETED) {
                         $item[$name]['confirm'] = [
                             'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Confirm',
-                                ['job_id' => $item['job_id'], 'job_key' => $item['job_key'], 'job_type_id' => $item['job_type_id']]),
+                                [
+                                    'job_id' => $item['job_id'],
+                                    'job_key' => $item['job_key'],
+                                    'job_type_id' => $item['job_type_id']
+                                ]),
                             'label' => __('Confirm')
                         ];
                     }

@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -30,31 +31,31 @@ class PageHelper extends AbstractHelper
     protected $_attributeOptionTranslationModel;
     protected $_attributeCollectionFactory;
     protected $_storeManager;
+    protected $_attributeTranslationFactory;
+    protected $_attributeOptionTranslationFactory;
+    protected $_attributeRepository;
+    protected $_configHelper;
+    protected $_attributeHelper;
+    protected $_xmlHelper;
 
     protected $_entityTypeId;
     protected $_pageData;
     protected $_storeId;
 
-    protected $_pageAttributes = array(
-        'name',
-        'description',
-        'meta_title',
-        'meta_keywords',
-        'meta_description',
-        'content_heading',
-        'content'
-    );
-
-
-
+    const PageAttributes = [
+        ['name'=>'title','label'=>'Title'],
+        ['name'=>'meta_keywords','label'=>'Meta Keywords'],
+        ['name'=>'meta_description','label'=>'Meta Description'],
+        ['name'=>'content_heading','label'=>'Content Heading'],
+        ['name'=>'content','label'=>'Content']
+    ];
 
     /**
      * ProductHelper constructor.
      * @param Context $context
-     * @param ProductFactory $productFactory
      * @param AttributeRepository $attributeRepository
      * @param AttributeCollection $attributeCollectionFactory
-     * @param ProductCollection $productCollectionFactory
+     * @param PageCollection $pageCollectionFactory
      * @param AttributeTranslationFactory $attributeTranslationFactory
      * @param AttributeOptionTranslationFactory $attributeOptionTranslationFactory
      * @param Config $eavConfig
@@ -62,6 +63,9 @@ class PageHelper extends AbstractHelper
      * @param \Straker\EasyTranslationPlatform\Helper\AttributeHelper $attributeHelper
      * @param \Straker\EasyTranslationPlatform\Helper\XmlHelper $xmlHelper
      * @param Logger $logger
+     * @param StoreManagerInterface $storeManager
+     * @internal param ProductFactory $productFactory
+     * @internal param ProductCollection $productCollectionFactory
      */
     public function __construct(
         Context $context,
@@ -86,7 +90,7 @@ class PageHelper extends AbstractHelper
         $this->_attributeHelper = $attributeHelper;
         $this->_xmlHelper = $xmlHelper;
         $this->_logger = $logger;
-        $this->_entityTypeId =  $eavConfig->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
+        $this->_entityTypeId =  $eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
         $this->_storeManager = $storeManager;
 
         parent::__construct($context);
@@ -94,15 +98,16 @@ class PageHelper extends AbstractHelper
 
     public function getAttributes()
     {
-        return $this->_pageAttributes;
+        return array_column( self::PageAttributes, 'name');
     }
 
-
     /**
-     * @param $product_ids
-     * @param $store_id
-     * @return $this
+     * @param $page_ids
+     * @param $source_store_id
+     * @return $this Todo: Add store id to filter products by store
      * Todo: Add store id to filter products by store
+     * @internal param $product_ids
+     * @internal param $store_id
      */
     public function getPages(
         $page_ids,
@@ -186,19 +191,20 @@ class PageHelper extends AbstractHelper
         return $this->_xmlHelper->getXmlFileName();
     }
 
+
     /**
-     * @param $productData
+     * @param $pageData
      * @param $job_id
-     * @param $jobtype_id
+     * @param $jobType_id
      * @param $source_store_id
      * @param $target_store_id
      * @param $xmlHelper
-     * @return bool
+     * @return $this|bool
      */
     protected function appendPageAttributes(
         $pageData,
         $job_id,
-        $jobtype_id,
+        $jobType_id,
         $source_store_id,
         $target_store_id,
         $xmlHelper
@@ -206,12 +212,11 @@ class PageHelper extends AbstractHelper
     {
         if($pageData)
         {
-
             foreach ($pageData as $data){
 
                 foreach ($data['attributes'] as $attribute) {
 
-                        $job_name = $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['page_id'].'_'.$attribute['attribute_id'];
+                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['page_id'].'_'.$attribute['attribute_id'];
 
                         $xmlHelper->appendDataToRoot([
                             'name' => $job_name,
@@ -224,17 +229,11 @@ class PageHelper extends AbstractHelper
                             'attribute_label'=>$attribute['label'],
                             'value' => $attribute['value']
                         ]);
-
                 }
-
-
             }
-
             return $this;
         }
-
         return false;
-
     }
 
     /**
@@ -244,7 +243,7 @@ class PageHelper extends AbstractHelper
     public function savePageData($job_id)
     {
 
-        foreach ($this->_pageData as $pagekey => $data) {
+        foreach ($this->_pageData as $pageKey => $data) {
 
             foreach ($data['attributes'] as $key => $attribute) {
 
@@ -262,8 +261,8 @@ class PageHelper extends AbstractHelper
                         ]
                     )->save();
 
-                    $this->_pageData[$pagekey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
-                    $this->_pageData[$pagekey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
+                    $this->_pageData[$pageKey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
+                    $this->_pageData[$pageKey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
 
                 }catch (Exception $e){
 
