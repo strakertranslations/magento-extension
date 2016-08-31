@@ -126,12 +126,6 @@ class Save extends Action
 
         if ($data) {
 
-            if(isset($data['pages']) && strlen($data['pages'])>0)
-            {
-                $jobData[] = $this->_jobHelper->createJob($data)->generatePagesJob();
-
-            }
-
             if(strlen($data['magento_source_store'])>0)
             {
                 $this->_saveStoreConfigData($data);
@@ -142,9 +136,15 @@ class Save extends Action
                 $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
             }
 
-            if(strlen ($data['categories'])>0)
+            if(strlen($data['categories'])>0)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
+            }
+
+            if(isset($data['pages']) && strlen($data['pages'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generatePagesJob();
+
             }
 
             try {

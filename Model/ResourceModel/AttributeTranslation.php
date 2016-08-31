@@ -38,8 +38,6 @@ class AttributeTranslation extends \Magento\Framework\Model\ResourceModel\Db\Abs
             $key = array_search( $object->getAttributeId(),array_column(self::PageAttributes, 'name'));
             $object->setAttributeId($key);
         }
-
         return parent::_beforeSave($object);
-
     }
 }

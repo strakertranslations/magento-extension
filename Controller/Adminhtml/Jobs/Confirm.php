@@ -35,7 +35,6 @@ class Confirm extends \Magento\Backend\App\Action
         parent::__construct($context);
     }
 
-    //Todo: Loop over jobs
     public function execute()
     {
         $job_id = $this->getRequest()->getParam('job_id');
@@ -44,33 +43,44 @@ class Confirm extends \Magento\Backend\App\Action
 
         $job = $this->_jobFactory->create()->load($job_id);
 
-        try{
+        $jobMatches = [];
 
-            $this->_importHelper->create($job_id)->publishTranslatedData();
+        preg_match("/job_(.*?)_/",$job->getSourceFile(),$jobMatches);
 
-            $job->addData(['job_status_id'=>6]);
+        $jobIds = explode('&',$jobMatches[1]);
 
-            $job->save();
+        foreach ($jobIds as $job_id)
+        {
+            try{
 
-            $this->messageManager->addSuccess('Translated data has been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
+                $jobType = $this->_jobFactory->create()->load($job_id)->getJobType();
 
-            $resultRedirect->setPath('*/*/index');
+                $this->_importHelper->create($job_id)->publishTranslatedData();
 
-            return $resultRedirect;
+                $job->addData(['job_status_id'=>6]);
+
+                $job->save();
+
+                $this->messageManager->addSuccess('Translated '.$jobType.' data has been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
 
 
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
-            $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
 
-            $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
-            $this->messageManager->addError('Translated data has not been published for'.$job->getData('target_store_id').' store');
+                $this->messageManager->addError('Translated data has not been published for'.$job->getData('target_store_id').' store');
 
-            $resultRedirect->setPath('*/*/index');
+                $resultRedirect->setPath('*/*/index');
 
-            return $resultRedirect;
+                return $resultRedirect;
+            }
         }
+
+        $resultRedirect->setPath('*/*/index');
+
+        return $resultRedirect;
 
     }
 }

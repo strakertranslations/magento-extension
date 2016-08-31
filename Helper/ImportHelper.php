@@ -12,12 +12,14 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
 use Magento\Catalog\Model\CategoryFactory;
+use Magento\Cms\Model\PageFactory as PageFactory;
 
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 
 use Straker\EasyTranslationPlatform\Model\AttributeTranslation;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation as AttributeTranslationResourceModel;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
@@ -45,6 +47,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_attributeCollection;
     protected $_optionCollection;
     protected $_storeManager;
+    protected $_pageFactory;
 
     protected $_jobModel;
     protected $_parsedFileData = [];
@@ -78,7 +81,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         CategoryCollectionFactory $categoryCollectionFactory,
         CategoryFactory $categoryFactory,
         AttributeCollection $attributeCollection,
-        OptionCollection $optionCollection
+        OptionCollection $optionCollection,
+        PageFactory $pageFactory
 
     ) {
 
@@ -98,6 +102,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_resourceConnection = $resourceConnection;
         $this->_attributeCollection = $attributeCollection;
         $this->_optionCollection = $optionCollection;
+        $this->_pageFactory = $pageFactory;
 
         parent::__construct($context);
     }
@@ -130,6 +135,12 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
         });
 
+        $this->_pageData = array_filter($this->_parsedFileData, function($v) {
+
+            return  preg_match('/page/',$v['_attribute']['content_context']);
+
+        });
+
         return $this;
     }
 
@@ -142,6 +153,11 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         if(!empty($this->_categoryData))
         {
             $this->saveTranslatedCategoryData();
+        }
+
+        if(!empty($this->_pageData))
+        {
+            $this->saveTranslatedPageData();
         }
 
         return $this;
@@ -157,6 +173,11 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         if($this->_jobModel->getJobType() == 'category')
         {
             $this->publishTranslatedCategoryData();
+        }
+
+        if($this->_jobModel->getJobType() == 'page')
+        {
+            $this->publishTranslatedPageData();
         }
 
         return $this;
@@ -414,9 +435,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         {
 
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
-
             $att_trans_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
-
             $att_trans_model->save();
 
         }
@@ -438,6 +457,55 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
             $attribute_code = $this->_attributeRepository->get(\Magento\Catalog\Model\Category::ENTITY,$data['attribute_id'])->setStoreId($this->_jobModel->getTargetStoreId())->getAttributeCode();
             $category = $this->_categoryFactory->create()->load($data['entity_id']);
             $category->setData($attribute_code,$data['translated_value'])->getResource()->saveAttribute($category,$attribute_code);
+        }
+
+        return $this;
+    }
+
+    public function saveTranslatedPageData()
+    {
+
+        foreach ($this->_pageData as $data)
+        {
+
+            $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
+            $att_trans_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
+            $att_trans_model->save();
+
+        }
+
+        return $this;
+    }
+
+    public function publishTranslatedPageData()
+    {
+
+        $translatedPages = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect('*')
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) );
+
+
+        foreach ($translatedPages as $page)
+        {
+
+            $saveData = [];
+
+            $pageData = $translatedPages->addFieldToFilter('entity_id',array( 'eq' => $page->getData('entity_id') ));
+
+            foreach ($pageData as $key => $data)
+            {
+
+                $attribute = AttributeTranslationResourceModel::PageAttributes[$data->getData('attribute_id')]['name'];
+
+                $saveData[$attribute] = $data->getData('translated_value');
+
+            }
+
+            $saveData['stores'] = array($this->_jobModel->getTargetStoreId());
+
+            $page = $this->_pageFactory->create()->setData($saveData)->save();
+
+            $page->save();
         }
 
         return $this;

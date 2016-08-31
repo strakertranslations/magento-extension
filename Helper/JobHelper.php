@@ -12,6 +12,7 @@ use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 use Straker\EasyTranslationPlatform\Helper\PageHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
 use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
@@ -102,6 +103,7 @@ class JobHelper extends AbstractHelper
 
     public function generateCategoryJob()
     {
+
         $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_CATEGORY]);
 
         $this->jobModel->save();
@@ -186,5 +188,5 @@ class JobHelper extends AbstractHelper
 //
 //        return $collection->getData('status_id');
 //    }
-    
+
 }
