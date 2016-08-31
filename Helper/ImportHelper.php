@@ -7,6 +7,7 @@ use Magento\Framework\Xml\Parser;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\StoreManagerInterface;
 
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
@@ -82,7 +83,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         CategoryFactory $categoryFactory,
         AttributeCollection $attributeCollection,
         OptionCollection $optionCollection,
-        PageFactory $pageFactory
+        PageFactory $pageFactory,
+        StoreManagerInterface $storeManager
 
     ) {
 
@@ -103,6 +105,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_attributeCollection = $attributeCollection;
         $this->_optionCollection = $optionCollection;
         $this->_pageFactory = $pageFactory;
+        $this->_storeManager = $storeManager;
 
         parent::__construct($context);
     }
@@ -501,7 +504,11 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             }
 
-            $saveData['stores'] = array($this->_jobModel->getTargetStoreId());
+            $saveData = $this->_pageFactory->create()->load($page->getData('entity_id'))->toArray();
+
+            $saveData['store_id'] = array($this->_jobModel->getTargetStoreId());
+
+            $saveData['identifier'] = $this->_storeManager->getStore($this->_jobModel->getTargetStoreId())->getCode().'-'.$this->_pageFactory->create()->load($page->getData('entity_id'))->getData('identifier');
 
             $page = $this->_pageFactory->create()->setData($saveData)->save();
 

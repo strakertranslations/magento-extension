@@ -14,7 +14,6 @@ use Straker\EasyTranslationPlatform\Helper\PageHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
-use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory as JobStatusCollection;
 
