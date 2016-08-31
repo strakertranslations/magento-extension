@@ -504,7 +504,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             $saveData = [
                 'title' => $original_page->getData('title'),
-                'identifier' => $this->_storeManager->getStore($this->_jobModel->getTargetStoreId())->getCode().'/'.$original_page->getData('identifier').$page,
+                'identifier' => $original_page->getData('identifier'),
                 'content' => $original_page->getData('content'),
                 'content_heading' => $original_page->getData('content_heading'),
                 'page_layout' => $original_page->getData('page_layout'),
@@ -523,6 +523,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
             $page->save();
 
         }
+
 
         return $this;
 
