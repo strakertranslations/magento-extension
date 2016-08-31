@@ -483,39 +483,49 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     public function publishTranslatedPageData()
     {
 
-        $translatedPages = $this->_attributeTranslationCollection->create()
-            ->addFieldToSelect('*')
+        $translatedPageAttributes = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect(['attribute_id','translated_value','entity_id'])
             ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) );
 
+        $attData = $translatedPageAttributes->toArray()['items'];
 
-        foreach ($translatedPages as $page)
+        $pageData = [];
+
+        foreach ($attData as $key => $data)
         {
+            $pageData[$data['entity_id']][] = $data;
+        }
+
+        foreach ($pageData as $page => $attributes)
+        {
+            $original_page = $this->_pageFactory->create()->load($page);
 
             $saveData = [];
 
-            $pageData = $translatedPages->addFieldToFilter('entity_id',array( 'eq' => $page->getData('entity_id') ));
+            $saveData = [
+                'title' => $original_page->getData('title'),
+                'identifier' => $this->_storeManager->getStore($this->_jobModel->getTargetStoreId())->getCode().'/'.$original_page->getData('identifier').$page,
+                'content' => $original_page->getData('content'),
+                'content_heading' => $original_page->getData('content_heading'),
+                'page_layout' => $original_page->getData('page_layout'),
+                'is_active' => 1,
+                'sort_order' => 0,
+                'stores' => array($this->_jobModel->getTargetStoreId())
+            ];
 
-            foreach ($pageData as $key => $data)
+
+            foreach ($attributes as $key => $value)
             {
-
-                $attribute = AttributeTranslationResourceModel::PageAttributes[$data->getData('attribute_id')]['name'];
-
-                $saveData[$attribute] = $data->getData('translated_value');
-
+                $saveData[AttributeTranslationResourceModel::PageAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
             }
 
-            $saveData = $this->_pageFactory->create()->load($page->getData('entity_id'))->toArray();
-
-            $saveData['store_id'] = array($this->_jobModel->getTargetStoreId());
-
-            $saveData['identifier'] = $this->_storeManager->getStore($this->_jobModel->getTargetStoreId())->getCode().'-'.$this->_pageFactory->create()->load($page->getData('entity_id'))->getData('identifier');
-
             $page = $this->_pageFactory->create()->setData($saveData)->save();
-
             $page->save();
+
         }
 
         return $this;
+
     }
 
 }
