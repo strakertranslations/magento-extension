@@ -126,15 +126,14 @@ class Save extends Action
 
         if ($data) {
 
-            if(isset($data['blocks']) && strlen($data['blocks'])>0)
-            {
-                $jobData[] = $this->_jobHelper->createJob($data)->generateBlockJob();
-
-            }
-
             if(strlen($data['magento_source_store'])>0)
             {
                 $this->_saveStoreConfigData($data);
+            }
+
+            if(isset($data['blocks']) && strlen($data['blocks'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateBlockJob();
             }
 
             if(isset($data['products']) && strlen($data['products'])>0)

@@ -154,12 +154,12 @@ class Setup extends AbstractModel implements SetupInterface
 
             if (!empty($attributes['custom'])) {
 
-                $this->_configModel->SaveConfig('straker/attributes/custom', $attributes['custom'], 'default', 0);
+                $this->_configModel->SaveConfig('straker_attribute/settings/custom', $attributes['custom'], 'default', 0);
             }
 
             if (!empty($attributes['default'])) {
 
-                $this->_configModel->SaveConfig('straker/attributes/default', $attributes['default'], 'default', 0);
+                $this->_configModel->SaveConfig('straker_attribute/settings/default', $attributes['default'], 'default', 0);
             }
 
             $this->_errorManager->_error = false;
@@ -207,6 +207,8 @@ class Setup extends AbstractModel implements SetupInterface
                         if( $connection->isTableExists( $targetTable )){
                             $where = [$idField. ' IN(?)' => $ids ];
                             $deleteCount = $connection->delete($targetTable, $where);
+                            $where = ['entity_id IN(?)' => $ids, 'store_id = ?' => ( empty($storeId) ? 1: $storeId)];
+                            $deleteCount += $connection->delete($connection->getTableName('url_rewrite'), $where);
                         }
                     }
 
