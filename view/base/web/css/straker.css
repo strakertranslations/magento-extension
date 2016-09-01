@@ -80,6 +80,9 @@ a.straker-job-refresh-anchor{
     width: 10%;
 }
 
+.easytranslationplatform-jobs-index .admin__data-grid-wrap .data-row{
+    cursor: pointer;
+}
 /* straker logo */
 @font-face {
     font-family: 'straker';
