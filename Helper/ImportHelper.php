@@ -604,7 +604,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
         }
 
-
         return $this;
 
     }
