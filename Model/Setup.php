@@ -47,10 +47,6 @@ class Setup extends AbstractModel implements SetupInterface
 
         try {
 
-//            $this->_configModel->SaveConfig('straker/general/first_name',$data['first_name'],'default',0);
-
-//            $this->_configModel->SaveConfig('straker/general/last_name',$data['last_name'],'default',0);
-
             $this->_configModel->SaveConfig('straker/general/name', $data['first_name'] . ' ' . $data['last_name'], 'default', 0);
 
             $this->_configModel->SaveConfig('straker/general/email', $data['email'], 'default', 0);
