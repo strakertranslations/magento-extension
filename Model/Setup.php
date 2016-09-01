@@ -7,6 +7,8 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
+use Magento\Store\Model\Data\StoreConfig;
+use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Model\Error;
@@ -125,9 +127,9 @@ class Setup extends AbstractModel implements SetupInterface
 
         try {
 
-            $this->_configModel->saveConfig('straker/general/source_store', $source_store, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
-            $this->_configModel->SaveConfig('straker/general/source_language', $source_language, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
-            $this->_configModel->SaveConfig('straker/general/destination_language', $destination_language, \Magento\Store\Model\ScopeInterface::SCOPE_STORES, $scopeId);
+            $this->_configModel->saveConfig('straker/general/source_store', $source_store, ScopeInterface::SCOPE_STORES, $scopeId);
+            $this->_configModel->SaveConfig('straker/general/source_language', $source_language, ScopeInterface::SCOPE_STORES, $scopeId);
+            $this->_configModel->SaveConfig('straker/general/destination_language', $destination_language, ScopeInterface::SCOPE_STORES, $scopeId);
 
             $this->_errorManager->_error = false;
 
@@ -183,17 +185,40 @@ class Setup extends AbstractModel implements SetupInterface
         $connection = $this->_getConnection();
 
         try {
-            foreach ($this->_dataHelper->getMagentoDataTableArray() as $table) {
-                $table = $connection->getTableName($table);
+            foreach ($this->_dataHelper->getMagentoDataTableArray() as $rawTableName) {
+                $table = $connection->getTableName($rawTableName);
+
+                if( strcasecmp($rawTableName, 'cms_page') === 0 || strcasecmp($rawTableName, 'cms_block') === 0 ){
+                    continue;
+                }
+
                 if ($connection->isTableExists($table)) {
+
+                    if( strcasecmp($rawTableName, 'cms_page_store') === 0 || strcasecmp( $rawTableName, 'cms_block_store') === 0 ){
+                        $idField = ( strcasecmp($rawTableName, 'cms_page_store') === 0 ) ? 'page_id' : 'block_id';
+
+                        $sql = $this->_resourceConnection->getConnection()->select()->from( $table , [ $idField ] )->where('store_id != ?', Store::DEFAULT_STORE_ID);
+                        $return = $this->_resourceConnection->getConnection()->query($sql);
+                        $ids = array_column( $return->fetchAll(),$idField );
+
+                        $rawTargetTable = strcasecmp($idField, 'page_id') === 0 ? 'cms_page' : 'cms_block';
+                        $targetTable = $connection->getTableName($rawTargetTable);
+
+                        if( $connection->isTableExists( $targetTable )){
+                            $where = [$idField. ' IN(?)' => $ids ];
+                            $deleteCount = $connection->delete($targetTable, $where);
+                        }
+                    }
+
                     if (empty($storeId)) {
                         //CLEAR FOR ALL STORES
-                        $deleteCount = $connection->delete($table, ['store_id' => ['neq' => Store::DEFAULT_STORE_ID]]);
+                        $where = ['store_id != ?' => Store::DEFAULT_STORE_ID ];
+                        $deleteCount += $connection->delete($table, $where );
                     } else {
                         //CLEAR FOR A SINGLE STORE
-                        $deleteCount = $connection->delete($table, ['store_id' => ['eq' => $storeId]]);
+                        $where = ['store_id = ?' => $storeId ];
+                        $deleteCount += $connection->delete($table, $where);
                     }
-                    $deleteCount++;
                 }
             }
             $result['Success'] = true;
@@ -226,6 +251,8 @@ class Setup extends AbstractModel implements SetupInterface
                     $deleteCount++;
                 }
             }
+
+            $this->clearDefaultAttributeSettings();
             $result['Success'] = true;
             $result['Count'] = $deleteCount;
         } catch (Exception $e) {
@@ -236,6 +263,12 @@ class Setup extends AbstractModel implements SetupInterface
         return $result;
 
 
+    }
+
+    protected function clearDefaultAttributeSettings(){
+        $this->_configModel->saveConfig('straker_attribute/settings/default', '', 'default', 0);
+        $this->_configModel->saveConfig('straker_attribute/settings/custom',  '', 'default', 0);
+        $this->_configModel->saveConfig('straker_attribute/settings/category','', 'default', 0);
     }
 
     protected function _getConnection()

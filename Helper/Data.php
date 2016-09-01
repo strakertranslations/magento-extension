@@ -25,7 +25,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'catalog_category_entity_varchar',
         'catalog_category_entity_text',
         'eav_attribute_option_value',
-        'catalog_product_super_attribute_label'
+        'catalog_product_super_attribute_label',
+        'cms_page',
+        'cms_page_store',
+        'cms_block',
+        'cms_block_store'
     );
 
     const BACKUP_TABLE_SUFFIX = '_back';

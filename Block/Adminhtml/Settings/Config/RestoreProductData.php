@@ -99,7 +99,7 @@ class RestoreProductData extends Field
                 $sql = $connection->select()
                     ->from(
                         $backupTableName,
-                        array('COUNT(value_id) AS RowCount')
+                        array('COUNT(*) AS RowCount')
                     );
 
                 $rows = $connection->fetchAll( $sql );

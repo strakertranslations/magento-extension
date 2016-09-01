@@ -107,8 +107,9 @@ class BackupProductData extends Action
             $result = $this->_executeBackup();
 
             if( $result['Success'] ){
-                $this->_logger->info( __('Product and category entity tables has been duplicated.') );
-                $this->_messageManager->addSuccessMessage( __('Product and category entity tables has been duplicated') );
+                $info = __('Translatable tables has been duplicated.');
+                $this->_logger->info( $info );
+                $this->_messageManager->addSuccessMessage( $info );
             }else{
                 $message = __( $result['Message'] );
                 $this->_logger->error( $message );
