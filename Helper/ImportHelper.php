@@ -14,6 +14,7 @@ use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as Attrib
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Cms\Model\PageFactory as PageFactory;
+use Magento\Cms\Model\BlockFactory as BlockFactory;
 
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -49,6 +50,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_optionCollection;
     protected $_storeManager;
     protected $_pageFactory;
+    protected $_blockFactory;
 
     protected $_jobModel;
     protected $_parsedFileData = [];
@@ -84,6 +86,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         AttributeCollection $attributeCollection,
         OptionCollection $optionCollection,
         PageFactory $pageFactory,
+        BlockFactory $blockFactory,
         StoreManagerInterface $storeManager
 
     ) {
@@ -105,6 +108,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_attributeCollection = $attributeCollection;
         $this->_optionCollection = $optionCollection;
         $this->_pageFactory = $pageFactory;
+        $this->_blockFactory = $blockFactory;
         $this->_storeManager = $storeManager;
 
         parent::__construct($context);
@@ -144,6 +148,12 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
         });
 
+        $this->_blockData = array_filter($this->_parsedFileData, function($v) {
+
+            return  preg_match('/block/',$v['_attribute']['content_context']);
+
+        });
+
         return $this;
     }
 
@@ -161,6 +171,11 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         if(!empty($this->_pageData))
         {
             $this->saveTranslatedPageData();
+        }
+
+        if(!empty($this->_blockData))
+        {
+            $this->saveTranslatedBlockData();
         }
 
         return $this;
@@ -181,6 +196,11 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         if($this->_jobModel->getJobType() == 'page')
         {
             $this->publishTranslatedPageData();
+        }
+
+        if($this->_jobModel->getJobType() == 'block')
+        {
+            $this->publishTranslatedBlockData();
         }
 
         return $this;
@@ -517,6 +537,69 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
             }
 
             $page = $this->_pageFactory->create()->setData($saveData)->save();
+            $page->save();
+
+        }
+
+
+        return $this;
+
+    }
+
+    //TO DO
+    public function saveTranslatedBlockData()
+    {
+        foreach ($this->_blockData as $data)
+        {
+            $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
+            $att_trans_model->addData(['is_imported'=>1,'translated_value'=>$data['_value']['value']]);
+            $att_trans_model->save();
+
+        }
+        return $this;
+    }
+
+    public function publishTranslatedBlockData()
+    {
+
+        $translatedBlockAttributes = $this->_attributeTranslationCollection->create()
+            ->addFieldToSelect(['attribute_id','translated_value','entity_id'])
+            ->addFieldToFilter( 'job_id',   array( 'eq' => $this->_jobModel->getId() ) );
+
+        $attData = $translatedBlockAttributes->toArray()['items'];
+
+        $blockData = [];
+
+        foreach ($attData as $key => $data)
+        {
+            $pageData[$data['entity_id']][] = $data;
+        }
+
+        foreach ($blockData as $block => $attributes)
+        {
+            $original_block = $this->_blockFactory->create()->load($block);
+
+            $saveData = [];
+
+            $saveData = [
+                'title' => $original_block->getData('title'),
+                'identifier' => $original_block->getData('identifier'),
+                'content' => $original_block->getData('content'),
+                'content_heading' => $original_block->getData('content_heading'),
+                'page_layout' => $original_block->getData('page_layout'),
+                'is_active' => 1,
+                'sort_order' => 0,
+                'stores' => array($this->_jobModel->getTargetStoreId())
+            ];
+
+
+            foreach ($attributes as $key => $value)
+            {
+                $saveData[BlockHelper::blockAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
+            }
+
+            $page = $this->_blockFactory->create()->setData($saveData)->save();
+
             $page->save();
 
         }
