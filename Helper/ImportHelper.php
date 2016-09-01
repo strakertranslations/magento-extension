@@ -478,7 +478,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         {
 
             $attribute_code = $this->_attributeRepository->get(\Magento\Catalog\Model\Category::ENTITY,$data['attribute_id'])->setStoreId($this->_jobModel->getTargetStoreId())->getAttributeCode();
-            $category = $this->_categoryFactory->create()->load($data['entity_id']);
+            $category = $this->_categoryFactory->create()->load($data['entity_id'])->setStoreId($this->_jobModel->getTargetStoreId());
             $category->setData($attribute_code,$data['translated_value'])->getResource()->saveAttribute($category,$attribute_code);
         }
 
