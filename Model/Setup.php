@@ -45,10 +45,6 @@ class Setup extends AbstractModel implements SetupInterface
 
         try {
 
-//            $this->_configModel->SaveConfig('straker/general/first_name',$data['first_name'],'default',0);
-
-//            $this->_configModel->SaveConfig('straker/general/last_name',$data['last_name'],'default',0);
-
             $this->_configModel->SaveConfig('straker/general/name', $data['first_name'] . ' ' . $data['last_name'], 'default', 0);
 
             $this->_configModel->SaveConfig('straker/general/email', $data['email'], 'default', 0);
@@ -152,12 +148,12 @@ class Setup extends AbstractModel implements SetupInterface
 
             if (!empty($attributes['custom'])) {
 
-                $this->_configModel->SaveConfig('straker/attributes/custom', $attributes['custom'], 'default', 0);
+                $this->_configModel->SaveConfig('straker_attribute/settings/custom', $attributes['custom'], 'default', 0);
             }
 
             if (!empty($attributes['default'])) {
 
-                $this->_configModel->SaveConfig('straker/attributes/default', $attributes['default'], 'default', 0);
+                $this->_configModel->SaveConfig('straker_attribute/settings/default', $attributes['default'], 'default', 0);
             }
 
             $this->_errorManager->_error = false;
