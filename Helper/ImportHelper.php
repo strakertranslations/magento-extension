@@ -478,7 +478,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         {
 
             $attribute_code = $this->_attributeRepository->get(\Magento\Catalog\Model\Category::ENTITY,$data['attribute_id'])->setStoreId($this->_jobModel->getTargetStoreId())->getAttributeCode();
-            $category = $this->_categoryFactory->create()->load($data['entity_id']);
+            $category = $this->_categoryFactory->create()->load($data['entity_id'])->setStoreId($this->_jobModel->getTargetStoreId());
             $category->setData($attribute_code,$data['translated_value'])->getResource()->saveAttribute($category,$attribute_code);
         }
 
@@ -546,7 +546,6 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
     }
 
-    //TO DO
     public function saveTranslatedBlockData()
     {
         foreach ($this->_blockData as $data)
@@ -572,7 +571,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
         foreach ($attData as $key => $data)
         {
-            $pageData[$data['entity_id']][] = $data;
+            $blockData[$data['entity_id']][] = $data;
         }
 
         foreach ($blockData as $block => $attributes)
@@ -598,9 +597,9 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
                 $saveData[BlockHelper::blockAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
             }
 
-            $page = $this->_blockFactory->create()->setData($saveData)->save();
+            $block = $this->_blockFactory->create()->setData($saveData)->save();
 
-            $page->save();
+            $block->save();
 
         }
 
