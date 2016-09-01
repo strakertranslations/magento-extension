@@ -70,7 +70,7 @@ class Confirm extends \Magento\Backend\App\Action
 
                 $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
-                $this->messageManager->addError('Translated data has not been published for'.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
+                $this->messageManager->addError('Translated data has not been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
 
                 $resultRedirect->setPath('*/*/index');
 
