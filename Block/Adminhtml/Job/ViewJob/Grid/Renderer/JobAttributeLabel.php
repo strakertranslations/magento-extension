@@ -5,6 +5,7 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Rende
 use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\AbstractRenderer;
+use Straker\EasyTranslationPlatform\Helper\BlockHelper;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation;
 use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Helper\PageHelper;
@@ -61,7 +62,7 @@ class JobAttributeLabel extends AbstractRenderer
 
         switch ( $jobReferrer ){
             case JobType::JOB_TYPE_BLOCK:
-                $label = PageHelper::PageAttributes[ $attributeId ]['label'];
+                $label = BlockHelper::blockAttributes[ $attributeId ]['label'];
                 break;
             case JobType::JOB_TYPE_PAGE:
                 $label = PageHelper::PageAttributes[ $attributeId ]['label'];
