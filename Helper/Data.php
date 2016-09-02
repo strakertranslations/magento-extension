@@ -29,7 +29,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'cms_page',
         'cms_page_store',
         'cms_block',
-        'cms_block_store'
+        'cms_block_store',
+        'url_rewrite'
     );
 
     const BACKUP_TABLE_SUFFIX = '_back';

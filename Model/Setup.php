@@ -203,6 +203,8 @@ class Setup extends AbstractModel implements SetupInterface
                         if( $connection->isTableExists( $targetTable )){
                             $where = [$idField. ' IN(?)' => $ids ];
                             $deleteCount = $connection->delete($targetTable, $where);
+                            $where = ['entity_id IN(?)' => $ids, 'store_id = ?' => ( empty($storeId) ? 1: $storeId)];
+                            $deleteCount += $connection->delete($connection->getTableName('url_rewrite'), $where);
                         }
                     }
 
