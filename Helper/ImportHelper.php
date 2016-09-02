@@ -9,6 +9,8 @@ use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
@@ -51,6 +53,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
     protected $_storeManager;
     protected $_pageFactory;
     protected $_blockFactory;
+    protected $_urlFinder;
 
     protected $_jobModel;
     protected $_parsedFileData = [];
@@ -87,7 +90,8 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         OptionCollection $optionCollection,
         PageFactory $pageFactory,
         BlockFactory $blockFactory,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        UrlFinderInterface $urlFinder
 
     ) {
 
@@ -110,6 +114,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $this->_pageFactory = $pageFactory;
         $this->_blockFactory = $blockFactory;
         $this->_storeManager = $storeManager;
+        $this->_urlFinder = $urlFinder;
 
         parent::__construct($context);
     }
@@ -519,6 +524,11 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
             $saveData = [];
 
+            $urlKey = $this->_urlFinder->findOneByData([
+                'request_path'=>$original_page->getData('identifier'),
+                'store_id'=>$this->_jobModel->getTargetStoreId()
+            ]);
+
             $saveData = [
                 'title' => $original_page->getData('title'),
                 'identifier' => $original_page->getData('identifier'),
@@ -536,11 +546,19 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
                 $saveData[PageHelper::PageAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
             }
 
-            $page = $this->_pageFactory->create()->setData($saveData)->save();
-            $page->save();
+            if($urlKey->getEntityId())
+            {
+                $this->_pageFactory->create()->load($urlKey->getEntityId())->setData($saveData)->save();
+
+            }else{
+
+                $page = $this->_pageFactory->create()->setData($saveData)->save();
+
+                $page->save();
+
+            }
 
         }
-
 
         return $this;
 
@@ -558,6 +576,7 @@ class ImportHelper extends \Magento\Framework\App\Helper\AbstractHelper
         return $this;
     }
 
+    //key key in url table
     public function publishTranslatedBlockData()
     {
 
