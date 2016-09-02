@@ -46,12 +46,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
-        if ($this->getRequest()->getParam('target_store_id')) {
-
-            $store_info = $this->_configHelper->getStoreInfo($this->getRequest()->getParam('target_store_id'));
-
-            $this->sourceStoreId = $store_info['straker/general/source_store'];
-        }
+        $this->sourceStoreId = $this->getRequest()->getParam('source_store_id');
     }
 
 //    /**
