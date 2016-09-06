@@ -92,14 +92,17 @@ class Index extends Action
                                     array_push( $localJobIds, $localJob->getId() );
                                     $isUpdate = $this->_compareJobs( $apiJob, $localJob );
                                     if( $isUpdate['isSuccess'] ){
-                                        array_push( $updatedJobs, $localJob->getId() );
+                                        $tjNumber = $localJob->getJobNumber();
+                                        if( !empty($tjNumber) && !in_array($tjNumber, $updatedJobs) ){
+                                            array_push( $updatedJobs, $tjNumber);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                     if( count( $updatedJobs ) > 0 ){
-                        $this->messageManager->addSuccessMessage( __('The status of the jobs [Id: '. implode(',', $updatedJobs )  .'] has been updated!') );
+                        $this->messageManager->addSuccessMessage( __('The status of the jobs: '. implode(', ', $updatedJobs )  .' has been updated!') );
                     }
                     elseif (count($localJobIds) <= 0){
                         $result['status'] = false;
