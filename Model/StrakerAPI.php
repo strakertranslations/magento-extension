@@ -138,11 +138,10 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         return http_build_query($request);
     }
 
+
     /**
-     * Set array of additional cURL options
-     *
      * @param array $options
-     * @return Varien_Http_Adapter_Curl
+     * @return $this
      */
     public function setOptions(array $options = array())
     {
@@ -264,37 +263,35 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     }
 
     public function getCountries(){
-
         $countriesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'countries.json';
-
         if(file_exists( $countriesFilePath )){
             $result = json_decode(file_get_contents($countriesFilePath));
         }else{
             $result = $this->_call($this->_getCountriesUrl());
+            if(!empty($result)){
+                file_put_contents( $countriesFilePath, json_encode($result) );
+            }
         }
-
-        return $result->country;
+        return isset( $result->country ) ?  $result->country : [];
     }
 
     public function getLanguages(){
         $languagesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'languages.json';
-
         if(file_exists( $languagesFilePath )){
             $result = json_decode(file_get_contents($languagesFilePath));
         }else{
             $result = $this->_call($this->_getLanguagesUrl());
+            if(!empty($result)) {
+                file_put_contents($languagesFilePath, json_encode($result));
+            }
         }
-
-        return $result->languages ? $result->languages : false;
+        return isset( $result->languages ) ? $result->languages : [];
     }
 
     public function getLanguageName( $code = ''){
-        foreach ( $this->getLanguages() as $language ) {
-            if (strcasecmp($code, $language->code) === 0) {
-                return $language->native_name;
-            }
-        }
-        return '';
+        $languages = $this->getLanguages();
+        $key = array_search($code, array_column($languages, 'code'));
+        return $languages[$key]->native_name;
     }
 
     public function completeJob( $jobNumber, $url ){
