@@ -10,6 +10,9 @@ use Straker\EasyTranslationPlatform\Model\JobStatus;
 class Block extends Container
 {
     protected $_jobFactory;
+    /** @var  \Straker\EasyTranslationPlatform\Model\Job */
+    protected $_job;
+    protected $_requestData;
 
     public function __construct(
         Context $context,
@@ -23,39 +26,60 @@ class Block extends Container
 
     public function _construct()
     {
-        $requestData = $this->getRequest()->getParams();
-        $job = $this->_jobFactory->create()->load($requestData['job_id']);
-        if ( $job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) {
+        $this->_requestData = $this->getRequest()->getParams();
+        $this->_job = $this->_jobFactory->create()->load($this->_requestData['job_id']);
+
+        if($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED){
             $this->addButton(
                 'confirm',
                 [
                     'label' => __('Confirm'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
-                            'job_id' => $job->getId(),
-                            'job_key' => $job->getJobKey(),
-                            'job_type_id' => $job->getJobTypeId()
+                            'job_id' => $this->_job->getId(),
+                            'job_key' => $this->_job->getJobKey(),
+                            'job_type_id' => $this->_job->getJobTypeId()
                         ] ) . '\') ',
-                    'class' => 'primary'
+                    'class' => 'primary',
+                    'title' => __( 'Confirm the job of ' . $this->_job->getJobNumber() )
                 ],
-                -2
+                0,
+                50
             );
         }
 
+//        $this->addButton(
+//            'confirm',
+//            [
+//                'label' => __('Confirm'),
+//                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
+//                        'job_id' => $this->_job->getId(),
+//                        'job_key' => $this->_job->getJobKey(),
+//                        'job_type_id' => $this->_job->getJobTypeId()
+//                    ] ) . '\') ',
+//                'class' => 'primary',
+//                'disabled' => ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) ? '':'disabled'
+//            ],
+//            0,
+//            50
+//        );
+
         $this->addButton(
-            'back',
+            'job_type',
             [
                 'label' => __('Back'),
                 'onclick' => 'setLocation(\''
                     . $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
                         [
-                            'job_id' => $requestData['job_id'],
-                            'job_key'=> $requestData['job_key'],
+                            'job_id' => $this->_requestData['job_id'],
+                            'job_key'=> $this->_requestData['job_key'],
                             'job_type_id' => 0,
-                            'source_store_id' => $requestData['source_store_id']
-                        ])  . '\') ',
-                'class' => 'back'
+                            'source_store_id' => $this->_requestData['source_store_id']
+                        ]) . '\') ',
+                'class' => 'back',
+                'title' => __('Go to Job Types page')
             ],
-            -1
+            0,
+            20
         );
 
         parent::_construct();
@@ -63,6 +87,32 @@ class Block extends Container
 
     protected function _prepareLayout()
     {
+        $this->addChild(
+            'straker-breadcrumbs',
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',
+            [
+                [
+                    'label' => 'Manage Jobs',
+                    'url' => $this->getUrl('EasyTranslationPlatform/Jobs/'),
+                    'title' => 'Go to Manage Jobs page'
+                ],
+                [
+                    'label' => $this->_job->getJobNumber(),
+                    'url' => $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                        [
+                            'job_id' => $this->_requestData['job_id'],
+                            'job_key'=> $this->_requestData['job_key'],
+                            'job_type_id' => 0,
+                            'source_store_id' => $this->_requestData['source_store_id']
+                        ]),
+                    'title' => 'Go to Job Types page'
+                ],
+                [
+                    'label' => 'Block List',
+                ]
+            ]
+        );
+
         $this->addChild(
             'straker_job_block_grid',
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Block\Grid'
@@ -73,7 +123,7 @@ class Block extends Container
 
     function _toHtml()
     {
-        return $this->getChildHtml('straker_job_block_grid');
+        return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_block_grid');
     }
 
 }
