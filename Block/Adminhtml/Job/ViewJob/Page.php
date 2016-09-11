@@ -97,7 +97,7 @@ class Page extends Container
                     'title' => 'Go to Manage Jobs page'
                 ],
                 [
-                    'label' => $this->_job->getJobNumber(),
+                    'label' => empty($this->_job->getJobNumber()) ? 'Sub-job' : $this->_job->getJobNumber(),
                     'url' => $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
                         [
                             'job_id' => $this->_requestData['job_id'],
