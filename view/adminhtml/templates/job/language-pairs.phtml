@@ -4,6 +4,8 @@
 
     ], function ($) {
 
+        $removed_language = false;
+
         $(document).ajaxSend(function( event, jqxhr, settings ) {
 
             var destination_store_id = $('select[name="magento_destination_store"]').val();
@@ -55,7 +57,6 @@
                 {
 
                     $('select[name="straker_target_language"]').show(1000).attr('disabled',false).val('');
-                    $('#source_content').show(1000);
 
                 }else{
 
@@ -73,6 +74,21 @@
 
             $('#productsGrid').empty();
             $('#job_tabs_attachment_products').attr('href',window.products_ajax_url)
+
+        });
+
+        $('select[name="straker_target_language"]').on( "change", function () {
+
+            console.log('hello');
+            console.log($(this).val());
+            console.log($removed_language);
+            if($removed_language)
+            {
+                $("select[name='straker_source_language']").find("option[value='" + $removed_language + "']").prop('disabled',false)
+            }
+            $("select[name='straker_source_language']").find("option[value='" + $(this).val() + "']").prop('disabled',true)
+            $removed_language = $(this).val();
+            $('#source_content').show(1000);
 
         });
 
