@@ -289,9 +289,24 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     }
 
     public function getLanguageName( $code = ''){
+
         $languages = $this->getLanguages();
-        $key = array_search($code, array_column($languages, 'code'));
-        return $languages[$key]->native_name;
+        
+        foreach ($languages as $k => $val) {
+
+            foreach ($val as $i => $langCodes){
+
+                if($langCodes == $code){
+
+                    $native_name = $val->native_name;
+
+                    break;
+                }
+            }
+        }
+
+        return $native_name;
+
     }
 
     public function completeJob( $jobNumber, $url ){
