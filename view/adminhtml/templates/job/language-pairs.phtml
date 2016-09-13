@@ -43,13 +43,15 @@
 
             }).done(function(response) {
 
+                console.log(response);
+
                 if($('#productsGrid').length)
                 {
                     $('#productsGrid').empty();
                     $('#job_tabs_attachment_products').attr('href',window.products_ajax_url)
                 }
 
-                if(response.success == false)
+                if(response['store-data'].length < 1 || response['store-data']['straker/general/destination_language'].length < 1)
                 {
 
                     $('select[name="straker_target_language"]').show(1000).attr('disabled',false).val('');
@@ -57,8 +59,8 @@
 
                 }else{
 
-                    $('select[name="straker_target_language"]').val(response.store_data['straker/general/destination_language']).show().prop('disabled',true);
-                    $('select[name="magento_source_store"]').val(response.store_data['straker/general/source_store']).prop('enable',true);
+                    $('select[name="straker_target_language"]').val(response['store-data']['straker/general/destination_language']).show().prop('disabled',true);
+                    $('select[name="magento_source_store"]').val(response['store-data']['straker/general/source_store']).prop('enable',true);
                     $('select[name="magento_source_language"]').val('');
                     $('#source_content').hide();
 
