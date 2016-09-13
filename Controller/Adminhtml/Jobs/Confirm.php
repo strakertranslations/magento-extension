@@ -10,6 +10,7 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\JobStatus;
 
 class Confirm extends \Magento\Backend\App\Action
 {
@@ -17,6 +18,8 @@ class Confirm extends \Magento\Backend\App\Action
     protected $_jobFactory;
     protected $_logger;
     protected $_storeManager;
+    protected $_configHelper;
+    protected $_importHelper;
 
     public function __construct(
         Context $context,
@@ -52,14 +55,18 @@ class Confirm extends \Magento\Backend\App\Action
         foreach ($jobIds as $job_id)
         {
             try{
-
-                $jobType = $this->_jobFactory->create()->load($job_id)->getJobType();
+                //should get sub job instance
+//                $jobType = $this->_jobFactory->create()->load($job_id)->getJobType();
+                $currentJob = $this->_jobFactory->create()->load($job_id);
+                $jobType = $currentJob->getJobType();
 
                 $this->_importHelper->create($job_id)->publishTranslatedData();
 
-                $job->addData(['job_status_id'=>6]);
-
-                $job->save();
+                //should set status for sub job instance
+//                $job->addData(['job_status_id'=>6]);
+//                $job->save();
+                $currentJob->addData( ['job_status_id' => JobStatus::JOB_STATUS_CONFIRMED] );
+                $currentJob->save();
 
                 $this->messageManager->addSuccess('Translated '.$jobType.' data has been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
 

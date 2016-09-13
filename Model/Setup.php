@@ -179,12 +179,14 @@ class Setup extends AbstractModel implements SetupInterface
         $result = ['Success' => false, 'Message' => '', 'Count' => 0];
         $deleteCount = 0;
         $connection = $this->_getConnection();
-
         try {
+            $connection->beginTransaction();
             foreach ($this->_dataHelper->getMagentoDataTableArray() as $rawTableName) {
                 $table = $connection->getTableName($rawTableName);
 
-                if( strcasecmp($rawTableName, 'cms_page') === 0 || strcasecmp($rawTableName, 'cms_block') === 0 ){
+                if( strcasecmp($rawTableName, 'cms_page') === 0 ||
+                    strcasecmp($rawTableName, 'cms_block') === 0 ||
+                    strcasecmp($rawTableName, 'catalog_url_rewrite_product_category') === 0){
                     continue;
                 }
 
@@ -193,9 +195,12 @@ class Setup extends AbstractModel implements SetupInterface
                     if( strcasecmp($rawTableName, 'cms_page_store') === 0 || strcasecmp( $rawTableName, 'cms_block_store') === 0 ){
                         $idField = ( strcasecmp($rawTableName, 'cms_page_store') === 0 ) ? 'page_id' : 'block_id';
 
-                        $sql = $this->_resourceConnection->getConnection()->select()->from( $table , [ $idField ] )->where('store_id != ?', Store::DEFAULT_STORE_ID);
-                        $return = $this->_resourceConnection->getConnection()->query($sql);
-                        $ids = array_column( $return->fetchAll(),$idField );
+                        $select = $connection
+                            ->select()
+                            ->from( $table , [ $idField ] )
+                            ->where('store_id != ?', Store::DEFAULT_STORE_ID);
+                        $return = $select->query()->fetchAll();
+                        $ids = array_column( $return, $idField );
 
                         $rawTargetTable = strcasecmp($idField, 'page_id') === 0 ? 'cms_page' : 'cms_block';
                         $targetTable = $connection->getTableName($rawTargetTable);
@@ -207,14 +212,26 @@ class Setup extends AbstractModel implements SetupInterface
                         }
                     }
 
-                    if (empty($storeId)) {
+                    if (is_null($storeId)) {
                         //CLEAR FOR ALL STORES
                         if(strcasecmp($rawTableName, 'url_rewrite') === 0){
+                            $select = $connection->select()->from( $table, ['url_rewrite_id'])->where('store_id != ?', 1);
+                            $urlRewriteIds = [];
+                            $return = $select->query()->fetchAll();
+                            if( count( $return ) > 0){
+                                $urlRewriteIds = array_column($return, 'url_rewrite_id');
+                            }
                             $where = [ 'store_id != ?' => 1];
+                            $deleteCount += $connection->delete($table, $where );
+                            $urlRewriteProductCategoryTable = $connection->getTableName('catalog_url_rewrite_product_category');
+                            if( $connection->isTableExists($urlRewriteProductCategoryTable)  && count( $urlRewriteIds ) > 0 ){
+                                $where = ['url_rewrite_id IN(?)'=> $urlRewriteIds ];
+                                $deleteCount += $connection->delete($urlRewriteProductCategoryTable, $where);
+                            }
                         }else{
                             $where = ['store_id != ?' => Store::DEFAULT_STORE_ID ];
+                            $deleteCount += $connection->delete($table, $where );
                         }
-                        $deleteCount += $connection->delete($table, $where );
                     } else {
                         //CLEAR FOR A SINGLE STORE
                         $where = ['store_id = ?' => $storeId ];
@@ -224,7 +241,9 @@ class Setup extends AbstractModel implements SetupInterface
             }
             $result['Success'] = true;
             $result['Count'] = $deleteCount;
+            $connection->commit();
         } catch (Exception $e) {
+            $connection->rollBack();
             $result['Message'] = $e->getMessage();
             throw new Exception($result['Message']);
         }
@@ -245,6 +264,7 @@ class Setup extends AbstractModel implements SetupInterface
         $connection = $this->_getConnection();
 
         try {
+            $connection->beginTransaction();
             foreach ($tables as $table) {
                 $table = $connection->getTableName($table);
                 if ($connection->isTableExists($table)) {
@@ -256,14 +276,14 @@ class Setup extends AbstractModel implements SetupInterface
             $this->clearDefaultAttributeSettings();
             $result['Success'] = true;
             $result['Count'] = $deleteCount;
+            $connection->commit();
         } catch (Exception $e) {
+            $connection->rollBack();
             $result['Message'] = $e->getMessage();
             throw new Exception($result['Message']);
         }
 
         return $result;
-
-
     }
 
     protected function clearDefaultAttributeSettings(){
@@ -272,6 +292,9 @@ class Setup extends AbstractModel implements SetupInterface
         $this->_configModel->saveConfig('straker_attribute/settings/category','', 'default', 0);
     }
 
+    /**
+     * @return \Magento\Framework\DB\Adapter\AdapterInterface
+     */
     protected function _getConnection()
     {
         return $this->_resourceConnection->getConnection();

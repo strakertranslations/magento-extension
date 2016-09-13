@@ -14,11 +14,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_backendUrl;
 
-    /**
-     * @var StoreManagerInterface $storeManager
-     */
-    protected $storeManager;
-
     protected $_magentoDataTables = array(
         'catalog_product_entity_varchar',
         'catalog_product_entity_text',
@@ -30,8 +25,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'cms_page_store',
         'cms_block',
         'cms_block_store',
-        'url_rewrite'
+        'url_rewrite',
+        'catalog_url_rewrite_product_category'
     );
+
+    /**
+     * @var StoreManagerInterface $storeManager
+     */
+    protected $storeManager;
 
     const BACKUP_TABLE_SUFFIX = '_back';
 
