@@ -205,6 +205,12 @@ class InstallSchema implements InstallSchemaInterface
                 null,
                 ['nullable' => false, 'default' => '1',],
                 'Is Active'
+            )->addColumn(
+                'is_test_job',
+                Table::TYPE_BOOLEAN,
+                null,
+                ['nullable' => false, 'default' => '0',],
+                'Is Test Job'
             )->addIndex(
                 $installer->getIdxName(Model\Job::ENTITY, ['job_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
                 'job_id',

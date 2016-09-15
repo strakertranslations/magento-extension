@@ -68,16 +68,19 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel = $this->_jobFactory->create();
 
-        $this->jobModel->setData(
-            [
+        $jobData = [
+            'job_status_id'=> JobStatus::JOB_STATUS_INIT,
+            'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
+            'target_store_id'=>$this->jobData['magento_destination_store'],
+            'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
+            'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
+        ];
 
-                'job_status_id'=> JobStatus::JOB_STATUS_INIT,
-                'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
-                'target_store_id'=>$this->jobData['magento_destination_store'],
-                'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
-                'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
-            ]
-        );
+        if($this->_configHelper->isSandboxMode()){
+            $jobData['is_test_job'] = true;
+        }
+
+        $this->jobModel->setData($jobData);
 
         return $this;
     }
