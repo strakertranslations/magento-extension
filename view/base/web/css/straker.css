@@ -1,4 +1,49 @@
 /* setting page */
+.straker-breadcrumbs{
+    letter-spacing: .025em;
+    padding-bottom: 0.6875em;
+    padding-top: 0.6875em;
+    display: inline-block;
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1.36;
+    vertical-align: baseline;
+    margin: 0 0 15px;
+}
+
+.straker-breadcrumbs .items{
+    color: #a3a3a3;
+    margin: 0;
+    padding: 0;
+    list-style: none none;
+}
+
+.straker-breadcrumbs .items .item{
+    display: inline-block;
+    vertical-align: top;
+}
+
+.straker-breadcrumbs .item:not(:last-child):after {
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.3rem;
+    line-height: 18px;
+    content: '\f105';
+    font-family: 'FontAwesome';
+    margin: 0 10px;
+    vertical-align: top;
+    display: inline-block;
+    overflow: hidden;
+    speak: none;
+    text-align: center;
+}
+
+.straker-breadcrumbs a,
+.straker-breadcrumbs a:hover,
+.straker-breadcrumbs a:visited {
+    color: #333333;
+    /*text-decoration: underline;*/
+}
+
 .straker-value{
     padding-top: 7px;
 }
@@ -63,6 +108,11 @@
     cursor: pointer;
 }
 
+#straker-job-grid table thead tr th:first-child,
+#straker-job-grid table tbody tr td.job-id{
+    display: none;
+}
+
 a.straker-job-refresh-anchor{
     display: inline-block;
     width: 100%;
@@ -80,6 +130,9 @@ a.straker-job-refresh-anchor{
     width: 10%;
 }
 
+.easytranslationplatform-jobs-index .admin__data-grid-wrap .data-row{
+    cursor: pointer;
+}
 /* straker logo */
 @font-face {
     font-family: 'straker';
@@ -103,16 +156,16 @@ a.straker-job-refresh-anchor{
 .attr-option-table tr:not(.data-grid-editable-row):last-child td,
 .attr-option-table td
 {
-    border-bottom: 0px none transparent ! important;
+    border-bottom: 0 none transparent ! important;
 }
 
 .attr-option-table td:first-child{
-    border-left: 0px none transparent ! important;
+    border-left: 0 none transparent ! important;
     border-right: 0.1rem dashed #d6d6d6 ! important;
 }
 
 .attr-option-table td:last-child{
-    border-right: 0px none transparent ! important;
+    border-right: 0 none transparent ! important;
     border-left: 0.1rem dashed #d6d6d6 ! important;
 }
 
@@ -132,6 +185,6 @@ a.straker-job-refresh-anchor{
     background-color: #f5f5f5;
 }
 
-#straker_job_attribute_grid_table>tbody>tr:not(.job-option) {
-    border-bottom: 0.1rem solid #d6d6d6;
+#straker_job_attribute_grid_table{
+    border-bottom: 0.1rem solid #D6D6D3;
 }

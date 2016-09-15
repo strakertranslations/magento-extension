@@ -95,20 +95,24 @@ class RestoreProductData extends Field
 
         foreach ( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
             $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
-            if( $connection->isTableExists( $backupTableName ) ){
-                $sql = $connection->select()
-                    ->from(
-                        $backupTableName,
-                        array('COUNT(value_id) AS RowCount')
-                    );
-
-                $rows = $connection->fetchAll( $sql );
-
-                if( $rows[0]['RowCount'] <= 0){
-                    $validBackupData = false;
-                    break;
-                }
-            }else{
+//            if( $connection->isTableExists( $backupTableName ) ){
+//                $sql = $connection->select()
+//                    ->from(
+//                        $backupTableName,
+//                        array('COUNT(*) AS RowCount')
+//                    );
+//
+//                $rows = $connection->fetchAll( $sql );
+//
+//                if( $rows[0]['RowCount'] <= 0){
+//                    $validBackupData = false;
+//                    break;
+//                }
+//            }else{
+//                $validBackupData = false;
+//                break;
+//            }
+            if(!$connection->isTableExists( $backupTableName )){
                 $validBackupData = false;
                 break;
             }

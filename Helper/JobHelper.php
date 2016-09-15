@@ -10,7 +10,10 @@ use Magento\Framework\Data\Collection;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
+use Straker\EasyTranslationPlatform\Helper\PageHelper;
+use Straker\EasyTranslationPlatform\Helper\BlockHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\JobType;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory as JobTypeCollection;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus\CollectionFactory as JobStatusCollection;
@@ -27,6 +30,8 @@ class JobHelper extends AbstractHelper
     protected $_configHelper;
     protected $_productHelper;
     protected $_categoryHelper;
+    protected $_pageHelper;
+    protected $_blockHelper;
     protected $_jobStatusCollection;
 
     public function __construct(
@@ -34,7 +39,9 @@ class JobHelper extends AbstractHelper
         JobFactory $jobFactory,
         ProductHelper $productHelper,
         CategoryHelper $categoryHelper,
+        PageHelper $pageHelper,
         ConfigHelper $configHelper,
+        BlockHelper $blockHelper,
         JobTypeCollection $jobTypeCollectionFactory,
         JobStatusCollection $jobStatusFactory
 
@@ -44,6 +51,8 @@ class JobHelper extends AbstractHelper
         $this->_configHelper = $configHelper;
         $this->_productHelper = $productHelper;
         $this->_categoryHelper = $categoryHelper;
+        $this->_pageHelper = $pageHelper;
+        $this->_blockHelper = $blockHelper;
         $this->_jobTypeCollection = $jobTypeCollectionFactory;
         $this->_jobStatusCollection = $jobStatusFactory;
         parent::__construct($context);
@@ -55,28 +64,31 @@ class JobHelper extends AbstractHelper
      */
     public function createJob($data)
     {
-
         $this->jobData = $data;
 
         $this->jobModel = $this->_jobFactory->create();
 
-        $this->jobModel->setData(
-            [
+        $jobData = [
+            'job_status_id'=> JobStatus::JOB_STATUS_INIT,
+            'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
+            'target_store_id'=>$this->jobData['magento_destination_store'],
+            'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
+            'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
+        ];
 
-                'job_status_id'=> JobStatus::JOB_STATUS_INIT,
-                'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
-                'target_store_id'=>$this->jobData['magento_destination_store'],
-                'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
-                'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
-            ]
-        );
+        if($this->_configHelper->isSandboxMode()){
+            $jobData['is_test_job'] = true;
+        }
+
+        $this->jobModel->setData($jobData);
 
         return $this;
     }
 
     public function generateProductJob()
     {
-        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('product')]);
+
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PRODUCT]);
 
         $this->jobModel->save();
 
@@ -97,7 +109,8 @@ class JobHelper extends AbstractHelper
 
     public function generateCategoryJob()
     {
-        $this->jobModel->addData(['job_type_id'=>$this->getJobTypeId('category')]);
+
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_CATEGORY]);
 
         $this->jobModel->save();
 
@@ -109,6 +122,42 @@ class JobHelper extends AbstractHelper
         $this->jobModel->addData(['source_file'=>$jobFile]);
 
         $this->jobModel->save();
+        return $this->jobModel;
+    }
+
+    public function generatePageJob()
+    {
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PAGE]);
+
+        $this->jobModel->save();
+
+        $jobFile = $this->_pageHelper->getPages($this->jobData['pages'],$this->jobModel->getData('source_store_id'))
+            ->getSelectedPageAttributes()
+            ->savePageData($this->jobModel->getId())
+            ->generatePageXML($this->jobModel);
+
+        $this->jobModel->addData(['source_file'=>$jobFile]);
+
+        $this->jobModel->save();
+
+        return $this->jobModel;
+    }
+
+    public function generateBlockJob()
+    {
+        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_BLOCK]);
+
+        $this->jobModel->save();
+
+        $jobFile = $this->_blockHelper->getBlocks($this->jobData['blocks'],$this->jobModel->getData('source_store_id'))
+            ->getSelectedBlockAttributes()
+            ->saveBlockData($this->jobModel->getId())
+            ->generateBlockXML($this->jobModel);
+
+        $this->jobModel->addData(['source_file'=>$jobFile]);
+
+        $this->jobModel->save();
+
         return $this->jobModel;
     }
 
@@ -138,30 +187,30 @@ class JobHelper extends AbstractHelper
         return $this;
     }
 
-    /**
-     * @param $jobType
-     * @return mixed
-     */
-    protected function getJobTypeId($jobType){
+//    /**
+//     * @param $jobType
+//     * @return mixed
+//     */
+//    protected function getJobTypeId($jobType){
+//
+//        $collection = $this->_jobTypeCollection->create()
+//            ->addFieldToFilter('type_name',array('eq'=>$jobType))
+//            ->getFirstItem();
+//
+//        return $collection->getData('type_id');
+//    }
 
-        $collection = $this->_jobTypeCollection->create()
-            ->addFieldToFilter('type_name',array('eq'=>$jobType))
-            ->getFirstItem();
+//    /**
+//     * @param $jobStatus
+//     * @return mixed
+//     */
+//    protected function getJobStatusId($jobStatus){
+//
+//        $collection = $this->_jobStatusCollection->create()
+//            ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
+//            ->getFirstItem();
+//
+//        return $collection->getData('status_id');
+//    }
 
-        return $collection->getData('type_id');
-    }
-
-    /**
-     * @param $jobStatus
-     * @return mixed
-     */
-    protected function getJobStatusId($jobStatus){
-
-        $collection = $this->_jobStatusCollection->create()
-            ->addFieldToFilter('status_name',array('eq'=>$jobStatus))
-            ->getFirstItem();
-
-        return $collection->getData('status_id');
-    }
-    
 }

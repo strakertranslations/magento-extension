@@ -2,9 +2,18 @@ requirejs([
     'jquery'
 ], function( $ ){
 
-    // var sVersion = $('#row_straker_general_version');
-    //
-    // if( typeof sVersion.get(0) !== 'undefined' ){
-    //     sVersion.css('display','none');
-    // }
+    $('li[data-ui-id="menu-straker-easytranslationplatform-accounts"]').on('click', function(event){
+
+        event.preventDefault();
+        var url = 'https://myaccount.strakertranslations.com/user/login';
+        window.open(url, '_blank');
+    });
+
+    $('li[data-ui-id="menu-straker-easytranslationplatform-termsandconditions"]').on('click', function(event){
+
+        event.preventDefault();
+        var url = 'https://www.strakertranslations.com/terms-conditions';
+        window.open(url, '_blank');
+    });
+
 });

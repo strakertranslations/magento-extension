@@ -9,6 +9,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
+use Magento\Eav\Model\Entity\Store;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\JsonFactory;
@@ -80,6 +81,7 @@ class Index extends \Magento\Backend\App\Action
         ];
 
     protected $_testFilePath = '/straker_job_12_1470260999.xml';
+    protected $_connection;
 
     public function __construct(
         Context $context,
@@ -135,12 +137,23 @@ class Index extends \Magento\Backend\App\Action
 
     public function execute()
     {
-
-        $this->_importHelper->create('252')->parseTranslatedFile()->saveTranslatedCategoryData()->publishTranslatedCategoryData();
-
-        exit;
-
-
+//        $rawTableName = 'cms_page_store';
+//        $table = $this->_resourceConnection->getConnection()->getTableName($rawTableName);
+//        $connection = $this->_resourceConnection->getConnection();
+//        $defaultStoreId = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+//        $idField = ( strcasecmp($rawTableName, 'cms_page_store') === 0 ) ? 'page_id' : 'block_id';
+//
+//        $sql = $connection->select()->from( $table , [ $idField ] )->where('store_id != ?', $defaultStoreId);
+//        $result = $connection->query($sql);
+//        $ids = array_column( $result->fetchAll(),$idField );
+//
+//        $rawTargetTable = strcasecmp($idField, 'page_id') === 0 ? 'cms_page' : 'cms_block';
+//        $targetTable = $connection->getTableName($rawTargetTable);
+//
+//        if( $connection->isTableExists( $targetTable )){
+//            $where = [$idField. ' IN(?)' => $ids ];
+////            $deleteCount = $connection->delete($targetTable, $where);
+//        }
     }
 
     //add target store id

@@ -10,6 +10,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Search\AggregationInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model;
 use Psr\Log\LoggerInterface;
 
@@ -23,21 +24,20 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
      * @var AggregationInterface
      */
     protected $aggregations;
+
     /**
+     * Collection constructor.
      * @param EntityFactoryInterface $entityFactory
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
-     * @param mixed|null $mainTable
-     * @param AbstractDb $eventPrefix
-     * @param mixed $eventObject
-     * @param mixed $resourceModel
+     * @param ConfigHelper $configHelper
+     * @param $mainTable
+     * @param $eventPrefix
+     * @param $eventObject
+     * @param $resourceModel
      * @param string $model
-     * @param null $connection
-     * @param AbstractDb|null $resource
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -45,20 +45,20 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
+        ConfigHelper $configHelper,
         $mainTable,
         $eventPrefix,
         $eventObject,
         $resourceModel,
-        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
-        $connection = null,
-        AbstractDb $resource = null
+        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document'
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $configHelper);
+        $this->_init($model, $resourceModel);
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
-        $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
     }
+
     /**
      * @return AggregationInterface
      */
@@ -106,6 +106,18 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
     {
         return $this;
     }
+
+    function getSelectCountSql()
+    {
+        $select = clone $this->getSelect();
+        $select->where('is_test_job = ?', $this->_configHelper->isSandboxMode());
+        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $select->columns('COUNT(distinct job_key)');
+//        var_dump($select->__toString());exit;
+//        $count = $select->query()->fetchAll()[0]['RowCount'];
+        return $select;
+    }
+
     /**
      * Get total count.
      *
@@ -115,6 +127,7 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
     {
         return $this->getSize();
     }
+
     /**
      * Set total count.
      *
@@ -138,10 +151,12 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     protected function _beforeLoad() {
-
-        $this->getSelect()->order('created_at DESC')->group('job_key');
-//        var_dump($sql);exit;
         parent::_beforeLoad();
+        $this->getSelect()->where('is_test_job = ?', $this->_configHelper->isSandboxMode())->order('created_at DESC')->group('job_key');
+        return $this;
     }
 }

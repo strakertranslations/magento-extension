@@ -7,7 +7,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\Data;
@@ -28,7 +28,7 @@ class CheckLanguagePairs extends Action
 
     public function __construct(
         Context $context,
-        Json $resultJson,
+        JsonFactory $resultJson,
         ManagerInterface $messageManager,
         StoreManagerInterface $storeManager,
         ConfigHelper $configHelper,
@@ -54,20 +54,10 @@ class CheckLanguagePairs extends Action
 
         $store_data = $this->_configHelper->getStoreInfo($target_store_id);
 
-        $result['store_data'] = $store_data;
+        $result = $this->_resultJson->create();
 
-        if(empty($store_data['straker/general/source_store']))
-        {
-            $result['success'] = false;
-            
-        }else{
+        $result = $result->setData(['store-data' => $store_data]);
 
-            $result['success'] = true;
-
-        }
-
-        $result['target_store_id'] = $target_store_id;
-
-        return $this->_resultJson->setData($result);
+        return $result;
     }
 }

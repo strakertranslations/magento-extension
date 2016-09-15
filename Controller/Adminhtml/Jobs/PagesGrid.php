@@ -5,7 +5,7 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 use Magento\Backend\App\Action;
 use Magento\TestFramework\ErrorLog\Logger;
 
-class Products extends \Magento\Backend\App\Action
+class PagesGrid extends \Magento\Backend\App\Action
 {
 
     /**
@@ -41,9 +41,9 @@ class Products extends \Magento\Backend\App\Action
     public function execute()
     {
         $resultLayout = $this->_resultLayoutFactory->create();
-        $resultLayout->getLayout()->getBlock('easytranslationplatform.edit.tab.products')
-            ->setProductsJobs($this->getRequest()->getPost('job_products', null));
+        $resultLayout->getLayout()->getBlock('easytranslationplatform.edit.tab.pages');
 
         return $resultLayout;
     }
+
 }

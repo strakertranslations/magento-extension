@@ -14,19 +14,25 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_backendUrl;
 
-    /**
-     * @var StoreManagerInterface $storeManager
-     */
-    protected $storeManager;
-
     protected $_magentoDataTables = array(
         'catalog_product_entity_varchar',
         'catalog_product_entity_text',
         'catalog_category_entity_varchar',
         'catalog_category_entity_text',
         'eav_attribute_option_value',
-        'catalog_product_super_attribute_label'
+        'catalog_product_super_attribute_label',
+        'cms_page',
+        'cms_page_store',
+        'cms_block',
+        'cms_block_store',
+        'url_rewrite',
+        'catalog_url_rewrite_product_category'
     );
+
+    /**
+     * @var StoreManagerInterface $storeManager
+     */
+    protected $storeManager;
 
     const BACKUP_TABLE_SUFFIX = '_back';
 
@@ -50,14 +56,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * get products tab Url in admin
      * @return string
      */
-    public function getEasyTranslationPlatformUrl()
+    public function getProductUrl()
     {
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/products', ['_current' => true]);
+    }
+
+    public function getPagesUrl()
+    {
+        return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/pages', ['_current' => true]);
     }
 
     public function getBlockUrl()
     {
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/Blocks', ['_current' => true]);
+
     }
 
     public function getMagentoDataTableArray(){

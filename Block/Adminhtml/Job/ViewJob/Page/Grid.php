@@ -46,11 +46,10 @@ class Grid extends Extended
     protected function _prepareCollection()
     {
         $pageCollection = $this->_job->getPageCollection();
-
         if( !empty( $this->_sourceStoreId ) && is_numeric( $this->_sourceStoreId )){
             $pageCollection->addStoreFilter( $this->_sourceStoreId );
         }
-
+        $this->setCollection($pageCollection);
         return parent::_prepareCollection();
     }
 
@@ -61,17 +60,17 @@ class Grid extends Extended
     protected function _prepareColumns()
     {
 //        $this->addColumn(
-//            'in_category',
+//            'in_page',
 //            [
 //                'type' => 'checkbox',
-//                'name' => 'in_category',
+//                'name' => 'in_page',
 //                'align' => 'center',
-//                'index' => 'entity_id'
+//                'index' => 'page_id'
 //            ]
 //        );
 
         $this->addColumn(
-            'page_id',
+            'entity_id',
             [
                 'header' => __('Page ID'),
                 'type' => 'number',
@@ -86,7 +85,6 @@ class Grid extends Extended
                 'header' => __('Title'),
                 'index' => 'title',
                 'class' => 'xxx',
-                'width' => '50px',
             ]
         );
 
@@ -95,7 +93,7 @@ class Grid extends Extended
             [
                 'header' => __('Action'),
                 'type' => 'action',
-                'getter' => 'getEntityId',
+                'getter' => 'getPageId',
                 'actions' => [
                     [
                         'caption' => __('View'),
@@ -134,7 +132,7 @@ class Grid extends Extended
             [
                 'job_id' => $this->_job->getJobId(),
                 'job_type_id' => $this->_jobTypeId,
-                'entity_id' => $row->getEntityId(),
+                'entity_id' => $row->getPageId(),
                 'job_type_referrer' => Model\JobType::JOB_TYPE_PAGE,
                 'job_key' => $this->_jobKey,
                 'source_store_id' => $this->_sourceStoreId

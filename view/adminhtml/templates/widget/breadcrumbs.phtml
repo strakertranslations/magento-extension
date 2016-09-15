@@ -1,0 +1,34 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/** @var \Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs $block */
+$data = $block->getData();
+if (!empty($data)): ?>
+    <div class="straker-breadcrumbs">
+        <ul class="items">
+        <?php $_size = count($data); ?>
+        <?php foreach ($data as $_index => $_link):?>
+            <?php if( is_numeric( $_index ) ): ?>
+                <li class="item">
+                    <?php if (empty($_link['url'])): ?>
+                        <?php if ($_index != $_size-1): ?>
+                            <span><?php echo __( $block->escapeHtml($_link['label']) ); ?></span>
+                        <?php else: ?>
+                            <strong><?php echo __( $block->escapeHtml($_link['label']) ); ?></strong>
+                        <?php endif; ?>
+                    <?php else: ?>
+                        <a href="<?php /* @escapeNotVerified */ echo $_link['url'] ?>" title="<?php echo $block->escapeHtml($_link['title']) ?>"><?php echo __( $block->escapeHtml($_link['label']) ); ?></a>
+                    <?php endif; ?>
+                </li>
+            <?php endif; ?>
+        <?php endforeach; ?>
+        </ul>
+    </div>
+<?php endif; ?>

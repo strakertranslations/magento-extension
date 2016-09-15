@@ -4,8 +4,8 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\DB\Sql\LookupExpression;
 use Magento\Framework\View\Result\PageFactory;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\StrakerAPI;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -17,7 +17,7 @@ class Index extends Action
      * @var PageFactory
      */
     protected $resultPageFactory;
-
+    protected $_configHelper;
     protected $_strakerApi;
     protected $_jobFactory;
     protected $_logger;
@@ -28,19 +28,22 @@ class Index extends Action
      * @param Logger $logger
      * @param StrakerAPI $strakerAPI
      * @param JobFactory $jobFactory
+     * @param ConfigHelper $configHelper
      */
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
         Logger $logger,
         StrakerAPI $strakerAPI,
-        JobFactory $jobFactory
+        JobFactory $jobFactory,
+        ConfigHelper $configHelper
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->_strakerApi = $strakerAPI;
         $this->_logger = $logger;
         $this->_jobFactory = $jobFactory;
+        $this->_configHelper = $configHelper;
     }
 
     /**
@@ -50,6 +53,9 @@ class Index extends Action
      */
     public function execute()
     {
+        if($this->_configHelper->isSandboxMode()){
+            $this->messageManager->addNotice($this->_configHelper->getSandboxMessage());
+        }
         $this->refreshJobs();
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
@@ -92,14 +98,17 @@ class Index extends Action
                                     array_push( $localJobIds, $localJob->getId() );
                                     $isUpdate = $this->_compareJobs( $apiJob, $localJob );
                                     if( $isUpdate['isSuccess'] ){
-                                        array_push( $updatedJobs, $localJob->getId() );
+                                        $tjNumber = $localJob->getJobNumber();
+                                        if( !empty($tjNumber) && !in_array($tjNumber, $updatedJobs) ){
+                                            array_push( $updatedJobs, $tjNumber);
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                     if( count( $updatedJobs ) > 0 ){
-                        $this->messageManager->addSuccessMessage( __('The status of the jobs [Id: '. implode(',', $updatedJobs )  .'] has been updated!') );
+                        $this->messageManager->addSuccessMessage( __('The status of the jobs: '. implode(', ', $updatedJobs )  .' has been updated!') );
                     }
                     elseif (count($localJobIds) <= 0){
                         $result['status'] = false;
@@ -160,8 +169,7 @@ class Index extends Action
 
     /**
      * @param $apiJob
-     * @param \Straker\EasyTranslationPlatform\Model\Job $localJob
-     * @param bool $isPartOfJob
+     * @param $localJob
      * @return array
      */
     protected function _compareJobs( $apiJob, $localJob){

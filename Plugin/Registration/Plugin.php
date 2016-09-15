@@ -27,9 +27,14 @@ class Plugin
     )
     {
 
-        if(!$this->_configHelper->getAccessToken()) {
+        $url = false;
 
-            $url = $this->_url->getUrl("*/Setup_registration/index/");
+        (count($this->_configHelper->getDefaultAttributes()) < 2 ) ? $url = $this->_url->getUrl("*/Setup_productattributes/index/") : false;
+
+        (!$this->_configHelper->getAccessToken()) ? $url = $this->_url->getUrl("*/setup_registration/index/") : false;
+
+
+        if($url) {
 
             $resultRedirect = $subject->resultRedirectFactory->create();
 

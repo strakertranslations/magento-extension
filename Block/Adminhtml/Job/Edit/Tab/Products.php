@@ -46,21 +46,16 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
-        if ($this->getRequest()->getParam('target_store_id')) {
-
-            $store_info = $this->_configHelper->getStoreInfo($this->getRequest()->getParam('target_store_id'));
-
-            $this->sourceStoreId = $store_info['straker/general/source_store'];
-        }
+        $this->sourceStoreId = $this->getRequest()->getParam('source_store_id');
     }
 
-    /**
-     * add Column Filter To Collection
-     */
+//    /**
+//     * add Column Filter To Collection
+//     */
 //    protected function _addColumnFilterToCollection($column)
 //    {
 //        if ($column->getId() == 'in_product') {
-//            //$productIds = $this->_getSelectedProducts();
+//            $productIds = $this->_getSelectedProducts();
 //
 //            if (empty($productIds)) {
 //                $productIds = 0;
@@ -104,7 +99,8 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'checkbox',
                 'name' => 'in_product',
                 'align' => 'center',
-                'index' => 'entity_id'
+                'index' => 'entity_id',
+                'values' => $this->_getSelectedProducts()
             ]
         );
 
@@ -147,6 +143,18 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         );
 
         return parent::_prepareColumns();
+    }
+
+    protected function _getSelectedProducts()
+    {
+        $products = $this->getRequest()->getPost('job_products');
+
+        if ($products) {
+
+            return $products;
+        }
+
+        return [];
     }
 
     /**

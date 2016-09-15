@@ -10,6 +10,7 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\JobStatus;
 
 class Confirm extends \Magento\Backend\App\Action
 {
@@ -17,6 +18,8 @@ class Confirm extends \Magento\Backend\App\Action
     protected $_jobFactory;
     protected $_logger;
     protected $_storeManager;
+    protected $_configHelper;
+    protected $_importHelper;
 
     public function __construct(
         Context $context,
@@ -43,33 +46,48 @@ class Confirm extends \Magento\Backend\App\Action
 
         $job = $this->_jobFactory->create()->load($job_id);
 
-        try{
+        $jobMatches = [];
 
-            $this->_importHelper->create($job_id)->publishTranslatedData();
+        preg_match("/job_(.*?)_/",$job->getSourceFile(),$jobMatches);
 
-            $job->addData(['job_status_id'=>6]);
+        $jobIds = explode('&',$jobMatches[1]);
 
-            $job->save();
+        foreach ($jobIds as $job_id)
+        {
+            try{
+                //should get sub job instance
+//                $jobType = $this->_jobFactory->create()->load($job_id)->getJobType();
+                $currentJob = $this->_jobFactory->create()->load($job_id);
+                $jobType = $currentJob->getJobType();
 
-            $this->messageManager->addSuccess('Translated data has been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
+                $this->_importHelper->create($job_id)->publishTranslatedData();
 
-            $resultRedirect->setPath('*/*/index');
+                //should set status for sub job instance
+//                $job->addData(['job_status_id'=>6]);
+//                $job->save();
+                $currentJob->addData( ['job_status_id' => JobStatus::JOB_STATUS_CONFIRMED] );
+                $currentJob->save();
 
-            return $resultRedirect;
+                $this->messageManager->addSuccess('Translated '.$jobType.' data has been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
 
 
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (\Magento\Framework\Exception\LocalizedException $e) {
 
-            $this->messageManager->addError($e->getMessage());
+                $this->messageManager->addError($e->getMessage());
 
-            $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
 
-            $this->messageManager->addError('Translated data has not been published for'.$job->getData('target_store_id').' store');
+                $this->messageManager->addError('Translated data has not been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
 
-            $resultRedirect->setPath('*/*/index');
+                $resultRedirect->setPath('*/*/index');
 
-            return $resultRedirect;
+                return $resultRedirect;
+            }
         }
+
+        $resultRedirect->setPath('*/*/index');
+
+        return $resultRedirect;
 
     }
 }

@@ -131,14 +131,26 @@ class Save extends Action
                 $this->_saveStoreConfigData($data);
             }
 
+            if(isset($data['blocks']) && strlen($data['blocks'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generateBlockJob();
+
+            }
+
             if(isset($data['products']) && strlen($data['products'])>0)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
             }
 
-            if(strlen ($data['categories'])>0)
+            if(strlen($data['categories'])>0)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
+            }
+
+            if(isset($data['pages']) && strlen($data['pages'])>0)
+            {
+                $jobData[] = $this->_jobHelper->createJob($data)->generatePageJob();
+
             }
 
             try {
@@ -235,23 +247,16 @@ class Save extends Action
             foreach ($job_object as $job)
             {
                 $job->addData(['job_key'=>$response->job_key]);
-
                 $job->setData('sl', $this->_api->getLanguageName( $job->getData('sl')));
-
                 $job->setData('tl', $this->_api->getLanguageName( $job->getData('tl')));
-
                 $job->setData('source_file',$sourcefile);
-
                 $job->save();
             }
-
             $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
-
 
         }catch (\Exception $e){
 
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message,array($response));
-
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
 

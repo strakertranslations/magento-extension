@@ -75,18 +75,18 @@ class Form extends Template{
     public function getTranslationLanguage()
     {
 
-        return $this->_storeInfoData['straker/general/destination_language'];
+        return (!empty ($this->_storeInfoData )) ? $this->_storeInfoData['straker/general/destination_language'] : false ;
     }
 
     public function getSourceLanguage()
     {
-        return $this->_storeInfoData['straker/general/source_language'];
+        return (!empty ($this->_storeInfoData )) ? $this->_storeInfoData['straker/general/destination_language'] : false ;
 
     }
 
     public function getSourceStore()
     {
-        return $this->_storeInfoData['straker/general/source_store'];
+        return (! empty ($this->_storeInfoData )) ? $this->_storeInfoData['straker/general/source_store'] : false ;
     }
 
     public function getMessage($store_id)

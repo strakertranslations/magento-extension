@@ -31,19 +31,26 @@
             </group>
         </section>
 
-        <section id="straker_attribute" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="straker_config" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
             <class>separator-top</class>
             <label>Configuration</label>
             <!-- should be the same as the tab's id above -->
             <tab>easytranslationplatform</tab>
             <resource>Straker_EasyTranslationPlatform::config</resource>
-            <group id="settings" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="env" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Environment</label>
+                <field id="sandbox" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Sandbox Mode</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="attribute" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Attribute Settings</label>
-                <field id="default" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="product_default" translate="label" type="multiselect" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product Default Attributes</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\DefaultAttributeSource</source_model>
                 </field>
-                <field id="custom" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="product_custom" translate="label" type="multiselect" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Product Custom Attributes</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\CustomAttributeSource</source_model>
                 </field>

@@ -3,27 +3,76 @@
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob;
 
 use Magento\Backend\Block\Widget\Container;
-use Magento\Framework\View\Element\Template;
-use Straker\EasyTranslationPlatform\Model;
-
+use Magento\Backend\Block\Widget\Context;
+use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\JobStatus;
 
 class Type extends Container
 {
-    /** @var \Straker\EasyTranslationPlatform\Model\Job $_job */
+    protected $_jobFactory;
+    /** @var  \Straker\EasyTranslationPlatform\Model\Job */
     protected $_job;
-    protected $_entityId;
-    protected $_jobTypeId = Model\JobType::JOB_TYPE_ATTRIBUTE;
+    protected $_requestData;
+
+    public function __construct(
+        Context $context,
+        JobFactory $jobFactory,
+        array $data = []
+    )
+    {
+        $this->_jobFactory = $jobFactory;
+        parent::__construct($context, $data);
+    }
 
     public function _construct()
     {
+        $this->_requestData = $this->getRequest()->getParams();
+        $this->_job = $this->_jobFactory->create()->load($this->_requestData['job_id']);
+
+        if($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED){
+            $this->addButton(
+                'confirm',
+                [
+                    'label' => __('Confirm'),
+                    'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
+                            'job_id' => $this->_job->getId(),
+                            'job_key' => $this->_job->getJobKey(),
+                            'job_type_id' => $this->_job->getJobTypeId()
+                        ] ) . '\') ',
+                    'class' => 'primary',
+                    'title' => __( 'Confirm the job of ' . $this->_job->getJobNumber() )
+                ],
+                0,
+                50
+            );
+        }
+
+//        $this->addButton(
+//            'confirm',
+//            [
+//                'label' => __('Confirm'),
+//                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
+//                        'job_id' => $this->_job->getId(),
+//                        'job_key' => $this->_job->getJobKey(),
+//                        'job_type_id' => $this->_job->getJobTypeId()
+//                    ] ) . '\') ',
+//                'class' => 'primary',
+//                'disabled' => ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) ? '':'disabled'
+//            ],
+//            0,
+//            50
+//        );
+
         $this->addButton(
-            'back',
+            'manage_job',
             [
                 'label' => __('Back'),
                 'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/') . '\') ',
-                'class' => 'back'
+                'class' => 'back',
+                'title' => __('Go to Manage Jobs page')
             ],
-            -1
+            0,
+            30
         );
 
         parent::_construct();
@@ -31,6 +80,21 @@ class Type extends Container
 
     protected function _prepareLayout()
     {
+        $this->addChild(
+            'straker-breadcrumbs',
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',
+            [
+                [
+                    'label' => 'Manage Jobs',
+                    'url' => $this->getUrl('EasyTranslationPlatform/Jobs/'),
+                    'title' => 'Go to Manage Jobs page'
+                ],
+                [
+                    'label' => empty($this->_job->getJobNumber()) ? 'Sub-job' : $this->_job->getJobNumber()
+                ]
+            ]
+        );
+
         $this->addChild(
             'straker_job_type_grid',
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Type\Grid'
@@ -41,7 +105,7 @@ class Type extends Container
 
     function _toHtml()
     {
-        return $this->getChildHtml('straker_job_type_grid');
+        return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_type_grid');
     }
 
 }

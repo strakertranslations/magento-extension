@@ -46,11 +46,10 @@ class Grid extends Extended
     protected function _prepareCollection()
     {
         $blockCollection = $this->_job->getBlockCollection();
-
         if( !empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)){
             $blockCollection->addStoreFilter( $this->_sourceStoreId );
         }
-
+        $this->setCollection($blockCollection);
         return parent::_prepareCollection();
     }
 
@@ -71,7 +70,7 @@ class Grid extends Extended
 //        );
 
         $this->addColumn(
-            'block_id',
+            'entity_id',
             [
                 'header' => __('Block ID'),
                 'type' => 'number',
@@ -95,7 +94,7 @@ class Grid extends Extended
             [
                 'header' => __('Action'),
                 'type' => 'action',
-                'getter' => 'getEntityId',
+                'getter' => 'getBlockId',
                 'actions' => [
                     [
                         'caption' => __('View'),
@@ -134,7 +133,7 @@ class Grid extends Extended
             [
                 'job_id' => $this->_job->getJobId(),
                 'job_type_id' => $this->_jobTypeId,
-                'entity_id' => $row->getEntityId(),
+                'entity_id' => $row->getBlockId(),
                 'job_type_referrer' => Model\JobType::JOB_TYPE_BLOCK,
                 'job_key' => $this->_jobKey,
                 'source_store_id' => $this->_sourceStoreId
