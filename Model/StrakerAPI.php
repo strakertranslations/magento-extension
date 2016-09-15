@@ -309,6 +309,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     }
 
+    // for demo only
     public function completeJob( $jobNumber, $url ){
         return $this->_call( $url, 'post', ['job_id' => $jobNumber] );
     }

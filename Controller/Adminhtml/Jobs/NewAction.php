@@ -2,24 +2,32 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
+
 class NewAction extends \Magento\Backend\App\Action
 {
     /**
      * @var \Magento\Backend\Model\View\Result\Forward
      */
     protected $resultForwardFactory;
-
+    protected $_configHelper;
     public $resultRedirectFactory;
 
+
     /**
-     * @param \Magento\Backend\App\Action\Context $context
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param Context $context
+     * @param ForwardFactory $resultForwardFactory
+     * @param ConfigHelper $configHelper
      */
     public function __construct(
-        \Magento\Backend\App\Action\Context $context,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+        Context $context,
+        ForwardFactory $resultForwardFactory,
+        ConfigHelper $configHelper
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
+        $this->_configHelper = $configHelper;
         parent::__construct($context);
     }
 
@@ -39,6 +47,9 @@ class NewAction extends \Magento\Backend\App\Action
      */
     public function execute()
     {
+        if($this->_configHelper->isSandboxMode()){
+            $this->messageManager->addNotice($this->_configHelper->getSandboxMessage());
+        }
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
         return $resultForward->forward('edit');

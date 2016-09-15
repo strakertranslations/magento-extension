@@ -80,9 +80,6 @@ class Type extends Container
 
     protected function _prepareLayout()
     {
-        if( !empty($this->_job->getJobNumber()) ){
-
-        }
         $this->addChild(
             'straker-breadcrumbs',
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',

@@ -2,6 +2,8 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
+use Magento\Downloadable\Model\SampleFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
@@ -255,6 +257,14 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                             $this->_importHelper->create( $this->getId() )
                                 ->parseTranslatedFile()
                                 ->saveData();
+                            if(empty( $this->getData('job_number') ) && $this->_importHelper->configHelper->isSandboxMode() ){
+                                $jobKey = $this->getJobKey();
+                                $testJobNumber = $this->getId();
+                                if(!empty( $jobKey )){
+                                    $testJobNumber = $this->getTestJobNumberByJobKey($this->getJobKey());
+                                }
+                                $this->setData('job_number', 'Test Job '. $testJobNumber);
+                            }
                             $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
                         }
                     }else{
@@ -309,5 +319,16 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                 break;
         }
         return $title;
+    }
+
+    public function getTestJobNumberByJobKey( $jobKey ){
+        $data = $this->getResourceCollection()
+            ->distinct(true)
+            ->addFieldToSelect('job_number')
+            ->addFieldToFilter('job_number', ['neq'=> null ])
+            ->addFieldToFilter('is_test_job', ['eq'=> 1 ])
+            ->addFieldToFilter('job_key', ['neq'=> $jobKey ]);
+
+        return count($data) + 1;
     }
 }

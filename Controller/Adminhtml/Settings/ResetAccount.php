@@ -55,6 +55,7 @@ class ResetAccount extends Action
         try {
             $this->_strakerSetup->saveAccessToken('');
             $this->_strakerSetup->saveAppKey('');
+            $this->_strakerSetup->deleteSandboxSetting();
 
             //clear translations for all stores
             $this->_strakerSetup->clearTranslations();

@@ -13,6 +13,7 @@
     </type>
     <type name="Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid\Collection">
         <arguments>
+            <argument name="configHelper" xsi:type="object">Straker\EasyTranslationPlatform\Helper\ConfigHelper</argument>
             <argument name="mainTable" xsi:type="string">straker_job</argument>
             <argument name="eventPrefix" xsi:type="string">straker_job_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">straker_job_grid_collection</argument>
