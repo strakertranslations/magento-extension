@@ -57,23 +57,25 @@ class Save extends \Magento\Backend\App\Action
 
         if ($data) {
 
-
             try {
 
-                $oSupport = $this->_strakerAPI->callRegister($data);
+                $oSupport = $this->_strakerAPI->callSupport($data);
 
                 if($oSupport->success)
                 {
                     $this->messageManager->addSuccess(__('Your support request was submitted successfully.'));
 
-                    return $resultRedirect->setPath('*/*/');
+                    $resultRedirect->setPath('*/Jobs/index/');
+
+                    return $resultRedirect;
 
                 }else{
 
                     $this->messageManager->addError(__('Your support request could not be submitted'));
 
+                    $this->_logger->error('error'.__FILE__.' '.__LINE__.$oSupport->message,[]);
 
-                    $resultRedirect->setPath('/*/index/',$data);
+                    $resultRedirect->setPath('/*/*/',$data);
 
                     return $resultRedirect;
 
