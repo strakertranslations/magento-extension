@@ -188,3 +188,8 @@ a.straker-job-refresh-anchor{
 #straker_job_attribute_grid_table{
     border-bottom: 0.1rem solid #D6D6D3;
 }
+
+.support-link{
+    margin-bottom: 1em;
+    display: block;
+}
