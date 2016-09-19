@@ -1,11 +1,13 @@
 {
   "name": "Straker/EasyTranslationPlatform",
   "type": "magento2-module",
-  "description": "Translation Platform for Magento 2",
-  "keywords": ["Magento2", "Admin", "Sample"],
-  "homepage": "https://Strakertranslations.com/magento",
-  "aaaminimum-stability": "dev",
-  "license": "AFL - Academic Free License (AFL 3.0)",
+  "description": "Translation Module for Magento 2",
+  "homepage": "https://strakertranslations.com/magento",
+  "version": "1.0.0",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
   "authors": [
     {
       "name": "Straker Translation"
@@ -15,12 +17,10 @@
     "php": "~5.5.0|~5.6.0|~7.0.0",
     "magento/magento-composer-installer": "*"
   },
-  "extra": {
-    "map": [
-      [
-        "*",
-        "Straker/EasyTranslationPlatform"
-      ]
-    ]
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Straker\\EasyTranslationPlatform\\": ""
+    }
   }
 }
