@@ -247,23 +247,16 @@ class Save extends Action
             foreach ($job_object as $job)
             {
                 $job->addData(['job_key'=>$response->job_key]);
-
                 $job->setData('sl', $this->_api->getLanguageName( $job->getData('sl')));
-
                 $job->setData('tl', $this->_api->getLanguageName( $job->getData('tl')));
-
                 $job->setData('source_file',$sourcefile);
-
                 $job->save();
             }
-
             $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
-
 
         }catch (\Exception $e){
 
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message,array($response));
-
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
 

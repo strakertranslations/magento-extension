@@ -150,12 +150,12 @@ class Setup extends AbstractModel implements SetupInterface
 
             if (!empty($attributes['custom'])) {
 
-                $this->_configModel->SaveConfig('straker_attribute/settings/custom', $attributes['custom'], 'default', 0);
+                $this->_configModel->SaveConfig('straker_config/attribute/product_custom', $attributes['custom'], 'default', 0);
             }
 
             if (!empty($attributes['default'])) {
 
-                $this->_configModel->SaveConfig('straker_attribute/settings/default', $attributes['default'], 'default', 0);
+                $this->_configModel->SaveConfig('straker_config/attribute/product_default', $attributes['default'], 'default', 0);
             }
 
             $this->_errorManager->_error = false;
@@ -287,9 +287,9 @@ class Setup extends AbstractModel implements SetupInterface
     }
 
     protected function clearDefaultAttributeSettings(){
-        $this->_configModel->saveConfig('straker_attribute/settings/default', '', 'default', 0);
-        $this->_configModel->saveConfig('straker_attribute/settings/custom',  '', 'default', 0);
-        $this->_configModel->saveConfig('straker_attribute/settings/category','', 'default', 0);
+        $this->_configModel->saveConfig('straker_config/attribute/product_custom', '', 'default', 0);
+        $this->_configModel->saveConfig('straker_config/attribute/product_default',  '', 'default', 0);
+        $this->_configModel->saveConfig('straker_config/attribute/category','', 'default', 0);
     }
 
     /**
@@ -298,5 +298,9 @@ class Setup extends AbstractModel implements SetupInterface
     protected function _getConnection()
     {
         return $this->_resourceConnection->getConnection();
+    }
+
+    public function deleteSandboxSetting(){
+        $this->_configModel->deleteConfig('straker_config/env/sandbox', 'default', 0);
     }
 }
