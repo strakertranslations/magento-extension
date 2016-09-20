@@ -6,6 +6,7 @@ use Magento\Eav\Model\Entity\Store;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Search\AggregationInterface;
@@ -13,12 +14,13 @@ use Magento\Store\Model\StoreManagerInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model;
 use Psr\Log\LoggerInterface;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Collection as JobCollection;
 
 /**
  * Class Collection
  * Collection for displaying grid of sales documents
  */
-class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Collection implements SearchResultInterface
+class Collection extends JobCollection implements SearchResultInterface
 {
     /**
      * @var AggregationInterface
@@ -32,12 +34,16 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
+     * @param MetadataPool $metadataPool
      * @param ConfigHelper $configHelper
      * @param $mainTable
      * @param $eventPrefix
      * @param $eventObject
      * @param $resourceModel
      * @param string $model
+     * @param null $connection
+     * @param AbstractDb $resource
+     * @internal param ConfigHelper $configHelper
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
@@ -45,18 +51,30 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
+        MetadataPool $metadataPool,
         ConfigHelper $configHelper,
         $mainTable,
         $eventPrefix,
         $eventObject,
         $resourceModel,
-        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document'
+        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
+        $connection = null,
+        AbstractDb $resource = null
     ) {
-        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $configHelper);
-        $this->_init($model, $resourceModel);
+//        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $configHelper);
+        parent::__construct(
+            $entityFactory,
+            $logger,
+            $fetchStrategy,
+            $eventManager,
+            $connection,
+            $resource
+        );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
+        $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
+        $this->_configHelper = $configHelper;
     }
 
     /**
@@ -109,12 +127,16 @@ class Collection extends \Straker\EasyTranslationPlatform\Model\ResourceModel\Jo
 
     function getSelectCountSql()
     {
-        $select = clone $this->getSelect();
+//        $select = clone $this->getSelect();
+//        $select->where('is_test_job = ?', $this->_configHelper->isSandboxMode());
+//        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
+//        $select->columns('COUNT(distinct job_key)');
+////        var_dump($select->__toString());exit;
+////        $count = $select->query()->fetchAll()[0]['RowCount'];
+//        return $select;
+
+        $select = parent::getSelectCountSql();
         $select->where('is_test_job = ?', $this->_configHelper->isSandboxMode());
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $select->columns('COUNT(distinct job_key)');
-//        var_dump($select->__toString());exit;
-//        $count = $select->query()->fetchAll()[0]['RowCount'];
         return $select;
     }
 

@@ -64,16 +64,6 @@ class Index extends Action
         return $resultPage;
     }
 
-    /**
-     * Is the user allowed to view the attachment grid.
-     *
-     * @return bool
-     */
-    protected function _isAllowed()
-    {
-        return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::jobs');
-    }
-
     protected function refreshJobs(){
         $updatedJobs = [];
         $localJobIds = [];
@@ -121,7 +111,7 @@ class Index extends Action
                         $result['status'] = false;
                         $result['message'] = __('All jobs are up to date.');
                         $this->_logger->addInfo( $result['message']);
-                        $this->messageManager->addSuccessMessage( $result['message'] );
+                        //$this->messageManager->addSuccessMessage( $result['message'] );
                     }
                 }else{
                     $result['status'] = false;
@@ -178,5 +168,13 @@ class Index extends Action
             return $localJob->updateStatus( $apiJob );
         }
         return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
+    }
+
+    /**
+     * @return bool
+     */
+    protected function _isAllowed()
+    {
+        return true;
     }
 }

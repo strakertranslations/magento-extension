@@ -127,7 +127,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         } catch (Exception $e) {
 
             $debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
-            throw $e;
+            //throw $e;
         }
 
         return $response;

@@ -94,7 +94,7 @@ class RestoreProductData extends Field
         $validBackupData = true;
 
         foreach ( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
-            $backupTableName = $this->_dataHelper->getBackupTableNames( $tableName );
+            $backupTableName = $this->_dataHelper->getBackupTableNames( $this->_resourceConnection->getTableName( $tableName ));
 //            if( $connection->isTableExists( $backupTableName ) ){
 //                $sql = $connection->select()
 //                    ->from(

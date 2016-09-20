@@ -57,8 +57,13 @@ class CompleteJob extends Action
      *
      * @return bool
      */
+//    protected function _isAllowed()
+//    {
+//        return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::jobs');
+//    }
+
     protected function _isAllowed()
     {
-        return $this->_authorization->isAllowed('Straker_EasyTranslationPlatform::jobs');
+        return true;
     }
 }
