@@ -52,7 +52,7 @@ class RestoreProductData extends Action
             }
 
             foreach ($this->_dataHelper->getMagentoDataTableArray() as $tableName) {
-                $tableName = $this->_connection->getTableName($tableName);
+                $tableName = $this->_resourceConnection->getTableName($tableName);
                 $backupTableName = $this->_dataHelper->getBackupTableNames($tableName);
 
                 if ($this->_connection->isTableExists($tableName)
@@ -131,7 +131,7 @@ class RestoreProductData extends Action
 
         foreach ($this->_dataHelper->getMagentoDataTableArray() as $tableName) {
 
-            $backupTableName = $this->_dataHelper->getBackupTableNames($tableName);
+            $backupTableName = $this->_dataHelper->getBackupTableNames( $this->_resourceConnection->getTableName( $tableName ) );
 
             if( !$this->_connection->isTableExists($backupTableName) ){
                 $result = false;
@@ -170,7 +170,7 @@ class RestoreProductData extends Action
             ){
                 continue;
             }
-            $tableName = $this->_connection->getTableName($rawTableName);
+            $tableName = $this->_resourceConnection->getTableName($rawTableName);
             if ($this->_connection->isTableExists($tableName)) {
                 $foreignKeys = $this->_connection->getForeignKeys($tableName);
                 foreach ($foreignKeys as $foreignKey) {
@@ -180,14 +180,14 @@ class RestoreProductData extends Action
                 switch ($rawTableName){
                     case 'cms_page_store':
                         $this->_connection->truncateTable($tableName);
-                        $this->_connection->truncateTable($this->_connection->getTableName('cms_page'));
+                        $this->_connection->truncateTable($this->_resourceConnection->getTableName('cms_page'));
                         break;
                     case 'cms_block_store':
                         $this->_connection->truncateTable($tableName);
-                        $this->_connection->truncateTable($this->_connection->getTableName('cms_block'));
+                        $this->_connection->truncateTable($this->_resourceConnection->getTableName('cms_block'));
                         break;
                     case 'url_rewrite':
-                        $foreignTable = $this->_connection->getTableName('catalog_url_rewrite_product_category');
+                        $foreignTable = $this->_resourceConnection->getTableName('catalog_url_rewrite_product_category');
                         $urlForeignKeys = $this->_connection->getForeignKeys($foreignTable);
                         foreach ($urlForeignKeys as $urlForeignKey){
                             $this->_connection->dropForeignKey($foreignTable, $urlForeignKey['FK_NAME']);

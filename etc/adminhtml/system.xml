@@ -37,7 +37,7 @@
             <!-- should be the same as the tab's id above -->
             <tab>easytranslationplatform</tab>
             <resource>Straker_EasyTranslationPlatform::config</resource>
-            <group id="env" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="env" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Environment</label>
                 <field id="sandbox" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Sandbox Mode</label>

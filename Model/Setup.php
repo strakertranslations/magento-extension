@@ -182,7 +182,7 @@ class Setup extends AbstractModel implements SetupInterface
         try {
             $connection->beginTransaction();
             foreach ($this->_dataHelper->getMagentoDataTableArray() as $rawTableName) {
-                $table = $connection->getTableName($rawTableName);
+                $table = $this->_resourceConnection->getTableName($rawTableName);
 
                 if( strcasecmp($rawTableName, 'cms_page') === 0 ||
                     strcasecmp($rawTableName, 'cms_block') === 0 ||
@@ -203,7 +203,7 @@ class Setup extends AbstractModel implements SetupInterface
                         $ids = array_column( $return, $idField );
 
                         $rawTargetTable = strcasecmp($idField, 'page_id') === 0 ? 'cms_page' : 'cms_block';
-                        $targetTable = $connection->getTableName($rawTargetTable);
+                        $targetTable = $this->_resourceConnection->getTableName($rawTargetTable);
 
                         if( $connection->isTableExists( $targetTable )){
                             $where = [$idField. ' IN(?)' => $ids ];
@@ -223,7 +223,7 @@ class Setup extends AbstractModel implements SetupInterface
                             }
                             $where = [ 'store_id != ?' => 1];
                             $deleteCount += $connection->delete($table, $where );
-                            $urlRewriteProductCategoryTable = $connection->getTableName('catalog_url_rewrite_product_category');
+                            $urlRewriteProductCategoryTable = $this->_resourceConnection->getTableName('catalog_url_rewrite_product_category');
                             if( $connection->isTableExists($urlRewriteProductCategoryTable)  && count( $urlRewriteIds ) > 0 ){
                                 $where = ['url_rewrite_id IN(?)'=> $urlRewriteIds ];
                                 $deleteCount += $connection->delete($urlRewriteProductCategoryTable, $where);
@@ -266,7 +266,7 @@ class Setup extends AbstractModel implements SetupInterface
         try {
             $connection->beginTransaction();
             foreach ($tables as $table) {
-                $table = $connection->getTableName($table);
+                $table = $this->_resourceConnection->getTableName($table);
                 if ($connection->isTableExists($table)) {
                     $deleteCount = $connection->delete($table);
                     $deleteCount++;
