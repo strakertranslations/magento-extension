@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<layout>
+    <default>
+        <reference name="head">
+            <action method="addCss">
+                <name>css/straker.css</name>
+            </action>
+            <action method="addJs">
+                <name>straker/translations.js</name>
+            </action>
+        </reference>
+    </default>
+    <adminhtml_straker_job_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+            <!--<action method="addJs">-->
+                <!--<name>straker/livepipe/livepipe.js</name>-->
+            <!--</action>-->
+            <!--<action method="addJs">-->
+                <!--<name>straker/livepipe/window.js</name>-->
+            <!--</action>-->
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job" name="strakertranslations_easytranslationplatform_job" />
+        </reference>
+    </adminhtml_straker_job_index>
+    <adminhtml_straker_product_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+            <!--<action method="addJs">-->
+            <!--<name>straker/livepipe/livepipe.js</name>-->
+            <!--</action>-->
+            <!--<action method="addJs">-->
+            <!--<name>straker/livepipe/window.js</name>-->
+            <!--</action>-->
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job_product" name="strakertranslations_easytranslationplatform_job_product" />
+        </reference>
+    </adminhtml_straker_product_index>
+    <adminhtml_straker_category_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+            <!--<action method="addJs">-->
+            <!--<name>straker/livepipe/livepipe.js</name>-->
+            <!--</action>-->
+            <!--<action method="addJs">-->
+            <!--<name>straker/livepipe/window.js</name>-->
+            <!--</action>-->
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job_category" name="strakertranslations_easytranslationplatform_job_category" />
+        </reference>
+    </adminhtml_straker_category_index>
+    <adminhtml_straker_attribute_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job_attribute" name="strakertranslations_easytranslationplatform_job_attribute" />
+        </reference>
+    </adminhtml_straker_attribute_index>
+    <adminhtml_straker_cms_page_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job_cms_page" name="strakertranslations_easytranslationplatform_job_cms_page" />
+        </reference>
+    </adminhtml_straker_cms_page_index>
+    <adminhtml_straker_cms_block_index>
+        <referense name="head">
+            <action method="setTitle" translate="title"><title>Manage Jobs</title></action>
+        </referense>
+        <reference name="menu">
+            <action method="setActive"><menupath>straker/job</menupath></action>
+        </reference>
+        <reference name="content">
+            <block type="strakertranslations_easytranslationplatform/adminhtml_job_cms_block" name="strakertranslations_easytranslationplatform_job_cms_block" />
+        </reference>
+    </adminhtml_straker_cms_block_index>
+    <adminhtml_cms_block_edit>
+        <reference name="cms_block_edit">
+            <action method="setTemplate"><template>cms/form/container.phtml</template></action>
+        </reference>
+    </adminhtml_cms_block_edit>
+    <adminhtml_cms_page_edit>
+        <reference name="cms_page_edit">
+            <action method="setTemplate"><template>cms/form/container.phtml</template></action>
+        </reference>
+    </adminhtml_cms_page_edit>
+</layout>

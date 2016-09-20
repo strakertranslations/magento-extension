@@ -1,0 +1,31 @@
+<div class="content-header">
+    <h3><?php echo $this->__('Create New Job') ?></h3>
+</div>
+<ol class="wizard" data-wizard-steps="3">
+    <li class="wizard-todo">Select Product Details</li>
+    <li class="wizard-todo">Select Products</li>
+    <li class="wizard-todo">Confirm Products</li>
+</ol>
+<div class="straker-main-container border">
+    <h1><?php echo $this->__('Product Details') ?></h1>
+    <p><?php echo $this->__('What product details would you like to translate?') ?></p>
+    <form action="<?php echo Mage::helper("adminhtml")->getUrl("straker/adminhtml_new/attribute") ?>" >
+        <div style="padding:0; margin-bottom: 30px;">
+            <div style="text-align: left;">
+                <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+                <input type="checkbox" name="attr[name]" id="name" value="1">
+                <label for="name"><?php echo $this->__('Title') ?></label>
+                <br>
+                <input type="checkbox" name="attr[short_description]" id="short_description" value="1">
+                <label for="short_description"><?php echo $this->__('Short Description') ?></label>
+                <br>
+                <input type="checkbox" name="attr[description]" id="description" value="1">
+                <label for="description"><?php echo $this->__('Description') ?></label>
+                <br>
+                <input type="checkbox" name="attr[meta_title]" id="meta_title" value="1">
+                <label for="meta_title"><?php echo $this->__('Meta Title') ?></label><br></div>
+            <div class="clear"></div>
+            <input type="submit" class="form-button right" value="Next" title="Next">
+        </div>
+    </form>
+</div>
