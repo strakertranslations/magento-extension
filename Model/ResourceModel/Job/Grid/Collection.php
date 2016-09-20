@@ -34,7 +34,6 @@ class Collection extends JobCollection implements SearchResultInterface
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
      * @param StoreManagerInterface $storeManager
-     * @param MetadataPool $metadataPool
      * @param ConfigHelper $configHelper
      * @param $mainTable
      * @param $eventPrefix
@@ -51,7 +50,6 @@ class Collection extends JobCollection implements SearchResultInterface
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        MetadataPool $metadataPool,
         ConfigHelper $configHelper,
         $mainTable,
         $eventPrefix,
