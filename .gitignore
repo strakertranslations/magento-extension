@@ -1,0 +1,13 @@
+#### Ignore everything ###
+/*
+/*/
+
+#### Unignore the following ####
+!app/code/community/StrakerTranslations/EasyTranslationPlatform
+!app/design/adminhtml/default/straker
+!app/etc/modules
+
+!js/straker
+!skin/adminhtml/default/straker
+
+
