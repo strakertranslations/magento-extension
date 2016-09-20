@@ -1,0 +1,83 @@
+# OS generated files           #
+################################
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+maintenance.flag
+
+# Magento Configurations       #
+################################
+/app/etc/local.xml
+
+# Magento Media                #
+################################
+/media
+
+# Magento Var                  #
+################################
+.cache/
+/tmp/*
+/var/cache/*
+/var/full_page_cache/*
+/var/locks/*
+/var/report/*
+/var/session/*
+/var/log/*
+/var/logging/*
+/var/connect/*
+/var/pear/*
+/var/import/*
+/var/export/*
+/var/mrextension/package/*
+
+# Magento Sitemap              #
+################################
+/sitemap/*
+/sitemap*/*
+/sitemap.xml
+/sitemap*.xml
+
+# archives                     #
+################################
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# logs and databases           #
+################################
+*.log
+*.sql
+*.sqlite
+
+# IDE project files            #
+################################
+.viminfo
+/nbproject
+/.project
+/.sass-cache
+/.idea
+/cgi-bin
+*.sublime-project
+*.sublime-workspace
+/logs/
+/atlassian-ide-plugin.xml
+
+# Geo IP extension backup files #
+################################
+/lib/GeoIP/GeoIP.dat_backup_*
+
+
+# Modgit #
+################################
+.modgit

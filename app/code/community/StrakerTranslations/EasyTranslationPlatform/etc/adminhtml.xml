@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <menu>
+        <straker>
+            <title>Straker Translations</title>
+            <label><![CDATA[<div style="position: absolute;"><img id="straker_logo" src="" alt="" border="0" /></div>&nbsp;<script>
+            var n = SKIN_URL.indexOf("adminhtml");
+            $('straker_logo').src = SKIN_URL.substring(0, n) + "adminhtml/default/straker/images/straker/straker-translations-logo.png";
+            </script>]]></label>
+            <sort_order>71</sort_order>
+            <children>
+                <new translate="title">
+                    <title>Create New Job</title>
+                    <sort_order>0</sort_order>
+                    <action>adminhtml/straker_new/index</action>
+                </new>
+                <job translate="title">
+                    <title>Manage Jobs</title>
+                    <sort_order>10</sort_order>
+                    <action>adminhtml/straker_job/index</action>
+                </job>
+                <settings translate="title">
+                    <title>Settings</title>
+                    <action>adminhtml/system_config/edit/section/straker</action>
+                    <sort_order>20</sort_order>
+                </settings>
+                <account translate="title">
+                    <title>Account</title>
+                    <action>adminhtml/straker_new/account</action>
+                    <sort_order>30</sort_order>
+                </account>
+                <terms translate="title">
+                    <title><![CDATA[Terms & Conditions]]></title>
+                    <action>adminhtml/straker_new/terms</action>
+                    <sort_order>40</sort_order>
+                </terms>
+            </children>
+        </straker>
+    </menu>
+    <acl>
+        <resources>
+            <all>
+                <title>Allow Everything</title>
+            </all>
+            <admin>
+                <children>
+                    <straker>
+                        <title>Easy Translation Platform</title>
+                        <sort_order>70</sort_order>
+                        <children>
+                            <new>
+                                <title>Create a Translation Job</title>
+                                <sort_order>0</sort_order>
+                            </new>
+                            <job>
+                                <title>Manage Jobs</title>
+                                <sort_order>1</sort_order>
+                            </job>
+                        </children>
+                    </straker>
+                    <system>
+                        <children>
+                            <config>
+                                <children>
+                                    <straker>
+                                        <title>Easy Translation Platform</title>
+                                    </straker>
+                                </children>
+                            </config>
+                        </children>
+                    </system>
+                </children>
+            </admin>
+        </resources>
+    </acl>
+</config>

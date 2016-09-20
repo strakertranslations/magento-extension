@@ -1,0 +1,39 @@
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td style="width:80%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getJob()->getStoreId()) ?></h3></td>
+            <td class="a-right">
+                <?php echo $this->getButtonsHtml() ?>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="container">
+    <input type="button" class="form-button left" value="Back" title="Back" onclick="window.location.href = '<?php echo $this->getUrl('*/straker_job'); ?>'">
+</div>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>
+<div id="dispute-container" style="display: none">
+    <a id="dispute-container-close">X</a>
+    <form id="straker-dispute-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_job/dispute") ?>" method="post">
+        <h4 id="dispute-form-title"><?php echo $this->__('If you have any issues, please provide comments below. You must provide specific examples of the source and translation. You can edit translations after you published them to your site.') ?></h4>
+        <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
+        <input type="hidden" name="job_id">
+        <div class="input-box"><label for="message">Message</label><em class="required">*</em><br />
+            <textarea id="message" name="message" value="" class="required-entry input-text" rows="16" cols="90"></textarea></div>
+        <div class="form-buttons">
+            <input type="submit" onclick="disputeForm.submit()" class="form-button" value="Submit" title="Submit">
+        </div>
+    </form>
+    <script>
+        var disputeForm = new varienForm('straker-dispute-form');
+        disputeForm.show = function(jobId){
+            $$('#straker-dispute-form input[name=\'job_id\']')[0].value = jobId;
+            $('dispute-container').show();
+        };
+        $('dispute-container-close').observe('click', function(){
+            $('dispute-container').hide();
+        });
+    </script>
+</div>

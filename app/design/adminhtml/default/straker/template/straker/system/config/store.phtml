@@ -1,0 +1,13 @@
+<?php foreach (Mage::app()->getWebsites() as $website) { ?>
+    <div class="straker-store-settings-wrapper">
+    <?php foreach ($website->getGroups() as $group) {
+        $stores = $group->getStores();
+        foreach ($stores as $store) { ?>
+            <div class="straker-store-settings-row">
+                <label><?php echo $store->getName() ?></label>
+                <?php echo $this->getClearStoreButtonHtml($store) ?>
+            </div>
+        <?php } ?>
+        </div>
+    <?php }
+}

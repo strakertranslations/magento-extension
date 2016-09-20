@@ -1,0 +1,38 @@
+<?php
+/**
+ * @see StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products
+ */
+?>
+<div class="content-header">
+    <table cellspacing="0">
+        <tr>
+            <td><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm CMS Blocks to Translate') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getStore()) ?></h3></td>
+        </tr>
+    </table>
+</div>
+<ol class="wizard" data-wizard-steps="4">
+    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
+    <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
+    <li class="wizard-done"><?php echo $this->__('Select Content') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+</ol>
+<?php $params = $this->getRequest()->getParams(); ?>
+<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_block/new", array('store'=>$this->getStore(), 'internal_cms_block'=>implode(',', $this->getCmsBlock()), 'attr'=>$this->getAttr())) ?>"><?php echo $this->__('Edit CMS Blocks') ?></a>
+<form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_block/submitjob") ?>" method="post">
+    <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
+    <input type="hidden" name="cms_block" value="<?php echo implode(',', $this->getCmsBlock()) ?>" >
+    <input type="hidden" name="store" value="<?php echo $this->getStore() ?>" >
+    <input type="hidden" name="attr" value="<?php echo $this->getAttr() ?>" >
+</form>
+<div class="right">
+    <?php echo $this->getButtonsHtml() ?>
+</div>
+<div>
+    <?php echo $this->getGridHtml() ?>
+</div>
+<script>
+    Event.observe(window, "load", function() {
+        var buttonHtml = '<button title="Submit" type="button" class="right" onclick="$(\'submit-new-job-form\').submit();" style=""><span><span><span>Submit</span></span></span></button>';
+        $('strakerCmsBlocks').insert({after: buttonHtml});
+    });
+</script>

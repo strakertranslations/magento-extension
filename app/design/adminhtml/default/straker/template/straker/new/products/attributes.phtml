@@ -1,0 +1,46 @@
+<div class="content-header">
+    <h3><?php echo $this->__('Create New Job') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getRequest()->getParam('store')) ?></h3>
+</div>
+<ol class="wizard" data-wizard-steps="4">
+    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Select Details') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Select Content') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+</ol>
+<div class="straker-main-container border">
+    <h1><?php echo $this->__('Product Details') ?></h1>
+    <p><?php echo $this->__('What product details would you like to translate?') ?></p>
+    <form action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/attribute") ?>" >
+        <div style="padding:0; margin-bottom: 30px;">
+            <div style="text-align: left;">
+                <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+                <input type="checkbox" name="attr[name]" id="name" value="1" checked="checked">
+                <label for="name"><?php echo $this->__('Title') ?></label>
+                <br>
+                <input type="checkbox" name="attr[short_description]" id="short_description" value="1" checked="checked">
+                <label for="short_description"><?php echo $this->__('Short Description') ?></label>
+                <br>
+                <input type="checkbox" name="attr[description]" id="description" value="1" checked="checked">
+                <label for="description"><?php echo $this->__('Description') ?></label>
+                <br>
+                <input type="checkbox" name="attr[meta_title]" id="meta_title" value="1" checked="checked">
+                <label for="meta_title"><?php echo $this->__('Meta Title') ?></label>
+                <br>
+                <input type="checkbox" name="attr[meta_description]" id="meta_description" value="1" checked="checked">
+                <label for="meta_description"><?php echo $this->__('Meta Description') ?></label>
+                <br>
+                <input type="checkbox" name="attr[meta_keyword]" id="meta_keyword" value="1" checked="checked">
+                <label for="meta_keyword"><?php echo $this->__('Meta Keywords') ?></label>
+                <div class="clear"></div>
+            <?php foreach($this->getAttributes() as $attribute):?>
+                <br>
+                <input type="checkbox" name="attr[<?php echo $attribute->getAttributeCode() ?>]" id="<?php echo $attribute->getAttributeCode() ?>">
+                <label for="<?php echo $attribute->getAttributeCode() ?>"><?php echo $attribute->getFrontendLabel() ?></label>
+            <?php endforeach; ?>
+                <br></div>
+            <div class="clear"></div>
+            <input type="submit" class="form-button right" value="Next" title="Next">
+            <input type="button" class="form-button right" value="Back" title="Back" onclick="window.location.href = '<?php echo $this->getUrl('*/straker_new', array('store'=> $this->getSetupStoreId())); ?>'">
+        </div>
+    </form>
+</div>
