@@ -51,7 +51,7 @@ class Collection extends JobCollection implements SearchResultInterface
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
         StoreManagerInterface $storeManager,
-        MetadataPool $metadataPool,
+//        MetadataPool $metadataPool,
         ConfigHelper $configHelper,
         $mainTable,
         $eventPrefix,
