@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package>
+    <name>Paypal_InContext</name>
+    <version>0.1.6</version>
+    <stability>stable</stability>
+    <license>GPL</license>
+    <channel>community</channel>
+    <extends/>
+    <summary>Displays a PayPal in-context checkout window with the merchant website in the background</summary>
+    <description>Displays a PayPal in-context checkout window with the merchant website in the background</description>
+    <notes>Fix Secure urls</notes>
+    <authors><author><name>Tikhonov Alex</name><user>nakilon</user><email>tihonov.sania@gmail.com</email></author></authors>
+    <date>2015-09-15</date>
+    <time>11:45:42</time>
+    <contents><target name="magecommunity"><dir name="Paypal"><dir name="InContext"><dir name="Block"><dir name="Adminhtml"><dir name="System"><dir name="Config"><dir name="Form"><dir name="Field"><file name="Merchant.php" hash="93698412747f91fa7ddfa09cef8e39e4"/></dir></dir></dir></dir></dir><file name="Js.php" hash="d529023c3659331a8a59d497426a8395"/><dir name="Paypal"><file name="Shortcut.php" hash="a547ce25739a61a60b53cb9c768bbf70"/><file name="Shortcutuk.php" hash="eb56c54b6be763664ec9931d8ed711ea"/></dir></dir><dir name="Controller"><dir name="Express"><file name="Abstract.php" hash="4d68136f8ac508aec8f7e7f28a4a9840"/></dir></dir><dir name="Model"><file name="Observer.php" hash="58ba28192c7b4bb22d6130352640e0a9"/><dir name="Paypal"><file name="Config.php" hash="a56ea1f3a0673f7fb4a05af93624430e"/></dir><file name="Paypal.php" hash="6b886311d65a6a0d4bd3eb201becffda"/><file name="Paypaluk.php" hash="3e96b7073132c05fd1c75f2ccd49bcdc"/></dir><dir name="controllers"><file name="ExpressController.php" hash="99913dbf84bfb7dcce1f9971b689eeff"/><file name="ExpressController.php.old" hash="6c7876b7b546e4c5384514b5e331331b"/><file name="ExpressukController.php" hash="75e2320d3efaf0d2d1419f45d0a91181"/></dir><dir name="etc"><file name="adminhtml.xml" hash="24cdfe3d6ba8853887caddf2c8008107"/><file name="config.xml" hash="98e98c7d55f8f8477628d85a930e14a4"/><file name="system.xml" hash="8f6b170346cad1b807109f6e308e5655"/></dir></dir></dir></target><target name="magedesign"><dir name="frontend"><dir name="base"><dir name="default"><dir name="layout"><file name="incontext.xml" hash="5b430dba42636af6eec5802a0ad6a235"/></dir><dir name="template"><dir name="incontext"><file name="js.phtml" hash="3f839fdfe20e63d036ebbb54f52a661a"/><dir name="onepage"><file name="payment.phtml" hash="3a66a87d01d4d2d0067edbd3a1c54565"/></dir></dir></dir></dir></dir></dir></target><target name="mageskin"><dir name="frontend"><dir name="base"><dir name="default"><dir name="js"><dir name="checkout"><file name="iwd-jquery-2.1.3.min.js" hash="95d5220c7ac0d5c88885de8282f66fbe"/><file name="paypal-in-context.js" hash="9fb74f2f44aa262da4885591c931f55f"/></dir></dir></dir></dir></dir></target><target name="mageetc"><dir name="modules"><file name="Paypal_InContext.xml" hash="060b908352841de91d7bebe5db9f9b0d"/></dir></target></contents>
+    <compatible/>
+    <dependencies><required><php><min>5.2.0</min><max>6.0.0</max></php></required></dependencies>
+</package>
