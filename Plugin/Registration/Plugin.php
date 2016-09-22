@@ -27,24 +27,26 @@ class Plugin
     )
     {
 
-        $url = false;
-
-        (count($this->_configHelper->getDefaultAttributes()) < 2 ) ? $url = $this->_url->getUrl("*/Setup_productattributes/index/") : false;
-
-        (!$this->_configHelper->getAccessToken()) ? $url = $this->_url->getUrl("*/setup_registration/index/") : false;
-
-
-        if($url) {
+        if(!$this->_configHelper->getAccessToken()){
 
             $resultRedirect = $subject->resultRedirectFactory->create();
 
-            $resultRedirect->setUrl($url);
+            $resultRedirect->setUrl($this->_url->getUrl("*/setup_registration/index/"));
 
             return $resultRedirect;
 
-        }else{
-
-            return $proceed($request);
         }
+
+        if(empty($this->_configHelper->getDefaultAttributes())){
+
+            $resultRedirect = $subject->resultRedirectFactory->create();
+
+            $resultRedirect->setUrl($this->_url->getUrl("*/setup_productattributes/index/"));
+
+            return $resultRedirect;
+        }
+
+        return $proceed($request);
+
     }
 }
