@@ -7,6 +7,8 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Backend\Model\View\Factory;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\Config;
 use Closure;
 
 
@@ -14,10 +16,12 @@ class Plugin
 {
     public function __construct(
         ConfigHelper $configHelper,
-        UrlInterface $url
+        UrlInterface $url,
+        CacheInterface $cache
     ) {
         $this->_configHelper = $configHelper;
         $this->_url = $url;
+        $this->_cache = $cache;
     }
 
     public function aroundDispatch(
@@ -26,6 +30,8 @@ class Plugin
         RequestInterface $request
     )
     {
+
+        $this->_cache->clean(Config::CACHE_TAG);
 
         if(!$this->_configHelper->getAccessToken()){
 
