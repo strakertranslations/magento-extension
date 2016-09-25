@@ -79,7 +79,7 @@ class Save extends \Magento\Backend\App\Action
 
                 }else{
 
-                    $resultRedirect->setPath('/Setup_Languagepairs/index/');
+                    $resultRedirect->setPath('/Setup_productattributes/index/');
 
                 }
 
