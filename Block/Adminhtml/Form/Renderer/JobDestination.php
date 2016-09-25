@@ -4,9 +4,9 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
-class Field extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
+class JobDestination extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element implements \Magento\Framework\Data\Form\Element\Renderer\RendererInterface
 {
-    protected $_template = 'Straker_EasyTranslationPlatform::renderer/form/field.phtml';
+    protected $_template = 'Straker_EasyTranslationPlatform::renderer/form/jobDestination.phtml';
 
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
