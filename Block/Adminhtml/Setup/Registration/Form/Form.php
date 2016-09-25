@@ -106,8 +106,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'company_name',
                 'label' => __('Company Name'),
-                'title' => __('company_name'),
-                'required' => true
+                'title' => __('company_name')
             ]
         );
 
@@ -117,8 +116,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'phone_number',
                 'label' => __('Phone Number'),
-                'title' => __('phone_Number'),
-                'required' => true
+                'title' => __('phone_Number')
             ]
         );
 
@@ -129,7 +127,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'url',
                 'label' => __('Website Url'),
                 'title' => __('url'),
-                'required' => true,
                 'class'=>'validate-url'
             ]
         );
@@ -140,7 +137,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'label' => __(' '),
                 'name' => 'terms',
-                'after_element_html' => '<span>&nbsp;&nbsp;I have read and agreed to the</span><a href="https://www.strakertranslations.com/terms-conditions/"> terms and conditions</a>',
+                'after_element_html' => '<span>&nbsp;&nbsp;I have read and agreed to the</span><a href="https://www.strakertranslations.com/terms-conditions/" target="_blank"> terms and conditions</a>',
                 'class'=>'checkbox required'
             ]
         );
@@ -158,7 +155,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     ){
         $aCountries = [];
 
-        $aCountries[NULL] = 'Select A Country';
+        $aCountries[NULL] = 'Select a country';
 
         foreach($this->_strakerAPIinterface->getCountries() as $key => $value)
         {
