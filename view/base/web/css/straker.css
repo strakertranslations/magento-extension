@@ -76,11 +76,15 @@
 
 .store-language{
     font-style: italic;
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
 .clear-language{
     padding: 0.5rem 0 ! important;
+}
+
+.straker-space-line{
+    min-height: 0.5rem;
 }
 
 .action-default.scalable.straker-reset-store-button{
