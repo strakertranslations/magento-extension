@@ -74,6 +74,11 @@
     /*text-align: right;*/
 }
 
+.store-language{
+    font-style: italic;
+    font-size: 1rem;
+}
+
 .clear-language{
     padding: 0.5rem 0 ! important;
 }
