@@ -2,11 +2,11 @@
 
 namespace Straker\EasyTranslationPlatform\Plugin\Registration;
 
-use Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs\NewAction;
+use Magento\Backend\App\AbstractAction;
+use Magento\Framework\Controller\Result\RedirectFactory;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\UrlInterface;
-use Magento\Backend\Model\View\Factory;
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config;
 use Closure;
@@ -14,28 +14,31 @@ use Closure;
 
 class Plugin
 {
+    private $_redirectFactory;
+
     public function __construct(
         ConfigHelper $configHelper,
         UrlInterface $url,
-        CacheInterface $cache
+        CacheInterface $cache,
+        RedirectFactory $redirectFactory
     ) {
         $this->_configHelper = $configHelper;
         $this->_url = $url;
         $this->_cache = $cache;
+        $this->_redirectFactory = $redirectFactory;
     }
 
     public function aroundDispatch(
-        NewAction $subject,
+        AbstractAction $subject,
         Closure $proceed,
         RequestInterface $request
     )
     {
-
         $this->_cache->clean(Config::CACHE_TAG);
 
         if(!$this->_configHelper->getAccessToken()){
 
-            $resultRedirect = $subject->resultRedirectFactory->create();
+            $resultRedirect = $this->_redirectFactory->create();
 
             $resultRedirect->setUrl($this->_url->getUrl("*/setup_registration/index/"));
 
@@ -45,7 +48,7 @@ class Plugin
 
         if(empty($this->_configHelper->getDefaultAttributes())){
 
-            $resultRedirect = $subject->resultRedirectFactory->create();
+            $resultRedirect = $this->_redirectFactory->create();
 
             $resultRedirect->setUrl($this->_url->getUrl("*/setup_productattributes/index/"));
 

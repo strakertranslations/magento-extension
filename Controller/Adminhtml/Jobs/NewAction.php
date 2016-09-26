@@ -13,7 +13,7 @@ class NewAction extends \Magento\Backend\App\Action
      */
     protected $resultForwardFactory;
     protected $_configHelper;
-    public $resultRedirectFactory;
+//    public $resultRedirectFactory;
 
 
     /**
