@@ -4,6 +4,11 @@
 
     ], function ($) {
 
+        $('#save').hide().attr('disabled',true);
+        $('#Next').attr('disabled',true);
+        $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').hide();
+
+
         $removed_language = false;
 
         $(document).ajaxSend(function( event, jqxhr, settings ) {
@@ -11,12 +16,8 @@
             var destination_store_id = $('select[name="magento_destination_store"]').val();
             var source_store_id = $('select[name="magento_source_store"]').val();
 
-            if(source_store_id)
+            if(!source_store_id)
             {
-                source_store_id = source_store_id;
-
-            }else{
-
                 source_store_id = destination_store_id;
             }
 
@@ -30,9 +31,15 @@
 
         });
 
-        $('select[name="magento_destination_store"]').on( "change", function () {
+        $('select[name="destination_checker"]').on( "change", function () {
+
+            $('#save').hide().attr('disabled',true);
+            $('#Next').attr('disabled',true).show();
+            $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').hide();
 
             $('select[name="magento_source_store"]').val('');
+
+            var destination_storeId = $(this).val();
 
             $.ajax({
                 url: '<?php echo $block->getUrl('EasyTranslationPlatform/Jobs/CheckLanguagePairs') ?>',
@@ -55,20 +62,29 @@
 
                 if(response['store-data'].length < 1 || response['store-data']['straker/general/destination_language'].length < 1)
                 {
-
-                    $('select[name="straker_target_language"]').show(1000).attr('disabled',false).val('');
+                    $('select[name="magento_destination_store"]').val(destination_storeId).prop('disabled',true);
+                    $('select[name="straker_target_language"]').val('');
+                    $('select[name="magento_source_store"]').val('');
+                    $('select[name="straker_source_language"]').val('');
+                    $('#destination-picker').show();
 
                 }else{
 
-                    $('select[name="straker_target_language"]').val(response['store-data']['straker/general/destination_language']).show().prop('disabled',true);
+                    $('#destination-picker').hide();
+                    $('select[name="magento_destination_store"]').val(destination_storeId);
+                    $('select[name="straker_target_language"]').val(response['store-data']['straker/general/destination_language']).show();
                     $('select[name="magento_source_store"]').val(response['store-data']['straker/general/source_store']).prop('enable',true);
-                    $('select[name="magento_source_language"]').val('');
-                    $('#source_content').hide();
+                    $('select[name="straker_source_language"]').val(response['store-data']['straker/general/source_language']);
 
                 }
 
+                checkSourceData();
+
             })
+
         });
+
+
 
         $('select[name="magento_source_store"]').on( "change", function () {
 
@@ -79,18 +95,79 @@
 
         $('select[name="straker_target_language"]').on( "change", function () {
 
-            console.log('hello');
-            console.log($(this).val());
-            console.log($removed_language);
+
             if($removed_language)
             {
                 $("select[name='straker_source_language']").find("option[value='" + $removed_language + "']").prop('disabled',false)
             }
+
             $("select[name='straker_source_language']").find("option[value='" + $(this).val() + "']").prop('disabled',true)
+
             $removed_language = $(this).val();
-            $('#source_content').show(1000);
+
+            $('#source_content').show();
 
         });
+
+
+        $('#Next').on("click",function(){
+            $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').show();
+            $('#job_tabs_attachment_products').click();
+            $(this).hide();
+            $('#save').show();
+
+
+        });
+
+
+        $('#edit_form').on("change", "input", function(e) {
+
+            $('#save').attr('disabled',false);
+
+        });
+
+        $('#source_content').on("change", "select", function(e) {
+
+            checkSourceData ();
+
+        });
+
+
+
+        function checkSourceData ()
+        {
+            var data = {
+                magento_destination_store: $('select[name="magento_destination_store"]').val(),
+                magento_source_store: $('select[name="magento_source_store"]').val(),
+                straker_target_language: $('select[name="straker_target_language"]').val(),
+                straker_source_language: $('select[name="straker_source_language"]').val()
+            };
+
+            console.log(data);
+
+            var empty = 0;
+
+            $.each(data,function(key,value){
+
+                if(value==""){
+                    empty++
+                }
+            });
+
+            console.log(empty);
+
+            if(empty<1){
+
+                $('#Next').attr('disabled',false);
+
+
+            }else{
+
+                $('#Next').attr('disabled',true);
+
+            }
+        }
+
 
     });
 

@@ -44,7 +44,7 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
         $this->addButton(
             'save',
             [
-                'label' => __('Save'),
+                'label' => __('Next'),
                 'class' => 'save primary',
                 'data_attribute' => [
                     'mage-init' => ['button' => ['event' => 'save', 'target' => '#edit_form']],
