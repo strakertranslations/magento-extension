@@ -47,80 +47,32 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['data' => ['id' => 'edit_form', 'action' => $this->getData('action'), 'method' => 'post']]
         );
 
-        $form->setHtmlIdPrefix('attribute_');
-
-
 
         $fieldset = $form->addFieldset(
             'fieldset',
             ['legend' => __(''), 'class' => '']
         );
 
-
-        $fieldset->addField('Default Attributes', 'checkboxes', array(
+        $fieldset->addField('default_attributes', 'multiselect', array(
             'label' => __('Default Attributes'),
             'name' => 'default[]',
             'required' => true,
-            'checked' => $this->getDefaultAttributes()['default_values'],
-            'values' =>  $this->getDefaultAttributes()['options'],
-            'onclick' => "",
-            'onchange' => "",
-            'disabled' => false,
-            'value'  => '1',
-            'tabindex' => 1
+            'values' =>  $this->getDefaultAttributes()['values'],
+            'value' => $this->getDefaultAttributes()['value']
         ));
 
-        $fieldset->addField('Custom Attributes', 'checkboxes', array(
+        $fieldset->addField('custom_attributes', 'multiselect', array(
             'label' => __('Custom Attributes'),
             'name' => 'custom[]',
-            'required' => true,
-            'checked' => true,
             'values' =>  $this->getCustomAttributes(),
-            'onclick' => "",
-            'onchange' => "",
-            'disabled' => false,
-            'value'  => '1',
-            'tabindex' => 1
         ));
-
-
-
-//        foreach ($this->productHelper->getDefaultAttributes() as $attribute){
-//
-//            $fieldset_1->addField(
-//                'default_attribute_'.$attribute->getAttributeId(),
-//                'checkbox',
-//                [
-//                    'name'=>'default_'.$attribute->getAttributeId(),
-//                    'title'=> 'default_attributes',
-//                    'checked'=>true,
-//                    'value'=>'1',
-//                    'onclick'   => 'this.value = this.checked ?'.$attribute->getAttributeId().' : 0;',
-//                    'after_element_html'=>'&nbsp;'.$attribute->getFrontendLabel()
-//                ]
-//            );
-//
-//        }
-//
-//        foreach ($this->productHelper->getCustomAttributes() as $attribute){
-//
-//            $fieldset_2->addField(
-//                'custom_attributes_'.$attribute->getAttributeId(),
-//                'checkbox',
-//                [
-//                    'name'=>'custom_'.$attribute->getAttributeId(),
-//                    'title'=> 'default_attributes',
-//                    'onclick'   => 'this.value = this.checked ? '.$attribute->getAttributeId().' : 0;',
-//                    'after_element_html'=>'&nbsp;'.$attribute->getFrontendLabel()
-//                ]
-//            );
-//
-//        }
 
 
         $form->setUseContainer(true);
 
-        $form->setValues($this->session->getData('form_data'));
+        //$form->setValues('default_attributes',array(70));
+
+        //$form->setValues($this->session->getData('form_data'));
 
         $this->setForm($form);
 
@@ -130,7 +82,6 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
     public function getDefaultAttributes()
     {
-        $options = [];
 
         $values = [];
 
@@ -138,29 +89,26 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         foreach ($attributes as $attribute){
 
-                $options[] = array('value'=>$attribute->getAttributeId(),'label'=> $attribute->getFrontendLabel(),'name'=>'test');
-                $values[] = $attribute->getAttributeId();
+            $values['values'][] = ['value' => $attribute->getAttributeId(),'label' => __($attribute->getFrontendLabel())];
+            $values['value'][] = $attribute->getAttributeId();
+
         }
 
-        $options['options'] = $options;
-
-        $options['default_values'] = $values;
-
-        return $options;
+        return $values;
     }
 
     public function getCustomAttributes()
     {
 
-        $options = [];
+        $values = [];
 
         $attributes = $this->productHelper->getCustomAttributes();
 
         foreach ($attributes as $attribute){
 
-            $options[] = array('value'=>$attribute->getAttributeId(),'label'=> $attribute->getFrontendLabel());
+            $values[] = ['label' => __($attribute->getFrontendLabel()), 'value' => $attribute->getAttributeId()];
         }
 
-        return $options;
+        return $values;
     }
 }
