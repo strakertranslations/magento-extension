@@ -54,6 +54,10 @@
         <plugin name="starker_easytranslation_plugin_registration_plugin" type="Straker\EasyTranslationPlatform\Plugin\Registration\Plugin" sortOrder="10" disabled="false"/>
     </type>
 
+    <type name="Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs\Index">
+        <plugin name="starker_easytranslation_plugin_registration_plugin" type="Straker\EasyTranslationPlatform\Plugin\Registration\Plugin" sortOrder="10" disabled="false"/>
+    </type>
+
     <type name="Straker\EasyTranslationPlatform\Helper\ProductHelper" shared="false">
         <arguments>
             <argument name="jobModel" xsi:type="object">Straker\EasyTranslationPlatform\Helper\JobHelper</argument>

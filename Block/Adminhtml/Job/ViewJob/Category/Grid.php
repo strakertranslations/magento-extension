@@ -5,6 +5,12 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Category;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data as BackendHelperData;
+use Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Catalog\Api\Data\EavAttributeInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Model\Entity;
+use Magento\Framework\EntityManager\EntityManager;
 use Magento\Framework\View\Element\Template;
 use Straker\EasyTranslationPlatform\Model;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -19,14 +25,17 @@ class Grid extends Extended
     protected $_jobKey;
     protected $_jobId;
     protected $_sourceStoreId;
+    protected $_attributeRepository;
 
     public function __construct(
         Context $context,
         BackendHelperData $backendHelper,
         JobFactory $jobFactory,
+        AttributeRepositoryInterface $attributeRepository,
         array $data = []
     ) {
         $this->_jobFactory = $jobFactory;
+        $this->_attributeRepository = $attributeRepository;
         parent::__construct($context,$backendHelper, $data);
     }
 
@@ -45,10 +54,11 @@ class Grid extends Extended
      */
     protected function _prepareCollection()
     {
+        $nameAttribute = $this->_attributeRepository->get(CategoryAttributeInterface::ENTITY_TYPE_CODE, 'name');
         $categoryCollection = $this->_job->getCategoryCollection();
 
         if( !empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)){
-            $this->setCollection($categoryCollection->addCategoryName( $this->_sourceStoreId ));
+            $this->setCollection($categoryCollection->addCategoryName( $this->_sourceStoreId, $nameAttribute->getAttributeId() ));
         }else{
             $this->setCollection($categoryCollection->addCategoryName());
         }
