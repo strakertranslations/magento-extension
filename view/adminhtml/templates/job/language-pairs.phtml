@@ -93,15 +93,15 @@
 
         });
 
-        $('select[name="straker_target_language"]').on( "change", function () {
+        $('select[name="straker_source_language"]').on( "change", function () {
 
 
             if($removed_language)
             {
-                $("select[name='straker_source_language']").find("option[value='" + $removed_language + "']").prop('disabled',false)
+                $("select[name='straker_target_language']").find("option[value='" + $removed_language + "']").prop('disabled',false)
             }
 
-            $("select[name='straker_source_language']").find("option[value='" + $(this).val() + "']").prop('disabled',true)
+            $("select[name='straker_target_language']").find("option[value='" + $(this).val() + "']").prop('disabled',true)
 
             $removed_language = $(this).val();
 

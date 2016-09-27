@@ -203,6 +203,28 @@ a.straker-job-refresh-anchor{
     margin-bottom: 1em;
 }
 
-#job_tabs_select_destination_content p{
-    margin-bottom: 2em;
+#job_tabs_select_destination_content p:first-of-type{
+    margin-bottom: 1.5em;
 }
+
+div.fieldset-wrapper.straker{
+    padding: 1.5em 2em;
+    margin-bottom: 2em;
+    border: 1px solid #e3e3e3;
+}
+
+div.fieldset-wrapper.straker p{
+    line-height: 200%;
+}
+
+#source_content div.fieldset-wrapper.straker-source{
+    padding: 2em 2em 1em 2em;
+    border-right: none;
+    border-left: none;
+    border-bottom: none;
+}
+
+#source_content div.fieldset-wrapper.straker-source h2{
+    margin-bottom: 1em;
+}
+
