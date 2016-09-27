@@ -19,7 +19,7 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">attachment_products</argument>
                     <argument name="block" xsi:type="array">
-                        <item name="label" xsi:type="string">Translate Products</item>
+                        <item name="label" xsi:type="string">2. &#160; Select Products</item>
                         <item name="title" xsi:type="string">Translate Products</item>
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getProductUrl"/>
                         <item name="class" xsi:type="string">ajax</item>
@@ -33,7 +33,7 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">cms_pages</argument>
                     <argument name="block" xsi:type="array">
-                        <item name="label" xsi:type="string">Translate Pages</item>
+                        <item name="label" xsi:type="string">4. &#160; Select Pages</item>
                         <item name="title" xsi:type="string">Translate Pages</item>
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getPagesUrl"/>
                          <item name="class" xsi:type="string">ajax</item>
@@ -42,7 +42,7 @@
                 <action method="addTab">
                     <argument name="name" xsi:type="string">cms_blocks</argument>
                     <argument name="block" xsi:type="array">
-                        <item name="label" xsi:type="string">Translate Blocks</item>
+                        <item name="label" xsi:type="string">5. &#160; Select Blocks</item>
                         <item name="title" xsi:type="string">Translate Blocks</item>
                         <item name="url" xsi:type="helper" helper="Straker\EasyTranslationPlatform\Helper\Data::getBlockUrl"/>
                         <item name="class" xsi:type="string">ajax</item>

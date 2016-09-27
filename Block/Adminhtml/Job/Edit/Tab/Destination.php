@@ -50,7 +50,7 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
         );
 
         $renderer = $this->getLayout()->createBlock(
-            'Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\Field'
+            'Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\JobDestination'
         );
 
         $fieldset->setRenderer($renderer);
@@ -72,7 +72,7 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
      */
     public function getTabLabel()
     {
-        return __('Select Destination');
+        return __('1. &nbsp; Select Destination');
     }
 
     /**
