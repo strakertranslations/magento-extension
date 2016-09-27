@@ -17,6 +17,7 @@
                             url      : '<?php echo $block->getAjaxResetUrl(); ?>',
                             method   : 'get',
                             dataType : 'json',
+                            showLoader :  true,
                             complete : function(){
                                 location.reload();
                             }

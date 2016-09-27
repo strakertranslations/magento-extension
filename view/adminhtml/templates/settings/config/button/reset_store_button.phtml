@@ -79,6 +79,7 @@
                                 url: '<?php echo $block->getAjaxResetUrl(); ?>',
                                 data: {'store': iStoreId},
                                 method: 'get',
+                                showLoader :  true,
                                 complete: function () {
                                     location.reload();
                                 }

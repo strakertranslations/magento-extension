@@ -16,6 +16,7 @@
                         $.ajax({
                             url      : '<?php echo $block->getAjaxResetUrl(); ?>',
                             method   : 'get',
+                            showLoader :  true,
                             complete : function(){
                                 location.reload();
                             }
