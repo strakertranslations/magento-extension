@@ -24,6 +24,15 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
+                        <site_mode translate="label comment" >
+                            <label>Site Mode</label>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>0</sort_order>
+                            <source_model>strakertranslations_easytranslationplatform/system_config_source_siteMode</source_model>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </site_mode>
                         <access_token translate="label comment" >
                             <label>Access Token</label>
                             <frontend_type>text</frontend_type>
@@ -94,30 +103,6 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </register>
-                        <languages translate="label comment" >
-                            <label>Languages</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>30</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </languages>
-                        <translate translate="label comment" >
-                            <label>Translate</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>40</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </translate>
-                        <countries translate="label comment" >
-                            <label>Countries</label>
-                            <frontend_type>text</frontend_type>
-                            <sort_order>20</sort_order>
-                            <show_in_default>1</show_in_default>
-                            <show_in_website>1</show_in_website>
-                            <show_in_store>1</show_in_store>
-                        </countries>
                         <quote translate="label comment" >
                             <label>Quote</label>
                             <frontend_type>text</frontend_type>
@@ -126,22 +111,54 @@
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </quote>
-                        <payment translate="label comment" >
-                            <label>Payment</label>
+                        <countries translate="label comment" >
+                            <label>Countries</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </countries>
+                        <languages translate="label comment" >
+                            <label>Languages</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </languages>
+                        <translate translate="label comment" >
+                            <label>Translate</label>
                             <frontend_type>text</frontend_type>
                             <sort_order>50</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
-                        </payment>
+                        </translate>
+                        <translate_sandbox translate="label comment" >
+                            <label>Translate (Sandbox)</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>50</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </translate_sandbox>
                         <payment_page translate="label comment" >
                             <label>Payment Page</label>
                             <frontend_type>text</frontend_type>
-                            <sort_order>50</sort_order>
+                            <sort_order>70</sort_order>
                             <show_in_default>1</show_in_default>
                             <show_in_website>1</show_in_website>
                             <show_in_store>1</show_in_store>
                         </payment_page>
+                        <payment translate="label comment" >
+                            <label>Payment</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </payment>
                     </fields>
                 </api_url>
             </groups>

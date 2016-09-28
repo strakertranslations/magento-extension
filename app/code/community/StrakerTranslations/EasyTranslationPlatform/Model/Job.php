@@ -28,7 +28,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         return $this;
     }
 
-
     protected function addProductIds($productIds){
 
         $writeConnection = $this->getWriteAdapter();
@@ -46,7 +45,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
     }
 
     protected function addProductTranslateOriginal($productAttributeId, $productCollection){
-
 
         $writeConnection = $this->getWriteAdapter();
 
@@ -502,6 +500,12 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
         $request = array();
 
+        /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        if($helper->isSandboxMode()){
+            $this->setIsTestJob(true);
+        }
+
         if (!$this->getTitle()){
             $store = Mage::getModel('core/store')->load($this->getStoreId());
             $defaultTitle = $store->getFrontendName().'_'.$store->getName().'_'.Mage::getModel('core/date')->timestamp();
@@ -516,7 +520,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         $request['source_file']    = function_exists('curl_file_create') ?  curl_file_create($filePath) :'@'.$filePath;
         $request['callback_uri']    = Mage::getStoreConfig('web/unsecure/base_link_url',$this->getStoreId()) . 'straker/callback';
         $request['token']    = $this->getId();
-
+        /** @var StrakerTranslations_EasyTranslationPlatform_Model_Api $api */
         $api = $this->_getApi();
         $response = $api->callTranslate($request);
         if($response->job_key) {

@@ -161,7 +161,13 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
     }
 
     protected  function _getTranslateUrl(){
-        return Mage::getStoreConfig('straker/api_url/translate');
+        /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        if( $helper->isSandboxMode() ){
+            return Mage::getStoreConfig('straker/api_url/translate_sandbox');
+        }else{
+            return Mage::getStoreConfig('straker/api_url/translate');
+        }
     }
 
     protected  function _getQuoteUrl(){

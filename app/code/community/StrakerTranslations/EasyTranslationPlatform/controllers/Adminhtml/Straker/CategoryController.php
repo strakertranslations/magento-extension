@@ -8,6 +8,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
 
     protected function _initAction()
     {
+        $this->checkSiteMode();
+
         $this
             ->loadLayout()
             ->_setActiveMenu('straker/job')
@@ -18,6 +20,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
 
     protected function _initNewAction()
     {
+        $this->checkSiteMode();
+
         $this
             ->loadLayout()
             ->_setActiveMenu('straker/new')
@@ -205,5 +209,11 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
             return;
         }
 
+    }
+
+    private function checkSiteMode(){
+        /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        $helper->checkSiteMode();
     }
 }

@@ -17,10 +17,16 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
 
     public function indexAction(){
 
+        /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        $helper->checkSiteMode();
+
         //todo refresh all jobs that is waiting on a quote. This should be refactored into different process.
+        /** @var $collection StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Collection */
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job')
             ->getCollection()
             ->addFieldToFilter('status_id', array('lt' => 4));
+
         foreach($collection as $job){
             $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($job->getId());
             if ( $job->updateTranslation() ){

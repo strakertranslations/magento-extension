@@ -11,6 +11,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Grid exten
     }
 
     protected function _prepareCollection() {
+        /** @var $collection StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Collection*/
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job')->getCollection();
 
         foreach($collection as $jobModel){
@@ -19,8 +20,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Grid exten
             }
         }
 
-
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job')->getCollection();
+
+        /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        if($helper->isSandboxMode()){
+            $collection->addFieldToFilter('is_test_job', ['eq' => true]);
+        }else{
+            $collection->addFieldToFilter('is_test_job', ['eq' => false]);
+        }
 
         $collection->getSelect()->joinLeft(
             Mage::getSingleton('core/resource')->getTableName('strakertranslations_easytranslationplatform/job_type'),

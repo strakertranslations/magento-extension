@@ -58,4 +58,31 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Data extends Mage_Core_
         }
         return $message;
     }
+
+    public function isSandboxMode(){
+        return (Mage::getStoreConfig('straker/general/site_mode') == 0);
+    }
+
+    public function getSandboxMessage(){
+        return
+            '<p>
+                <h1>Sandbox Mode Enabled.</h1>
+             </p>
+             <p>
+                Thank you for installing our plugin. We have enabled the Sandbox testing mode for you. Jobs you create while this is enabled
+                will not be received by Straker Translations, and content will not be translated by a human - rather it will only be sample 
+                text. To change the Sandbox Mode, go to 
+                    <a href="'. Mage::helper('adminhtml')->getUrl('adminhtml/system_config/edit', ['section' => 'straker']).'">Straker Configuration</a>
+             </p>';
+    }
+
+    public function checkSiteMode(){
+        if($this->isSandboxMode()){
+            Mage::getSingleton('adminhtml/session')->addNotice($this->getSandboxMessage());
+        }
+    }
+
+    public function clearSiteMode(){
+        return Mage::getModel('core/config')->deleteConfig('straker/general/site_mode', 'default', 0);
+    }
 }

@@ -1,5 +1,7 @@
 <?php
-Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewController extends Mage_Adminhtml_Controller_Action{
+
+Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewController extends Mage_Adminhtml_Controller_Action
+{
     protected function _isAllowed()
     {
         return Mage::getSingleton('admin/session')->isAllowed('admin/straker/new');
@@ -9,84 +11,87 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
     {
         $this
             ->loadLayout()
-            ->_setActiveMenu('straker/new')
-        ;
+            ->_setActiveMenu('straker/new');
         $this->_title($this->__('Create New Job'));
         return $this;
     }
 
-    public function accountAction(){
+    public function accountAction()
+    {
         $this->_redirectUrl("https://myaccount.strakertranslations.com/");
     }
 
-    public function termsAction(){
+    public function termsAction()
+    {
         $this->_redirectUrl("https://www.strakertranslations.com/about-us/terms-and-conditions-of-service.cfm");
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
         $params = $this->getRequest()->getParams();
-        if (Mage::helper('strakertranslations_easytranslationplatform')->getAppKey() === false || Mage::helper('strakertranslations_easytranslationplatform')->getAccessToken() === false){
+        if (Mage::helper('strakertranslations_easytranslationplatform')->getAppKey() === false || Mage::helper('strakertranslations_easytranslationplatform')->getAccessToken() === false) {
             return $this->_initAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_register'))
                 ->renderLayout();
-        }
-        elseif (empty($params['store'])){
+        } elseif (empty($params['store'])) {
+            $this->checkSiteMode();
             return $this->_initAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_selectstore'))
                 ->renderLayout();
-        }
-        elseif ( Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($params['store']) === false
-    ){
+        } elseif (Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($params['store']) === false ) {
+            $this->checkSiteMode();
             return $this->_initAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_setupstore', 'strakertranslations_easytranslationplatform_new_setupstore', array('setup_store_id' => $params['store'])))
+                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_setupstore',
+                    'strakertranslations_easytranslationplatform_new_setupstore', array('setup_store_id' => $params['store'])))
                 ->renderLayout();
-        }
-        else{
+        } else {
+            $this->checkSiteMode();
             return $this->_initAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_type','strakertranslations_easytranslationplatform_new_type',array('setup_store_id' => $params['store'])))
+                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_type', 'strakertranslations_easytranslationplatform_new_type',
+                    array('setup_store_id' => $params['store'])))
                 ->renderLayout();
         }
     }
 
-    public function registerAction(){
+    public function registerAction()
+    {
 
         $data = $this->getRequest()->getPost();
-        if (array_key_exists('form_key', $data)){
+        if (array_key_exists('form_key', $data)) {
             unset($data['form_key']);
         }
         if ($data['first_name'] && $data['last_name'] && $data['email'] && $data['terms']) {
-            if ($data['company'] == ''){
-                $data['company'] = $data['first_name'] .' '. $data['last_name'];
+            if ($data['company'] == '') {
+                $data['company'] = $data['first_name'] . ' ' . $data['last_name'];
             }
             $apiModel = Mage::getModel('strakertranslations_easytranslationplatform/api');
             $response = $apiModel->callRegister($data);
-            if($response->access_token && $response->application_key) {
+            if ($response->access_token && $response->application_key) {
                 $apiModel->saveAccessToken($response->access_token);
                 $apiModel->saveAppKey($response->application_key);
                 Mage::app()->getCacheInstance()->cleanType('config');
                 Mage::getSingleton('adminhtml/session')->addSuccess('Registration success.');
-            }
-            elseif($response->magentoMessage){
+            } elseif ($response->magentoMessage) {
                 Mage::getSingleton('adminhtml/session')->addError($response->magentoMessage);
-            }
-            else{
+            } else {
                 Mage::getSingleton('adminhtml/session')->addError('Registration unsuccessful.');
             }
         }
         $this->_redirect('*/*/');
     }
 
-    public function selectstoreAction(){
+    public function selectstoreAction()
+    {
         $store = $this->getRequest()->getParam('store');
-        if($store){
+        if ($store) {
             $this->_redirect('*/*/', array('store' => $store));
-        }
-        else {
+        } else {
             $this->_redirect('*/*/');
         }
     }
 
-    public function setupstoreAction(){
+    public function setupstoreAction()
+    {
         $data = $this->getRequest()->getParams();
         if ($data['store'] && $data['source'] && $data['from'] && $data['to']) {
             /** @var $session Mage_Admin_Model_Session */
@@ -95,12 +100,11 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
                 //save the source, language from and to in stystem config
                 $helper = Mage::helper('strakertranslations_easytranslationplatform');
 
-                if ($helper->saveStoreSetup($data['store'], $data['source'], $data['from'], $data['to']) !== false ){
+                if ($helper->saveStoreSetup($data['store'], $data['source'], $data['from'], $data['to']) !== false) {
                     Mage::app()->getCacheInstance()->cleanType('config');
                     $this->_redirect('*/*/', array('store' => $data['store']));
                     return;
-                }
-                else {
+                } else {
                     Mage::throwException(Mage::helper('strakertranslations_easytranslationplatform')->__('Unable to save store configurations.'));
                 }
             } catch (Exception $e) {
@@ -121,11 +125,12 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
             $apiModel->saveAccessToken('');
             $apiModel->saveAppKey('');
-
+            /** @var StrakerTranslations_EasyTranslationPlatform_Helper_Data $helper */
             $helper = Mage::helper('strakertranslations_easytranslationplatform');
             foreach (Mage::app()->getStores() as $store) {
                 $helper->saveStoreSetup($store->getId(), '', '', '');
             }
+            $helper->clearSiteMode();
             Mage::app()->getCacheInstance()->cleanType('config');
             $session->addSuccess('Straker Settings has been cleared.');
 
@@ -177,29 +182,29 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
             $writeConnection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
-            if ($writeConnection->query("SELECT 1 FROM catalog_product_entity_varchar_back LIMIT 1")){
+            if ($writeConnection->query("SELECT 1 FROM catalog_product_entity_varchar_back LIMIT 1")) {
 
                 $sql = 'DELETE FROM straker_job';
                 $writeConnection->query($sql);
 
-            $sql = 'TRUNCATE catalog_product_entity_varchar; INSERT INTO catalog_product_entity_varchar SELECT * FROM catalog_product_entity_varchar_back;';
+                $sql = 'TRUNCATE catalog_product_entity_varchar; INSERT INTO catalog_product_entity_varchar SELECT * FROM catalog_product_entity_varchar_back;';
 
-            $writeConnection->query($sql);
+                $writeConnection->query($sql);
 
-            $sql = 'TRUNCATE catalog_product_entity_text; INSERT INTO catalog_product_entity_text SELECT * FROM catalog_product_entity_text_back;';
+                $sql = 'TRUNCATE catalog_product_entity_text; INSERT INTO catalog_product_entity_text SELECT * FROM catalog_product_entity_text_back;';
 
-            $writeConnection->query($sql);
+                $writeConnection->query($sql);
 
-            $sql = 'TRUNCATE catalog_category_entity_varchar; INSERT INTO catalog_category_entity_varchar SELECT * FROM catalog_category_entity_varchar_back;';
+                $sql = 'TRUNCATE catalog_category_entity_varchar; INSERT INTO catalog_category_entity_varchar SELECT * FROM catalog_category_entity_varchar_back;';
 
-            $writeConnection->query($sql);
+                $writeConnection->query($sql);
 
-            $sql = 'TRUNCATE catalog_category_entity_text; INSERT INTO catalog_category_entity_text SELECT * FROM catalog_category_entity_text_back;';
+                $sql = 'TRUNCATE catalog_category_entity_text; INSERT INTO catalog_category_entity_text SELECT * FROM catalog_category_entity_text_back;';
 
-            $writeConnection->query($sql);
+                $writeConnection->query($sql);
 
-            $session->addSuccess('product and category entity tables has been restored ');
-                }
+                $session->addSuccess('product and category entity tables has been restored ');
+            }
 
         } catch (Exception $e) {
             $session->addError($e->getMessage());
@@ -209,20 +214,26 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
     }
 
 
-    public function resetStoreSettingsAction(){
+    public function resetStoreSettingsAction()
+    {
         $storeId = $this->getRequest()->getParam('store');
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $session = Mage::getSingleton('adminhtml/session');
 
-        if($helper->getStoreSetup($storeId)){
+        if ($helper->getStoreSetup($storeId)) {
             $helper->saveStoreSetup($storeId, '', '', '');
             $session->addSuccess($this->__('Language settings has been reset.'));
-        }
-        else{
+        } else {
             $session->addError($this->__('Store code is not valid.'));
         }
         $this->_redirect('adminhtml/system_config/edit/section/straker');
         return;
+    }
+
+    private function checkSiteMode(){
+        /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        $helper->checkSiteMode();
     }
 
 }
