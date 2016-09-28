@@ -62,7 +62,7 @@
 
                 if(response['store-data'].length < 1 || response['store-data']['straker/general/destination_language'].length < 1)
                 {
-                    $('select[name="magento_destination_store"]').val(destination_storeId).prop('disabled',true);
+                    $('select[name="magento_destination_store"]').val(destination_storeId).attr('readonly',true);
                     $('select[name="straker_target_language"]').val('');
                     $('select[name="magento_source_store"]').val('');
                     $('select[name="straker_source_language"]').val('');
