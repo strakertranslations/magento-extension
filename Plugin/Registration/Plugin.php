@@ -34,7 +34,6 @@ class Plugin
         RequestInterface $request
     )
     {
-        $this->_cache->clean(Config::CACHE_TAG);
 
         if(!$this->_configHelper->getAccessToken()){
 

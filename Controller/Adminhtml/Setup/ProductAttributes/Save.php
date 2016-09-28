@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\ProductAttributes;
 
+use Magento\Framework\Config\CacheInterface;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
