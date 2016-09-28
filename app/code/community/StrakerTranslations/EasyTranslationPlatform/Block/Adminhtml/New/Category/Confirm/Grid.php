@@ -23,6 +23,32 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
     {
         return $this;
     }
+//    protected function _prepareCollection()
+//    {
+//        $collection = Mage::getModel('catalog/category')->getCollection()
+//            ->addAttributeToSelect('path')
+//            ->addAttributeToSelect('name');
+//        $collection->addAttributeToFilter('entity_id', array('in' => $this->getCategory()));
+//
+//        foreach ($this->getAttrArray() as $attr){
+//            $collection->addAttributeToSelect($attr);
+//        }
+//
+//        //join straker job product table to get version for each product
+//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+//        $collection->getSelect()->joinLeft(
+//            $prefix.'straker_job_category',
+//            $prefix.'straker_job_category.category_id = e.entity_id',
+//            'version'
+//        );
+//
+//        $this->setCollection($collection);
+//
+//        parent::_prepareCollection();
+////        $this->getCollection()->addWebsiteNamesToResult();
+//        return $this;
+//    }
+
     protected function _prepareCollection()
     {
         $collection = Mage::getModel('catalog/category')->getCollection()
@@ -34,11 +60,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
             $collection->addAttributeToSelect($attr);
         }
 
+        $strakerJobCategoryTable = $collection->getResource()->getTable('straker_job_category');
+
         //join straker job product table to get version for each product
-        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $collection->getSelect()->joinLeft(
-            $prefix.'straker_job_category',
-            $prefix.'straker_job_category.category_id = e.entity_id',
+            ['a' => $strakerJobCategoryTable ],
+            'a.category_id = e.entity_id AND a.version = 1',
             'version'
         );
 
