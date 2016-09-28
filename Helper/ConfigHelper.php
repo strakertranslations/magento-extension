@@ -122,17 +122,17 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getDefaultAttributes(){
-        $return = $this->scopeConfig->getValue('straker_config/attribute/product_default');
+        $return = $this->scopeConfig->getValue('straker_config/attribute/product_default', 'default', 0);
         return  empty( $return ) ? [] : explode(',', $return);
     }
 
     public function getCustomAttributes(){
-        $return = $this->scopeConfig->getValue('straker_config/attribute/product_custom');
+        $return = $this->scopeConfig->getValue('straker_config/attribute/product_custom', 'default', 0);
         return  empty( $return ) ? [] : explode(',', $return);
     }
 
     public function getCategoryAttributes(){
-        $return =  $this->scopeConfig->getValue('straker_config/attribute/category');
+        $return =  $this->scopeConfig->getValue('straker_config/attribute/category', 'default', 0);
         return  empty( $return ) ? [] : explode(',', $return);
     }
 
