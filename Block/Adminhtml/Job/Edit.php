@@ -39,11 +39,10 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
 
         $this->buttonList->add('Next',[
             'label' => __('Next'),
-            'class'=>'action-default scalable next'
+            'class'=>'primary'
         ]);
 
         $this->buttonList->update('save', 'label', __('Create Job'));
-
         $this->buttonList->remove('reset');
         $this->buttonList->remove('back');
 
