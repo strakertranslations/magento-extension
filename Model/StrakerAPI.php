@@ -9,7 +9,6 @@ use Exception;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
-use Straker\EasyTranslationPlatform\Model\Error;
 
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -42,7 +41,6 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     protected $_configHelper;
     protected $_configModel;
     protected $_httpClient;
-    protected $_errorManager;
     protected $_storeManager;
 
     public function __construct(
@@ -52,8 +50,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         Config $configModel,
         ZendClientFactory $httpClient,
         Logger $logger,
-        StoreManagerInterface $storeManagerInterface,
-        Error $error
+        StoreManagerInterface $storeManagerInterface
     )
     {
         parent::__construct( $context, $registry );
@@ -62,7 +59,6 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $this->_httpClient = $httpClient;
         $this->_logger = $logger;
         $this->_storeManager = $storeManagerInterface;
-        $this->_errorManager = $error;
 //        $this->_storeId = ($this->getStore()) ? $this->getStore() : 0;
 //        $this->_init('strakertranslations_easytranslationplatform/api');
 //        $this->_headers[] = 'Authorization: Bearer '. Mage::getStoreConfig('straker/general/access_token', $this->_storeId);
@@ -220,21 +216,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     public function callRegister($data){
 
-        try{
-
-            return $this->_call($this->_getRegisterUrl(), 'post', $data);
-
-        }catch (\Exception $e){
-
-            $this->_logger->error('error'.__FILE__.' '.__LINE__.'', array($e));
-
-            $this->_errorManager->_errorMessage = 'There was an error registering your details';
-
-            $this->_errorManager->_error = true;
-
-            return $this->_errorManager;
-        }
-
+        return $this->_call($this->_getRegisterUrl(), 'post', $data);
     }
 
     public function callTranslate($data){

@@ -11,7 +11,6 @@ use Magento\Store\Model\Data\StoreConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
-use Straker\EasyTranslationPlatform\Model\Error;
 use \Straker\EasyTranslationPlatform\Helper\Data;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Store\Model\StoreManagerInterface;
@@ -21,7 +20,6 @@ class Setup extends AbstractModel implements SetupInterface
 {
     protected $_configModel;
     protected $_storeManager;
-    protected $_errorManager;
     protected $_resourceConnection;
     protected $_dataHelper;
 
@@ -31,147 +29,70 @@ class Setup extends AbstractModel implements SetupInterface
         Config $config,
         StoreManagerInterface $storeManagerInterface,
         ResourceConnection $resourceConnection,
-        Data $dataHelper,
-        Error $error
+        Data $dataHelper
     ) {
         $this->_configModel = $config;
         $this->_storeManager = $storeManagerInterface;
         $this->_resourceConnection = $resourceConnection;
         $this->_dataHelper = $dataHelper;
-        $this->_errorManager = $error;
         parent::__construct($context, $registry);
     }
 
     public function saveClientData($data)
     {
+        $this->_configModel->SaveConfig('straker/general/name', $data['first_name'] . ' ' . $data['last_name'], 'default', 0);
 
-        try {
+        $this->_configModel->SaveConfig('straker/general/email', $data['email'], 'default', 0);
 
-            $this->_configModel->SaveConfig('straker/general/name', $data['first_name'] . ' ' . $data['last_name'], 'default', 0);
+        $this->_configModel->SaveConfig('straker/general/url', $data['url'], 'default', 0);
 
-            $this->_configModel->SaveConfig('straker/general/email', $data['email'], 'default', 0);
+        return $this->_configModel;
 
-            $this->_configModel->SaveConfig('straker/general/url', $data['url'], 'default', 0);
-
-            $this->_errorManager->_error = false;
-
-            return $this->_errorManager;
-
-        } catch (Exception $e) {
-
-            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__, array($e));
-
-            $this->_errorManager->_errorMessage = 'There was an error saving your details';
-
-            $this->_errorManager->_error = true;
-
-            return $this->_errorManager;
-
-        }
     }
 
     public function saveAppKey($appKey)
     {
 
-        try {
+        $this->_configModel->SaveConfig('straker/general/application_key', $appKey, 'default', 0);
 
-            $this->_configModel->SaveConfig('straker/general/application_key', $appKey, 'default', 0);
+        return $this->_configModel;
 
-            $this->_errorManager->_error = false;
-
-            return $this->_errorManager;
-
-        } catch (Exception $e) {
-
-            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__, array($e));
-
-            $this->_errorManager->_errorMessage = 'There was an error saving your application key';
-
-            $this->_errorManager->_error = true;
-
-            return $this->_errorManager;
-
-        }
     }
 
     public function saveAccessToken($accessToken)
     {
 
-        try {
+       $this->_configModel->SaveConfig('straker/general/access_token', $accessToken, 'default', 0);
 
-            $this->_configModel->SaveConfig('straker/general/access_token', $accessToken, 'default', 0);
-
-            $this->_errorManager->_error = false;
-
-            return $this->_errorManager;
-
-        } catch (Exception $e) {
-
-            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__, array($e));
-
-            $this->_errorManager->_errorMessage = 'There was an error saving your access token';
-
-            $this->_errorManager->_error = true;
-
-            return $this->_errorManager;
-
-        }
+        return $this->_configModel;
     }
 
     public function saveStoreSetup($scopeId, $source_store, $source_language, $destination_language)
     {
 
-        try {
+        $this->_configModel->SaveConfig('straker/general/source_store', $source_store, ScopeInterface::SCOPE_STORES, $scopeId);
+        $this->_configModel->SaveConfig('straker/general/source_language', $source_language, ScopeInterface::SCOPE_STORES, $scopeId);
+        $this->_configModel->SaveConfig('straker/general/destination_language', $destination_language, ScopeInterface::SCOPE_STORES, $scopeId);
 
-            $this->_configModel->saveConfig('straker/general/source_store', $source_store, ScopeInterface::SCOPE_STORES, $scopeId);
-            $this->_configModel->SaveConfig('straker/general/source_language', $source_language, ScopeInterface::SCOPE_STORES, $scopeId);
-            $this->_configModel->SaveConfig('straker/general/destination_language', $destination_language, ScopeInterface::SCOPE_STORES, $scopeId);
+        return $this->_configModel;
 
-            $this->_errorManager->_error = false;
-
-            return $this->_errorManager;
-
-        } catch (Exception $e) {
-
-            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__, array($e));
-
-            $this->_errorManager->_errorMessage = 'There was an error saving Language Pairs';
-
-            $this->_errorManager->_error = true;
-
-            return $this->_errorManager;
-        }
     }
 
     public function saveProductAttributes($attributes)
     {
 
-        try {
+        if (!empty($attributes['custom'])) {
 
-            if (!empty($attributes['custom'])) {
-
-                $this->_configModel->SaveConfig('straker_config/attribute/product_custom', $attributes['custom'], 'default', 0);
-            }
-
-            if (!empty($attributes['default'])) {
-
-                $this->_configModel->SaveConfig('straker_config/attribute/product_default', $attributes['default'], 'default', 0);
-            }
-
-            $this->_errorManager->_error = false;
-
-            return $this->_errorManager;
-
-        } catch (Exception $e) {
-
-            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__, array($e));
-
-            $this->_errorManager->_errorMessage = 'There was an error saving Product Attributes';
-
-            $this->_errorManager->_error = true;
-
-            return $this->_errorManager;
+            $this->_configModel->SaveConfig('straker_config/attribute/product_custom', $attributes['custom'], 'default', 0);
         }
+
+        if (!empty($attributes['default'])) {
+
+            $this->_configModel->SaveConfig('straker_config/attribute/product_default', $attributes['default'], 'default', 0);
+        }
+
+        return $this->_configModel;
+
     }
 
     public function clearTranslations($storeId = null)
@@ -287,9 +208,12 @@ class Setup extends AbstractModel implements SetupInterface
     }
 
     protected function clearDefaultAttributeSettings(){
+
         $this->_configModel->saveConfig('straker_config/attribute/product_custom', '', 'default', 0);
         $this->_configModel->saveConfig('straker_config/attribute/product_default',  '', 'default', 0);
         $this->_configModel->saveConfig('straker_config/attribute/category','', 'default', 0);
+
+        return  $this->_configModel;
     }
 
     /**
@@ -301,6 +225,9 @@ class Setup extends AbstractModel implements SetupInterface
     }
 
     public function deleteSandboxSetting(){
+
         $this->_configModel->deleteConfig('straker_config/env/sandbox', 'default', 0);
+
+        return  $this->_configModel;
     }
 }

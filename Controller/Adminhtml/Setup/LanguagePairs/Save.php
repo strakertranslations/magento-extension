@@ -3,7 +3,6 @@
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\LanguagePairs;
 
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
-use Straker\EasyTranslationPlatform\Model\Error;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 
 use Magento\Framework\App\Action\Context;
@@ -14,7 +13,6 @@ class Save extends \Magento\Backend\App\Action
     public function __construct(
         Context $context,
         SetupInterface $setupInterface,
-        Error $error,
         Logger $logger
     )
     {
@@ -22,7 +20,6 @@ class Save extends \Magento\Backend\App\Action
         parent::__construct($context);
 
         $this->_setup = $setupInterface;
-        $this->_errorManager = $error;
         $this->_logger = $logger;
     }
 
@@ -46,19 +43,7 @@ class Save extends \Magento\Backend\App\Action
 
                 }
 
-                if($this->_errorManager->_error){
-
-                    $this->_getSession()->setFormData($data);
-
-                    $resultRedirect->setPath('*/*/index/');
-
-                    $this->messageManager->addError($this->_errorManager->getErrorMessage());
-
-                }else{
-
-                    $resultRedirect->setPath('/Setup_productattributes/index/');
-
-                }
+                $resultRedirect->setPath('/Setup_productattributes/index/');
 
                 return $resultRedirect;
 
