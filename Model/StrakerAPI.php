@@ -245,26 +245,42 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     }
 
     public function getCountries(){
-        $countriesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'countries.json';
-        if(file_exists( $countriesFilePath )){
-            $result = json_decode(file_get_contents($countriesFilePath));
+        $filePath = $this->_configHelper->getDataFilePath();
+        $fileName = 'countries.json';
+
+        if(!file_exists($filePath)){
+            mkdir($filePath, 0777, true );
+        }
+
+        $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
+
+        if(file_exists( $fileFullPath )){
+            $result = json_decode(file_get_contents($fileFullPath));
         }else{
             $result = $this->_call($this->_getCountriesUrl());
             if(!empty($result)){
-                file_put_contents( $countriesFilePath, json_encode($result) );
+                file_put_contents( $fileFullPath, json_encode($result) );
             }
         }
         return isset( $result->country ) ?  $result->country : [];
     }
 
     public function getLanguages(){
-        $languagesFilePath = $this->_configHelper->getDataFilePath().DIRECTORY_SEPARATOR.'languages.json';
-        if(file_exists( $languagesFilePath )){
-            $result = json_decode(file_get_contents($languagesFilePath));
+        $filePath = $this->_configHelper->getDataFilePath();
+        $fileName = 'languages.json';
+
+        if(!file_exists($filePath)){
+            mkdir($filePath, 0777, true );
+        }
+
+        $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
+
+        if(file_exists( $fileFullPath )){
+            $result = json_decode(file_get_contents($fileFullPath));
         }else{
             $result = $this->_call($this->_getLanguagesUrl());
             if(!empty($result)) {
-                file_put_contents($languagesFilePath, json_encode($result));
+                file_put_contents($fileFullPath, json_encode($result));
             }
         }
         return isset( $result->languages ) ? $result->languages : [];
@@ -280,14 +296,14 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
                 if($langCodes == $code){
 
-                    $native_name = $val->native_name;
+                    $languageName = $val->name;
 
                     break;
                 }
             }
         }
 
-        return $native_name;
+        return $languageName;
 
     }
 

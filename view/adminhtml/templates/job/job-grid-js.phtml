@@ -54,7 +54,7 @@
 
                     // if( jobId ){
                     if ($(this).hasClass('straker-job-view-anchor')) {
-                        console.log('view job for ' + jobKey);
+//                        console.log('view job for ' + jobKey);
                         $.ajax({
                             url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob'); ?>',
                             data: {job_key: jobKey},
@@ -66,7 +66,7 @@
                                     quoteFrame.load();
                                     jobGrid.hide();
                                     quoteDiv.show();
-                                    console.log(response);
+//                                    console.log(response);
                                 }
                             }
 
@@ -77,7 +77,7 @@
                         var viewJobId = $(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text();
                         loadingMask.show();
                         var quoteFrame = quoteDiv.find('iframe');
-                        console.log($(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text());
+//                        console.log($(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text());
                         $.ajax({
                             url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/ViewQuote'); ?>',
                             data: { job_id: viewJobId },
@@ -91,7 +91,7 @@
                                         quoteDiv.show();
                                     });
 
-                                    console.log(response);
+//                                    console.log(response);
                                 }
                             }
 
@@ -99,7 +99,7 @@
                     }
 
                     if ($(this).hasClass('straker-job-confirm-anchor')) {
-                        console.log('confirm job for ' + jobKey);
+//                        console.log('confirm job for ' + jobKey);
                     }
 
                     if ($(this).hasClass('straker-job-refresh-anchor')) {
@@ -111,7 +111,7 @@
                         }).done(function (data, textStatus ) {
                             loadingMask.hide();
                             if ( textStatus == 'success' && data.status) {
-                                console.log(data);
+//                                console.log(data);
                                 confirm({
                                     title: '<?php echo __("Please Confirm") ?>',
                                     content: '<?php echo __('The job have a new status, please refresh the page by pressing [OK]') ?>',

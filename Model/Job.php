@@ -236,7 +236,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                         $fileContent = $this->_strakerApi->getTranslatedFile( $downloadUrl );
                         $filePath = $this->_importHelper->configHelper->getTranslatedXMLFilePath();
                         if( !file_exists( $filePath )){
-                            mkdir( $filePath);
+                            mkdir( $filePath, 0777, true );
                         }
                         $fileNameArray = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
                         $fileFullName = implode(DIRECTORY_SEPARATOR, $fileNameArray);

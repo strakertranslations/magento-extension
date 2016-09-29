@@ -175,15 +175,23 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getOriginalXMLFilePath(){
-        return $this->getDataFilePath().DIRECTORY_SEPARATOR.'Original';
+        return $this->getJobsFilePath().DIRECTORY_SEPARATOR.'original';
     }
 
     public function getTranslatedXMLFilePath(){
-        return $this->getDataFilePath().DIRECTORY_SEPARATOR.'Translated';
+        return $this->getJobsFilePath().DIRECTORY_SEPARATOR.'translated';
     }
 
     public function getDataFilePath(){
-        return $this->_directoryList->getPath('app').DIRECTORY_SEPARATOR.'code/Straker/EasyTranslationPlatform/Api/Data';
+        return $this->getStrakerPath(). DIRECTORY_SEPARATOR . 'data';
+    }
+
+    public function getJobsFilePath(){
+        return $this->getStrakerPath().DIRECTORY_SEPARATOR.'jobs';
+    }
+
+    public function getStrakerPath(){
+        return $this->_directoryList->getPath('var').DIRECTORY_SEPARATOR.'straker';
     }
 
     public function isSandboxMode(){

@@ -18,9 +18,9 @@ class ViewQuote extends Template
         parent::__construct($context, $data);
     }
 
-    public function getQuoteFrameHtml(){
-        var_dump( $this->_coreRegistry->registry('quote_url') );
-        exit();
-
-    }
+//    public function getQuoteFrameHtml(){
+//        var_dump( $this->_coreRegistry->registry('quote_url') );
+//        exit();
+//
+//    }
 }
