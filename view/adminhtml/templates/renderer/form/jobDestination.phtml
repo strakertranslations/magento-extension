@@ -35,19 +35,33 @@
             <div class="note"><?php echo __('Translations will be imported into this store')?></div>
         </div>
     </div>
+
+    <div id="straker_target_language" class="field field-tax_class_id">
+        <label class="label" for="target_language">
+            <span>Target Language</span>
+        </label>
+        <div class="control">
+            <select name="straker_target_language" class="select admin__control-select">
+                <option value=""><?php echo __('Select target language') ?></option>
+                <?php foreach ($block->getOptions() as $languages): ?>
+                    <option value="<?php echo $languages->code ?>">
+                        <?php echo $languages->name ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+            <div class="note"><?php echo __('The target language is the language of the target view')?></div>
+        </div>
+    </div>
+
 </div>
 
 <div id="destination-picker" class="fieldset-wrapper straker" style="display:none">
     <div>
         <h2>Select your Languages Pairs</h2>
-        <p>Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each<br>Store View.</p>
+        <p>Select your Source Store and language for your Target Store. This is a one time setup process for each<br>Store View.</p>
     </div>
     <div id="source_content">
         <div class="fieldset-wrapper straker-source">
-            <div>
-                <h2>Source</h2>
-                <p>Where would you like us to take your content from?</p>
-            </div>
             <div id="attribute-tax_class_id-container" class="field field-tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-form-field-tax-class-id" data-attribute-code="tax_class_id">
                 <label class="label" for="Source_store">
                     <span>Source Store View</span>
@@ -100,10 +114,6 @@
         </div>
 
         <div class="fieldset-wrapper straker-source">
-            <div>
-                <h2>Destination Store View</h2>
-                <p>Which language would you like us to use to translate the content for the destination store?</p>
-            </div>
             <div class="field field-tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-form-field-tax-class-id" data-attribute-code="tax_class_id" style="display:none">
                 <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span>Target Store View</span></label>
                 <div class="control">
@@ -136,22 +146,6 @@
                 </div>
             </div>
 
-            <div id="straker_target_language" class="field field-tax_class_id">
-                <label class="label" for="target_language">
-                    <span>Target Language</span>
-                </label>
-                <div class="control">
-                    <select name="straker_target_language" class="select admin__control-select">
-                        <option value=""><?php echo __('Select target language') ?></option>
-                        <?php foreach ($block->getOptions() as $languages): ?>
-                            <option value="<?php echo $languages->code ?>">
-                                <?php echo $languages->name ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                    <div class="note"><?php echo __('The target language is the language of the target view')?></div>
-                </div>
-            </div>
         </div>
 
     </div>

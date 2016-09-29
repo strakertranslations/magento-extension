@@ -34,6 +34,7 @@ use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeOptionTranslati
 
 class ImportHelper extends AbstractHelper
 {
+    /** @var $this->configHelper \Straker\EasyTranslationPlatform\Helper\ConfigHelper */
     public $configHelper;
 
     protected $_logger;
