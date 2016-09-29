@@ -227,10 +227,8 @@ div.fieldset-wrapper.straker p{
 }
 
 #source_content div.fieldset-wrapper.straker-source{
-    padding: 2em 2em 1em 2em;
-    border-right: none;
-    border-left: none;
-    border-bottom: none;
+    padding: 0 2em;
+    border: none;
 }
 
 #source_content div.fieldset-wrapper.straker-source h2{
