@@ -49,69 +49,71 @@ class BackupProductData extends Action
 
         $result = [ 'Success' => false, 'Message' => ''];
         $isNoError = true;
+        $siteVersion = $this->_configHelper->getVersion();
 
-        if( !isset($this->_connection) ){
-            $this->_connection = $this->_resourceConnection->getConnection();
-        }
+        if(strcasecmp($siteVersion, 'live') !== 0){
+            if( !isset($this->_connection) ){
+                $this->_connection = $this->_resourceConnection->getConnection();
+            }
 
-        try{
-            foreach ($this->_dataHelper->getMagentoDataTableArray() as $productTableName ){
-                $memTable = '';
-                $productTableName = $this->_resourceConnection->getTableName($productTableName);
+            try{
+                foreach ($this->_dataHelper->getMagentoDataTableArray() as $productTableName ){
+                    $memTable = '';
+                    $productTableName = $this->_resourceConnection->getTableName($productTableName);
 
-                if( $this->_connection->isTableExists( $productTableName )){
-                    $backupTableName = $this->_dataHelper->getBackupTableNames( $productTableName );
+                    if( $this->_connection->isTableExists( $productTableName )){
+                        $backupTableName = $this->_dataHelper->getBackupTableNames( $productTableName );
 
-                    //if new table exists with data, it should be truncated. Otherwise, create it.
-                    if( $this->_connection->isTableExists( $backupTableName )){
-                        $this->_connection->truncateTable( $backupTableName );
-                    }else{
-                        //create a Table instance in memory, the structure is same as product table
-                        $memTable = $this->_connection->createTableByDdl($productTableName, $backupTableName);
-                        //create table in database and return a boolean value by comparing with the no error code
-                        $isNoError = ( $this->_connection->createTable($memTable)->errorCode() === \Zend_Db::ERR_NONE );
-                    }
-
-                    if( $isNoError ){
-                        if( $memTable instanceof Table){
-                            foreach ($memTable->getForeignKeys() as $foreignKey){
-                                $this->_connection->dropForeignKey($backupTableName, $foreignKey['FK_NAME']);
-                            }
+                        //if new table exists with data, it should be truncated. Otherwise, create it.
+                        if( $this->_connection->isTableExists( $backupTableName )){
+                            $this->_connection->truncateTable( $backupTableName );
+                        }else{
+                            //create a Table instance in memory, the structure is same as product table
+                            $memTable = $this->_connection->createTableByDdl($productTableName, $backupTableName);
+                            //create table in database and return a boolean value by comparing with the no error code
+                            $isNoError = ( $this->_connection->createTable($memTable)->errorCode() === \Zend_Db::ERR_NONE );
                         }
 
-                        //generating sql statement for insert into ... select
-                        $sql = $this->_connection->insertFromSelect(
-                            $this->_connection
-                                ->select()
-                                ->from( $productTableName ),
-                            $backupTableName
-                        );
+                        if( $isNoError ){
+                            if( $memTable instanceof Table){
+                                foreach ($memTable->getForeignKeys() as $foreignKey){
+                                    $this->_connection->dropForeignKey($backupTableName, $foreignKey['FK_NAME']);
+                                }
+                            }
 
-                        $return = $this->_connection->query( $sql );
+                            //generating sql statement for insert into ... select
+                            $sql = $this->_connection->insertFromSelect(
+                                $this->_connection
+                                    ->select()
+                                    ->from( $productTableName ),
+                                $backupTableName
+                            );
 
-                        if( $return->errorCode() === \Zend_Db::ERR_NONE ){
-                            $result['Success'] = true;
+                            $return = $this->_connection->query( $sql );
+
+                            if( $return->errorCode() === \Zend_Db::ERR_NONE ){
+                                $result['Success'] = true;
+                            }else{
+                                $result['Message'] = join("|", $return->errorInfo()) ;
+                                $this->_messageManager->addErrorMessage( $result['Message']);
+                                break;
+                            }
+
                         }else{
-                            $result['Message'] = join("|", $return->errorInfo()) ;
+                            $result['Message'] = 'Failed to create backup table.';
                             $this->_messageManager->addErrorMessage( $result['Message']);
                             break;
                         }
-
-                    }else{
-                        $result['Message'] = 'Failed to create backup table.';
-                        $this->_messageManager->addErrorMessage( $result['Message']);
-                        break;
                     }
-                }
 
+                }
+            }catch(Exception $e){
+                $result['Message'] = $e->getMessage();
+                throw $e;
             }
-        }catch(Exception $e){
-            $result['Message'] = $e->getMessage();
-            throw $e;
         }
 
         return $result;
-
     }
 
     public function execute()

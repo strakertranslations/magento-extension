@@ -66,7 +66,7 @@ class XmlHelper extends AbstractHelper
         $flag = true;
 
         if( !file_exists( $this->_xmlFilePath ) ){
-            $flag = mkdir( $this->_xmlFilePath );
+            $flag = mkdir( $this->_xmlFilePath, 0777, true );
         }
 
         if( !$flag ) {
