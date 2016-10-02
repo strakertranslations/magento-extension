@@ -1,41 +1,15 @@
-# AdminSample module
+# Straker Translations Magento 2 Extension
+![alt text]( https://www.strakertranslations.com/wp-content/themes/strakertranslations/dist/images/logo.png "Straker Translations")
+[Straker Translations](https://www.strakertranslations.com/website-translation-and-localization/translation-api/)
 
-* To add a menu/sub-menu, check out the following files:
-  * `etc/adminhtml/menu.xml`
-  * `etc/adminhtml/routes.xml`
-* To bind a page to those submenus, check out the following files:
-  * You will notice the path to look like the action parameter from `etc/adminhtml/menu.xml`
-  * `Controller/Adminhtml/SampleOne/Index.php`
-  * `Controller/Adminhtml/SampleTwo/Index.php`
-* To add content to your freshly created pages, check out the following files:
-  * `view/adminhtml/layout/adminsample_sampleone_index.xml`
-  * `view/adminhtml/templates/sample/one.phtml`
-* To add content to your freshly created pages and pass something to it, You can also check:
-  * `view/adminhtml/layout/adminsample_sampletwo_index.xml`
-  * `Controller/Adminhtml/SampleTwo/Index.php`
-  * `view/adminhtml/templates/sample/two.phtml`
-* To set and retrieve values from Magento2's configuration you can check these files:
-  * `Controller/Adminhtml/SampleTwo/Index.php`
-  * `etc/adminhtml/system.xml` Configuration menu in *Stores/Settings/Configuration* is set here
-  * `etc/config.xml` Default configuration
-  * `view/adminhtml/templates/sample/two.phtml`
-* To see how ACLs are made, check these files:
-  * `etc/acl.xml`
-  * You'll notice that most resource elements are from `etc/adminhtml/menu.xml`
-* To see how to have different layouts, check this file:
-  * `view/adminhtml/layout/adminsample_sampletwo_index.xml`
-* To see how we create a custom block and use it, check those files:
-  * `Block/Adminhtml/CustomBlock.php`
-  * `view/adminhtml/layout/adminsample_sampletwo_index.xml`
-* To see how you use block functions, have a look at:
-* `Block/Adminhtml/CustomBlock.php`
-  * `view/adminhtml/templates/custom/one.phtml`
-* To call a helper from a block you can check:
-  * `Block/Adminhtml/CustomBlock.php`
-  * `Helper/ConfigHelper.php`
-  * `view/adminhtml/templates/custom/one.phtml`
+This extension will add the ability to translate products, categories, cms pages and blocks into different languages via Straker Translations API. 
 
-# To do
+## Installation
+* Download zip file of this extension
+* Place all the files of the extension in your Magento 2 installation in the folder `app/code/Straker/EasyTranslationPlatform`
+* Enable the extension: `php bin/magento --clear-static-content module:enable Straker_EasyTranslationPlatform`
+* Upgrade db scheme: `php bin/magento setup:upgrade`
+* Clear cache
 
-- Use model inside CustomBlock
-
+## SandBox Mode
+* To enable sandbox mode go to the configuration page and select the Straker Translations configuration tab to set the environment for testing. 
