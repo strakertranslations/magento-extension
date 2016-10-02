@@ -6,6 +6,8 @@
 
         $('#save').hide().attr('disabled',true);
         $('#Next').attr('disabled',true);
+        $('#back').hide()
+
         $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').hide();
 
 
@@ -111,12 +113,16 @@
 
 
         $('#Next').on("click",function(){
+            $('#back').show()
             $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').show();
             $('#job_tabs_attachment_products').click();
             $(this).hide();
             $('#save').show();
 
+        });
 
+        $('#back').on("click",function(){
+            $('#job_tabs_select_destination').click();
         });
 
 
@@ -159,7 +165,6 @@
             if(empty<1){
 
                 $('#Next').attr('disabled',false);
-
 
             }else{
 
