@@ -360,7 +360,7 @@ class ImportHelper extends AbstractHelper
 
                 } else {
 
-                    $connection->insertArray($table, ['option_id', 'store_id', 'eav_attribute_option_value.value'],
+                    $connection->insertArray($table, ['option_id', 'store_id', $table.'.value'],
                         [[$data['option_id'], $this->_jobModel->getTargetStoreId(), $data['translated_value']]]);
                 };
             }
