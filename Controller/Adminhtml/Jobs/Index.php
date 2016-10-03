@@ -98,7 +98,7 @@ class Index extends Action
                         }
                     }
                     if( count( $updatedJobs ) > 0 ){
-                        $this->messageManager->addSuccessMessage( __('The status of the jobs: '. implode(', ', $updatedJobs )  .' has been updated!') );
+                        $this->messageManager->addSuccessMessage( __( implode(', ', $updatedJobs )  .' has been updated!') );
                     }
                     elseif (count($localJobIds) <= 0){
                         $result['status'] = false;

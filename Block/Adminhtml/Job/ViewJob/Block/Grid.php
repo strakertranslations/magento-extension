@@ -118,6 +118,7 @@ class Grid extends Extended
                 'column_css_class' => 'col-action'
             ]
         );
+
         return parent::_prepareColumns();
     }
 
@@ -136,7 +137,7 @@ class Grid extends Extended
                 'entity_id' => $row->getBlockId(),
                 'job_type_referrer' => Model\JobType::JOB_TYPE_BLOCK,
                 'job_key' => $this->_jobKey,
-                'source_store_id' => $this->_sourceStoreId
+                'source_store_id' => $this->_sourceStoreId,
             ]
         );
     }
