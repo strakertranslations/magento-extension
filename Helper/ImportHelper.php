@@ -397,7 +397,7 @@ class ImportHelper extends AbstractHelper
     protected function getOptionIds($job_id)
     {
 
-        //Straker Translation Translation Ids
+        //Straker Translations Translation Ids
         $translatedOptionKeys = [];
 
         //Find Attributes with translated Options

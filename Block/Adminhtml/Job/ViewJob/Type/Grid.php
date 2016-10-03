@@ -80,7 +80,7 @@ class Grid extends Extended
         $this->addColumn(
             'job_type',
             [
-                'header' => __('Job Type'),
+                'header' => __('Content Type'),
                 'filter' => false,
                 'index' => 'job_type',
                 'type' => 'xxx',

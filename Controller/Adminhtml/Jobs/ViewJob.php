@@ -54,7 +54,7 @@ class ViewJob extends Action
         // TODO: Implement execute() method.
         $resultPage = $this->_resultPageFactory->create();
         $resultPage->setActiveMenu('Straker_EasyTranslationPlatform::managejobs');
-        $resultPage->getConfig()->getTitle()->prepend(__('Straker Translation'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Straker Translations'));
 
         return $resultPage;
     }

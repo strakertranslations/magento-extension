@@ -257,7 +257,7 @@ class Save extends Action
                 $job->setData('source_file',$sourcefile);
                 $job->save();
             }
-            $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
+            $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
 
         }catch (\Exception $e){
 
