@@ -1,0 +1,205 @@
+<script>
+    require([
+        'jquery'
+
+    ], function ($) {
+
+        $('#save').hide().attr('disabled',true);
+        $('#Next').attr('disabled',true);
+        $('#reset').hide()
+
+        var next = 1;
+
+        $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').hide();
+
+        var params = window.location.href.split('/');
+
+        $removed_language = false;
+
+        $(document).ajaxSend(function( event, jqxhr, settings ) {
+
+            var destination_store_id = $('select[name="magento_destination_store"]').val();
+            var source_store_id = $('select[name="magento_source_store"]').val();
+
+            if(!source_store_id)
+            {
+                source_store_id = destination_store_id;
+            }
+
+            if(settings.url.toLowerCase().search('easytranslationplatform/jobs/products')>-1)
+            {
+                settings.data = settings.data+'&source_store_id='+source_store_id;
+
+                window.products_ajax_url = settings.url;
+
+            }
+
+        });
+
+        $('select[name="destination_checker"]').on( "change", function () {
+
+
+            $('select[name="magento_source_store"]').val('');
+
+            var destination_storeId = $(this).val();
+
+            $.ajax({
+                url: '<?php echo $block->getUrl('EasyTranslationPlatform/Jobs/CheckLanguagePairs') ?>',
+                data: {
+                    form_key: window.FORM_KEY,
+                    target_store_id: $(this).val()
+                },
+                showLoader: true,
+                type: 'POST'
+
+            }).done(function(response) {
+
+                console.log(response);
+
+                if($('#productsGrid').length)
+                {
+                    $('#productsGrid').empty();
+                    $('#job_tabs_attachment_products').attr('href',window.products_ajax_url)
+                }
+
+                if(response['store-data'].length < 1 || response['store-data']['straker/general/destination_language'].length < 1)
+                {
+                    $('select[name="magento_destination_store"]').val(destination_storeId).attr('readonly',true);
+                    $('select[name="straker_target_language"]').val('');
+                    $('select[name="magento_source_store"]').val('');
+                    $('select[name="straker_source_language"]').val('');
+                    $('#destination-picker').show();
+
+                }else{
+
+                    $('#destination-picker').hide();
+                    $('select[name="magento_destination_store"]').val(destination_storeId);
+                    $('select[name="straker_target_language"]').val(response['store-data']['straker/general/destination_language']).show();
+                    $('select[name="magento_source_store"]').val(response['store-data']['straker/general/source_store']).prop('enable',true);
+                    $('select[name="straker_source_language"]').val(response['store-data']['straker/general/source_language']);
+
+                }
+
+                checkSourceData();
+
+            })
+
+        });
+
+
+        $('select[name="magento_source_store"]').on( "change", function () {
+
+            $('#productsGrid').empty();
+            $('#job_tabs_attachment_products').attr('href',window.products_ajax_url)
+
+        });
+
+        $('select[name="straker_source_language"]').on( "change", function () {
+
+
+            if($removed_language)
+            {
+                $("select[name='straker_target_language']").find("option[value='" + $removed_language + "']").prop('disabled',false)
+            }
+
+            $("select[name='straker_target_language']").find("option[value='" + $(this).val() + "']").prop('disabled',true)
+
+            $removed_language = $(this).val();
+
+            $('#source_content').show();
+
+        });
+
+
+        $('#Next').on("click",function(){
+
+            $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').show();
+            $('#job_tabs_attachment_products').click();
+            $('#save').show();
+            $('#reset').show();
+            $(this).hide();
+//            if(next<5){
+//                checkOpenTabs(next);
+//                next++;
+//            }
+//
+//            if(next==5){
+//                checkOpenTabs(next);
+//                $(this).hide()
+//                $('#save').show();
+//            }
+
+
+
+        });
+
+        $('#back').on("click",function(){
+
+            $('#job_tabs_select_destination').click();
+            $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').hide();
+            $('#save').hide();
+            $('#Next').show();
+            $(this).hide();
+
+        });
+
+
+        $('#edit_form').on("change", "input", function(e) {
+
+            $('#save').attr('disabled',false);
+
+            checkSourceData ();
+
+        });
+
+        $('#source_content').on("change", "select", function(e) {
+
+            checkSourceData ();
+
+        });
+
+
+
+        function checkSourceData ()
+        {
+            var data = {
+                magento_destination_store: $('select[name="magento_destination_store"]').val(),
+                magento_source_store: $('select[name="magento_source_store"]').val(),
+                straker_target_language: $('select[name="straker_target_language"]').val(),
+                straker_source_language: $('select[name="straker_source_language"]').val()
+            };
+
+            console.log(data);
+
+            var empty = 0;
+
+            $.each(data,function(key,value){
+
+                if(value==""){
+                    empty++
+                }
+            });
+
+
+            if(empty<1){
+
+                $('#Next').attr('disabled',false);
+
+            }else{
+
+                $('#Next').attr('disabled',true);
+                $('#save').attr('disabled',true);
+
+            }
+        }
+
+        function checkOpenTabs(tabNumber)
+        {
+            var tab = $('#job_tabs ul.tabs.admin__page-nav-items.ui-tabs-nav').children()[tabNumber];
+            $(tab).find('a').show().click();
+        }
+
+
+    });
+
+</script>

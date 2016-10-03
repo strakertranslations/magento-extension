@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <referenceContainer name="page.messages">
+                <block class="Magento\Framework\View\Element\Messages" name="messages" as="messages"/>
+            </referenceContainer>
+            <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::setup/registrationtitle.phtml" />
+            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\Registration\FormContainer" name="registration_container"/>
+        </referenceContainer>
+    </body>
+</page>

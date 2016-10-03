@@ -1,0 +1,52 @@
+# Windost image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windost Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windost shortcuts
+*.lnk
+
+# =========================
+# Operating System Files
+# =========================
+
+# OSX
+# =========================
+
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# Straker Job Files
+Api/Data/Original/*
+Api/Data/Translated/*
+Block/Adminhtml/Test/
+Controller/Adminhtml/Test/
+view/adminhtml/layout/easytranslationplatform_test_index.xml
+view/adminhtml/templates/test/
+view/adminhtml/web/js/test/

@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+
+    <preference for="Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface" type="Straker\EasyTranslationPlatform\Model\StrakerAPI"/>
+    <preference for="Straker\EasyTranslationPlatform\Api\Data\SetupInterface" type="Straker\EasyTranslationPlatform\Model\Setup"/>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="jobs_grid_data_source" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid\Collection">
+        <arguments>
+            <argument name="configHelper" xsi:type="object">Straker\EasyTranslationPlatform\Helper\ConfigHelper</argument>
+            <argument name="mainTable" xsi:type="string">straker_job</argument>
+            <argument name="eventPrefix" xsi:type="string">straker_job_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">straker_job_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Straker\EasyTranslationPlatform\Model\ResourceModel\Job</argument>
+        </arguments>
+    </type>
+    <virtualType name="JobGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
+        <arguments>
+            <argument name="collection" xsi:type="object" shared="false">Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Collection</argument>
+            <argument name="filterPool" xsi:type="object" shared="false">JobGridFilterPool</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="JobGridFilterPool" type="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
+        <arguments>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
+            </argument>
+        </arguments>
+    </virtualType>
+
+    <type name="Straker\EasyTranslationPlatform\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">StrakerLogger</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Straker\EasyTranslationPlatform\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs\NewAction">
+        <plugin name="starker_easytranslation_plugin_registration_plugin" type="Straker\EasyTranslationPlatform\Plugin\Registration\Plugin" sortOrder="10" disabled="false"/>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs\Index">
+        <plugin name="starker_easytranslation_plugin_registration_plugin" type="Straker\EasyTranslationPlatform\Plugin\Registration\Plugin" sortOrder="10" disabled="false"/>
+    </type>
+
+    <type name="Straker\EasyTranslationPlatform\Helper\ProductHelper" shared="false">
+        <arguments>
+            <argument name="jobModel" xsi:type="object">Straker\EasyTranslationPlatform\Helper\JobHelper</argument>
+        </arguments>
+    </type>
+
+</config>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <straker>
+            <general>
+                <version>live</version>
+                <domain>
+                    <sandbox>https://app-sandbox.strakertranslations.com</sandbox>
+                    <live>https://app.strakertranslations.com</live>
+                </domain>
+                <my_account_domain>
+                    <live>https://myaccount.strakertranslations.com/</live>
+                </my_account_domain>
+                <api_url>
+                    <register>v1/ta4ma/register</register>
+                    <languages>v1/languages</languages>
+                    <translate>v1/ta4ma/translate</translate>
+                    <countries>v1/countries</countries>
+                    <payment_page>o/?action=api.quote</payment_page>
+                    <support>v1/ta4ma/support</support>
+                </api_url>
+            </general>
+        </straker>
+    </default>
+</config>
