@@ -94,7 +94,7 @@ class BlockHelper extends AbstractHelper
         $source_store_id
     )
     {
-        if(strpos($block_ids,'&'))
+        if(strpos($block_ids,'&')!== false)
         {
             $block_ids = explode('&',$block_ids);
         }

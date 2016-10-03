@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -108,7 +109,7 @@ class CategoryHelper extends AbstractHelper
         $source_store_id
     )
     {
-        if(strpos($category_ids,','))
+        if(strpos($category_ids,',')!== false)
         {
             $category_ids = explode(',',$category_ids);
         }

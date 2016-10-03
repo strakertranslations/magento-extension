@@ -97,7 +97,7 @@ class PageHelper extends AbstractHelper
         $source_store_id
     )
     {
-        if(strpos($page_ids,'&'))
+        if(strpos($page_ids,'&')!== false)
         {
             $page_ids = explode('&',$page_ids);
         }

@@ -1,5 +1,5 @@
 {
-  "name": "Straker/EasyTranslationPlatform",
+  "name": "strakertranslations/magento2-extension",
   "type": "magento2-module",
   "description": "Translation Module for Magento 2",
   "homepage": "https://strakertranslations.com/magento",

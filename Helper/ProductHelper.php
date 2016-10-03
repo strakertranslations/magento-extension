@@ -157,7 +157,7 @@ class ProductHelper extends AbstractHelper
         $includeChildren = true
     )
     {
-        if(strpos($product_ids,'&'))
+        if(strpos($product_ids,'&')!== false)
         {
             $product_ids = explode('&',$product_ids);
         }
