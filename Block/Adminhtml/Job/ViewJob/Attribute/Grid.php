@@ -105,7 +105,7 @@ class Grid extends Extended
         $this->addColumn(
             'original_value',
             [
-                'header' => __( 'Original Text'),
+                'header' => __( 'Source Text'),
                 'type' => 'text',
                 'name' => 'original_value',
                 'align' => 'left',
@@ -118,7 +118,7 @@ class Grid extends Extended
         $this->addColumn(
             'translated_value',
             [
-                'header' => __('Translation'),
+                'header' => __('Target Text'),
                 'type' => 'text',
                 'index' => 'translated_value',
                 'header_css_class' => 'col-text',
