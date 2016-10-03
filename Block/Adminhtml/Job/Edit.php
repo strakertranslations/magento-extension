@@ -42,12 +42,9 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
             'class'=>'primary'
         ]);
 
-        $this->buttonList->update('save', 'label', __('Create Job'));
-        $this->buttonList->remove('reset');
         $this->buttonList->remove('back');
-        $this->buttonList->add('back',[
-            'label' => __('Back')
-        ]);
+
+        $this->buttonList->update('save', 'label', __('Create Job'));
 
     }
 
