@@ -124,7 +124,7 @@ class Save extends Action
 
         $jobData = [];
 
-        if ($data) {
+        if ($data && $this->checkEmptyJob($data)<2) {
 
             if(strlen($data['magento_source_store'])>0)
             {
@@ -147,7 +147,7 @@ class Save extends Action
                 $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
             }
 
-            if(isset($data['pages']) && strlen($data['pages'])>0)
+            if(isset($data['pages']) && strlen($data['pages'])<1)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generatePageJob();
 
@@ -182,7 +182,12 @@ class Save extends Action
 
             return $resultRedirect->setPath('*/*/edit', ['job_id' => $this->getRequest()->getParam('job_id')]);
         }
-        return $resultRedirect->setPath('*/*/');
+
+        $this->messageManager->addWarningMessage(__('Your job could not be sent. Please select some content.'));
+
+        $resultRedirect->setPath('*/*/edit',[]);
+
+        return $resultRedirect;
     }
 
     protected function _saveStoreConfigData($data)
@@ -252,7 +257,7 @@ class Save extends Action
                 $job->setData('source_file',$sourcefile);
                 $job->save();
             }
-            $this->messageManager->addSuccess(__('Your job was submitted successfully.'));
+            $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
 
         }catch (\Exception $e){
 
@@ -293,6 +298,23 @@ class Save extends Action
         $this->_xmlHelper->saveXmlFile();
 
         return $this->_xmlHelper->getXmlFileName();
+    }
+
+    protected function checkEmptyJob($data){
+
+        $empty = 0;
+
+        $required = ['products','categories','pages','blocks'];
+
+        foreach ($required as $value)
+        {
+            if(array_key_exists($value,$data) && strlen($data[$value])<1){
+                $empty++;
+            }
+        }
+
+        return $empty;
+
     }
 
 }

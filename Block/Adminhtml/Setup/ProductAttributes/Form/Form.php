@@ -57,8 +57,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             'label' => __('Default Attributes'),
             'name' => 'default[]',
             'required' => true,
-            'values' =>  $this->getDefaultAttributes()['values'],
-            'value' => $this->getDefaultAttributes()['value']
+            'values' =>  $this->getDefaultAttributes()
         ));
 
         $fieldset->addField('custom_attributes', 'multiselect', array(
@@ -89,10 +88,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         foreach ($attributes as $attribute){
 
-            $values['values'][] = ['value' => $attribute->getAttributeId(),'label' => __($attribute->getFrontendLabel())];
-            $values['value'][] = $attribute->getAttributeId();
+            $values[] = ['value' => $attribute->getAttributeId(),'label' => $attribute->getData('frontend_label')];
 
         }
+
+        usort($values,function($a,$b){
+
+            return strcmp($a['label'], $b['label']);
+
+        });
+
 
         return $values;
     }
@@ -106,9 +111,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         foreach ($attributes as $attribute){
 
-            $values[] = ['label' => __($attribute->getFrontendLabel()), 'value' => $attribute->getAttributeId()];
+            $values[] = ['value' => $attribute->getAttributeId(),'label' => $attribute->getFrontendLabel()];
         }
+
+        usort($values,function($a,$b){
+
+            return strcmp($a['label'], $b['label']);
+
+        });
 
         return $values;
     }
+
 }

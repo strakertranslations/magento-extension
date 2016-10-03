@@ -1,0 +1,33 @@
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/confirm'
+    ], function( $, confirm ){
+
+        var $resetButton = $('#demonstration_data_restore_product_data_button');
+
+        $resetButton.on('click', function(){
+
+            confirm({
+                title: '<?php echo __("Please Confirm") ?>',
+                content: '<?php echo __('Do you want to restore product data?') ?>',
+                actions: {
+                    confirm: function(){
+                        $.ajax({
+                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                            method   : 'get',
+                            showLoader :  true,
+                            complete : function(){
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<?php
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'.__('This will restore data from the last backup.').'</span></p>';

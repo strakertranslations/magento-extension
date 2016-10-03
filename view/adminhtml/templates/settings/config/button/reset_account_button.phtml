@@ -1,0 +1,34 @@
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/confirm'
+    ], function( $, confirm ){
+
+        var $resetButton = $('#demonstration_data_reset_account_button');
+
+        $resetButton.on('click', function(){
+
+            confirm({
+                title: '<?php echo __("Please Confirm") ?>',
+                content: '<?php echo __("Do you want to remove all straker data, including registration, settings, translations and jobs?") ?>',
+                actions: {
+                    confirm: function(){
+                        $.ajax({
+                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                            method   : 'get',
+                            dataType : 'json',
+                            showLoader :  true,
+                            complete : function(){
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+
+<?php
+    echo $block->getButtonHtml();
+    echo '<p class="note"><span>'.__('This will remove all of the saved data, including registration, settings, translated text and jobs.').'</span></p>';

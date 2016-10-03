@@ -76,7 +76,7 @@ class Block extends Container
                             'source_store_id' => $this->_requestData['source_store_id']
                         ]) . '\') ',
                 'class' => 'back',
-                'title' => __('Go to Job Types page')
+                'title' => __('View content type details')
             ],
             0,
             20
@@ -92,12 +92,12 @@ class Block extends Container
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',
             [
                 [
-                    'label' => 'Manage Jobs',
+                    'label' => __('Manage Jobs'),
                     'url' => $this->getUrl('EasyTranslationPlatform/Jobs/'),
-                    'title' => 'Go to Manage Jobs page'
+                    'title' => __('Go to Manage Jobs page')
                 ],
                 [
-                    'label' => empty($this->_job->getJobNumber()) ? 'Sub-job' : $this->_job->getJobNumber(),
+                    'label' => empty($this->_job->getJobNumber()) ? __('Sub-job') : $this->_job->getJobNumber(),
                     'url' => $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
                         [
                             'job_id' => $this->_requestData['job_id'],
@@ -105,10 +105,10 @@ class Block extends Container
                             'job_type_id' => 0,
                             'source_store_id' => $this->_requestData['source_store_id']
                         ]),
-                    'title' => 'Go to Job Types page'
+                    'title' => __('View content type details')
                 ],
                 [
-                    'label' => 'Block List',
+                    'label' => __('Block List'),
                 ]
             ]
         );

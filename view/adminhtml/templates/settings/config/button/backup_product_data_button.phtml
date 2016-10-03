@@ -1,0 +1,32 @@
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/confirm'
+    ], function( $, confirm ){
+
+        var $resetButton = $('#demonstration_data_backup_product_data_button');
+
+        $resetButton.on('click', function(){
+
+            confirm({
+                title: '<?php echo __("Please Confirm") ?>',
+                content: '<?php echo __('Do you want to backup product data?') . '<br><strong>'. __( 'Note, ') . '</strong>'  . __('if you have previous backup, it will be overwritten!') ?>',
+                actions: {
+                    confirm: function(){
+                        $.ajax({
+                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                            method   : 'get',
+                            showLoader :  true,
+                            complete : function(){
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
+<?php
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'. __('This will backup any tables that contain translatable data.') .'</span>';

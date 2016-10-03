@@ -85,12 +85,12 @@ class Type extends Container
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',
             [
                 [
-                    'label' => 'Manage Jobs',
+                    'label' => __('Manage Jobs'),
                     'url' => $this->getUrl('EasyTranslationPlatform/Jobs/'),
-                    'title' => 'Go to Manage Jobs page'
+                    'title' => __('Go to Manage Jobs page')
                 ],
                 [
-                    'label' => empty($this->_job->getJobNumber()) ? 'Sub-job' : $this->_job->getJobNumber()
+                    'label' => empty($this->_job->getJobNumber()) ? __('Sub-job') : $this->_job->getJobNumber()
                 ]
             ]
         );
