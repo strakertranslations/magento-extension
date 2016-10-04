@@ -78,7 +78,7 @@ class Setup extends AbstractModel implements SetupInterface
 
     }
 
-    public function saveProductAttributes($attributes)
+    public function saveAttributes($attributes)
     {
 
         if (!empty($attributes['custom'])) {
@@ -89,6 +89,11 @@ class Setup extends AbstractModel implements SetupInterface
         if (!empty($attributes['default'])) {
 
             $this->_configModel->SaveConfig('straker_config/attribute/product_default', $attributes['default'], 'default', 0);
+        }
+
+        if (!empty($attributes['category'])) {
+
+            $this->_configModel->SaveConfig('straker_config/attribute/category', $attributes['default'], 'default', 0);
         }
 
         return $this->_configModel;

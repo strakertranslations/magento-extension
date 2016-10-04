@@ -53,7 +53,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $attributes = $this->sortData($data);
 
-                $this->_setup->saveProductAttributes($attributes);
+                $this->_setup->saveAttributes($attributes);
 
                 $resultRedirect->setPath('*/jobs/new/');
 
@@ -101,6 +101,21 @@ class Save extends \Magento\Backend\App\Action
             asort($data['default']);
 
             $attributes['default'] = implode(",", $data['default']);
+
+        }
+
+        if(!empty($data['custom'])){
+
+            asort($data['custom']);
+
+            $attributes['custom'] = implode(",", $data['custom']);
+        }
+
+        if(!empty($data['category'])){
+
+            asort($data['category']);
+
+            $attributes['category'] = implode(",", $data['category']);
 
         }
 

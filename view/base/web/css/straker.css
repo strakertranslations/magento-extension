@@ -204,8 +204,10 @@ a.straker-job-refresh-anchor{
 }
 
 #default_attributes,
-#custom_attributes{
+#custom_attributes,
+#category_attributes{
     width: 25em;
+    height: 20em;
 }
 
 #job_tabs_select_destination_content h3{
@@ -233,5 +235,16 @@ div.fieldset-wrapper.straker p{
 
 #source_content div.fieldset-wrapper.straker-source h2{
     margin-bottom: 1em;
+}
+
+.admin__fieldset.settings-attributes{
+    margin-top: 3em;
+    border: lightgrey solid 1px;
+    padding: 2em;
+}
+
+.admin__fieldset.settings-attributes legend span{
+    color: rgb(103, 96, 86);
+    font: 400 16.6667px "Open Sans", sans-serif;
 }
 
