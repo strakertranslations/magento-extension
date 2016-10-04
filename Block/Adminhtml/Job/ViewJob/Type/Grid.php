@@ -109,33 +109,20 @@ class Grid extends Extended
             ]
         );
 
-//        $this->addColumn(
-//            'view',
-//            [
-//                'header' => __('Action'),
-//                'type' => 'action',
-//                'getter' => 'getId',
-//                'actions' => [
-//                    [
-//                        'caption' => __('View'),
-//                        'url' => [
-//                            'base' => '*/*/ViewJob',
-//                            'params' => [
-//                                'job_type_id' => 0,
-//                                'job_type_referrer' => 0
-//                            ]
-//                        ],
-//                        'field' => 'job_id'
-//                    ]
-//                ],
-//                'filter' => false,
-//                'sortable' => false,
-//                'index' => 'view',
-//                'header_css_class' => 'col-action',
-//                'column_css_class' => 'col-action'
-//            ]
-//        );var_dump($this);exit;
-//        $jobTypeId = $this->getMultipleRowColumns();var_dump($jobTypeId);exit;
+        $this->addColumn(
+            'view',
+            [
+                'header' => __('Action'),
+                'type' => 'action',
+                'getter' => 'getId',
+                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Renderer\JobTypeActions',
+                'filter' => false,
+                'sortable' => false,
+                'index' => 'view',
+                'header_css_class' => 'col-action',
+                'column_css_class' => 'col-action'
+            ]
+        );
         return parent::_prepareColumns();
     }
 

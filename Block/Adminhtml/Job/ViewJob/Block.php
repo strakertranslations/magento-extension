@@ -31,16 +31,16 @@ class Block extends Container
 
         if($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED){
             $this->addButton(
-                'confirm',
+                'publish',
                 [
-                    'label' => __('Confirm'),
+                    'label' => __('Publish'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
                             'job_id' => $this->_job->getId(),
                             'job_key' => $this->_job->getJobKey(),
                             'job_type_id' => $this->_job->getJobTypeId()
                         ] ) . '\') ',
                     'class' => 'primary',
-                    'title' => __( 'Confirm the job of ' . $this->_job->getJobNumber() )
+                    'title' => __( 'Publish the job of ' . $this->_job->getJobNumber() )
                 ],
                 0,
                 50
