@@ -49,8 +49,8 @@ class ProductHelper extends AbstractHelper
         'select', 'text','multiline', 'textarea', 'multiselect'
     );
 
-    protected $_translatableFrontendLabel = array(
-        'name', 'description', 'meta title', 'meta keywords', 'meta description', 'short description', 'color','size'
+    protected $_translatableAttributeCode = array(
+        'name', 'description', 'meta_title', 'meta_keywords', 'meta_description', 'short_description', 'color','size'
     );
 
     protected $_multiSelectInputTypes = array(
@@ -120,7 +120,7 @@ class ProductHelper extends AbstractHelper
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
         $collection = $this->getAttributes()
-            ->addFieldToFilter( 'frontend_label',  array( 'in' => $this->_translatableFrontendLabel ));
+            ->addFieldToFilter( 'attribute_code',  array( 'in' => $this->_translatableAttributeCode ));
         return $collection;
     }
 
@@ -129,7 +129,7 @@ class ProductHelper extends AbstractHelper
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
         $collection = $this->getAttributes()
                         ->addFieldToFilter( 'is_user_defined', array( 'eq' => 1 ))
-                        ->addFieldToFilter('frontend_label',array('nin'=>$this->_translatableFrontendLabel));
+                        ->addFieldToFilter('attribute_code',array('nin'=>$this->_translatableAttributeCode));
         return $collection;
     }
 

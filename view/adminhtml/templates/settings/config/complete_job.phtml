@@ -30,6 +30,7 @@
                     alert({
                         content: '<?php echo __('Job complete successfully.'); ?>'
                     });
+                    tjNumberInput.val('');
                     location.href = "<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/Index'); ?>";
                 }else{
                     alert({

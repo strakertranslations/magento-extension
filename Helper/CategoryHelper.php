@@ -35,7 +35,7 @@ class CategoryHelper extends AbstractHelper
     protected $_categoryData;
     protected $_storeId;
 
-    protected $_translatableFrontendLabel = array(
+    protected $_translatableAttributeCode = array(
         'name','description','meta_title','meta_keywords','meta_description'
     );
 
@@ -92,7 +92,7 @@ class CategoryHelper extends AbstractHelper
     public function getAttributes()
     {
         $collection = $this->_attributeCollectionFactory->setEntityTypeFilter($this->_entityTypeId)
-            ->addFieldToFilter( 'attribute_code',  array( 'in' => $this->_translatableFrontendLabel ));
+            ->addFieldToFilter( 'attribute_code',  array( 'in' => $this->_translatableAttributeCode ));
         return $collection;
     }
 
