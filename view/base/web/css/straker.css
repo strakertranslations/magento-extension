@@ -238,13 +238,17 @@ div.fieldset-wrapper.straker p{
 }
 
 .admin__fieldset.settings-attributes{
-    margin-top: 3em;
+    margin-top: 2em;
     border: lightgrey solid 1px;
-    padding: 2em;
+    padding: 2em 2em 2em 2em;
 }
 
 .admin__fieldset.settings-attributes legend span{
     color: rgb(103, 96, 86);
     font: 400 16.6667px "Open Sans", sans-serif;
+}
+
+.field-default_attributes, .field-custom_attributes, .field-category_attributes{
+    margin-bottom: 0 !important;
 }
 
