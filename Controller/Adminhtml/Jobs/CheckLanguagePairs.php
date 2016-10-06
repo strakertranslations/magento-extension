@@ -13,7 +13,6 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\Data;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 
-
 class CheckLanguagePairs extends Action
 {
 
@@ -34,8 +33,8 @@ class CheckLanguagePairs extends Action
         ConfigHelper $configHelper,
         Logger $logger,
         Data $data
-    )
-    {
+    ) {
+    
         $this->_messageManager = $messageManager;
         $this->_storeManager = $storeManager;
         $this->_resultJson = $resultJson;

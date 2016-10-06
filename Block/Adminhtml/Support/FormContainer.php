@@ -14,8 +14,8 @@ class FormContainer extends \Magento\Backend\Block\Widget\Form\Container
     public function __construct(
         Context $context,
         Registry $registry
-    )
-    {
+    ) {
+    
         $this->_coreRegistry = $registry;
         parent::__construct($context);
     }
@@ -38,5 +38,4 @@ class FormContainer extends \Magento\Backend\Block\Widget\Form\Container
     {
         return $this->_authorization->isAllowed($resourceId);
     }
-
 }

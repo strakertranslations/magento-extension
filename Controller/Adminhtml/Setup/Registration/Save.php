@@ -10,7 +10,6 @@ use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Backend\App\Action\Context;
 
-
 class Save extends \Magento\Backend\App\Action
 {
 
@@ -27,8 +26,8 @@ class Save extends \Magento\Backend\App\Action
         StrakerAPIInterface $strakerAPIInterface,
         SetupInterface $setupInterface,
         Logger $logger
-    )
-    {
+    ) {
+    
         $this->_config = $config;
         $this->_reinitConfig = $reinitableConfigInterface;
         $this->_strakerAPI = $strakerAPIInterface;
@@ -46,9 +45,7 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data) {
-
             try {
-
                 $this->_setup->saveClientData($data);
 
                 $oRegistration = $this->_strakerAPI->callRegister($data);
@@ -62,34 +59,25 @@ class Save extends \Magento\Backend\App\Action
                 $resultRedirect->setPath('/Setup_productattributes/index/');
 
                 return $resultRedirect;
-
-
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
-                    $this->_logger->error('error'.__FILE__.' '.__LINE__.'', array($e));
+                    $this->_logger->error('error'.__FILE__.' '.__LINE__.'', [$e]);
 
                     $resultRedirect->setPath('/*/index/');
 
                     $this->messageManager->addError('There was an error registering your details');
 
                     return $resultRedirect;
-
-
             } catch (\RuntimeException $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError($e->getMessage());
-
             } catch (\Exception $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addException($e, __('There was an error registering your details'));
             }
 
             $resultRedirect->setPath('/*/index/');
-
         }
 
         return $resultRedirect;

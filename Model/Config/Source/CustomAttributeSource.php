@@ -9,7 +9,8 @@ class CustomAttributeSource implements ArrayInterface
     protected $_attributeCollection;
     protected $_option;
 
-    public function __construct( ProductHelper $productHelper ) {
+    public function __construct(ProductHelper $productHelper)
+    {
         $this->_attributeCollection = $productHelper->getCustomAttributes();
     }
 
@@ -20,19 +21,18 @@ class CustomAttributeSource implements ArrayInterface
      */
     public function toOptionArray()
     {
-        if( !empty( $this->_attributeCollection ) ){
-           $attributesArray = $this->_attributeCollection->getItems();
-           if( count( $attributesArray ) ){
-               foreach ( $attributesArray as $attribute ){
-                   $this->_option[] = [
-                       'label' => __( $attribute->getFrontend()->getLabel() ),
+        if (!empty($this->_attributeCollection)) {
+            $attributesArray = $this->_attributeCollection->getItems();
+            if (count($attributesArray)) {
+                foreach ($attributesArray as $attribute) {
+                    $this->_option[] = [
+                       'label' => __($attribute->getFrontend()->getLabel()),
                        'value' => $attribute->getId()
-                   ];
-               }
-               return $this->_option;
-           }
-
+                    ];
+                }
+                return $this->_option;
+            }
         }
-        return [ 'label' => __( 'No attributes are available! ' ), 'value' => '' ];
+        return [ 'label' => __('No attributes are available! '), 'value' => '' ];
     }
 }

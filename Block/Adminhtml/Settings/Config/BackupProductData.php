@@ -57,7 +57,6 @@ class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
         $this->_buttonName = $element->getName();
 
         return $this->_toHtml();
-
     }
 
     public function getButtonHtml()
@@ -73,5 +72,4 @@ class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
 
         return $button->toHtml();
     }
-
 }

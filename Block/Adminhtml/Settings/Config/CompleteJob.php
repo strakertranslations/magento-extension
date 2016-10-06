@@ -73,7 +73,6 @@ class CompleteJob extends Field
         $this->_buttonName = $element->getName();
 
         return $this->_toHtml();
-
     }
     public function getButtonHtml()
     {

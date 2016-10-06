@@ -1,6 +1,7 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model;
-interface JobStatusInterface 
+
+interface JobStatusInterface
 {
 
 }

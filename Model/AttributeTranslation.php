@@ -1,5 +1,6 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model;
+
 class AttributeTranslation extends \Magento\Framework\Model\AbstractModel implements AttributeTranslationInterface, \Magento\Framework\DataObject\IdentityInterface
 {
     const CACHE_TAG = 'straker_easytranslationplatform_attributetranslation';
@@ -31,8 +32,9 @@ class AttributeTranslation extends \Magento\Framework\Model\AbstractModel implem
         return [self::CACHE_TAG . '_' . $this->getId()];
     }
 
-    public function getOptions(){
-        if( $this->getData('has_option')){
+    public function getOptions()
+    {
+        if ($this->getData('has_option')) {
             $this->_loadOptions();
         }
         return $this->_options;

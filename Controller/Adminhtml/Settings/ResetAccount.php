@@ -14,7 +14,6 @@ use \Magento\Framework\Controller\Result\Json;
 use \Straker\EasyTranslationPlatform\Model\Setup;
 use \Straker\EasyTranslationPlatform\Logger\Logger;
 
-
 class ResetAccount extends Action
 {
 
@@ -35,8 +34,8 @@ class ResetAccount extends Action
         CacheInterface $storeCache,
         Setup $strakerSetup,
         Logger $logger
-    )
-    {
+    ) {
+    
         $this->_messageManager = $messageManager;
         $this->_storeManager = $storeManager;
         $this->_storeCache = $storeCache;
@@ -63,23 +62,22 @@ class ResetAccount extends Action
             $this->_strakerSetup->clearStrakerData();
 
             $data = ['first_name' => '', 'last_name' => '', 'email' => '', 'url' => ''];
-            $this->_strakerSetup->saveClientData( $data );
+            $this->_strakerSetup->saveClientData($data);
 
             foreach ($this->_storeManager->getStores() as $store) {
-                $this->_strakerSetup->saveStoreSetup($store->getId(),'','','');
+                $this->_strakerSetup->saveStoreSetup($store->getId(), '', '', '');
             }
 
             $this->_storeCache->clean(Config::CACHE_TAG);
-            $this->_messageManager->addSuccess( __('Straker Settings has been cleared.'));
-            $this->_logger->info( __('Straker Settings has been cleared.') );
-
+            $this->_messageManager->addSuccess(__('Straker Settings has been cleared.'));
+            $this->_logger->info(__('Straker Settings has been cleared.'));
         } catch (Exception $e) {
-            $message = __( $e->getMessage() );
-            $this->_messageManager->addError( $message );
-            $this->_logger->error( $message );
+            $message = __($e->getMessage());
+            $this->_messageManager->addError($message);
+            $this->_logger->error($message);
             $result['Success'] = false;
         }
 
-        return $this->_resultJson->setData( $result );
+        return $this->_resultJson->setData($result);
     }
 }

@@ -19,7 +19,7 @@ class JobStatus extends Column
             foreach ($dataSource['data']['items'] as &$item) {
                 if (array_key_exists('job_status_id', $item)) {
                     $statusId = $item['job_status_id'];
-                    if( $statusId == 3 ){
+                    if ($statusId == 3) {
                         $item[$this->getData('name')] = "<a href='#' class='straker-view-quote-anchor' data-job-id='". $item['job_id'] ."' data-job-key='" . $item['job_key'] . "' >" . __('View Quote') . "</a>";
                     }
                 }

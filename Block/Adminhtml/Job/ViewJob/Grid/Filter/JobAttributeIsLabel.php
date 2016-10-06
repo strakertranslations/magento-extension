@@ -36,7 +36,7 @@ class JobAttributeIsLabel extends Select
     protected function _getOptions()
     {
         $options = [];
-        foreach (self::$_isLabel as $k => $v )  {
+        foreach (self::$_isLabel as $k => $v) {
             $options[] = ['value' => $k, 'label' => __($v)];
         }
 

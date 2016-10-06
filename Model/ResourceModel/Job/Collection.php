@@ -20,7 +20,7 @@ class Collection extends AbstractCollection
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         \Magento\Framework\Model\ResourceModel\Db\AbstractDb $resource = null
-//        , ConfigHelper $configHelper
+        //        , ConfigHelper $configHelper
     ) {
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
 //        $this->_configHelper = $configHelper;

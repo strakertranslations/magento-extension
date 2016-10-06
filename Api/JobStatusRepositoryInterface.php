@@ -4,7 +4,7 @@ namespace Straker\EasyTranslationPlatform\Api;
 use Straker\EasyTranslationPlatform\Model\JobStatusInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
-interface JobStatusRepositoryInterface 
+interface JobStatusRepositoryInterface
 {
     public function save(JobStatusInterface $page);
 

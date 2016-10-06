@@ -51,17 +51,16 @@ class AttributeOption extends \Magento\Backend\App\Action
 
         $optionCollectionData = $this->_attributeOptionTranslationCollectionFactory->create()->addFieldToFilter('attribute_translation_id', ['eq' => $attributeTranslationId]);
 
-        foreach( $optionCollectionData as $option ){
+        foreach ($optionCollectionData as $option) {
             array_push($options, [
                 'attribute_option_translation_id'   => $option->getData('attribute_option_translation_id'),
                 'original_value'                    => $option->getData('original_value'),
                 'translated_value'                  => empty($option->getData('translated_value')) ? '':$option->getData('translated_value')
-            ] );
+            ]);
         }
 
         $result['option_data'] = $options;
-        return $this->_resultJsonFactory->create()->setData( $result );
-
+        return $this->_resultJsonFactory->create()->setData($result);
     }
 
     /**
@@ -69,26 +68,28 @@ class AttributeOption extends \Magento\Backend\App\Action
      * @param \Straker\EasyTranslationPlatform\Model\Job $localJob
      * @return array
      */
-    protected function _compareJobs( $apiJob, $localJob ){
+    protected function _compareJobs($apiJob, $localJob)
+    {
 //        if( strcasecmp($apiJob->status, $localJob->getJobStatus() ) !== 0
 //            || (strcasecmp($apiJob->status, $localJob->getJobStatus() ) === 0 &&
 //                strcasecmp($apiJob->status, 'queued') === 0 &&
 //                strcasecmp($apiJob->quotation, 'ready') === 0))
 //        {
 
-        if( $localJob->getJobStatusId() < $this->resolveApiStatus( $apiJob )) {
-            return $localJob->updateStatus( $apiJob );
+        if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
+            return $localJob->updateStatus($apiJob);
         }
 
         return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
     }
 
-    protected function resolveApiStatus( $apiJob ){
+    protected function resolveApiStatus($apiJob)
+    {
         $status = 0;
-        if( !empty($apiJob) && !empty($apiJob->status)){
-            switch (strtolower( $apiJob->status ) ){
+        if (!empty($apiJob) && !empty($apiJob->status)) {
+            switch (strtolower($apiJob->status)) {
                 case 'queued':
-                    $status =  strcasecmp( $apiJob->quotation, 'ready') == 0  ? 3 : 2;
+                    $status =  strcasecmp($apiJob->quotation, 'ready') == 0  ? 3 : 2;
                     break;
                 case 'in_progress':
                     $status = 4;

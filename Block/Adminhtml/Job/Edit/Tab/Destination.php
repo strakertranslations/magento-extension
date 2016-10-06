@@ -29,14 +29,13 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
         $this->_Registry = $registry;
         $this->session = $session;
 
-        parent::__construct($context,$registry,$formFactory);
+        parent::__construct($context, $registry, $formFactory);
     }
 
 
     protected function _construct()
     {
         parent::_construct();
-
     }
 
     protected function _prepareForm()
@@ -47,7 +46,8 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
         $form->setHtmlIdPrefix('job_');
 
         $fieldset = $form->addFieldset(
-            '', []
+            '',
+            []
         );
 
         $renderer = $this->getLayout()->createBlock(
@@ -61,7 +61,8 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
         return parent::_prepareForm();
     }
 
-    public function getWebsites() {
+    public function getWebsites()
+    {
 
         return $this->_storeManager->getWebsites();
     }
@@ -102,5 +103,4 @@ class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements 
     {
         return false;
     }
-
 }

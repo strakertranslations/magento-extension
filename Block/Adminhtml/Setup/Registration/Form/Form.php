@@ -30,7 +30,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->_Registry = $registry;
         $this->session = $session;
 
-        parent::__construct($context,$registry,$formFactory,$data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
 
@@ -151,18 +151,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         return parent::_prepareForm();
     }
 
-    protected function _getOptions(
-    ){
+    protected function _getOptions()
+    {
         $aCountries = [];
 
-        $aCountries[NULL] = 'Select a country';
+        $aCountries[null] = 'Select a country';
 
-        foreach($this->_strakerAPIinterface->getCountries() as $key => $value)
-        {
+        foreach ($this->_strakerAPIinterface->getCountries() as $key => $value) {
             $aCountries[$value->code] = $value->name;
         }
 
         return $aCountries;
     }
-
 }

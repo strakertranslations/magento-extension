@@ -4,7 +4,7 @@ namespace Straker\EasyTranslationPlatform\Api;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
-interface AttributeOptionTranslationRepositoryInterface 
+interface AttributeOptionTranslationRepositoryInterface
 {
     public function save(AttributeOptionTranslationInterface $page);
 

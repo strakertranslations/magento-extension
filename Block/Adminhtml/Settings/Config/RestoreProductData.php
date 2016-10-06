@@ -77,7 +77,6 @@ class RestoreProductData extends Field
         $this->_buttonName = $element->getName();
 
         return $this->_toHtml();
-
     }
 
     public function getButtonHtml()
@@ -93,8 +92,8 @@ class RestoreProductData extends Field
 
         $validBackupData = true;
 
-        foreach ( $this->_dataHelper->getMagentoDataTableArray() as $tableName ){
-            $backupTableName = $this->_dataHelper->getBackupTableNames( $this->_resourceConnection->getTableName( $tableName ));
+        foreach ($this->_dataHelper->getMagentoDataTableArray() as $tableName) {
+            $backupTableName = $this->_dataHelper->getBackupTableNames($this->_resourceConnection->getTableName($tableName));
 //            if( $connection->isTableExists( $backupTableName ) ){
 //                $sql = $connection->select()
 //                    ->from(
@@ -112,13 +111,13 @@ class RestoreProductData extends Field
 //                $validBackupData = false;
 //                break;
 //            }
-            if(!$connection->isTableExists( $backupTableName )){
+            if (!$connection->isTableExists($backupTableName)) {
                 $validBackupData = false;
                 break;
             }
         }
 
-        if( !$validBackupData ) {
+        if (!$validBackupData) {
             $attributeData['disabled'] = 'disabled';
         }
 
@@ -131,5 +130,4 @@ class RestoreProductData extends Field
 
         return $button->toHtml();
     }
-
 }

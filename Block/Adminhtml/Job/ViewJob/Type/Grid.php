@@ -27,7 +27,7 @@ class Grid extends Extended
         array $data = []
     ) {
         $this->_jobCollectionFactory = $jobCollectionFactory;
-        parent::__construct($context,$backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     public function _construct()

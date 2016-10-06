@@ -28,7 +28,6 @@ class Confirm extends \Magento\Backend\App\Action
         JobFactory $jobFactory,
         Logger $logger,
         StoreManagerInterface $storeManager
-
     ) {
         $this->_jobFactory = $jobFactory;
         $this->_configHelper = $configHelper;
@@ -48,13 +47,12 @@ class Confirm extends \Magento\Backend\App\Action
 
         $jobMatches = [];
 
-        preg_match("/job_(.*?)_/",$job->getSourceFile(),$jobMatches);
+        preg_match("/job_(.*?)_/", $job->getSourceFile(), $jobMatches);
 
-        $jobIds = explode('&',$jobMatches[1]);
+        $jobIds = explode('&', $jobMatches[1]);
 
-        foreach ($jobIds as $job_id)
-        {
-            try{
+        foreach ($jobIds as $job_id) {
+            try {
                 //should get sub job instance
 //                $jobType = $this->_jobFactory->create()->load($job_id)->getJobType();
                 $currentJob = $this->_jobFactory->create()->load($job_id);
@@ -65,17 +63,14 @@ class Confirm extends \Magento\Backend\App\Action
                 //should set status for sub job instance
 //                $job->addData(['job_status_id'=>6]);
 //                $job->save();
-                $currentJob->addData( ['job_status_id' => JobStatus::JOB_STATUS_CONFIRMED] );
+                $currentJob->addData(['job_status_id' => JobStatus::JOB_STATUS_CONFIRMED]);
                 $currentJob->save();
 
                 $this->messageManager->addSuccess('Translated '.$jobType.' data has been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
-
-
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
                 $this->messageManager->addError($e->getMessage());
 
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError('Translated data has not been published for '.$this->_storeManager->getStore($job->getData('target_store_id'))->getName().' store');
 
@@ -88,6 +83,5 @@ class Confirm extends \Magento\Backend\App\Action
         $resultRedirect->setPath('*/*/index');
 
         return $resultRedirect;
-
     }
 }

@@ -18,5 +18,4 @@ interface StrakerAPIInterface
     public function callSupport($data);
 
     public function getTranslatedFile($url);
-
 }

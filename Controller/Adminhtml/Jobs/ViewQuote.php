@@ -42,10 +42,10 @@ class ViewQuote extends \Magento\Backend\App\Action
     public function execute()
     {
         $jobId = $this->getRequest()->getParam('job_id');
-        $jobKey = $this->_jobFactory->create()->load( $jobId )->getJobKey();
+        $jobKey = $this->_jobFactory->create()->load($jobId)->getJobKey();
         $quoteUrl = $this->_configHelper->getPaymentPageUrl().'&job_key='.$jobKey;
         $result = [ 'Success'=> true, 'JobKey' => $quoteUrl ];
-        return $this->_resultJsonFactory->create()->setData( $result );
+        return $this->_resultJsonFactory->create()->setData($result);
     }
 
     /**

@@ -58,24 +58,25 @@ class XmlHelper extends AbstractHelper
      * @param $jobId
      * @return bool|\DOMElement
      */
-    public function create( $jobId ){
+    public function create($jobId)
+    {
         $this->_dom->version = $this->getVersion();
         $this->_dom->encoding = $this->getEncoding();
 
         $this->_xmlFileName = $this->_xmlFilePath . DIRECTORY_SEPARATOR . 'straker_job'. $jobId .'.xml';
         $flag = true;
 
-        if( !file_exists( $this->_xmlFilePath ) ){
-            $flag = mkdir( $this->_xmlFilePath, 0777, true );
+        if (!file_exists($this->_xmlFilePath)) {
+            $flag = mkdir($this->_xmlFilePath, 0777, true);
         }
 
-        if( !$flag ) {
+        if (!$flag) {
             return false;
         }
 
-        if( !file_exists( $this->_xmlFileName ) ){
-            $isSuccess = file_put_contents( $this->_xmlFileName, "" );
-            if( $isSuccess === false ){
+        if (!file_exists($this->_xmlFileName)) {
+            $isSuccess = file_put_contents($this->_xmlFileName, "");
+            if ($isSuccess === false) {
                 return false;
             }
         }
@@ -89,21 +90,21 @@ class XmlHelper extends AbstractHelper
      * @param array $attributes
      * @return bool
      */
-    public function appendDataToRoot( $attributes = [] ){
+    public function appendDataToRoot($attributes = [])
+    {
 
 
-        $this->_data = $this->_dom->createElement( 'data' );
+        $this->_data = $this->_dom->createElement('data');
 
-        foreach ($attributes as $key => $value){
-
+        foreach ($attributes as $key => $value) {
             ($key !='value')? $this->_data->setAttribute($key, $value) : false;
         }
 
-        $valueElem = $this->_dom->createElement( 'value' );
-        $valueElem->appendChild( $this->_dom->createCDATASection( $attributes['value'] ) );
+        $valueElem = $this->_dom->createElement('value');
+        $valueElem->appendChild($this->_dom->createCDATASection($attributes['value']));
 
-        $this->_data->appendChild( $valueElem );
-        $this->_root->appendChild( $this->_data );
+        $this->_data->appendChild($valueElem);
+        $this->_root->appendChild($this->_data);
 
         return true;
     }
@@ -112,8 +113,9 @@ class XmlHelper extends AbstractHelper
      * @param array $data
      * @return bool
      */
-    private function _validateKeys( $data = [] ){
-        return ( 0 === count( array_diff( $this->_elemAttributes, array_keys( $data ) ) ) );
+    private function _validateKeys($data = [])
+    {
+        return ( 0 === count(array_diff($this->_elemAttributes, array_keys($data))) );
     }
     
     /**
@@ -122,11 +124,11 @@ class XmlHelper extends AbstractHelper
     public function saveXmlFile()
     {
         $this->_dom->formatOutput = true;
-        if( !file_exists( $this->_xmlFileName )){
+        if (!file_exists($this->_xmlFileName)) {
             return false;
         }
-        $this->_dom->appendChild( $this->_root );
-        $saveData = $this->_dom->save( $this->_xmlFileName );
+        $this->_dom->appendChild($this->_root);
+        $saveData = $this->_dom->save($this->_xmlFileName);
         //var_dump($saveData);
         //exit;
         $this->_dom->documentElement->parentNode->removeChild($this->_root);
@@ -197,5 +199,4 @@ class XmlHelper extends AbstractHelper
     {
         return $this->_elemAttributes;
     }
-
 }

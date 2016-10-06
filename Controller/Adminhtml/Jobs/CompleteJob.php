@@ -48,8 +48,8 @@ class CompleteJob extends Action
     {
         $url = 'https://uat-app.strakertranslations.com/v1/ta2wo/test/complete';
         $tjNumber = $this->getRequest()->getParam('job_id');
-        $result = $this->_strakerAPI->completeJob( $tjNumber, $url );
-        return $this->_resultJsonFactory->create()->setData( $result );
+        $result = $this->_strakerAPI->completeJob($tjNumber, $url);
+        return $this->_resultJsonFactory->create()->setData($result);
     }
 
     /**

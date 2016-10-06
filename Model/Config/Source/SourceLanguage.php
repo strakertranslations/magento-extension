@@ -8,8 +8,8 @@ class SourceLanguage implements \Magento\Framework\Option\ArrayInterface
 
     function __construct(
         \Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory $jobCollectionFactory
-    )
-    {
+    ) {
+    
         $this->_jobCollectionFactory = $jobCollectionFactory;
     }
 
@@ -22,7 +22,7 @@ class SourceLanguage implements \Magento\Framework\Option\ArrayInterface
         $collection = $this->_jobCollectionFactory->create();
         $collection->distinct(true)->addFieldToSelect('sl');
         $languages = [];
-        foreach ( $collection->getItems() as $job ){
+        foreach ($collection->getItems() as $job) {
             array_push($languages, ['value' => $job->getSl(), 'label'=> $job->getSl()]);
         }
         return $languages;

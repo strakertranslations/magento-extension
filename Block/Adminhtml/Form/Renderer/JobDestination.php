@@ -12,8 +12,8 @@ class JobDestination extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldse
         \Magento\Backend\Block\Template\Context $context,
         StrakerAPIInterface $strakerAPI,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->_strakerAPIinterface = $strakerAPI;
         parent::__construct($context, $data);
     }
@@ -25,14 +25,15 @@ class JobDestination extends \Magento\Backend\Block\Widget\Form\Renderer\Fieldse
         return $html;
     }
 
-    public function getWebsites() {
+    public function getWebsites()
+    {
 
         return $this->_storeManager->getWebsites();
     }
 
-    public function getOptions() {
+    public function getOptions()
+    {
 
         return $this->_strakerAPIinterface->getLanguages();
     }
-
 }

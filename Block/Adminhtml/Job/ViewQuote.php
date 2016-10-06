@@ -9,11 +9,11 @@ class ViewQuote extends Template
     protected $_coreRegistry;
     
     function __construct(
-        Template\Context $context, 
+        Template\Context $context,
         Registry $registry,
         array $data
-    )
-    {
+    ) {
+    
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }

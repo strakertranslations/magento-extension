@@ -64,7 +64,7 @@ class Breadcrumbs extends \Magento\Backend\Block\Widget
 //        $classes[] = 'scalable';
         $classes[] = 'straker-toolbar-title';
 
-         if ($this->getClass()) {
+        if ($this->getClass()) {
             $classes[] = $this->getClass();
         }
         if ($disabled) {

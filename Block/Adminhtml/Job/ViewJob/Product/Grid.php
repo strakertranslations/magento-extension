@@ -12,7 +12,6 @@ use Straker\EasyTranslationPlatform\Model\JobFactory;
 class Grid extends Extended
 {
     protected $_jobFactory;
-    /** @var \Straker\EasyTranslationPlatform\Model\Job $_job */
     protected $_job;
     protected $_entityId;
     protected $_jobTypeId = Model\JobType::JOB_TYPE_ATTRIBUTE;
@@ -28,7 +27,7 @@ class Grid extends Extended
         array $data = []
     ) {
         $this->_jobFactory = $jobFactory;
-        parent::__construct($context,$backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     public function _construct()
@@ -37,7 +36,7 @@ class Grid extends Extended
         $this->_jobId = $requestData['job_id'];
         $this->_jobKey = $requestData['job_key'];
         $this->_sourceStoreId = $this->getRequest()->getParam('source_store_id');
-        $this->_job = $this->_jobFactory->create()->load( $this->_jobId );
+        $this->_job = $this->_jobFactory->create()->load($this->_jobId);
         parent::_construct();
     }
 
@@ -49,8 +48,8 @@ class Grid extends Extended
         $productCollection = $this->_job->getProductCollection()
             ->addAttributeToSelect('name')
             ->addAttributeToSelect('price');
-        if( !empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)){
-            $productCollection->addStoreFilter( $this->_sourceStoreId );
+        if (!empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)) {
+            $productCollection->addStoreFilter($this->_sourceStoreId);
         }
         $this->setCollection($productCollection);
         return parent::_prepareCollection();
@@ -139,6 +138,7 @@ class Grid extends Extended
                 'column_css_class' => 'col-action'
             ]
         );
+
         return parent::_prepareColumns();
     }
 

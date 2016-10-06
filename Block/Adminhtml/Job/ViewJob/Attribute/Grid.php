@@ -42,7 +42,7 @@ class Grid extends Extended
             ->addFieldToFilter('main_table.job_id', ['eq' => $this->_jobId ])
             ->addFieldToFilter('main_table.entity_id', ['eq' => $this->_entityId ]);
 
-        $this->setCollection( $attrConnection );
+        $this->setCollection($attrConnection);
         return parent::_prepareCollection();
     }
 
@@ -65,7 +65,7 @@ class Grid extends Extended
         $this->addColumn(
             'attribute_translation_id',
             [
-                'header' => __( 'ID'),
+                'header' => __('ID'),
                 'type' => 'html',
                 'name' => 'attribute_translation_id',
                 'align' => 'left',
@@ -78,7 +78,7 @@ class Grid extends Extended
         $this->addColumn(
             'is_label',
             [
-                'header' => __( 'Is Label'),
+                'header' => __('Is Label'),
                 'type' => 'text',
                 'filter' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Filter\JobAttributeIsLabel',
                 'name' => 'label',
@@ -91,7 +91,7 @@ class Grid extends Extended
         $this->addColumn(
             'label',
             [
-                'header' => __( 'Label'),
+                'header' => __('Label'),
                 'filter' => false,
                 'type' => 'text',
                 'name' => 'label',
@@ -105,7 +105,7 @@ class Grid extends Extended
         $this->addColumn(
             'original_value',
             [
-                'header' => __( 'Source Text'),
+                'header' => __('Source Text'),
                 'type' => 'text',
                 'name' => 'original_value',
                 'align' => 'left',

@@ -12,7 +12,6 @@ use Magento\Backend\Model\Session;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 
-
 class Form extends \Magento\Backend\Block\Widget\Form\Generic
 {
 
@@ -34,7 +33,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->productHelper = $productHelper;
         $this->categoryHelper = $categoryHelper;
 
-        parent::__construct($context,$registry,$formFactory,$data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
 
@@ -62,28 +61,31 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ['legend' => __('Category Attributes'), 'class' => 'settings-attributes']
         );
 
-        $fieldset->addField('default_attributes', 'multiselect', array(
+        $fieldset->addField('default_attributes', 'multiselect', [
             'label' => __('Default'),
             'name' => 'default[]',
             'required' => true,
             'values' =>  $this->getDefaultAttributes()[0],
-            'value'=> $this->getDefaultAttributes()[1]
-        ));
+            'value'=> $this->getDefaultAttributes()[1],
+            'class'=>'straker-attributes'
+        ]);
 
-        $fieldset->addField('custom_attributes', 'multiselect', array(
+        $fieldset->addField('custom_attributes', 'multiselect', [
             'label' => __('Custom'),
             'name' => 'custom[]',
             'values' =>  $this->getCustomAttributes()[0],
-            'value'=> $this->getCustomAttributes()[1]
-        ));
+            'value'=> $this->getCustomAttributes()[1],
+            'class'=>'straker-attributes'
+        ]);
 
-        $fieldset2->addField('category_attributes', 'multiselect', array(
+        $fieldset2->addField('category_attributes', 'multiselect', [
             'label' => __('Default'),
             'name' => 'category[]',
             'required' => true,
             'values' =>  $this->getCategoryAttributes()[0],
-            'value'=> $this->getCategoryAttributes()[1]
-        ));
+            'value'=> $this->getCategoryAttributes()[1],
+            'class'=>'straker-attributes'
+        ]);
 
 
         $form->setUseContainer(true);
@@ -105,17 +107,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $attributes = $this->productHelper->getDefaultAttributes();
 
-        foreach ($attributes as $attribute){
-
+        foreach ($attributes as $attribute) {
             $values[] = ['value' => $attribute->getAttributeId(),'label' => $attribute->getData('frontend_label')];
             $default[] = $attribute->getAttributeId();
-
         }
 
-        usort($values,function($a,$b){
+        usort($values, function ($a, $b) {
 
             return strcmp($a['label'], $b['label']);
-
         });
 
         $array[] = $values;
@@ -133,16 +132,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $attributes = $this->productHelper->getCustomAttributes();
 
-        foreach ($attributes as $attribute){
-
+        foreach ($attributes as $attribute) {
             $values[] = ['value' => $attribute->getAttributeId(),'label' => $attribute->getFrontendLabel()];
             $default[] = $attribute->getAttributeId();
         }
 
-        usort($values,function($a,$b){
+        usort($values, function ($a, $b) {
 
             return strcmp($a['label'], $b['label']);
-
         });
 
         $array[] = $values;
@@ -160,16 +157,14 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $attributes = $this->categoryHelper->getAttributes();
 
-        foreach ($attributes as $attribute){
-
+        foreach ($attributes as $attribute) {
             $values[] = ['value' => $attribute->getAttributeId(),'label' => $attribute->getFrontendLabel()];
             $default[] = $attribute->getAttributeId();
         }
 
-        usort($values,function($a,$b){
+        usort($values, function ($a, $b) {
 
             return strcmp($a['label'], $b['label']);
-
         });
 
         $array[] = $values;
@@ -177,5 +172,4 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         return $array;
     }
-
 }

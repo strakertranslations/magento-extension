@@ -35,8 +35,8 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
                     'label' => __('Delete'),
                     'class' => 'delete',
                     'onclick' => 'deleteConfirm(\'' . __(
-                            'Are you sure you want to do this?'
-                        ) . '\', \'' . $this->getDeleteUrl() . '\')'
+                        'Are you sure you want to do this?'
+                    ) . '\', \'' . $this->getDeleteUrl() . '\')'
                 ]
             );
         }
@@ -52,7 +52,6 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
             ],
             1
         );
-
     }
 
     protected function _prepareLayout()
@@ -73,7 +72,5 @@ class FormContainer extends \Magento\Backend\Block\Widget\Container
     {
 
         return $this->getChildHtml('form');
-
     }
-
 }

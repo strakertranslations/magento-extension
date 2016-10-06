@@ -11,8 +11,6 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory as JobCollectionFactory;
 
-
-
 class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 {
 
@@ -191,7 +189,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $products = $this->getRequest()->getPost('job_products');
 
         if ($products) {
-
             return $products;
         }
 

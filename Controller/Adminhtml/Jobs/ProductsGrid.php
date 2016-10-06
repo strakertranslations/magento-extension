@@ -46,5 +46,4 @@ class ProductsGrid extends \Magento\Backend\App\Action
 
         return $resultLayout;
     }
-
 }

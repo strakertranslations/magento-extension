@@ -14,7 +14,8 @@ class JobTypeActions extends AbstractRenderer
         $params = $this->getRequest()->getParams();
 
         return '<a href="'
-                . $this->getUrl('*/*/ViewJob',
+                . $this->getUrl(
+                    '*/*/ViewJob',
                     [
                         'job_type_id' => $row['job_type_id'],
                         'job_type_referrer' => 0,

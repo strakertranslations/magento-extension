@@ -27,7 +27,7 @@ class Grid extends Extended
         array $data = []
     ) {
         $this->_jobFactory = $jobFactory;
-        parent::__construct($context,$backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     public function _construct()
@@ -36,7 +36,7 @@ class Grid extends Extended
         $this->_jobId = $requestData['job_id'];
         $this->_jobKey = $requestData['job_key'];
         $this->_sourceStoreId = $this->getRequest()->getParam('source_store_id');
-        $this->_job = $this->_jobFactory->create()->load( $this->_jobId );
+        $this->_job = $this->_jobFactory->create()->load($this->_jobId);
         parent::_construct();
     }
 
@@ -46,8 +46,8 @@ class Grid extends Extended
     protected function _prepareCollection()
     {
         $blockCollection = $this->_job->getBlockCollection();
-        if( !empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)){
-            $blockCollection->addStoreFilter( $this->_sourceStoreId );
+        if (!empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)) {
+            $blockCollection->addStoreFilter($this->_sourceStoreId);
         }
         $this->setCollection($blockCollection);
         return parent::_prepareCollection();

@@ -46,5 +46,4 @@ class BlocksGrid extends \Magento\Backend\App\Action
 
         return $resultLayout;
     }
-
 }

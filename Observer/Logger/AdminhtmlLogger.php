@@ -10,7 +10,6 @@ class AdminhtmlLogger implements ObserverInterface
 
     public function __construct(
         Logger $logger
-
     ) {
         $this->_logger = $logger;
     }
@@ -21,6 +20,5 @@ class AdminhtmlLogger implements ObserverInterface
         //$this->_logger->debug('helloWorld');
 
         return $this;
-
     }
 }

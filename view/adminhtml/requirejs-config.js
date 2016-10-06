@@ -8,5 +8,5 @@ var config = {
         '*': {
             rolesTree: 'Magento_User/js/roles-tree'
         }
-    } 
+    }
 };

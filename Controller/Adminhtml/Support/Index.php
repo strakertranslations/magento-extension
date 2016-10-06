@@ -14,8 +14,8 @@ class Index extends \Magento\Framework\App\Action\Action
     public function __construct(
         Context $context,
         PageFactory $pageFactory
-    )
-    {
+    ) {
+    
         $this->_pageFactory = $pageFactory;
         return parent::__construct($context);
     }
@@ -27,7 +27,5 @@ class Index extends \Magento\Framework\App\Action\Action
         $page_object->getConfig()->getTitle()->prepend(__('Straker Translations'));
 
         return $page_object;
-
     }
-
 }

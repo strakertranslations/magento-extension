@@ -14,7 +14,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_backendUrl;
 
-    protected $_magentoDataTables = array(
+    protected $_magentoDataTables = [
         'catalog_product_entity_varchar',
         'catalog_product_entity_text',
         'catalog_category_entity_varchar',
@@ -27,7 +27,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'cms_block_store',
         'url_rewrite',
         'catalog_url_rewrite_product_category'
-    );
+    ];
 
     /**
      * @var StoreManagerInterface $storeManager
@@ -69,19 +69,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function getBlockUrl()
     {
         return $this->_backendUrl->getUrl('EasyTranslationPlatform/Jobs/Blocks', ['_current' => true]);
-
     }
 
-    public function getMagentoDataTableArray(){
+    public function getMagentoDataTableArray()
+    {
         return $this->_magentoDataTables;
     }
 
-    public function getBackupTableNames( $tableName ){
+    public function getBackupTableNames($tableName)
+    {
         return $tableName.self::BACKUP_TABLE_SUFFIX;
     }
 
-    public function getUrl($path = '/', $parameters=[])
+    public function getUrl($path = '/', $parameters = [])
     {
-        return $this->_backendUrl->getUrl($path,$parameters);
+        return $this->_backendUrl->getUrl($path, $parameters);
     }
 }

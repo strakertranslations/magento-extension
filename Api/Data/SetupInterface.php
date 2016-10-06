@@ -13,5 +13,4 @@ interface SetupInterface
     public function saveClientData($data);
 
     public function saveAttributes($attributes);
-
 }

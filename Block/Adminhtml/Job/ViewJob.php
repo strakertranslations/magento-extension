@@ -20,10 +20,10 @@ class ViewJob extends Template
     function _prepareLayout()
     {
         $requestData = $this->getRequest()->getParams();
-        if( array_key_exists('job_type_id', $requestData )){
+        if (array_key_exists('job_type_id', $requestData)) {
             $jobType = $requestData['job_type_id'];
 
-            switch ( $jobType ){
+            switch ($jobType) {
                 case Model\JobType::JOB_TYPE_ATTRIBUTE:
                     $this->addChild(
                         'view_job_attribute_grid',
@@ -91,6 +91,6 @@ class ViewJob extends Template
 
     function getHtml()
     {
-        return  $this->getChildHtml( $this->_childName );
+        return  $this->getChildHtml($this->_childName);
     }
 }

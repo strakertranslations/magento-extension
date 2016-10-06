@@ -175,7 +175,8 @@ class Collection extends JobCollection implements SearchResultInterface
     /**
      * @return $this
      */
-    protected function _beforeLoad() {
+    protected function _beforeLoad()
+    {
         parent::_beforeLoad();
         $this->getSelect()->where('is_test_job = ?', $this->_configHelper->isSandboxMode())->order('created_at DESC')->group('job_key');
         return $this;

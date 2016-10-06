@@ -11,7 +11,6 @@ use Magento\Framework\App\ResourceConnection;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\Data;
 
-
 class RestoreProductData extends Action
 {
 
@@ -43,10 +42,9 @@ class RestoreProductData extends Action
     private function _executeRestore()
     {
 
-        $result = array('Success' => true, 'Message' => '');
+        $result = ['Success' => true, 'Message' => ''];
 
         try {
-
             if (!isset($this->_connection)) {
                 $this->_connection = $this->_resourceConnection->getConnection();
             }
@@ -58,7 +56,6 @@ class RestoreProductData extends Action
                 if ($this->_connection->isTableExists($tableName)
                     && $this->_connection->isTableExists($backupTableName)
                 ) {
-
                     //generating sql statement of 'insert into ... select ...'
                     $sql = $this->_connection->insertFromSelect(
                         $this->_connection->select()
@@ -82,14 +79,12 @@ class RestoreProductData extends Action
         }
 
         return $result;
-
     }
 
 
     public function execute()
     {
         try {
-
             if ($this->_hasBackupData()) {
                 $this->_truncateMagentoDataTables();
             } else {
@@ -110,7 +105,6 @@ class RestoreProductData extends Action
                 $this->_logger->error($message);
                 $this->_messageManager->addErrorMessage($message);
             }
-
         } catch (Exception $e) {
             $message = __($e->getMessage());
             $this->_logger->error($message);
@@ -130,10 +124,9 @@ class RestoreProductData extends Action
         }
 
         foreach ($this->_dataHelper->getMagentoDataTableArray() as $tableName) {
+            $backupTableName = $this->_dataHelper->getBackupTableNames($this->_resourceConnection->getTableName($tableName));
 
-            $backupTableName = $this->_dataHelper->getBackupTableNames( $this->_resourceConnection->getTableName( $tableName ) );
-
-            if( !$this->_connection->isTableExists($backupTableName) ){
+            if (!$this->_connection->isTableExists($backupTableName)) {
                 $result = false;
                 break;
             }
@@ -164,10 +157,10 @@ class RestoreProductData extends Action
         }
 
         foreach ($this->_dataHelper->getMagentoDataTableArray() as $rawTableName) {
-            if( strcasecmp($rawTableName, 'cms_page') === 0  ||
+            if (strcasecmp($rawTableName, 'cms_page') === 0  ||
                 strcasecmp($rawTableName, 'cms_block') === 0 ||
                 strcasecmp($rawTableName, 'catalog_url_rewrite_product_category') === 0
-            ){
+            ) {
                 continue;
             }
             $tableName = $this->_resourceConnection->getTableName($rawTableName);
@@ -177,7 +170,7 @@ class RestoreProductData extends Action
                     $this->_connection->dropForeignKey($tableName, $foreignKey['FK_NAME']);
                 }
 
-                switch ($rawTableName){
+                switch ($rawTableName) {
                     case 'cms_page_store':
                         $this->_connection->truncateTable($tableName);
                         $this->_connection->truncateTable($this->_resourceConnection->getTableName('cms_page'));
@@ -189,12 +182,12 @@ class RestoreProductData extends Action
                     case 'url_rewrite':
                         $foreignTable = $this->_resourceConnection->getTableName('catalog_url_rewrite_product_category');
                         $urlForeignKeys = $this->_connection->getForeignKeys($foreignTable);
-                        foreach ($urlForeignKeys as $urlForeignKey){
+                        foreach ($urlForeignKeys as $urlForeignKey) {
                             $this->_connection->dropForeignKey($foreignTable, $urlForeignKey['FK_NAME']);
                         }
                         $this->_connection->truncateTable($tableName);
                         $this->_connection->truncateTable($foreignTable);
-                        foreach ($urlForeignKeys as $urlForeignKey){
+                        foreach ($urlForeignKeys as $urlForeignKey) {
                             $this->_connection->addForeignKey(
                                 $urlForeignKey['FK_NAME'],
                                 $urlForeignKey['TABLE_NAME'],
@@ -229,5 +222,4 @@ class RestoreProductData extends Action
             }
         }
     }
-
 }

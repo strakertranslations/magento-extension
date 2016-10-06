@@ -28,8 +28,10 @@ class Collection extends AbstractCollection
 
     protected function _construct()
     {
-        $this->_init('Straker\EasyTranslationPlatform\Model\AttributeTranslation',
-            'Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation');
+        $this->_init(
+            'Straker\EasyTranslationPlatform\Model\AttributeTranslation',
+            'Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation'
+        );
     }
 
     public function massUpdate(array $data)
@@ -44,18 +46,19 @@ class Collection extends AbstractCollection
      * @return $this
      * @internal param int $attrId
      */
-    function addCategoryName( $sourceStoreId = 0 ){
+    function addCategoryName($sourceStoreId = 0)
+    {
         $categoryTable = $this->getTable('catalog_category_entity_varchar');
         $nameAttribute = $this->_attributeRepository->get(CategoryAttributeInterface::ENTITY_TYPE_CODE, 'name');
         $attrId = $nameAttribute->getAttributeId();
-        if( $sourceStoreId == 0 ){
+        if ($sourceStoreId == 0) {
             $this->getSelect()
                 ->joinLeft(
                     ['cn'=> $categoryTable],
                     'main_table.entity_id = cn.entity_id AND cn.store_id = 0 AND cn.attribute_id = ' . $attrId,
                     ['name' => 'value']
                 );
-        }else{
+        } else {
             $this->getSelect()
                 ->columns(
                     'if(cn_store.value IS NOT NULL, cn_store.value, cn_default.value) AS name'

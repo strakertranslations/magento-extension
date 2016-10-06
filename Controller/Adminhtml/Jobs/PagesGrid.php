@@ -45,5 +45,4 @@ class PagesGrid extends \Magento\Backend\App\Action
 
         return $resultLayout;
     }
-
 }

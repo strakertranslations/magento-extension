@@ -53,7 +53,7 @@ class Index extends Action
      */
     public function execute()
     {
-        if($this->_configHelper->isSandboxMode()){
+        if ($this->_configHelper->isSandboxMode()) {
             $this->messageManager->addNotice($this->_configHelper->getSandboxMessage());
         }
         $this->refreshJobs();
@@ -64,82 +64,81 @@ class Index extends Action
         return $resultPage;
     }
 
-    protected function refreshJobs(){
+    protected function refreshJobs()
+    {
         $updatedJobs = [];
         $localJobIds = [];
         //refresh all jobs
-        try{
+        try {
             $apiData = $this->_strakerApi->getTranslation();
-            if( isset( $apiData->job ) ){
+            if (isset($apiData->job)) {
                 $apiJobs = $apiData->job;
-                if( !empty( $apiData ) && count( $apiJobs ) > 0 ){
-                    foreach ( $apiJobs as $apiJob ){
-                        if( $apiJob->job_key ){
+                if (!empty($apiData) && count($apiJobs) > 0) {
+                    foreach ($apiJobs as $apiJob) {
+                        if ($apiJob->job_key) {
                             $localJobData = $this->_jobFactory->create()->getCollection()->addFieldToFilter('job_key', ['eq' => $apiJob->job_key ])->getItems();
 
-                            if(!empty($localJobData) ){
+                            if (!empty($localJobData)) {
 //                                $localJob = reset( $localJobData );
 //                                array_push( $localJobIds, $localJob->getId() );
 //                                $isUpdate = $this->_compareJobs( $apiJob, $localJob );
 //                                if( $isUpdate['isSuccess'] ){
 //                                    array_push( $updatedJobs, $localJob->getId() );
 //                                }
-                                foreach( $localJobData as $key => $localJob ){
-                                    array_push( $localJobIds, $localJob->getId() );
-                                    $isUpdate = $this->_compareJobs( $apiJob, $localJob );
-                                    if( $isUpdate['isSuccess'] ){
+                                foreach ($localJobData as $key => $localJob) {
+                                    array_push($localJobIds, $localJob->getId());
+                                    $isUpdate = $this->_compareJobs($apiJob, $localJob);
+                                    if ($isUpdate['isSuccess']) {
                                         $tjNumber = $localJob->getJobNumber();
-                                        if( !empty($tjNumber) && !in_array($tjNumber, $updatedJobs) ){
-                                            array_push( $updatedJobs, $tjNumber);
+                                        if (!empty($tjNumber) && !in_array($tjNumber, $updatedJobs)) {
+                                            array_push($updatedJobs, $tjNumber);
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    if( count( $updatedJobs ) > 0 ){
-                        $this->messageManager->addSuccessMessage( __( implode(', ', $updatedJobs )  .' has been updated!') );
-                    }
-                    elseif (count($localJobIds) <= 0){
+                    if (count($updatedJobs) > 0) {
+                        $this->messageManager->addSuccessMessage(__(implode(', ', $updatedJobs)  .' has been updated!'));
+                    } elseif (count($localJobIds) <= 0) {
                         $result['status'] = false;
                         $result['message'] = __('You have not created any job.');
-                        $this->_logger->addInfo( $result['message']);
-                        $this->messageManager->addNoticeMessage( $result['message'] );
-                    }
-                    else
-                    {
+                        $this->_logger->addInfo($result['message']);
+                        $this->messageManager->addNoticeMessage($result['message']);
+                    } else {
                         $result['status'] = false;
                         $result['message'] = __('All jobs are up to date.');
-                        $this->_logger->addInfo( $result['message']);
+                        $this->_logger->addInfo($result['message']);
                         //$this->messageManager->addSuccessMessage( $result['message'] );
                     }
-                }else{
+                } else {
                     $result['status'] = false;
                     $result['message'] =  __('No job has been found or failed to connect server.');
-                    $this->messageManager->addErrorMessage( $result['message'] );
+                    $this->messageManager->addErrorMessage($result['message']);
                     $this->_logger->addError($result['message']);
                 }
-            }else{
+            } else {
                 $dataArray = (array)$apiData;
                 $result['status'] = false;
-                $result['message'] =  __( 'Server: ' . $dataArray['message'] );
-                $this->messageManager->addErrorMessage( $result['message'] );
+                $result['message'] =  __('Server: ' . $dataArray['message']);
+                $this->messageManager->addErrorMessage($result['message']);
                 $this->_logger->addError($result['message']);
             }
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             $result['status'] = false;
             $result['message'] =  __('Failed to connect server.');
-            $this->messageManager->addErrorMessage( $result['message'] );
+            $this->messageManager->addErrorMessage($result['message']);
             $this->_logger->addError($result['message'], [ 'exception' => $e->getMessage() ]);
         }
     }
 
-    protected function resolveApiStatus( $apiJob ){
+    protected function resolveApiStatus($apiJob)
+    {
         $status = 0;
-        if( !empty($apiJob) && !empty($apiJob->status)){
-            switch (strtolower( $apiJob->status ) ){
+        if (!empty($apiJob) && !empty($apiJob->status)) {
+            switch (strtolower($apiJob->status)) {
                 case 'queued':
-                    $status =  strcasecmp( $apiJob->quotation, 'ready') == 0  ? 3 : 2;
+                    $status =  strcasecmp($apiJob->quotation, 'ready') == 0  ? 3 : 2;
                     break;
                 case 'in_progress':
                     $status = 4;
@@ -162,10 +161,11 @@ class Index extends Action
      * @param $localJob
      * @return array
      */
-    protected function _compareJobs( $apiJob, $localJob){
+    protected function _compareJobs($apiJob, $localJob)
+    {
 
-        if( $localJob->getJobStatusId() < $this->resolveApiStatus( $apiJob ) ){
-            return $localJob->updateStatus( $apiJob );
+        if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
+            return $localJob->updateStatus($apiJob);
         }
         return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
     }

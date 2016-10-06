@@ -76,21 +76,23 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * @return \Magento\Store\Api\Data\WebsiteInterface[]
      */
-    public function getWebsites() {
+    public function getWebsites()
+    {
         return $this->_storeManager->getWebsites();
     }
 
-    public function _getOptions(
-    ){
+    public function _getOptions()
+    {
         return $this->_strakerApi->getLanguages();
     }
 
-    public function getStoreLanguageSetting( $storeId ){
-        $storeInfo = $this->_configHelper->getStoreInfo( $storeId );
-        $source_store = array_key_exists('straker/general/source_store',$storeInfo ) ? $storeInfo['straker/general/source_store'] : false;
-        $source_language = array_key_exists('straker/general/source_language',$storeInfo ) ? $storeInfo['straker/general/source_language'] :  false;
-        $destination_language = array_key_exists('straker/general/destination_language',$storeInfo ) ? $storeInfo['straker/general/destination_language'] :  false;
-        $sourceStore = $source_store ? $this->_storeManager->getStore( $source_store ) : $source_store;
+    public function getStoreLanguageSetting($storeId)
+    {
+        $storeInfo = $this->_configHelper->getStoreInfo($storeId);
+        $source_store = array_key_exists('straker/general/source_store', $storeInfo) ? $storeInfo['straker/general/source_store'] : false;
+        $source_language = array_key_exists('straker/general/source_language', $storeInfo) ? $storeInfo['straker/general/source_language'] :  false;
+        $destination_language = array_key_exists('straker/general/destination_language', $storeInfo) ? $storeInfo['straker/general/destination_language'] :  false;
+        $sourceStore = $source_store ? $this->_storeManager->getStore($source_store) : $source_store;
         $storeInfoArray = [
             'source' => $sourceStore,
             'source_language' => $source_language,
@@ -100,14 +102,13 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
 
         $flag = true;
 
-        foreach ( $storeInfoArray as $item ){
-            if( !$item ){
-               $flag = false;
+        foreach ($storeInfoArray as $item) {
+            if (!$item) {
+                $flag = false;
                 break;
             }
         }
         return $flag ? $storeInfoArray : $flag;
-
     }
 
     /**
@@ -115,7 +116,7 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getRemoveTranslationButtonHtml( $store )
+    public function getRemoveTranslationButtonHtml($store)
     {
         if ($store->getId() && $this->_configHelper->getStoreSetup($store->getId())) {
             $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
@@ -132,5 +133,4 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
 //            return '<div class="empty-button">'.__('No language settings applied').'</div>';
 //        }
     }
-
 }

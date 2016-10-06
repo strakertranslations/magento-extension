@@ -220,19 +220,19 @@ class InstallSchema implements InstallSchemaInterface
             )->addForeignKey(
                 $installer->getFkName(Model\Job::ENTITY, 'target_store_id', Store::ENTITY, 'store_id'),
                 'target_store_id',
-                $installer->getTable( Store::ENTITY ),
+                $installer->getTable(Store::ENTITY),
                 'store_id',
                 Table::ACTION_CASCADE
             )->addForeignKey(
                 $installer->getFkName(Model\Job::ENTITY, 'job_type_id', Model\JobType::ENTITY, 'type_id'),
                 'job_type_id',
-                $installer->getTable( Model\JobType::ENTITY ),
+                $installer->getTable(Model\JobType::ENTITY),
                 'type_id',
                 Table::ACTION_CASCADE
             )->addForeignKey(
                 $installer->getFkName(Model\Job::ENTITY, 'job_status_id', Model\JobStatus::ENTITY, 'status_id'),
                 'job_status_id',
-                $installer->getTable( Model\JobStatus::ENTITY ),
+                $installer->getTable(Model\JobStatus::ENTITY),
                 'status_id',
                 Table::ACTION_CASCADE
             );
@@ -323,14 +323,17 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false, 'default' => '1',],
                 'Is Active'
             )->addIndex(
-                $installer->getIdxName(Model\AttributeTranslation::ENTITY, ['attribute_translation_id'],
-                    AdapterInterface::INDEX_TYPE_UNIQUE),
+                $installer->getIdxName(
+                    Model\AttributeTranslation::ENTITY,
+                    ['attribute_translation_id'],
+                    AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
                 'attribute_translation_id',
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addForeignKey(
                 $installer->getFkName(Model\AttributeTranslation::ENTITY, 'job_id', Model\Job::ENTITY, 'job_id'),
                 'job_id',
-                $installer->getTable( Model\Job::ENTITY ),
+                $installer->getTable(Model\Job::ENTITY),
                 'job_id',
                 Table::ACTION_CASCADE
             )
@@ -412,20 +415,23 @@ class InstallSchema implements InstallSchemaInterface
                 ['nullable' => false, 'default' => '1',],
                 'Is Active'
             )->addIndex(
-                $installer->getIdxName(Model\AttributeOptionTranslation::ENTITY, ['attribute_option_translation_id'],
-                    AdapterInterface::INDEX_TYPE_UNIQUE),
+                $installer->getIdxName(
+                    Model\AttributeOptionTranslation::ENTITY,
+                    ['attribute_option_translation_id'],
+                    AdapterInterface::INDEX_TYPE_UNIQUE
+                ),
                 'attribute_option_translation_id',
                 ['type' => AdapterInterface::INDEX_TYPE_UNIQUE]
             )->addForeignKey(
                 $installer->getFkName(Model\AttributeOptionTranslation::ENTITY, 'attribute_translation_id', Model\AttributeTranslation::ENTITY, 'attribute_translation_id'),
                 'attribute_translation_id',
-                $installer->getTable( Model\AttributeTranslation::ENTITY ),
+                $installer->getTable(Model\AttributeTranslation::ENTITY),
                 'attribute_translation_id',
                 Table::ACTION_CASCADE
             )->addForeignKey(
                 $installer->getFkName(Model\AttributeOptionTranslation::ENTITY, 'option_id', 'eav_attribute_option', 'option_id'),
                 'option_id',
-                $installer->getTable( 'eav_attribute_option' ),
+                $installer->getTable('eav_attribute_option'),
                 'option_id',
                 Table::ACTION_CASCADE
             );
