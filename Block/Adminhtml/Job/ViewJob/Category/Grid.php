@@ -5,13 +5,7 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Category;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data as BackendHelperData;
-use Magento\Catalog\Api\Data\CategoryAttributeInterface;
-use Magento\Catalog\Api\Data\EavAttributeInterface;
-use Magento\Catalog\Model\Category;
-use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\Eav\Model\Entity;
-use Magento\Framework\EntityManager\EntityManager;
-use Magento\Framework\View\Element\Template;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Straker\EasyTranslationPlatform\Model;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 
@@ -31,11 +25,9 @@ class Grid extends Extended
         Context $context,
         BackendHelperData $backendHelper,
         JobFactory $jobFactory,
-        AttributeRepositoryInterface $attributeRepository,
         array $data = []
     ) {
         $this->_jobFactory = $jobFactory;
-        $this->_attributeRepository = $attributeRepository;
         parent::__construct($context,$backendHelper, $data);
     }
 
@@ -54,15 +46,13 @@ class Grid extends Extended
      */
     protected function _prepareCollection()
     {
-        $nameAttribute = $this->_attributeRepository->get(CategoryAttributeInterface::ENTITY_TYPE_CODE, 'name');
-        $categoryCollection = $this->_job->getCategoryCollection();
-
+        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $strakerCategoryCollection */
+        $strakerCategoryCollection = $this->_job->getCategoryCollection();
         if( !empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)){
-            $this->setCollection($categoryCollection->addCategoryName( $this->_sourceStoreId, $nameAttribute->getAttributeId() ));
+            $this->setCollection( $strakerCategoryCollection->addCategoryName( $this->_sourceStoreId ) );
         }else{
-            $this->setCollection($categoryCollection->addCategoryName());
+            $this->setCollection( $strakerCategoryCollection->addCategoryName() );
         }
-
         return parent::_prepareCollection();
     }
 
@@ -88,6 +78,7 @@ class Grid extends Extended
                 'header' => __('Category ID'),
                 'type' => 'number',
                 'index' => 'entity_id',
+                'filter_index' => 'main_table.entity_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id',
             ]
@@ -96,9 +87,11 @@ class Grid extends Extended
             'name',
             [
                 'header' => __('Name'),
+                'type'  => 'text',
                 'index' => 'name',
-                'class' => 'xxx',
-                'width' => '50px',
+                'width' => '50px'
+                ,
+                'filter_condition_callback' => [$this, 'filterName']
             ]
         );
 
@@ -153,4 +146,12 @@ class Grid extends Extended
             ]
         );
     }
+
+    function filterName($collection, $column)
+    {
+        $condition = $column->getFilter()->getCondition();
+        $collection->getSelect()->having('`name` LIKE ' . reset($condition));
+        return $this;
+    }
+
 }
