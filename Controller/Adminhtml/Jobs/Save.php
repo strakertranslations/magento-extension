@@ -124,7 +124,7 @@ class Save extends Action
 
         $jobData = [];
 
-        if ($data && $this->checkEmptyJob($data)<2) {
+        if ($data && $this->checkEmptyJob($data)>0) {
 
             if(strlen($data['magento_source_store'])>0)
             {
@@ -142,12 +142,12 @@ class Save extends Action
                 $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
             }
 
-            if(strlen($data['categories'])>0)
+            if(strlen($data['categories'])>0 && strlen($data['categories'])>0)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
             }
 
-            if(isset($data['pages']) && strlen($data['pages'])<1)
+            if(isset($data['pages']) && strlen($data['pages'])>0)
             {
                 $jobData[] = $this->_jobHelper->createJob($data)->generatePageJob();
 
@@ -302,14 +302,18 @@ class Save extends Action
 
     protected function checkEmptyJob($data){
 
-        $empty = 0;
+
+        $empty=0;
 
         $required = ['products','categories','pages','blocks'];
 
         foreach ($required as $value)
         {
-            if(array_key_exists($value,$data) && strlen($data[$value])<1){
-                $empty++;
+            if(array_key_exists($value,$data)){
+
+                if(strlen($data[$value])>0){
+                    $empty++;
+                }
             }
         }
 
