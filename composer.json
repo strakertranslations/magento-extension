@@ -37,6 +37,6 @@
       "Straker\\EasyTranslationPlatform\\":""
     }
   },
-  "minimum-stability": "alpha",
+  "minimum-stability": "stable",
   "prefer-stable": true
 }
