@@ -1,0 +1,28 @@
+<div class="content-header">
+    <h3><?php echo $this->__('Create New Job') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getRequest()->getParam('store')) ?></h3>
+</div>
+<ol class="wizard" data-wizard-steps="4">
+    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Select Details') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Select Content') ?></li>
+    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+</ol>
+<div class="straker-main-container border">
+    <h1><?php echo $this->__('CMS Block Details') ?></h1>
+    <p><?php echo $this->__('What CMS block details would you like to translate?') ?></p>
+    <form action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_block/attribute") ?>" >
+        <div style="padding:0; margin-bottom: 30px;">
+            <div style="text-align: left;">
+                <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+                <?php foreach($this->getAttributes() as $columnName => $label):?>
+                    <input type="checkbox" name="attr[<?php echo $columnName ?>]" id="<?php echo $columnName ?>" value="1" checked="checked">
+                    <label for="<?php echo $columnName ?>"><?php echo $label ?></label>
+                    <br>
+                <?php endforeach; ?>
+            </div>
+            <div class="clear"></div>
+            <input type="submit" class="form-button right" value="Next" title="Next">
+            <input type="button" class="form-button right" value="Back" title="Back" onclick="window.location.href = '<?php echo $this->getUrl('*/straker_new', array('store'=> $this->getSetupStoreId())); ?>'">
+        </div>
+    </form>
+</div>

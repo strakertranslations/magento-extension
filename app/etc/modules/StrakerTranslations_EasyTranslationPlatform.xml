@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <StrakerTranslations_EasyTranslationPlatform>
+            <active>true</active>
+            <codePool>community</codePool>
+        </StrakerTranslations_EasyTranslationPlatform>
+    </modules>
+</config>
