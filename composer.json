@@ -30,7 +30,7 @@
   "minimum-stability":"stable",
   "require":{
     "php":"~5.5.0|~5.6.0|~7.0.0",
-    "strakertranslations/magento2-extension":"dev-master"
+    "strakertranslations/magento2-extension":"*"
   },
   "autoload":{
     "files":["registration.php"],
