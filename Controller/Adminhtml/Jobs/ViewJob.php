@@ -20,7 +20,6 @@ class ViewJob extends Action
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $_resultPageFactory;
-    protected $_registry;
     protected $_configHelper;
 
     /**

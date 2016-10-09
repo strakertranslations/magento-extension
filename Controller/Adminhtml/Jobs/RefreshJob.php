@@ -69,7 +69,7 @@ class RefreshJob extends \Magento\Backend\App\Action
                     }
 //                var_dump($updatedJobs );
                     if (count($updatedJobs) > 0) {
-                        $this->messageManager->addSuccessMessage(__('The status of the jobs [Id: '. implode(',', $updatedJobs)  .'] has been updated!'));
+                        $this->messageManager->addSuccessMessage(__('The status of the jobs [Id: '. implode(',', $updatedJobs)  .'] has been updated.'));
                     } else {
                         $result['status'] = false;
                         $result['message'] = __('The Job is up to date.');

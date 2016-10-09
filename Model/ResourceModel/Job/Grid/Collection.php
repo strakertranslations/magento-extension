@@ -2,15 +2,13 @@
 
 namespace Straker\EasyTranslationPlatform\Model\ResourceModel\Job\Grid;
 
-use Magento\Eav\Model\Entity\Store;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Search\AggregationInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Registry;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model;
 use Psr\Log\LoggerInterface;
@@ -26,6 +24,9 @@ class Collection extends JobCollection implements SearchResultInterface
      * @var AggregationInterface
      */
     protected $aggregations;
+    protected $_coreRegistry;
+//    protected $_configHelper;
+
 
     /**
      * Collection constructor.
@@ -33,25 +34,23 @@ class Collection extends JobCollection implements SearchResultInterface
      * @param LoggerInterface $logger
      * @param FetchStrategyInterface $fetchStrategy
      * @param ManagerInterface $eventManager
-     * @param StoreManagerInterface $storeManager
      * @param ConfigHelper $configHelper
-     * @param $mainTable
-     * @param $eventPrefix
+     * @param Registry $registry
+     * @param \Magento\Framework\DB\Adapter\AdapterInterface $mainTable
+     * @param AbstractDb $eventPrefix
      * @param $eventObject
      * @param $resourceModel
      * @param string $model
      * @param null $connection
-     * @param AbstractDb $resource
-     * @internal param ConfigHelper $configHelper
+     * @param AbstractDb|null $resource
      */
     public function __construct(
         EntityFactoryInterface $entityFactory,
         LoggerInterface $logger,
         FetchStrategyInterface $fetchStrategy,
         ManagerInterface $eventManager,
-        StoreManagerInterface $storeManager,
-        // MetadataPool $metadataPool,
         ConfigHelper $configHelper,
+        Registry $registry,
         $mainTable,
         $eventPrefix,
         $eventObject,
@@ -60,20 +59,19 @@ class Collection extends JobCollection implements SearchResultInterface
         $connection = null,
         AbstractDb $resource = null
     ) {
-//        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $configHelper);
         parent::__construct(
             $entityFactory,
             $logger,
             $fetchStrategy,
             $eventManager,
-            $connection,
-            $resource
+            $configHelper,
+            $registry
         );
         $this->_eventPrefix = $eventPrefix;
         $this->_eventObject = $eventObject;
+        $this->_coreRegistry = $registry;
         $this->_init($model, $resourceModel);
         $this->setMainTable($mainTable);
-        $this->_configHelper = $configHelper;
     }
 
     /**
@@ -83,6 +81,7 @@ class Collection extends JobCollection implements SearchResultInterface
     {
         return $this->aggregations;
     }
+
     /**
      * @param AggregationInterface $aggregations
      * @return $this
@@ -91,6 +90,7 @@ class Collection extends JobCollection implements SearchResultInterface
     {
         $this->aggregations = $aggregations;
     }
+
     /**
      * Retrieve all ids for collection
      * Backward compatibility with EAV collection
@@ -103,6 +103,7 @@ class Collection extends JobCollection implements SearchResultInterface
     {
         return $this->getConnection()->fetchCol($this->_getAllIdsSelect($limit, $offset), $this->_bindParams);
     }
+
     /**
      * Get search criteria.
      *
@@ -112,6 +113,7 @@ class Collection extends JobCollection implements SearchResultInterface
     {
         return null;
     }
+
     /**
      * Set search criteria.
      *
@@ -122,21 +124,6 @@ class Collection extends JobCollection implements SearchResultInterface
     public function setSearchCriteria(\Magento\Framework\Api\SearchCriteriaInterface $searchCriteria = null)
     {
         return $this;
-    }
-
-    function getSelectCountSql()
-    {
-//        $select = clone $this->getSelect();
-//        $select->where('is_test_job = ?', $this->_configHelper->isSandboxMode());
-//        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
-//        $select->columns('COUNT(distinct job_key)');
-////        var_dump($select->__toString());exit;
-////        $count = $select->query()->fetchAll()[0]['RowCount'];
-//        return $select;
-
-        $select = parent::getSelectCountSql();
-        $select->where('is_test_job = ?', $this->_configHelper->isSandboxMode());
-        return $select;
     }
 
     /**
@@ -160,6 +147,7 @@ class Collection extends JobCollection implements SearchResultInterface
     {
         return $this;
     }
+
     /**
      * Set items list.
      *
@@ -172,13 +160,15 @@ class Collection extends JobCollection implements SearchResultInterface
         return $this;
     }
 
-    /**
-     * @return $this
-     */
     protected function _beforeLoad()
     {
         parent::_beforeLoad();
-        $this->getSelect()->where('is_test_job = ?', $this->_configHelper->isSandboxMode())->order('created_at DESC')->group('job_key');
+        $this->getSelect()->where('is_test_job = ?', $this->_configHelper->isSandboxMode())->group('job_key');
+        $hasUpdatedJob = $this->_coreRegistry->registry('job_updated');
+        if( $hasUpdatedJob ){
+            $this->getSelect()->order('updated_at DESC');
+            $this->_coreRegistry->unregister('job_updated');
+        }
         return $this;
     }
 }

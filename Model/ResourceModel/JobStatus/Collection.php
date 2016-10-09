@@ -40,7 +40,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $frontEndLabel = __(ucwords('in progress'));
                 break;
             case 'completed':
-                $frontEndLabel = __(ucwords('please publish'));
+                $frontEndLabel = __(ucwords('publish'));
                 break;
             case 'confirmed':
                 $frontEndLabel = __(ucwords('published'));

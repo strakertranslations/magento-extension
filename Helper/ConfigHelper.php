@@ -5,6 +5,7 @@ namespace Straker\EasyTranslationPlatform\Helper;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -15,17 +16,20 @@ class ConfigHelper extends AbstractHelper
     protected $_scopeFactory;
     protected $_directoryList;
     protected $_urlFactory;
+    protected $_productMetadata;
 
     public function __construct(
         Context $context,
         ScopedFactory $scopedFactory,
         UrlFactory $urlFactory,
-        DirectoryList $directoryList
+        DirectoryList $directoryList,
+        ProductMetadataInterface $productMetadata
     ) {
     
         $this->_scopeFactory = $scopedFactory;
         $this->_directoryList = $directoryList;
         $this->_urlFactory = $urlFactory;
+        $this->_productMetadata = $productMetadata;
         parent::__construct($context);
     }
 
@@ -224,5 +228,9 @@ class ConfigHelper extends AbstractHelper
                 . '">Straker Configuration</a>'
             )
             . '</p>';
+    }
+
+    public function getMagentoVersion(){
+        return $this->_productMetadata->getVersion();
     }
 }

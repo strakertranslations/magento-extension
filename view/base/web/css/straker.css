@@ -117,10 +117,10 @@
     cursor: pointer;
 }
 
-#straker-job-grid table thead tr th:first-child,
-#straker-job-grid table tbody tr td.job-id{
-    display: none;
-}
+/*#straker-job-grid table thead tr th:first-child,*/
+/*#straker-job-grid table tbody tr td.job-id{*/
+    /*display: none;*/
+/*}*/
 
 a.straker-job-refresh-anchor{
     display: inline-block;
