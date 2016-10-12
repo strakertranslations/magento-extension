@@ -35,6 +35,5 @@
     "psr-4":{
       "Straker\\EasyTranslationPlatform\\":""
     }
-  },
-  "prefer-stable": true
+  }
 }
