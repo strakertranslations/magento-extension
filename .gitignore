@@ -50,3 +50,5 @@ Controller/Adminhtml/Test/
 view/adminhtml/layout/easytranslationplatform_test_index.xml
 view/adminhtml/templates/test/
 view/adminhtml/web/js/test/
+
+log/*
