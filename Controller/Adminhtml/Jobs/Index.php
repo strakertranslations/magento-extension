@@ -9,6 +9,7 @@ use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\StrakerAPI;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Magento\Framework\Registry;
 
 class Index extends Action
 {
@@ -21,6 +22,7 @@ class Index extends Action
     protected $_strakerApi;
     protected $_jobFactory;
     protected $_logger;
+    protected $_coreRegistry;
 
     /**
      * @param Context $context
@@ -29,6 +31,7 @@ class Index extends Action
      * @param StrakerAPI $strakerAPI
      * @param JobFactory $jobFactory
      * @param ConfigHelper $configHelper
+     * @param Registry $registry
      */
     public function __construct(
         Context $context,
@@ -36,7 +39,8 @@ class Index extends Action
         Logger $logger,
         StrakerAPI $strakerAPI,
         JobFactory $jobFactory,
-        ConfigHelper $configHelper
+        ConfigHelper $configHelper,
+        Registry $registry
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
@@ -44,6 +48,7 @@ class Index extends Action
         $this->_logger = $logger;
         $this->_jobFactory = $jobFactory;
         $this->_configHelper = $configHelper;
+        $this->_coreRegistry = $registry;
     }
 
     /**
@@ -99,7 +104,8 @@ class Index extends Action
                         }
                     }
                     if (count($updatedJobs) > 0) {
-                        $this->messageManager->addSuccessMessage(__(implode(', ', $updatedJobs)  .' has been updated!'));
+                        $this->_coreRegistry->register('job_updated', true );
+                        $this->messageManager->addSuccessMessage(__(implode(', ', $updatedJobs)  .' has been updated.'));
                     } elseif (count($localJobIds) <= 0) {
                         $result['status'] = false;
                         $result['message'] = __('You have not created any job.');
@@ -120,8 +126,8 @@ class Index extends Action
             } else {
                 $dataArray = (array)$apiData;
                 $result['status'] = false;
-                $result['message'] =  __('Server: ' . $dataArray['message']);
-                $this->messageManager->addErrorMessage($result['message']);
+                $result['message'] =  __( 'Server: ' . $dataArray['message'] );
+//                $this->messageManager->addErrorMessage( $result['message'] );
                 $this->_logger->addError($result['message']);
             }
         } catch (\Exception $e) {

@@ -53,7 +53,13 @@ class JobActions extends Column
 
                     if ($statusId == Model\JobStatus::JOB_STATUS_READY) {
                         $item[$name]['view_quote'] = [
-                            'href' => 'javascript:void(0)',
+                            'href' => $this->getContext()
+                                ->getUrl(
+                                    'EasyTranslationPlatform/Jobs/ViewQuote',
+                                    [
+                                        'job_key' => $item['job_key']
+                                    ]
+                                ),
                             'label' => __('View Quote')
                         ];
                     }

@@ -89,8 +89,7 @@ class ViewJob extends Template
         return parent::_prepareLayout();
     }
 
-    function getHtml()
-    {
+    function getHtml(){
         return  $this->getChildHtml($this->_childName);
     }
 }
