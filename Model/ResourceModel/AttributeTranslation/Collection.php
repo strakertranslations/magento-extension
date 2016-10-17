@@ -1,14 +1,37 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation;
 
+use Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
+use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection;
+use Psr\Log\LoggerInterface;
 use Straker\EasyTranslationPlatform\Model;
+use Zend_Db_Select;
 
-class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
+class Collection extends AbstractCollection
 {
+    protected $_attributeRepository;
+
+    function __construct(
+        EntityFactoryInterface $entityFactory,
+        LoggerInterface $logger,
+        FetchStrategyInterface $fetchStrategy,
+        ManagerInterface $eventManager,
+        AttributeRepositoryInterface $attributeRepository
+    ) {
+        parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager);
+        $this->_attributeRepository = $attributeRepository;
+    }
+
     protected function _construct()
     {
-        $this->_init('Straker\EasyTranslationPlatform\Model\AttributeTranslation',
-            'Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation');
+        $this->_init(
+            'Straker\EasyTranslationPlatform\Model\AttributeTranslation',
+            'Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation'
+        );
     }
 
     public function massUpdate(array $data)
@@ -18,17 +41,24 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         return $this;
     }
 
-    function addCategoryName( $sourceStoreId = 0, $attrId = 0 ){
+    /**
+     * @param int $sourceStoreId
+     * @return $this
+     * @internal param int $attrId
+     */
+    function addCategoryName($sourceStoreId = 0)
+    {
         $categoryTable = $this->getTable('catalog_category_entity_varchar');
-
-        if( $sourceStoreId == 0 ){
+        $nameAttribute = $this->_attributeRepository->get(CategoryAttributeInterface::ENTITY_TYPE_CODE, 'name');
+        $attrId = $nameAttribute->getAttributeId();
+        if ($sourceStoreId == 0) {
             $this->getSelect()
                 ->joinLeft(
                     ['cn'=> $categoryTable],
                     'main_table.entity_id = cn.entity_id AND cn.store_id = 0 AND cn.attribute_id = ' . $attrId,
                     ['name' => 'value']
                 );
-        }else{
+        } else {
             $this->getSelect()
                 ->columns(
                     'if(cn_store.value IS NOT NULL, cn_store.value, cn_default.value) AS name'
@@ -44,5 +74,31 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         }
 
         return $this;
+    }
+
+
+    function getSelectCountSql()
+    {
+        $this->_renderFilters();
+        $countSelect = clone $this->getSelect();
+        $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::FROM);
+        $countSelect->reset(\Magento\Framework\DB\Select::WHERE);
+
+        $select = clone $this->getSelect();
+        $select->reset(\Magento\Framework\DB\Select::ORDER);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
+        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
+
+        $countSelect->from(
+            ['s' => $select ]
+        );
+        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
+        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
+        $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
+        return $countSelect;
     }
 }

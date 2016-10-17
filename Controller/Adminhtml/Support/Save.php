@@ -10,7 +10,6 @@ use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Backend\App\Action\Context;
 
-
 class Save extends \Magento\Backend\App\Action
 {
 
@@ -27,8 +26,8 @@ class Save extends \Magento\Backend\App\Action
         StrakerAPIInterface $strakerAPIInterface,
         SetupInterface $setupInterface,
         Logger $logger
-    )
-    {
+    ) {
+    
         $this->_config = $config;
         $this->_reinitConfig = $reinitableConfigInterface;
         $this->_strakerAPI = $strakerAPIInterface;
@@ -47,53 +46,39 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data) {
-
             try {
-
                 $oSupport = $this->_strakerAPI->callSupport($data);
 
-                if($oSupport->success)
-                {
+                if ($oSupport->success) {
                     $this->messageManager->addSuccess(__('Your support request was submitted successfully.'));
 
                     $resultRedirect->setPath('*/Jobs/index/');
 
                     return $resultRedirect;
-
-                }else{
-
+                } else {
                     $this->messageManager->addError(__('Your support request could not be submitted'));
 
-                    $this->_logger->error('error'.__FILE__.' '.__LINE__.$oSupport->message,[]);
+                    $this->_logger->error('error'.__FILE__.' '.__LINE__.$oSupport->message, []);
 
-                    $resultRedirect->setPath('/*/*/',$data);
+                    $resultRedirect->setPath('/*/*/', $data);
 
                     return $resultRedirect;
-
                 }
-
-
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError($e->getMessage());
-
             } catch (\RuntimeException $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError($e->getMessage());
-
             } catch (\Exception $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addException($e, __('Something went wrong while saving your support request.'));
             }
 
             $resultRedirect->setPath('/*/index/');
-
         }
 
         return $resultRedirect;

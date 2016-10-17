@@ -8,7 +8,7 @@ set :repo_url, 'git@bitbucket.org:strakertranslations/magento2.git'
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 set :branch, ENV['BRANCH'] || "master"
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/mnt/data/apps/php/EasyTranslationPlatform'
+set :deploy_to, '/mnt/data/apps/php/magento2/app/code/Straker/EasyTranslationPlatform'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -55,28 +55,19 @@ namespace :deploy do
   desc "Magento2 directory ownership"
   task :magento2_ownership do
     on roles :all do
-      execute "chown -R www-data:www-data /mnt/data/apps/php/magento2"
+      execute "chmod -R 777 var pub"
     end
   end
 
-  after "deploy:published", "magento2_ownership"
+  after "deploy:published", "magento2_cache"
 
-  desc "Restarting php5-fpm to clear cache"
-  task :fpmreload do
+  desc "Magento2 Clear Cache"
+  task :magento2_cache do
     on roles :all do
-      execute "service php5-fpm restart"
+      execute "cd /mnt/data/apps/php/magento2/bin; php magento cache:clean"
     end
   end
 
-  after "deploy:published", "fpmreload"
-
-  after :restart, :clear_cache do
-    on roles(:web), in: :groups, limit: 3, wait: 10 do
-      # Here we can do anything such as:
-      # within release_path do
-      #   execute :rake, 'cache:clear'
-      # end
-    end
-  end
+  after "deploy:published", "magento2_cache"
 
 end

@@ -51,46 +51,56 @@ class JobActions extends Column
                         'label' => __('View')
                     ];
 
-                    if( $statusId == Model\JobStatus::JOB_STATUS_READY ){
+                    if ($statusId == Model\JobStatus::JOB_STATUS_READY) {
                         $item[$name]['view_quote'] = [
-                            'href' => 'javascript:void(0)',
+                            'href' => $this->getContext()
+                                ->getUrl(
+                                    'EasyTranslationPlatform/Jobs/ViewQuote',
+                                    [
+                                        'job_key' => $item['job_key']
+                                    ]
+                                ),
                             'label' => __('View Quote')
                         ];
                     }
 
                     if ($statusId == Model\JobStatus::JOB_STATUS_COMPLETED) {
-                        $item[$name]['confirm'] = [
-                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Confirm',
+                        $item[$name]['publish'] = [
+                            'href' => $this->getContext()->getUrl(
+                                'EasyTranslationPlatform/Jobs/Confirm',
                                 [
                                     'job_id' => $item['job_id'],
                                     'job_key' => $item['job_key'],
                                     'job_type_id' => $item['job_type_id']
-                                ]),
-                            'label' => __('Confirm')
+                                ]
+                            ),
+                            'label' => __('Publish')
                         ];
                         $item[$name]['reimport'] = [
-                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Reimport',
+                            'href' => $this->getContext()->getUrl(
+                                'EasyTranslationPlatform/Jobs/Reimport',
                                 [
                                     'job_id' => $item['job_id'],
                                     'job_key' => $item['job_key'],
                                     'job_type_id' => $item['job_type_id']
-                                ]),
+                                ]
+                            ),
                             'label' => __('Re-Import')
                         ];
-
                     }
 
                     if ($statusId == Model\JobStatus::JOB_STATUS_CONFIRMED) {
                         $item[$name]['reimport'] = [
-                            'href' => $this->getContext()->getUrl('EasyTranslationPlatform/Jobs/Reimport',
+                            'href' => $this->getContext()->getUrl(
+                                'EasyTranslationPlatform/Jobs/Reimport',
                                 [
                                     'job_id' => $item['job_id'],
                                     'job_key' => $item['job_key'],
                                     'job_type_id' => $item['job_type_id']
-                                ]),
+                                ]
+                            ),
                             'label' => __('Re-Import')
                         ];
-
                     }
 
 //                    if ($statusId == Model\JobStatus::JOB_STATUS_CONFIRMED){
@@ -100,8 +110,6 @@ class JobActions extends Column
 //                            'label' => __('Publish')
 //                        ];
 //                    }
-
-
                 }
             }
         }

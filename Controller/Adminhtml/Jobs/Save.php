@@ -40,13 +40,13 @@ class Save extends Action
      */
     protected $_jobCollectionFactory;
 
-    protected $_multiSelectInputTypes = array(
+    protected $_multiSelectInputTypes = [
         'select', 'multiselect'
-    );
+    ];
 
-    protected $_storeConfigKeys = array(
+    protected $_storeConfigKeys = [
         'magento_destination_store','straker_target_language','magento_source_store','straker_source_language'
-    );
+    ];
 
 
     protected $_jobRequest;
@@ -124,60 +124,43 @@ class Save extends Action
 
         $jobData = [];
 
-        if ($data && $this->checkEmptyJob($data)<2) {
-
-            if(strlen($data['magento_source_store'])>0)
-            {
+        if ($data && $this->checkEmptyJob($data)>0) {
+            if (strlen($data['magento_source_store'])>0) {
                 $this->_saveStoreConfigData($data);
             }
 
-            if(isset($data['blocks']) && strlen($data['blocks'])>0)
-            {
+            if (isset($data['blocks']) && strlen($data['blocks'])>0) {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateBlockJob();
-
             }
 
-            if(isset($data['products']) && strlen($data['products'])>0)
-            {
+            if (isset($data['products']) && strlen($data['products'])>0) {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
             }
 
-            if(strlen($data['categories'])>0)
-            {
+            if (strlen($data['categories'])>0 && strlen($data['categories'])>0) {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
             }
 
-            if(isset($data['pages']) && strlen($data['pages'])<1)
-            {
+            if (isset($data['pages']) && strlen($data['pages'])>0) {
                 $jobData[] = $this->_jobHelper->createJob($data)->generatePageJob();
-
             }
 
             try {
-
                 $this->_summitJob($jobData);
 
                 return $resultRedirect->setPath('*/*/');
-
-
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
                 $this->messageManager->addError($e->getMessage());
 
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
-
-
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             } catch (\RuntimeException $e) {
-
                 $this->messageManager->addError($e->getMessage());
 
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
-
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             } catch (\Exception $e) {
-
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
 
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             }
 
             return $resultRedirect->setPath('*/*/edit', ['job_id' => $this->getRequest()->getParam('job_id')]);
@@ -185,7 +168,7 @@ class Save extends Action
 
         $this->messageManager->addWarningMessage(__('Your job could not be sent. Please select some content.'));
 
-        $resultRedirect->setPath('*/*/edit',[]);
+        $resultRedirect->setPath('*/*/edit', []);
 
         return $resultRedirect;
     }
@@ -194,34 +177,25 @@ class Save extends Action
     {
         $count = 0;
 
-        foreach ($this->_storeConfigKeys as $key ) {
-
+        foreach ($this->_storeConfigKeys as $key) {
             if (isset($data[$key])) {
                 $count ++;
             }
         }
 
-        if($count==4)
-        {
-
+        if ($count==4) {
             try {
-
                 $this->_setupInterface->saveStoreSetup(
                     $data['magento_destination_store'],
                     $data['magento_source_store'],
                     $data['straker_source_language'],
                     $data['straker_target_language']
                 );
-
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
                 $this->messageManager->addError($e->getMessage());
 
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
-
-
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             }
-
         }
     }
 
@@ -229,7 +203,8 @@ class Save extends Action
      * @param $job_object
      * @return bool
      */
-    protected function _summitJob($job_object){
+    protected function _summitJob($job_object)
+    {
 
         $sourcefile = $this->mergeJobData($job_object);
 
@@ -237,7 +212,7 @@ class Save extends Action
 
         $defaultTitle = $strakerJobData->getData('sl').'_'.$strakerJobData->getData('tl').'_'.$strakerJobData->getData('source_store_id').'_'.$strakerJobData->getData('job_id');
 
-        $strakerJobData->setData('title',$defaultTitle);
+        $strakerJobData->setData('title', $defaultTitle);
 
         $this->_jobRequest['title']       = $strakerJobData->getTitle();
         $this->_jobRequest['sl']          = $strakerJobData->getData('sl');
@@ -248,23 +223,18 @@ class Save extends Action
         $response = $this->_api->callTranslate($this->_jobRequest);
 
         try {
-
-            foreach ($job_object as $job)
-            {
+            foreach ($job_object as $job) {
                 $job->addData(['job_key'=>$response->job_key]);
-                $job->setData('sl', $this->_api->getLanguageName( $job->getData('sl')));
-                $job->setData('tl', $this->_api->getLanguageName( $job->getData('tl')));
-                $job->setData('source_file',$sourcefile);
+                $job->setData('sl', $this->_api->getLanguageName($job->getData('sl')));
+                $job->setData('tl', $this->_api->getLanguageName($job->getData('tl')));
+                $job->setData('source_file', $sourcefile);
                 $job->save();
             }
             $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
-
-        }catch (\Exception $e){
-
-            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message,array($response));
+        } catch (\Exception $e) {
+            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message, [$response]);
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
-
     }
 
     protected function mergeJobData($job_object)
@@ -274,24 +244,33 @@ class Save extends Action
 
         $id = '';
 
-        foreach ($job_object as $key => $data)
-        {
+        foreach ($job_object as $key => $data) {
             $jobMergeData[$key]['id'] =  $data->getData('job_id');
             $jobMergeData[$key]['file_name'] =  $data->getData('source_file');
             $id.=  $data->getData('job_id').'&';
         }
 
-        $this->_xmlHelper->create('_'.rtrim($id,"&").'_'.time());
 
-        foreach ($jobMergeData as $file)
-        {
+        $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
+        
+        foreach ($jobMergeData as $file) {
+
             $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
 
-            foreach ($fileData['root']['data'] as $data)
-            {
-                $mergeData = array_merge_recursive($data['_value'],$data['_attribute']);
+            if(key_exists('_value', $fileData['root']['data'])){
+
+                $singleData = $fileData['root']['data'];
+                $fileData['root']['data'] = [];
+                $fileData['root']['data'][] = $singleData;
+
+            }
+
+            foreach ($fileData['root']['data'] as $data) {
+
+                $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
 
                 $this->_xmlHelper->appendDataToRoot($mergeData);
+
             }
         }
 
@@ -300,21 +279,22 @@ class Save extends Action
         return $this->_xmlHelper->getXmlFileName();
     }
 
-    protected function checkEmptyJob($data){
+    protected function checkEmptyJob($data)
+    {
 
-        $empty = 0;
+
+        $empty=0;
 
         $required = ['products','categories','pages','blocks'];
 
-        foreach ($required as $value)
-        {
-            if(array_key_exists($value,$data) && strlen($data[$value])<1){
-                $empty++;
+        foreach ($required as $value) {
+            if (array_key_exists($value, $data)) {
+                if (strlen($data[$value])>0) {
+                    $empty++;
+                }
             }
         }
 
         return $empty;
-
     }
-
 }

@@ -41,21 +41,21 @@ class ProductHelper extends AbstractHelper
 
     protected $_translatedAttributeOptions = [];
 
-    protected $_translatableBackendType = array (
+    protected $_translatableBackendType =  [
         'varchar', 'text','int'
-    );
+    ];
 
-    protected $_translatableFrontendInputType = array(
+    protected $_translatableFrontendInputType = [
         'select', 'text','multiline', 'textarea', 'multiselect'
-    );
+    ];
 
-    protected $_translatableFrontendLabel = array(
-        'name', 'description', 'meta title', 'meta keywords', 'meta description', 'short description', 'color','size'
-    );
+    protected $_translatableAttributeCode = [
+        'name', 'description', 'meta_title', 'meta_keywords', 'meta_description', 'short_description', 'color','size'
+    ];
 
-    protected $_multiSelectInputTypes = array(
+    protected $_multiSelectInputTypes = [
         'select', 'multiselect'
-    );
+    ];
     protected $_attributeCollectionFactory;
     protected $_productCollectionFactory;
     protected $_attributeTranslationFactory;
@@ -120,7 +120,7 @@ class ProductHelper extends AbstractHelper
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
         $collection = $this->getAttributes()
-            ->addFieldToFilter( 'frontend_label',  array( 'in' => $this->_translatableFrontendLabel ));
+            ->addFieldToFilter('attribute_code', [ 'in' => $this->_translatableAttributeCode ]);
         return $collection;
     }
 
@@ -128,18 +128,19 @@ class ProductHelper extends AbstractHelper
     {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
         $collection = $this->getAttributes()
-                        ->addFieldToFilter( 'is_user_defined', array( 'eq' => 1 ))
-                        ->addFieldToFilter('frontend_label',array('nin'=>$this->_translatableFrontendLabel));
+                        ->addFieldToFilter('is_user_defined', [ 'eq' => 1 ])
+                        ->addFieldToFilter('attribute_code', ['nin'=>$this->_translatableAttributeCode]);
         return $collection;
     }
 
-    public function getAttributes(){
+    public function getAttributes()
+    {
         /** @var \Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection $collection */
         $collection = $this->_attributeCollectionFactory->create();
-        $collection->setEntityTypeFilter( $this->_entityTypeId )
-            ->setFrontendInputTypeFilter( array( 'in' => $this->_translatableFrontendInputType ) )
-            ->addFieldToFilter( 'backend_type',   array( 'in' => $this->_translatableBackendType ) )
-            ->setOrder( 'attribute_id', 'asc' );
+        $collection->setEntityTypeFilter($this->_entityTypeId)
+            ->setFrontendInputTypeFilter([ 'in' => $this->_translatableFrontendInputType ])
+            ->addFieldToFilter('backend_type', [ 'in' => $this->_translatableBackendType ])
+            ->setOrder('attribute_id', 'asc');
         return $collection;
     }
 
@@ -155,21 +156,20 @@ class ProductHelper extends AbstractHelper
         $product_ids,
         $source_store_id,
         $includeChildren = true
-    )
-    {
-        if(strpos($product_ids,'&')!== false)
-        {
-            $product_ids = explode('&',$product_ids);
+    ) {
+    
+        if (strpos($product_ids, '&')) {
+            $product_ids = explode('&', $product_ids);
         }
 
         $this->_storeManager->setCurrentStore($source_store_id);
 
-        if( $includeChildren ){
-            $childrenIds = $this->_getChildrenProducts( $product_ids );
-            if(is_array($product_ids)){
-                $product_ids = array_merge( $product_ids, $childrenIds );
-            }else{
-                $product_ids = array_merge( [$product_ids], $childrenIds );
+        if ($includeChildren) {
+            $childrenIds = $this->_getChildrenProducts($product_ids);
+            if (is_array($product_ids)) {
+                $product_ids = array_merge($product_ids, $childrenIds);
+            } else {
+                $product_ids = array_merge([$product_ids], $childrenIds);
             }
         }
 
@@ -190,40 +190,31 @@ class ProductHelper extends AbstractHelper
      */
     public function getSelectedProductAttributes()
     {
-        $attributes = array_merge($this->_configHelper->getDefaultAttributes(),$this->_configHelper->getCustomAttributes());
+        $attributes = array_merge($this->_configHelper->getDefaultAttributes(), $this->_configHelper->getCustomAttributes());
 
         $productAttributeData = [];
 
-        foreach ($this->_productData as $product){
-
+        foreach ($this->_productData as $product) {
             $attributeData = [];
 
-            if($product->getData('type_id') =='configurable'){
-
+            if ($product->getData('type_id') =='configurable') {
                 $attributeData = $this->_attributeHelper->getConfigurableAttributes($product);
             }
 
-            foreach ($attributes as $attribute_id){
-
-                if(in_array($this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id)->getFrontendInput(),$this->_multiSelectInputTypes)){
-
-                    if($this->_attributeHelper->findMultiOptionAttributes($attribute_id,$product,$this->_storeId)){
-
-                        array_push($attributeData,$this->_attributeHelper->findMultiOptionAttributes($attribute_id,$product,$this->_storeId));
+            foreach ($attributes as $attribute_id) {
+                if (in_array($this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $attribute_id)->getFrontendInput(), $this->_multiSelectInputTypes)) {
+                    if ($this->_attributeHelper->findMultiOptionAttributes($attribute_id, $product, $this->_storeId)) {
+                        array_push($attributeData, $this->_attributeHelper->findMultiOptionAttributes($attribute_id, $product, $this->_storeId));
                     }
-
-                }else{
-
-                    if($product->getResource()->getAttributeRawValue($product->getId(),$attribute_id,$this->_storeId)){
-
-                        array_push($attributeData,['attribute_id'=>$attribute_id,'label'=>$product->getResource()->getAttribute($attribute_id)->getStoreLabel($this->_storeId),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id,$this->_storeId)]);
+                } else {
+                    if ($product->getResource()->getAttributeRawValue($product->getId(), $attribute_id, $this->_storeId)) {
+                        array_push($attributeData, ['attribute_id'=>$attribute_id,'label'=>$product->getResource()->getAttribute($attribute_id)->getStoreLabel($this->_storeId),'value'=>$product->getResource()->getAttributeRawValue($product->getId(), $attribute_id, $this->_storeId)]);
                     }
-
                 }
             }
 
             //Sort Attribute Data by Id Asc
-            usort($attributeData, function($a, $b) {
+            usort($attributeData, function ($a, $b) {
 
                 return $a['attribute_id'] - $b['attribute_id'];
             });
@@ -234,7 +225,6 @@ class ProductHelper extends AbstractHelper
                 'product_url'=>$product->setStoreId($this->_storeId)->getUrlInStore(),
                 'attributes'=>$attributeData
             ];
-
         }
 
         $this->_productData = $productAttributeData;
@@ -281,26 +271,19 @@ class ProductHelper extends AbstractHelper
         $source_store_id,
         $target_store_id,
         $xmlHelper
-    )
-    {
+    ) {
+    
 
-        if($productData)
-        {
-            try
-            {
-                foreach ($productData as $data){
-
-                    foreach ($data['attributes'] as $attribute){
-
+        if ($productData) {
+            try {
+                foreach ($productData as $data) {
+                    foreach ($data['attributes'] as $attribute) {
                         $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['product_id'].'_'.$attribute['attribute_id'];
 
-                        $this->_attributeHelper->appendAttributeLabel($data,$attribute,$job_name,$source_store_id,$xmlHelper);
+                        $this->_attributeHelper->appendAttributeLabel($data, $attribute, $job_name, $source_store_id, $xmlHelper);
 
-                        if(is_array($attribute['value']))
-                        {
-                            foreach ($attribute['value'] as $value)
-                            {
-
+                        if (is_array($attribute['value'])) {
+                            foreach ($attribute['value'] as $value) {
                                 $xmlHelper->appendDataToRoot([
                                     'name' => $job_name.'_'.$value['option_id'],
                                     'content_context' => 'product_attribute_value',
@@ -316,11 +299,9 @@ class ProductHelper extends AbstractHelper
                                 ]);
 
 
-                                array_push($this->_translatedAttributeOptions,$value['value']);
+                                array_push($this->_translatedAttributeOptions, $value['value']);
                             }
-
-                        }else{
-
+                        } else {
                             $xmlHelper->appendDataToRoot([
                                 'name' => $job_name,
                                 'content_context' => 'product_attribute_value',
@@ -332,22 +313,15 @@ class ProductHelper extends AbstractHelper
                                 'attribute_label'=>$attribute['label'],
                                 'value' => $attribute['value']
                             ]);
-
                         }
-
                     }
-
                 }
-
-            }catch (Exception $e){
-
-                $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
-
+            } catch (Exception $e) {
+                $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
             }
         }
 
         return false;
-
     }
 
     /**
@@ -357,16 +331,12 @@ class ProductHelper extends AbstractHelper
     public function saveProductData($job_id)
     {
         try {
-
             foreach ($this->_productData as $product_key => $data) {
-
-                if( count( $data['attributes'] )){
+                if (count($data['attributes'])) {
                     foreach ($data['attributes'] as $attribute_key => $attribute) {
-
                         $attributeTranslationModel = $this->_attributeTranslationFactory->create();
 
                         if (is_array($attribute['value'])) {
-
                             $attributeTranslationModel->setData(
                                 [
                                     'job_id' => $job_id,
@@ -380,10 +350,8 @@ class ProductHelper extends AbstractHelper
 
                             $this->_productData[$product_key]['attributes'][$attribute_key]['label_translation_id'] = $attributeTranslationModel->getId();
 
-                            $this->saveOptionValues($attribute['value'], $attributeTranslationModel->getId(),$product_key,$attribute_key);
-
-                        }else{
-
+                            $this->saveOptionValues($attribute['value'], $attributeTranslationModel->getId(), $product_key, $attribute_key);
+                        } else {
                             $attributeTranslationModel->setData(
                                 [
                                     'job_id' => $job_id,
@@ -407,19 +375,16 @@ class ProductHelper extends AbstractHelper
                             )->save();
 
                             $this->_productData[$product_key]['attributes'][$attribute_key]['value_translation_id'] = $attributeTranslationModel->getId();
-
                         }
                     }
-                }else{
+                } else {
                     $this->_logger->error('error '.__FILE__.' '.__LINE__.''. __(' no product attributes being selected'));
                 }
             }
             return $this;
-
         } catch (Exception $e) {
-            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
+            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
         }
-
     }
 
     /**
@@ -433,13 +398,11 @@ class ProductHelper extends AbstractHelper
         $attribute_translation_id,
         $product_key,
         $attribute_key
-    )
-    {
+    ) {
+    
 
-        try{
-
-            foreach ($option_values as $option_key => $option){
-
+        try {
+            foreach ($option_values as $option_key => $option) {
                 $attributeTranslationOptionModel = $this->_attributeOptionTranslationFactory->create();
 
                 $attributeTranslationOptionModel->setData(
@@ -451,17 +414,14 @@ class ProductHelper extends AbstractHelper
                 )->save();
 
                 $this->_productData[$product_key]['attributes'][$attribute_key]['value'][$option_key]['translation_id'] = $attributeTranslationOptionModel->getId();
-
             }
-
-        }catch (Exception $e) {
-
-            $this->_logger->error('error'.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
+        } catch (Exception $e) {
+            $this->_logger->error('error'.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
         }
-
     }
 
-    private function _getChildrenProducts( $parentIds = [] ){
+    private function _getChildrenProducts($parentIds = [])
+    {
         $children = [];
         $types = [
             Type::TYPE_BUNDLE,
@@ -469,30 +429,30 @@ class ProductHelper extends AbstractHelper
             Configurable::TYPE_CODE
         ];
 
-        if( !is_array( $parentIds )){
+        if (!is_array($parentIds)) {
             $parentIds = [ $parentIds ];
         }
 
-        if( count($parentIds) > 0 ){
+        if (count($parentIds) > 0) {
             $parentProducts = $this->_productCollectionFactory->create()
                 ->addAttributeToSelect('*')
                 ->addIdFilter($parentIds)
                 ->load();
             /** @var \Magento\Catalog\Model\Product $product */
-            foreach ( $parentProducts->getItems() as $product){
+            foreach ($parentProducts->getItems() as $product) {
                 $productTypeInstance = $product->getTypeInstance();
                 $productTypeId = $product->getTypeId();
-                if( in_array($productTypeId, $types )){
+                if (in_array($productTypeId, $types)) {
                     $childrenArray = $productTypeInstance->getChildrenIds($product->getId());
-                    foreach ( $childrenArray as $childrenItem ){
-                        foreach ( $childrenItem as $k => $v ){
-                            if( !in_array( $v, $children) )
+                    foreach ($childrenArray as $childrenItem) {
+                        foreach ($childrenItem as $k => $v) {
+                            if (!in_array($v, $children)) {
                                 array_push($children, $v);
+                            }
                         }
                     }
                 }
             }
-
         }
         return $children;
     }

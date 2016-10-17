@@ -23,8 +23,8 @@ class Attribute extends Container
         Context $context,
         JobFactory $jobFactory,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->_jobFactory = $jobFactory;
         parent::__construct($context, $data);
     }
@@ -38,18 +38,18 @@ class Attribute extends Container
         $this->_getReferrer();
         $this->_getEntityName();
 
-        if($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED){
+        if ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) {
             $this->addButton(
-                'confirm',
+                'publish',
                 [
-                    'label' => __('Confirm'),
+                    'label' => __('Publish'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
                             'job_id' => $this->_job->getId(),
                             'job_key' => $this->_job->getJobKey(),
                             'job_type_id' => $this->_job->getJobTypeId()
-                        ] ) . '\') ',
+                        ]) . '\') ',
                     'class' => 'primary',
-                    'title' => __( 'Confirm the job of ' . $this->_job->getJobNumber() )
+                    'title' => __('Publish the job of ' . $this->_job->getJobNumber())
                 ],
                 0,
                 50
@@ -111,25 +111,29 @@ class Attribute extends Container
                 ],
                 [
                     'label' => empty($this->_job->getJobNumber()) ? __('Sub-job') : $this->_job->getJobNumber(),
-                    'url' => $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                    'url' => $this->getUrl(
+                        'EasyTranslationPlatform/Jobs/ViewJob',
                         [
                             'job_id' => $this->_requestData['job_id'],
                             'job_key'=> $this->_requestData['job_key'],
                             'job_type_id' => 0,
                             'source_store_id' => $this->_requestData['source_store_id']
-                        ]),
+                        ]
+                    ),
                     'title' => __('View content type details')
                 ],
                 [
                     'label' => __($this->_referrer),
-                    'url' => $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                    'url' => $this->getUrl(
+                        'EasyTranslationPlatform/Jobs/ViewJob',
                         [
                             'job_id' => $this->_requestData['job_id'],
                             'job_type_id' => $this->_requestData['job_type_referrer'],
-//                            'entity_id' => $this->_requestData['entity_id'],
+                        //                            'entity_id' => $this->_requestData['entity_id'],
                             'job_key' => $this->_requestData['job_key'],
                             'source_store_id' => $this->_requestData['source_store_id']
-                        ]),
+                        ]
+                    ),
                     'title' => __('Go to ' . $this->_referrer . ' page')
 
                 ],
@@ -148,8 +152,9 @@ class Attribute extends Container
         return parent::_prepareLayout();
     }
 
-    protected function _getReferrer(){
-        switch ($this->_referrerId){
+    protected function _getReferrer()
+    {
+        switch ($this->_referrerId) {
             case JobType::JOB_TYPE_PRODUCT:
                 $this->_referrer = 'Product List';
                 break;
@@ -163,11 +168,11 @@ class Attribute extends Container
                 $this->_referrer = 'Block List';
                 break;
         }
-
     }
 
-    protected function _getEntityName(){
-        $this->_jobEntityName = $this->_job->getEntityName( $this->_entityId );
+    protected function _getEntityName()
+    {
+        $this->_jobEntityName = $this->_job->getEntityName($this->_entityId);
     }
 
     function _toHtml()

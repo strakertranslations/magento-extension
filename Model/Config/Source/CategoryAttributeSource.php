@@ -11,7 +11,7 @@ class CategoryAttributeSource implements ArrayInterface
 
     public function __construct(
         CategoryHelper $categoryHelper
-    ){
+    ) {
         $this->_attributeCollection = $categoryHelper->getAttributes();
     }
 
@@ -22,19 +22,18 @@ class CategoryAttributeSource implements ArrayInterface
      */
     public function toOptionArray()
     {
-        if( !empty( $this->_attributeCollection ) ){
-           $attributesArray = $this->_attributeCollection->setOrder('main_table.attribute_id', 'ASC')->getItems();
-           if( count( $attributesArray ) ){
-               foreach ( $attributesArray as $attribute ){
-                   $this->_option[] = [
-                       'label' => __( $attribute->getFrontend()->getLabel() ),
+        if (!empty($this->_attributeCollection)) {
+            $attributesArray = $this->_attributeCollection->setOrder('main_table.attribute_id', 'ASC')->getItems();
+            if (count($attributesArray)) {
+                foreach ($attributesArray as $attribute) {
+                    $this->_option[] = [
+                       'label' => __($attribute->getFrontend()->getLabel()),
                        'value' => $attribute->getId()
-                   ];
-               }
-               return $this->_option;
-           }
-
+                    ];
+                }
+                return $this->_option;
+            }
         }
-        return [ 'label' => __( 'No attributes are available! ' ), 'value' => '' ];
+        return [ 'label' => __('No attributes are available! '), 'value' => '' ];
     }
 }

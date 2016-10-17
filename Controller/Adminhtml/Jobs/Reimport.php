@@ -14,7 +14,6 @@ use Straker\EasyTranslationPlatform\Model\JobStatus;
 
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 
-
 class Reimport extends \Magento\Backend\App\Action
 {
 
@@ -33,7 +32,6 @@ class Reimport extends \Magento\Backend\App\Action
         Logger $logger,
         StoreManagerInterface $storeManager,
         StrakerAPIInterface $strakerAPI
-
     ) {
         $this->_jobFactory = $jobFactory;
         $this->_configHelper = $configHelper;
@@ -60,11 +58,10 @@ class Reimport extends \Magento\Backend\App\Action
 
         $resultRedirect = $this->resultRedirectFactory->create();
 
-        try{
+        try {
+            file_put_contents($this->_configHelper->getTranslatedXMLFilePath().'/'.$jobData->getData('translated_file'), $file_content);
 
-            file_put_contents( $this->_configHelper->getTranslatedXMLFilePath().'/'.$jobData->getData('translated_file'), $file_content);
-
-            $this->_importHelper->create( $jobData->getData('job_id') )
+            $this->_importHelper->create($jobData->getData('job_id'))
                 ->parseTranslatedFile()
                 ->saveData();
 
@@ -73,12 +70,10 @@ class Reimport extends \Magento\Backend\App\Action
             $this->messageManager->addSuccess('Translated '.$jobData->getData('job_number').' data has been re-imported for '.$this->_storeManager->getStore($jobData->getData('target_store_id'))->getName().' store');
 
             $resultRedirect->setPath('*/*/index');
-
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
             $this->messageManager->addError($e->getMessage());
 
-            $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+            $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
             $this->messageManager->addError('Translated data has not been re-imported for '.$this->_storeManager->getStore($jobData->getData('target_store_id'))->getName().' store');
 
@@ -89,6 +84,5 @@ class Reimport extends \Magento\Backend\App\Action
 
 
         return $resultRedirect;
-
     }
 }

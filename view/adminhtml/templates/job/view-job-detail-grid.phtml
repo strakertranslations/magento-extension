@@ -8,14 +8,18 @@
     ], function ( $ ) {
         $(function () {
             var viewJobGrid = $('#straker_job_attribute_grid');
+            var grid = $('#straker_job_attribute_grid_table > tbody');
+            var rows = grid.children();
+            rows.has('a.straker-view-option-anchor').css('cursor','pointer');
 
-            var spinner = '<div data-role="spinner" data-component="st_jobs_listing.st_jobs_listing.jobs_grid_columns" class="admin__data-grid-loading-mask" style="display:none">\
-                             <div class="spinner">\
-                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>\
-                             </div>\
-                          </div>';
-            $(spinner).appendTo(viewJobGrid);
-            var loadingMask = $('.admin__data-grid-loading-mask');
+//            var spinner = '<div data-role="spinner" data-component="st_jobs_listing.st_jobs_listing.jobs_grid_columns" class="admin__data-grid-loading-mask" style="display:none">\
+//                             <div class="spinner">\
+//                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>\
+//                             </div>\
+//                          </div>';
+//            $(spinner).appendTo(viewJobGrid);
+//
+//            var loadingMask = $('.admin__data-grid-loading-mask');
 
             viewJobGrid.on('click', 'tr', function ( e ) {
                 e.preventDefault();
@@ -30,11 +34,12 @@
                     var attrOptions = $('.straker-job-attribute-option-' + attrTranslationId);
 
                     if( typeof attrOptions.get(0) === 'undefined' ){
-                        loadingMask.show();
+                       // loadingMask.show();
                         $.ajax({
                             url: '<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/AttributeOption'); ?>',
                             data: {attributeTranslationId: attrTranslationId},
                             dataType: 'json',
+                            showLoader :  true,
                             method: 'get'
                         }).done(function (data, textStatus ) {
                             if( textStatus == 'success' && data.status ){
@@ -52,7 +57,7 @@
                                 $(html).insertAfter(currentRow);
                                 resetClass();
                             }
-                            loadingMask.hide();
+                            //loadingMask.hide();
                         });
                     }else{
                         attrOptions.toggle();viewJobGrid.load();
@@ -63,12 +68,9 @@
             });
 
             function resetClass() {
-                var grid = $('#straker_job_attribute_grid_table > tbody');
-                var rows = grid.children();
                 console.log(rows.length);
                 var i = 0;
                 $.each(rows, function (index, row) {
-
                     $(row).removeClass('even');
                     if($(row).css('display') !== 'none'){
                         if( i % 2 ) {

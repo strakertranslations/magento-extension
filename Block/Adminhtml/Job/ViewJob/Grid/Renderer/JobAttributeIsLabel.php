@@ -19,7 +19,7 @@ class JobAttributeIsLabel extends AbstractRenderer
 {
     function render(DataObject $row)
     {
-        $row->setData('is_label', $row->getData('is_label') ? __('Yes') : __('No') );
+        $row->setData('is_label', $row->getData('is_label') ? __('Yes') : __('No'));
         return parent::render($row);
     }
 }

@@ -47,7 +47,7 @@ class NewAction extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-        if($this->_configHelper->isSandboxMode()){
+        if ($this->_configHelper->isSandboxMode()) {
             $this->messageManager->addNotice($this->_configHelper->getSandboxMessage());
         }
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */

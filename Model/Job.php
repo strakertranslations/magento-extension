@@ -52,7 +52,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     protected $_blockRepository;
 
     protected $_entities = [];
-    public    $_entityIds = [];
+    public $_entityIds = [];
     protected $_entityCount;
     protected $_jobStatusFactory;
     protected $_jobTypeFactory;
@@ -101,9 +101,9 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
      * @return void
      */
 
-    protected function _construct(
-    )
+    protected function _construct()
     {
+    
         $this->_init('Straker\EasyTranslationPlatform\Model\ResourceModel\Job');
     }
 
@@ -121,15 +121,17 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
      * @param int $type, either JobType::JOB_TYPE_PRODUCT (default) or (JobType::JOB_TYPE_CATEGORY)
      * @return array
      */
-    public function getEntities( $type = JobType::JOB_TYPE_PRODUCT ){
-        $this->_loadEntities( $type );
+    public function getEntities($type = JobType::JOB_TYPE_PRODUCT)
+    {
+        $this->_loadEntities($type);
         return $this->_entities;
     }
 
     /**
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
-    public function getProductCollection(){
+    public function getProductCollection()
+    {
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_productCollectionFactory->create()
             ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
@@ -142,7 +144,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     /**
      * @return \Magento\Cms\Model\ResourceModel\Page\Collection
      */
-    public function getPageCollection(){
+    public function getPageCollection()
+    {
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_pageCollectionFactory->create()
             ->addFieldToFilter('page_id', ['in' => $this->_entityIds]);
@@ -152,7 +155,8 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     /**
      * @return \Magento\Cms\Model\ResourceModel\Block\Collection
      */
-    public function getBlockCollection(){
+    public function getBlockCollection()
+    {
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_blockCollectionFactory->create()
             ->addFieldToFilter('main_table.block_id', ['in' => $this->_entityIds]);
@@ -162,43 +166,45 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     /**
      * @return \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection
      */
-    public function getCategoryCollection(){
+    public function getCategoryCollection()
+    {
         $collection = $this->_getAttributeTranslationEntityCollection();
 //        $collection = $this->_categoryCollectionFactory->create()
 //            ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
         return $collection;
     }
 
-    public function getAttributeTranslationEntityArray(){
+    public function getAttributeTranslationEntityArray()
+    {
         /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
         $collection = $this->_getAttributeTranslationEntityCollection();
-        foreach ($collection->getData() as $item){
+        foreach ($collection->getData() as $item) {
             array_push($this->_entityIds, $item['entity_id']);
         }
         return $this->_entityIds;
     }
 
-    private function _getAttributeTranslationEntityCollection(){
+    private function _getAttributeTranslationEntityCollection()
+    {
         /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
         $collection = $this->_attributeTranslationCollectionFactory->create()
             ->distinct(true)
             ->addFieldToSelect('entity_id')
-            ->addFieldToFilter( 'job_id', [ 'eq' => $this->getId()] );
+            ->addFieldToFilter('job_id', [ 'eq' => $this->getId()]);
         return $collection;
     }
 
-    protected function _loadEntities( $type = JobType::JOB_TYPE_PRODUCT )
+    protected function _loadEntities($type = JobType::JOB_TYPE_PRODUCT)
     {
         $this->_entities = [];
         $this->_entityCount = 0;
 
-        if( $type == JobType::JOB_TYPE_CATEGORY ){
+        if ($type == JobType::JOB_TYPE_CATEGORY) {
             foreach ($this->getCategoryCollection() as $category) {
                 $this->_entities[$category->getEntityId()] = $category;
                 $this->_entityCount++;
             }
-
-        }else{
+        } else {
             foreach ($this->getProductCollection() as $product) {
                 $this->_entities[$product->getEntityId()] = $product;
                 $this->_entityCount++;
@@ -206,122 +212,128 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         }
     }
 
-    public function updateStatus( $jobData ){
+    public function updateStatus($jobData)
+    {
         $return = [ 'isSuccess' => true, 'Message' => ''];
-        switch (strtolower( $jobData->status) ){
+        switch (strtolower($jobData->status)) {
             case 'queued':
-                if( empty( $this->getData('job_number')) && !empty($jobData->tj_number) ){
-                    $this->setData('job_number', $jobData->tj_number )->save();
+                if (empty($this->getData('job_number')) && !empty($jobData->tj_number)) {
+                    $this->setData('job_number', $jobData->tj_number)->save();
                 }
 
-                if( empty($this->getData('job_number')) ){
+                if (empty($this->getData('job_number'))) {
                     return false;
                 }
 
-                if( !empty($jobData->quotation) && strcasecmp( $jobData->quotation, 'ready') === 0){
-                    $this->setData('job_status_id', JobStatus::JOB_STATUS_READY )
+                if (!empty($jobData->quotation) && strcasecmp($jobData->quotation, 'ready') === 0) {
+                    $this->setData('job_status_id', JobStatus::JOB_STATUS_READY)
                         ->save();
-                }else{
-                    $this->setData('job_status_id', JobStatus::JOB_STATUS_QUEUED )
+                } else {
+                    $this->setData('job_status_id', JobStatus::JOB_STATUS_QUEUED)
                         ->save();
                 }
                 break;
             case 'in_progress':
-                $this->setData('job_status_id', JobStatus::JOB_STATUS_INPROGRESS )->save();
+                $this->setData('job_status_id', JobStatus::JOB_STATUS_INPROGRESS)->save();
                 break;
             case 'completed':
-                if( !empty($jobData->translated_file) && count( $jobData->translated_file)){
+                if (!empty($jobData->translated_file) && count($jobData->translated_file)) {
                     $downloadUrl = reset($jobData->translated_file)->download_url;
-                    if( !empty( $downloadUrl )){
-                        $fileContent = $this->_strakerApi->getTranslatedFile( $downloadUrl );
+                    if (!empty($downloadUrl)) {
+                        $fileContent = $this->_strakerApi->getTranslatedFile($downloadUrl);
                         $filePath = $this->_importHelper->configHelper->getTranslatedXMLFilePath();
-                        if( !file_exists( $filePath )){
-                            mkdir( $filePath, 0777, true );
+                        if (!file_exists($filePath)) {
+                            mkdir($filePath, 0777, true);
                         }
-                        $fileNameArray = $this->_renameTranslatedFileName( $filePath, $jobData->source_file );
+                        $fileNameArray = $this->_renameTranslatedFileName($filePath, $jobData->source_file);
                         $fileFullName = implode(DIRECTORY_SEPARATOR, $fileNameArray);
                         $result = true;
 
-                        if( !file_exists( $fileFullName )){
-                            $result = file_put_contents( $fileFullName, $fileContent );
+                        if (!file_exists($fileFullName)) {
+                            $result = file_put_contents($fileFullName, $fileContent);
                         }
 
-                        if($result == false ){
+                        if ($result == false) {
                             $return['isSuccess'] = false;
                             $return['Message'] = __('Failed to write content to ' . $fileFullName);
-                            $this->_logger->addError( $return['Message'] );
-                        }else{
+                            $this->_logger->addError($return['Message']);
+                        } else {
                             //TODO save new filename to database
                             $this->setData('download_url', $downloadUrl)
                                 ->setData('translated_file', $fileNameArray['name'])->save();
-                            $this->_importHelper->create( $this->getId() )
+                            $this->_importHelper->create($this->getId())
                                 ->parseTranslatedFile()
                                 ->saveData();
-                            if(empty( $this->getData('job_number') ) && $this->_importHelper->configHelper->isSandboxMode() ){
+                            if (empty($this->getData('job_number')) && $this->_importHelper->configHelper->isSandboxMode()) {
                                 $jobKey = $this->getJobKey();
                                 $testJobNumber = $this->getId();
-                                if(!empty( $jobKey )){
+                                if (!empty($jobKey)) {
                                     $testJobNumber = $this->getTestJobNumberByJobKey($this->getJobKey());
                                 }
                                 $this->setData('job_number', 'Test Job '. $testJobNumber);
                             }
-                            $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED )->save();
+                            $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED)->save();
                         }
-                    }else{
+                    } else {
                         $return['isSuccess'] = false;
-                        $return['Message'] = __('Download url is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').' );
-                        $this->_logger->addError( $return['Message'] );
+                        $return['Message'] = __('Download url is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
+                        $this->_logger->addError($return['Message']);
                     }
-                }else{
+                } else {
                     $return['isSuccess'] = false;
                     $return['Message'] = __('Download file is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
-                    $this->_logger->addError( $return['Message'] );
+                    $this->_logger->addError($return['Message']);
                 }
                 break;
             default:
                 $return['isSuccess'] = false;
                 $return['Message'] = __('Unknown status is found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
-                $this->_logger->addError( $return['Message'] );
+                $this->_logger->addError($return['Message']);
                 break;
         }
         return $return;
     }
 
-    public function getJobStatus(){
+    public function getJobStatus()
+    {
         return $this->_jobStatusFactory->create()->load($this->getJobStatusId())->getStatusName();
     }
 
-    public function getJobType(){
+    public function getJobType()
+    {
         return $this->_jobTypeFactory->create()->load($this->getJobTypeId())->getTypeName();
     }
 
-    private function _renameTranslatedFileName( $filePath, $originalFileName ){
-        $fileName = substr_replace( $originalFileName, '_translated', stripos( $originalFileName, '.xml'));
+    private function _renameTranslatedFileName($filePath, $originalFileName)
+    {
+        $fileName = substr_replace($originalFileName, '_translated', stripos($originalFileName, '.xml'));
 //        $suffix = date('Y-m-d H:i',time());
         $suffix = '';
         return [ 'path' => $filePath, 'name' => $fileName.'_'. $suffix  .'.xml'];
     }
 
-    public function getEntityName( $entityId = '1' ){
+    public function getEntityName($entityId = '1')
+    {
         $title = '';
-        switch ($this->getJobTypeId()){
+        switch ($this->getJobTypeId()) {
             case JobType::JOB_TYPE_PRODUCT:
-                $title = $this->_productRepository->getById( $entityId, false, $this->getSourceStoreId() )->getName();
+                $title = $this->_productRepository->getById($entityId, false, $this->getSourceStoreId())->getName();
                 break;
             case JobType::JOB_TYPE_CATEGORY:
-                $title = $this->_categoryRepository->get( $entityId, $this->getSourceStoreId())->getName();
+                $title = $this->_categoryRepository->get($entityId, $this->getSourceStoreId())->getName();
                 break;
             case JobType::JOB_TYPE_PAGE:
-                $title = $this->_pageRepository->getById( $entityId )->getTitle();
+                $title = $this->_pageRepository->getById($entityId)->getTitle();
                 break;
             case Jobtype::JOB_TYPE_BLOCK:
-                $title = $this->_blockRepository->getById( $entityId )->getTitle();
+                $title = $this->_blockRepository->getById($entityId)->getTitle();
                 break;
         }
         return $title;
     }
 
-    public function getTestJobNumberByJobKey( $jobKey ){
+    public function getTestJobNumberByJobKey($jobKey)
+    {
         $data = $this->getResourceCollection()
             ->distinct(true)
             ->addFieldToSelect('job_number')

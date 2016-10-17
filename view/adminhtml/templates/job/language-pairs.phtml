@@ -28,7 +28,7 @@
 
             if(settings.url.toLowerCase().search('easytranslationplatform/jobs/products')>-1)
             {
-                settings.data = settings.data+'&source_store_id='+source_store_id;
+                settings.data = settings.data+'&source_store_id='+source_store_id+'&target_store_id='+destination_store_id;
 
                 window.products_ajax_url = settings.url;
 

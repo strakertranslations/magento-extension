@@ -11,6 +11,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
+
 class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobStatusRepositoryInterface
 {
     protected $objectFactory;
@@ -18,9 +19,9 @@ class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobSta
     public function __construct(
         JobStatusFactory $objectFactory,
         CollectionFactory $collectionFactory,
-        SearchResultsInterfaceFactory $searchResultsFactory       
-    )
-    {
+        SearchResultsInterfaceFactory $searchResultsFactory
+    ) {
+    
         $this->objectFactory        = $objectFactory;
         $this->collectionFactory    = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -28,12 +29,9 @@ class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobSta
     
     public function save(JobStatusInterface $object)
     {
-        try
-        {
+        try {
             $object->save();
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             throw new CouldNotSaveException($e->getMessage());
         }
         return $object;
@@ -46,8 +44,8 @@ class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobSta
         if (!$object->getId()) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }
-        return $object;        
-    }       
+        return $object;
+    }
 
     public function delete(JobStatusInterface $object)
     {
@@ -56,18 +54,18 @@ class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobSta
         } catch (Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
-        return true;    
-    }    
+        return true;
+    }
 
     public function deleteById($id)
     {
         return $this->delete($this->getById($id));
-    }    
+    }
 
     public function getList(SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);  
+        $searchResults->setSearchCriteria($criteria);
         $collection = $this->collectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             $fields = [];
@@ -80,7 +78,7 @@ class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobSta
             if ($fields) {
                 $collection->addFieldToFilter($fields, $conditions);
             }
-        }  
+        }
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $criteria->getSortOrders();
         if ($sortOrders) {
@@ -94,10 +92,11 @@ class JobStatusRepository implements \Straker\EasyTranslationPlatform\Api\JobSta
         }
         $collection->setCurPage($criteria->getCurrentPage());
         $collection->setPageSize($criteria->getPageSize());
-        $objects = [];                                     
+        $objects = [];
         foreach ($collection as $objectModel) {
             $objects[] = $objectModel;
         }
         $searchResults->setItems($objects);
-        return $searchResults;        
-    }}
+        return $searchResults;
+    }
+}

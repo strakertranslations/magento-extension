@@ -27,8 +27,8 @@ class Post extends \Magento\Framework\App\Helper\AbstractHelper
         \Magento\Framework\App\Helper\Context $context,
         \Straker\EasyTranslationPlatform\Model\Post $post,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
-    )
-    {
+    ) {
+    
         $this->_post = $post;
         $this->resultPageFactory = $resultPageFactory;
         parent::__construct($context);

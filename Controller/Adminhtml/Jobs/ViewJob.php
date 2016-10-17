@@ -20,7 +20,6 @@ class ViewJob extends Action
      * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $_resultPageFactory;
-    protected $_registry;
     protected $_configHelper;
 
     /**
@@ -33,8 +32,8 @@ class ViewJob extends Action
         Context $context,
         PageFactory $resultPageFactory,
         ConfigHelper $configHelper
-    )
-    {
+    ) {
+    
         parent::__construct($context);
         $this->_resultPageFactory = $resultPageFactory;
         $this->_configHelper = $configHelper;
@@ -48,7 +47,7 @@ class ViewJob extends Action
      */
     public function execute()
     {
-        if($this->_configHelper->isSandboxMode()){
+        if ($this->_configHelper->isSandboxMode()) {
             $this->messageManager->addNotice($this->_configHelper->getSandboxMessage());
         }
         // TODO: Implement execute() method.

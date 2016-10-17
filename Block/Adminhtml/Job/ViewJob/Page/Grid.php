@@ -5,7 +5,6 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Page;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data as BackendHelperData;
-use Magento\Framework\View\Element\Template;
 use Straker\EasyTranslationPlatform\Model;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 
@@ -27,7 +26,7 @@ class Grid extends Extended
         array $data = []
     ) {
         $this->_jobFactory = $jobFactory;
-        parent::__construct($context,$backendHelper, $data);
+        parent::__construct($context, $backendHelper, $data);
     }
 
     public function _construct()
@@ -36,7 +35,7 @@ class Grid extends Extended
         $this->_jobId = $requestData['job_id'];
         $this->_jobKey = $requestData['job_key'];
         $this->_sourceStoreId = $this->getRequest()->getParam('source_store_id');
-        $this->_job = $this->_jobFactory->create()->load( $this->_jobId );
+        $this->_job = $this->_jobFactory->create()->load($this->_jobId);
         parent::_construct();
     }
 
@@ -46,8 +45,8 @@ class Grid extends Extended
     protected function _prepareCollection()
     {
         $pageCollection = $this->_job->getPageCollection();
-        if( !empty( $this->_sourceStoreId ) && is_numeric( $this->_sourceStoreId )){
-            $pageCollection->addStoreFilter( $this->_sourceStoreId );
+        if (!empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)) {
+            $pageCollection->addStoreFilter($this->_sourceStoreId);
         }
         $this->setCollection($pageCollection);
         return parent::_prepareCollection();

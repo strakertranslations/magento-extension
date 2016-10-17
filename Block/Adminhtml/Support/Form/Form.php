@@ -35,7 +35,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $this->session = $session;
         $this->_jobCollection = $jobCollection;
 
-        parent::__construct($context,$registry,$formFactory,$data);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
 
@@ -171,22 +171,21 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         return parent::_prepareForm();
     }
 
-    protected function _getTJNumbers(
-    ){
+    protected function _getTJNumbers()
+    {
 
         $options = [];
 
         $jobs = $this->_jobCollection->create()
             ->addFieldToSelect(['job_number']);
 
-        foreach ($jobs->toArray()['items'] as $item)
-        {
-            if(empty($item['job_number']))
-            continue;
+        foreach ($jobs->toArray()['items'] as $item) {
+            if (empty($item['job_number'])) {
+                continue;
+            }
             $options[$item['job_number']] = $item['job_number'];
         }
 
         return $options;
     }
-
 }

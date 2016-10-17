@@ -6,7 +6,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
     protected function _construct()
     {
-        $this->_init('Straker\EasyTranslationPlatform\Model\JobStatus','Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus');
+        $this->_init('Straker\EasyTranslationPlatform\Model\JobStatus', 'Straker\EasyTranslationPlatform\Model\ResourceModel\JobStatus');
     }
 
     /**
@@ -17,15 +17,16 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     public function toOptionArray()
     {
         $data = $this->_toOptionArray('status_id', 'status_name');
-        foreach ($data as $key => $item){
+        foreach ($data as $key => $item) {
             $data[$key]['label'] = $this->convertToFrontendLabel($item['label']);
         }
         return $data;
     }
 
-    private function convertToFrontendLabel( $label ){
+    private function convertToFrontendLabel($label)
+    {
         $frontEndLabel = '';
-        switch( $label ){
+        switch ($label) {
             case 'init':
                 $frontEndLabel = __(ucwords('created'));
                 break;
@@ -39,14 +40,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 $frontEndLabel = __(ucwords('in progress'));
                 break;
             case 'completed':
-                $frontEndLabel = __(ucwords('please confirm'));
+                $frontEndLabel = __(ucwords('publish'));
                 break;
             case 'confirmed':
-                $frontEndLabel = __(ucwords('confirmed'));
+                $frontEndLabel = __(ucwords('published'));
                 break;
         }
 
         return $frontEndLabel;
     }
-
 }

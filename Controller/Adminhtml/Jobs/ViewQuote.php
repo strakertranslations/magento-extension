@@ -3,7 +3,7 @@
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Registry;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -13,6 +13,7 @@ class ViewQuote extends \Magento\Backend\App\Action
 
     protected $_coreRegistry;
     protected $_resultJsonFactory;
+    protected $_resultPageFactory;
     protected $_configHelper;
     protected $_jobFactory;
 
@@ -21,31 +22,34 @@ class ViewQuote extends \Magento\Backend\App\Action
      * @param Context $context
      * @param Registry $coreRegistry
      * @param ConfigHelper $configHelper
-     * @param JsonFactory $resultJsonFactory
+     * @param PageFactory $resultPageFactory
      * @param JobFactory $jobFactory
      */
     public function __construct(
         Context $context,
         Registry $coreRegistry,
         ConfigHelper $configHelper,
-        JsonFactory $resultJsonFactory,
+        PageFactory $resultPageFactory,
         JobFactory $jobFactory
     ) {
         parent::__construct($context);
         $this->_coreRegistry = $coreRegistry;
         $this->_configHelper = $configHelper;
-        $this->_resultJsonFactory = $resultJsonFactory;
+        $this->_resultPageFactory = $resultPageFactory;
         $this->_jobFactory = $jobFactory;
     }
 
 
     public function execute()
     {
-        $jobId = $this->getRequest()->getParam('job_id');
-        $jobKey = $this->_jobFactory->create()->load( $jobId )->getJobKey();
+        $jobKey = $this->getRequest()->getParam('job_key');
         $quoteUrl = $this->_configHelper->getPaymentPageUrl().'&job_key='.$jobKey;
-        $result = [ 'Success'=> true, 'JobKey' => $quoteUrl ];
-        return $this->_resultJsonFactory->create()->setData( $result );
+        $this->_coreRegistry->register('quote_url', $quoteUrl );
+        $resultPage = $this->_resultPageFactory->create();
+        $resultPage->setActiveMenu('Straker_EasyTranslationPlatform::managejobs');
+        $resultPage->getConfig()->getTitle()->prepend(__('Straker Translations'));
+
+        return $resultPage;
     }
 
     /**

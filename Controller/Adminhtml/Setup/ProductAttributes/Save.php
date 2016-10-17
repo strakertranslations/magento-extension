@@ -11,7 +11,6 @@ use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Backend\App\Action\Context;
 
-
 class Save extends \Magento\Backend\App\Action
 {
 
@@ -28,8 +27,8 @@ class Save extends \Magento\Backend\App\Action
         StrakerAPIInterface $strakerAPIInterface,
         SetupInterface $setupInterface,
         Logger $logger
-    )
-    {
+    ) {
+    
         $this->_config = $config;
         $this->_reinitConfig = $reinitableConfigInterface;
         $this->_strakerAPI = $strakerAPIInterface;
@@ -48,38 +47,29 @@ class Save extends \Magento\Backend\App\Action
         $resultRedirect = $this->resultRedirectFactory->create();
 
         if ($data) {
-
             try {
-
                 $attributes = $this->sortData($data);
 
-                $this->_setup->saveProductAttributes($attributes);
+                $this->_setup->saveAttributes($attributes);
 
                 $resultRedirect->setPath('*/jobs/new/');
 
                 return $resultRedirect;
-
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError('There was an error saving Product Attributes');
-
             } catch (\RuntimeException $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError($e->getMessage());
-
             } catch (\Exception $e) {
-
-                $this->_logger->error('error'.__FILE__.' '.__LINE__,array($e));
+                $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the product attributes.'));
             }
 
             $resultRedirect->setPath('/*/index/');
-
         }
 
         return $resultRedirect;
@@ -89,19 +79,28 @@ class Save extends \Magento\Backend\App\Action
     {
         $attributes = [];
 
-        if(!empty($data['custom'])){
-
+        if (!empty($data['custom'])) {
             asort($data['custom']);
 
             $attributes['custom'] = implode(",", $data['custom']);
         }
 
-        if(!empty($data['default'])){
-
+        if (!empty($data['default'])) {
             asort($data['default']);
 
             $attributes['default'] = implode(",", $data['default']);
+        }
 
+        if (!empty($data['custom'])) {
+            asort($data['custom']);
+
+            $attributes['custom'] = implode(",", $data['custom']);
+        }
+
+        if (!empty($data['category'])) {
+            asort($data['category']);
+
+            $attributes['category'] = implode(",", $data['category']);
         }
 
         return $attributes;

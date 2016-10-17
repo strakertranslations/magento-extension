@@ -15,7 +15,7 @@ class StringFormatter extends Column
      */
     public function prepareDataSource(array $dataSource)
     {
-        if( isset( $dataSource['data']['items'] ) ){
+        if (isset($dataSource['data']['items'])) {
             foreach ($dataSource['data']['items'] as &$item) {
                 $item[$this->getData('name')] = ucwords($item[$this->getData('name')]);
             }

@@ -2,7 +2,6 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
-use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -36,13 +35,13 @@ class CategoryHelper extends AbstractHelper
     protected $_categoryData;
     protected $_storeId;
 
-    protected $_translatableFrontendLabel = array(
+    protected $_translatableAttributeCode = [
         'name','description','meta_title','meta_keywords','meta_description'
-    );
+    ];
 
-    protected $_translatableBackendType = array (
+    protected $_translatableBackendType =  [
         'varchar', 'text','int'
-    );
+    ];
 
 
 
@@ -93,7 +92,7 @@ class CategoryHelper extends AbstractHelper
     public function getAttributes()
     {
         $collection = $this->_attributeCollectionFactory->setEntityTypeFilter($this->_entityTypeId)
-            ->addFieldToFilter( 'attribute_code',  array( 'in' => $this->_translatableFrontendLabel ));
+            ->addFieldToFilter('attribute_code', [ 'in' => $this->_translatableAttributeCode ]);
         return $collection;
     }
 
@@ -107,11 +106,10 @@ class CategoryHelper extends AbstractHelper
     public function getCategories(
         $category_ids,
         $source_store_id
-    )
-    {
-        if(strpos($category_ids,',')!== false)
-        {
-            $category_ids = explode(',',$category_ids);
+    ) {
+    
+        if (strpos($category_ids, ',')) {
+            $category_ids = explode(',', $category_ids);
         }
 
 
@@ -136,14 +134,11 @@ class CategoryHelper extends AbstractHelper
     {
         $categoryData = [];
 
-        foreach ($this->_categoryData as $category)
-        {
+        foreach ($this->_categoryData as $category) {
             $attributeData = [];
 
-            foreach ($this->getAttributes() as $attribute)
-            {
-                array_push($attributeData,['attribute_id'=>$attribute->getId(),'label'=>$category->getResource()->getAttribute($attribute->getId())->getStoreLabel($this->_storeId),'value'=>$category->getResource()->getAttributeRawValue($category->getId(), $attribute->getId(),$this->_storeId)]);
-
+            foreach ($this->getAttributes() as $attribute) {
+                array_push($attributeData, ['attribute_id'=>$attribute->getId(),'label'=>$category->getResource()->getAttribute($attribute->getId())->getStoreLabel($this->_storeId),'value'=>$category->getResource()->getAttributeRawValue($category->getId(), $attribute->getId(), $this->_storeId)]);
             }
 
             $categoryData[] = [
@@ -197,18 +192,13 @@ class CategoryHelper extends AbstractHelper
         $source_store_id,
         $target_store_id,
         $xmlHelper
-    )
-    {
+    ) {
+    
 
-        if($categoryData)
-        {
-
-            foreach ($categoryData as $data){
-
+        if ($categoryData) {
+            foreach ($categoryData as $data) {
                 foreach ($data['attributes'] as $attribute) {
-
-                    if($attribute['value']){
-
+                    if ($attribute['value']) {
                         $job_name = $job_id.'_'.$jobtype_id.'_'.$target_store_id.'_'.$data['category_id'].'_'.$attribute['attribute_id'];
 
                         $xmlHelper->appendDataToRoot([
@@ -222,21 +212,14 @@ class CategoryHelper extends AbstractHelper
                             'attribute_label'=>$attribute['label'],
                             'value' => $attribute['value']
                         ]);
-
-
                     }
-
-
                 }
-
-
             }
 
             return $this;
         }
 
         return false;
-
     }
 
     /**
@@ -246,16 +229,12 @@ class CategoryHelper extends AbstractHelper
     public function saveCategoryData($job_id)
     {
 
-        foreach ($this->_categoryData as $cat_key => $data)
-        {
-            foreach ($data['attributes'] as $att_key => $attribute){
-
+        foreach ($this->_categoryData as $cat_key => $data) {
+            foreach ($data['attributes'] as $att_key => $attribute) {
                 $attributeTranslationModel = $this->_attributeTranslationFactory->create();
 
-                if($attribute['value']){
-
-                    try{
-
+                if ($attribute['value']) {
+                    try {
                         $attributeTranslationModel->setData(
                             [
                                 'job_id' => $job_id,
@@ -267,20 +246,13 @@ class CategoryHelper extends AbstractHelper
                         )->save();
 
                         $this->_categoryData[$cat_key]['attributes'][$att_key]['value_translation_id'] = $attributeTranslationModel->getId();
-
-
-                    }catch (Exception $e){
-
-                        $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(),array($e));
-
+                    } catch (Exception $e) {
+                        $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
                     }
-
                 }
-
             }
         }
 
         return $this;
     }
-
 }

@@ -79,7 +79,7 @@ class Blocks extends Extended
     protected function _prepareCollection()
     {
         $collection = $this->_blockCollectionFactory->create();
-        $collection->addStoreFilter( $this->_sourceStoreId );
+        $collection->addStoreFilter($this->_sourceStoreId);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

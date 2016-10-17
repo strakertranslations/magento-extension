@@ -18,8 +18,8 @@ class Type extends Container
         Context $context,
         JobFactory $jobFactory,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->_jobFactory = $jobFactory;
         parent::__construct($context, $data);
     }
@@ -29,18 +29,18 @@ class Type extends Container
         $this->_requestData = $this->getRequest()->getParams();
         $this->_job = $this->_jobFactory->create()->load($this->_requestData['job_id']);
 
-        if($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED){
+        if ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) {
             $this->addButton(
-                'confirm',
+                'publish',
                 [
-                    'label' => __('Confirm'),
+                    'label' => __('Publish'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
                             'job_id' => $this->_job->getId(),
                             'job_key' => $this->_job->getJobKey(),
                             'job_type_id' => $this->_job->getJobTypeId()
-                        ] ) . '\') ',
+                        ]) . '\') ',
                     'class' => 'primary',
-                    'title' => __( 'Confirm the job of ' . $this->_job->getJobNumber() )
+                    'title' => __('Publish the job of ' . $this->_job->getJobNumber())
                 ],
                 0,
                 50
@@ -107,5 +107,4 @@ class Type extends Container
     {
         return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_type_grid');
     }
-
 }

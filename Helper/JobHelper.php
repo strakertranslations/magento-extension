@@ -44,7 +44,6 @@ class JobHelper extends AbstractHelper
         BlockHelper $blockHelper,
         JobTypeCollection $jobTypeCollectionFactory,
         JobStatusCollection $jobStatusFactory
-
     ) {
 
         $this->_jobFactory = $jobFactory;
@@ -76,7 +75,7 @@ class JobHelper extends AbstractHelper
             'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
         ];
 
-        if($this->_configHelper->isSandboxMode()){
+        if ($this->_configHelper->isSandboxMode()) {
             $jobData['is_test_job'] = true;
         }
 
@@ -92,7 +91,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->save();
 
-        $jobFile = $this->_productHelper->getProducts($this->jobData['products'],$this->jobModel->getData('source_store_id'))
+        $jobFile = $this->_productHelper->getProducts($this->jobData['products'], $this->jobModel->getData('source_store_id'))
             ->getSelectedProductAttributes()
             ->saveProductData($this->jobModel->getId())
             ->generateProductXML($this->jobModel);
@@ -114,7 +113,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->save();
 
-        $jobFile = $this->_categoryHelper->getCategories($this->jobData['categories'],$this->jobModel->getData('source_store_id'))
+        $jobFile = $this->_categoryHelper->getCategories($this->jobData['categories'], $this->jobModel->getData('source_store_id'))
             ->getSelectedCategoryAttributes()
             ->saveCategoryData($this->jobModel->getId())
             ->generateCategoryXML($this->jobModel);
@@ -131,7 +130,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->save();
 
-        $jobFile = $this->_pageHelper->getPages($this->jobData['pages'],$this->jobModel->getData('source_store_id'))
+        $jobFile = $this->_pageHelper->getPages($this->jobData['pages'], $this->jobModel->getData('source_store_id'))
             ->getSelectedPageAttributes()
             ->savePageData($this->jobModel->getId())
             ->generatePageXML($this->jobModel);
@@ -149,7 +148,7 @@ class JobHelper extends AbstractHelper
 
         $this->jobModel->save();
 
-        $jobFile = $this->_blockHelper->getBlocks($this->jobData['blocks'],$this->jobModel->getData('source_store_id'))
+        $jobFile = $this->_blockHelper->getBlocks($this->jobData['blocks'], $this->jobModel->getData('source_store_id'))
             ->getSelectedBlockAttributes()
             ->saveBlockData($this->jobModel->getId())
             ->generateBlockXML($this->jobModel);
@@ -164,7 +163,8 @@ class JobHelper extends AbstractHelper
     /**
      * @return mixed
      */
-    public function getJobInfo(){
+    public function getJobInfo()
+    {
 
         return $this->jobModel->getData();
     }
@@ -172,7 +172,8 @@ class JobHelper extends AbstractHelper
     /**
      * @return mixed
      */
-    public function getJob(){
+    public function getJob()
+    {
 
         return $this->jobModel;
     }
@@ -212,5 +213,4 @@ class JobHelper extends AbstractHelper
 //
 //        return $collection->getData('status_id');
 //    }
-
 }

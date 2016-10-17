@@ -11,7 +11,6 @@ use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config;
 use Closure;
 
-
 class Plugin
 {
     private $_redirectFactory;
@@ -32,21 +31,18 @@ class Plugin
         AbstractAction $subject,
         Closure $proceed,
         RequestInterface $request
-    )
-    {
+    ) {
+    
 
-        if(!$this->_configHelper->getAccessToken()){
-
+        if (!$this->_configHelper->getAccessToken()) {
             $resultRedirect = $this->_redirectFactory->create();
 
             $resultRedirect->setUrl($this->_url->getUrl("*/setup_registration/index/"));
 
             return $resultRedirect;
-
         }
 
-        if(empty($this->_configHelper->getDefaultAttributes())){
-
+        if (empty($this->_configHelper->getDefaultAttributes())) {
             $resultRedirect = $this->_redirectFactory->create();
 
             $resultRedirect->setUrl($this->_url->getUrl("*/setup_productattributes/index/"));
@@ -55,6 +51,5 @@ class Plugin
         }
 
         return $proceed($request);
-
     }
 }

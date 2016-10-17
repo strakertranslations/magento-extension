@@ -18,8 +18,8 @@ class Block extends Container
         Context $context,
         JobFactory $jobFactory,
         array $data = []
-    )
-    {
+    ) {
+    
         $this->_jobFactory = $jobFactory;
         parent::__construct($context, $data);
     }
@@ -29,18 +29,18 @@ class Block extends Container
         $this->_requestData = $this->getRequest()->getParams();
         $this->_job = $this->_jobFactory->create()->load($this->_requestData['job_id']);
 
-        if($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED){
+        if ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) {
             $this->addButton(
-                'confirm',
+                'publish',
                 [
-                    'label' => __('Confirm'),
+                    'label' => __('Publish'),
                     'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
                             'job_id' => $this->_job->getId(),
                             'job_key' => $this->_job->getJobKey(),
                             'job_type_id' => $this->_job->getJobTypeId()
-                        ] ) . '\') ',
+                        ]) . '\') ',
                     'class' => 'primary',
-                    'title' => __( 'Confirm the job of ' . $this->_job->getJobNumber() )
+                    'title' => __('Publish the job of ' . $this->_job->getJobNumber())
                 ],
                 0,
                 50
@@ -68,13 +68,15 @@ class Block extends Container
             [
                 'label' => __('Back'),
                 'onclick' => 'setLocation(\''
-                    . $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                    . $this->getUrl(
+                        'EasyTranslationPlatform/Jobs/ViewJob',
                         [
                             'job_id' => $this->_requestData['job_id'],
                             'job_key'=> $this->_requestData['job_key'],
                             'job_type_id' => 0,
                             'source_store_id' => $this->_requestData['source_store_id']
-                        ]) . '\') ',
+                        ]
+                    ) . '\') ',
                 'class' => 'back',
                 'title' => __('View content type details')
             ],
@@ -98,13 +100,15 @@ class Block extends Container
                 ],
                 [
                     'label' => empty($this->_job->getJobNumber()) ? __('Sub-job') : $this->_job->getJobNumber(),
-                    'url' => $this->getUrl('EasyTranslationPlatform/Jobs/ViewJob',
+                    'url' => $this->getUrl(
+                        'EasyTranslationPlatform/Jobs/ViewJob',
                         [
                             'job_id' => $this->_requestData['job_id'],
                             'job_key'=> $this->_requestData['job_key'],
                             'job_type_id' => 0,
                             'source_store_id' => $this->_requestData['source_store_id']
-                        ]),
+                        ]
+                    ),
                     'title' => __('View content type details')
                 ],
                 [
@@ -125,5 +129,4 @@ class Block extends Container
     {
         return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_block_grid');
     }
-
 }

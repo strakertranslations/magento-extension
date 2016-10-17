@@ -11,6 +11,7 @@ use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Api\SearchResultsInterfaceFactory;
+
 class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform\Api\AttributeTranslationRepositoryInterface
 {
     protected $objectFactory;
@@ -18,9 +19,9 @@ class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform
     public function __construct(
         AttributeTranslationFactory $objectFactory,
         CollectionFactory $collectionFactory,
-        SearchResultsInterfaceFactory $searchResultsFactory       
-    )
-    {
+        SearchResultsInterfaceFactory $searchResultsFactory
+    ) {
+    
         $this->objectFactory        = $objectFactory;
         $this->collectionFactory    = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -28,12 +29,9 @@ class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform
     
     public function save(AttributeTranslationInterface $object)
     {
-        try
-        {
+        try {
             $object->save();
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
             throw new CouldNotSaveException($e->getMessage());
         }
         return $object;
@@ -46,8 +44,8 @@ class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform
         if (!$object->getId()) {
             throw new NoSuchEntityException(__('Object with id "%1" does not exist.', $id));
         }
-        return $object;        
-    }       
+        return $object;
+    }
 
     public function delete(AttributeTranslationInterface $object)
     {
@@ -56,18 +54,18 @@ class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform
         } catch (Exception $exception) {
             throw new CouldNotDeleteException(__($exception->getMessage()));
         }
-        return true;    
-    }    
+        return true;
+    }
 
     public function deleteById($id)
     {
         return $this->delete($this->getById($id));
-    }    
+    }
 
     public function getList(SearchCriteriaInterface $criteria)
     {
         $searchResults = $this->searchResultsFactory->create();
-        $searchResults->setSearchCriteria($criteria);  
+        $searchResults->setSearchCriteria($criteria);
         $collection = $this->collectionFactory->create();
         foreach ($criteria->getFilterGroups() as $filterGroup) {
             $fields = [];
@@ -80,7 +78,7 @@ class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform
             if ($fields) {
                 $collection->addFieldToFilter($fields, $conditions);
             }
-        }  
+        }
         $searchResults->setTotalCount($collection->getSize());
         $sortOrders = $criteria->getSortOrders();
         if ($sortOrders) {
@@ -94,10 +92,11 @@ class AttributeTranslationRepository implements \Straker\EasyTranslationPlatform
         }
         $collection->setCurPage($criteria->getCurrentPage());
         $collection->setPageSize($criteria->getPageSize());
-        $objects = [];                                     
+        $objects = [];
         foreach ($collection as $objectModel) {
             $objects[] = $objectModel;
         }
         $searchResults->setItems($objects);
-        return $searchResults;        
-    }}
+        return $searchResults;
+    }
+}

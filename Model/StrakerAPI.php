@@ -51,9 +51,9 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         ZendClientFactory $httpClient,
         Logger $logger,
         StoreManagerInterface $storeManagerInterface
-    )
-    {
-        parent::__construct( $context, $registry );
+    ) {
+    
+        parent::__construct($context, $registry);
         $this->_configHelper = $configHelper;
         $this->_configModel = $configModel;
         $this->_httpClient = $httpClient;
@@ -65,7 +65,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 //        $this->_headers[] = 'X-Auth-App: '. Mage::getStoreConfig('straker/general/application_key', $this->_storeId);
     }
 
-    protected  function _call($url, $method = 'get', array $request = array(), $raw = false)
+    protected function _call($url, $method = 'get', array $request = [], $raw = false)
     {
 
         $response = [];
@@ -75,22 +75,18 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $httpClient = $this->_httpClient->create();
 
         switch ($method) {
-
             case 'post':
-
                 $method =  \Zend_Http_Client::POST;
 
                 $httpClient->setParameterPost($request);
 
-                if(!empty($request['source_file'])){
-
-                    $httpClient->setFileUpload($request['source_file'],'source_file');
+                if (!empty($request['source_file'])) {
+                    $httpClient->setFileUpload($request['source_file'], 'source_file');
                 }
 
                 break;
 
-            case 'get' :
-
+            case 'get':
                 $method =  \Zend_Http_Client::GET;
 
                 break;
@@ -108,21 +104,20 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         try {
             $response = $httpClient->request();
 
-            if(!$response->isError()){
+            if (!$response->isError()) {
                 $contentType = $response->getHeader('Content-Type');
                 $body = $response->getBody();
 
                 $debugData['response'] = $body;
 
-                if( strpos($contentType, 'json' )!== false){
+                if (strpos($contentType, 'json')) {
                     return json_decode($body);
-                }else{
+                } else {
                     return $body;
                 }
             }
         } catch (Exception $e) {
-
-            $debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
+            $debugData['http_error'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
             //throw $e;
         }
 
@@ -139,7 +134,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
      * @param array $options
      * @return $this
      */
-    public function setOptions(array $options = array())
+    public function setOptions(array $options = [])
     {
         $this->_options = $options;
         return $this;
@@ -166,46 +161,54 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
      */
     protected function _handleCallErrors($response)
     {
-        if(empty($response)){
+        if (empty($response)) {
             return;
         }
-        if (isset($response->message) && strpos($response->message,'Authentication failed') !== false){
+        if (isset($response->message) && strpos($response->message, 'Authentication failed') !== false) {
             $response->magentoMessage = $response->message;
         }
         return;
 // to be added
     }
 
-    protected  function _getRegisterUrl(){
+    protected function _getRegisterUrl()
+    {
         return $this->_configHelper->getRegisterUrl();
     }
 
-    protected  function _getLanguagesUrl(){
+    protected function _getLanguagesUrl()
+    {
         return $this->_configHelper->getLanguagesUrl();
     }
 
-    protected  function _getCountriesUrl(){
+    protected function _getCountriesUrl()
+    {
 
         return $this->_configHelper->getCountriesUrl();
     }
 
-    protected  function _getTranslateUrl(){
+    protected function _getTranslateUrl()
+    {
         return $this->_configHelper->getTranslateUrl();
     }
 
-    protected  function _getQuoteUrl(){
+    protected function _getQuoteUrl()
+    {
         return $this->_configHelper->getQuoteUrl();
     }
 
-    protected  function _getPaymentUrl(){
+    protected function _getPaymentUrl()
+    {
         return $this->_configHelper->getPaymentUrl();
     }
 
-    protected  function _getSupportUrl(){
+    protected function _getSupportUrl()
+    {
         return $this->_configHelper->getSupportUrl();
     }
 
-    public function getHeaders(){
+    public function getHeaders()
+    {
 
         $this->_headers[] = 'Authorization: Bearer '.$this->_configHelper->getAccessToken();
         $this->_headers[] = 'X-Auth-App: '. $this->_configHelper->getApplicationKey();
@@ -214,88 +217,95 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     }
 
 
-    public function callRegister($data){
+    public function callRegister($data)
+    {
 
         return $this->_call($this->_getRegisterUrl(), 'post', $data);
     }
 
-    public function callTranslate($data){
+    public function callTranslate($data)
+    {
         $this->_headers[] = 'Content-Type:multipart/form-data';
         return $this->_call($this->_getTranslateUrl(), 'post', $data);
     }
 
-    public function callSupport($data){
+    public function callSupport($data)
+    {
         return $this->_call($this->_getSupportUrl(), 'post', $data);
     }
 
-    public function getQuote($data){
+    public function getQuote($data)
+    {
         return $this->_call($this->_getQuoteUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getPayment($data){
+    public function getPayment($data)
+    {
         return $this->_call($this->_getPaymentUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getTranslation($data = []){
+    public function getTranslation($data = [])
+    {
         return $this->_call($this->_getTranslateUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getTranslatedFile($downloadUrl){
-        return $this->_call($downloadUrl,'get',array(),true);
+    public function getTranslatedFile($downloadUrl)
+    {
+        return $this->_call($downloadUrl, 'get', [], true);
     }
 
-    public function getCountries(){
+    public function getCountries()
+    {
         $filePath = $this->_configHelper->getDataFilePath();
         $fileName = 'countries.json';
 
-        if(!file_exists($filePath)){
-            mkdir($filePath, 0777, true );
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 0777, true);
         }
 
         $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
 
-        if(file_exists( $fileFullPath )){
+        if (file_exists($fileFullPath)) {
             $result = json_decode(file_get_contents($fileFullPath));
-        }else{
+        } else {
             $result = $this->_call($this->_getCountriesUrl());
-            if(!empty($result)){
-                file_put_contents( $fileFullPath, json_encode($result) );
-            }
-        }
-        return isset( $result->country ) ?  $result->country : [];
-    }
-
-    public function getLanguages(){
-        $filePath = $this->_configHelper->getDataFilePath();
-        $fileName = 'languages.json';
-
-        if(!file_exists($filePath)){
-            mkdir($filePath, 0777, true );
-        }
-
-        $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
-
-        if(file_exists( $fileFullPath )){
-            $result = json_decode(file_get_contents($fileFullPath));
-        }else{
-            $result = $this->_call($this->_getLanguagesUrl());
-            if(!empty($result)) {
+            if (!empty($result)) {
                 file_put_contents($fileFullPath, json_encode($result));
             }
         }
-        return isset( $result->languages ) ? $result->languages : [];
+        return isset($result->country) ?  $result->country : [];
     }
 
-    public function getLanguageName( $code = ''){
+    public function getLanguages()
+    {
+        $filePath = $this->_configHelper->getDataFilePath();
+        $fileName = 'languages.json';
+
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
+
+        $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
+
+        if (file_exists($fileFullPath)) {
+            $result = json_decode(file_get_contents($fileFullPath));
+        } else {
+            $result = $this->_call($this->_getLanguagesUrl());
+            if (!empty($result)) {
+                file_put_contents($fileFullPath, json_encode($result));
+            }
+        }
+        return isset($result->languages) ? $result->languages : [];
+    }
+
+    public function getLanguageName($code = '')
+    {
 
         $languages = $this->getLanguages();
         
         foreach ($languages as $k => $val) {
-
-            foreach ($val as $i => $langCodes){
-
-                if($langCodes == $code){
-
+            foreach ($val as $i => $langCodes) {
+                if ($langCodes == $code) {
                     $languageName = $val->name;
 
                     break;
@@ -304,11 +314,11 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         }
 
         return $languageName;
-
     }
 
     // for demo only
-    public function completeJob( $jobNumber, $url ){
-        return $this->_call( $url, 'post', ['job_id' => $jobNumber] );
+    public function completeJob($jobNumber, $url)
+    {
+        return $this->_call($url, 'post', ['job_id' => $jobNumber]);
     }
 }
