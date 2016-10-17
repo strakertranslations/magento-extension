@@ -25,7 +25,7 @@
             <group id="settings" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Translation Settings</label>
                 <field id="reset_store" translate="label" type="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Language</label>
+                    <label>Languages and Store Views</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetStore</frontend_model>
                 </field>
             </group>
