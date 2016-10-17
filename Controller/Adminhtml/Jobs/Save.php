@@ -250,15 +250,27 @@ class Save extends Action
             $id.=  $data->getData('job_id').'&';
         }
 
-        $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
 
+        $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
+        
         foreach ($jobMergeData as $file) {
+
             $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
 
+            if(key_exists('_value', $fileData['root']['data'])){
+
+                $singleData = $fileData['root']['data'];
+                $fileData['root']['data'] = [];
+                $fileData['root']['data'][] = $singleData;
+
+            }
+
             foreach ($fileData['root']['data'] as $data) {
+
                 $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
 
                 $this->_xmlHelper->appendDataToRoot($mergeData);
+
             }
         }
 
