@@ -64,7 +64,7 @@ class Setup extends AbstractModel implements SetupInterface
         return $this->_configModel;
     }
 
-    public function saveStoreSetup($scopeId, $source_store, $source_language, $destination_language)
+    public function saveStoreSetup($scopeId, $source_store = '', $source_language = '', $destination_language = '')
     {
 
         $this->_configModel->SaveConfig('straker/general/source_store', $source_store, ScopeInterface::SCOPE_STORES, $scopeId);

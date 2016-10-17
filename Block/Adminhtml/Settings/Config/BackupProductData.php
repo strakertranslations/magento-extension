@@ -67,7 +67,8 @@ class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
             'id' => $this->_buttonId,
                 'name' => $this->_buttonName,
                 'label' => __('Backup Product Data'),
-                'type' => 'button'
+                'type' => 'button',
+                'onclick' => 'return backup.backup(\'db\')'
         ]);
 
         return $button->toHtml();

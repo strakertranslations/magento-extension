@@ -14,7 +14,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected $_backendUrl;
 
-    protected $_magentoDataTables = [
+    protected $_magentoDataTables = array(
         'catalog_product_entity_varchar',
         'catalog_product_entity_text',
         'catalog_category_entity_varchar',
@@ -27,7 +27,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'cms_block_store',
         'url_rewrite',
         'catalog_url_rewrite_product_category'
-    ];
+    );
 
     /**
      * @var StoreManagerInterface $storeManager

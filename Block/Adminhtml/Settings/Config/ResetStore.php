@@ -90,8 +90,8 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
     {
         $storeInfo = $this->_configHelper->getStoreInfo($storeId);
         $source_store = array_key_exists('straker/general/source_store', $storeInfo) ? $storeInfo['straker/general/source_store'] : false;
-        $source_language = array_key_exists('straker/general/source_language', $storeInfo) ? $storeInfo['straker/general/source_language'] :  false;
-        $destination_language = array_key_exists('straker/general/destination_language', $storeInfo) ? $storeInfo['straker/general/destination_language'] :  false;
+        $source_language = array_key_exists('straker/general/source_language', $storeInfo) ? $storeInfo['straker/general/source_language'] : false;
+        $destination_language = array_key_exists('straker/general/destination_language', $storeInfo) ? $storeInfo['straker/general/destination_language'] : false;
         $sourceStore = $source_store ? $this->_storeManager->getStore($source_store) : $source_store;
         $storeInfoArray = [
             'source' => $sourceStore,
@@ -132,5 +132,20 @@ class ResetStore extends \Magento\Config\Block\System\Config\Form\Field
 //
 //            return '<div class="empty-button">'.__('No language settings applied').'</div>';
 //        }
+    }
+
+    /**
+     * @return string
+     * @internal param $store
+     */
+    public function getRemoveAllTranslationButtonHtml()
+    {
+        $button = $this->getLayout()->createBlock('Magento\Backend\Block\Widget\Button')
+            ->setData([
+                'id' => 'straker_reset_all_store_button',
+                'label' => __('Clear for All Store Views'),
+                'title' => __('Clear language settings for all store views.')
+            ]);
+        return $button->toHtml();
     }
 }

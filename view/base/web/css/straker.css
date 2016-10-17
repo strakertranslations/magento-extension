@@ -54,6 +54,38 @@
     color:#eb5202;
 }
 
+.straker-backup-list{
+    padding: 0.5rem ! important;
+}
+
+.straker-backup-list.filename{
+    width: 50%
+}
+
+.straker-backup-list.create-date{
+    width: 40%
+}
+
+.straker-backup-list.file-actions{
+    width: 5%;
+}
+
+.straker-backup-list.file-actions .fa.fa-history:hover{
+    color: lightgreen;
+}
+
+.straker-backup-list.file-actions .fa.fa-trash:hover{
+    color: orangered;
+}
+
+.straker-no-content-info{
+    padding-top: 7px;
+}
+
+.straker-backup-list.file-actions>a{
+    color: inherit;
+}
+
 #straker-quote-frame iframe{
     margin-top: 10px;
 }
@@ -71,7 +103,11 @@
     width: 45%;
     padding: 0.5rem 0 ! important;
     vertical-align: middle;
-    /*text-align: right;*/
+}
+
+.all-store-view-name{
+    padding: 0.5rem 0 ! important;
+    vertical-align: middle;
 }
 
 .store-language{
@@ -182,9 +218,9 @@ a.straker-job-refresh-anchor{
     position: relative;
 }
 
-#straker_job_attribute_grid tr{
-    cursor: pointer;
-}
+/*#straker_job_attribute_grid tr{*/
+    /*cursor: pointer;*/
+/*}*/
 
 #straker_job_attribute_grid tr:nth-child(even) td {
     background-color: transparent;
