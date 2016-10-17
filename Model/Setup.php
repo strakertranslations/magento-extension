@@ -86,7 +86,7 @@ class Setup extends AbstractModel implements SetupInterface
         }
 
         if (!empty($attributes['category'])) {
-            $this->_configModel->SaveConfig('straker_config/attribute/category', $attributes['default'], 'default', 0);
+            $this->_configModel->SaveConfig('straker_config/attribute/category', $attributes['category'], 'default', 0);
         }
 
         return $this->_configModel;
