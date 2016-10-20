@@ -69,8 +69,8 @@ class ResetAccount extends Action
             }
 
             $this->_storeCache->clean(Config::CACHE_TAG);
-            $this->_messageManager->addSuccess(__('Straker Settings has been cleared.'));
-            $this->_logger->info(__('Straker Settings has been cleared.'));
+            $this->_messageManager->addSuccessMessage(__('Straker Translations settings have been cleared.'));
+            $this->_logger->info(__('Straker Translations settings have been cleared.'));
         } catch (Exception $e) {
             $message = __($e->getMessage());
             $this->_messageManager->addError($message);
