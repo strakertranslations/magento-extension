@@ -1,7 +1,14 @@
 <?php
-    /** @var  Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData $block */
-    //echo $block->getButtonHtml();
-    $files = $block->getRestoreFileList();
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+/** @var  Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData $block */
+//echo $block->getButtonHtml();
+$files = $block->getRestoreFileList();
 ?>
 <?php if( count( $files ) ): ?>
     <table>
@@ -76,18 +83,7 @@
     <p class="straker-no-content-info">There is no backup files.</p>
 <?php endif; ?>
 
-<?php
-/**
- * Copyright © 2016 Magento. All rights reserved.
- * See COPYING.txt for license details.
- */
-
-// @codingStandardsIgnoreFile
-
-?>
-<!-- TODO: refactor form styles and js -->
 <script type="text/x-magento-template" id="rollback-warning-template">
-    <p><?php /* @escapeNotVerified */ echo __('You will lose any data created since the backup was made, including admin users, customers and orders.')?></p>
     <p><?php /* @escapeNotVerified */ echo __('Are you sure you want to continue?')?></p>
 </script>
 <script type="text/x-magento-template" id="backup-options-template">
@@ -113,25 +109,25 @@
                 </div>
             </div>
 
-            <div class="admin__field field maintenance-checkbox-container">
-                <label for="backup_maintenance_mode" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Maintenance mode')?></span></label>
-                <div class="admin__field-control">
-                    <div class="admin__field-option">
-                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>
-                        <label class="admin__field-label" for="backup_maintenance_mode"><?php /* @escapeNotVerified */ echo __('Please put your store into maintenance mode during backup.')?></label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="admin__field field maintenance-checkbox-container" id="exclude-media-checkbox-container" style="display: none;">
-                <label for="exclude_media" class="admin__field-label"><span><?php /* @escapeNotVerified */ echo __('Exclude')?></span></label>
-                <div class="admin__field-control">
-                    <div class="admin__field-option">
-                        <input class="admin__control-checkbox" type="checkbox" name="exclude_media" value="1" id="exclude_media"/>
-                        <label class="admin__field-label" for="exclude_media"><?php /* @escapeNotVerified */ echo __('Exclude media folder from backup') ?></label>
-                    </div>
-                </div>
-            </div>
+<!--            <div class="admin__field field maintenance-checkbox-container">-->
+<!--                <label for="backup_maintenance_mode" class="admin__field-label"><span>--><?php ///* @escapeNotVerified */ echo __('Maintenance mode')?><!--</span></label>-->
+<!--                <div class="admin__field-control">-->
+<!--                    <div class="admin__field-option">-->
+<!--                        <input class="admin__control-checkbox" type="checkbox" name="maintenance_mode" value="1" id="backup_maintenance_mode"/>-->
+<!--                        <label class="admin__field-label" for="backup_maintenance_mode">--><?php ///* @escapeNotVerified */ echo __('Please put your store into maintenance mode during backup.')?><!--</label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!---->
+<!--            <div class="admin__field field maintenance-checkbox-container" id="exclude-media-checkbox-container" style="display: none;">-->
+<!--                <label for="exclude_media" class="admin__field-label"><span>--><?php ///* @escapeNotVerified */ echo __('Exclude')?><!--</span></label>-->
+<!--                <div class="admin__field-control">-->
+<!--                    <div class="admin__field-option">-->
+<!--                        <input class="admin__control-checkbox" type="checkbox" name="exclude_media" value="1" id="exclude_media"/>-->
+<!--                        <label class="admin__field-label" for="exclude_media">--><?php ///* @escapeNotVerified */ echo __('Exclude media folder from backup') ?><!--</label>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
         </fieldset>
     </form>
 </script>
@@ -219,15 +215,48 @@ $backupUrl   = $block->getUrl('EasyTranslationPlatform/Settings/CreateBackup');
 
 <script>
     require([
+        "jquery",
         "prototype",
         "mage/adminhtml/backup"
     ], function(){
+        AdminBackup.prototype.submitRollback = function() {
+            var data = this.modal.find('#rollback-form').serialize(true);
+            data['time'] = this.time;
+            data['type'] = this.type;
+            new Ajax.Request(this.rollbackUrl, {
+                onSuccess: function(transport) {
+                    this.processResponse(transport);
+                }.bind(this),
+                method: 'post',
+                parameters: {time: this.time, type: this.type}
+            });
+        };
 
-//<![CDATA[
+        AdminBackup.prototype.submitBackup = function () {
+            var data = {
+                'type': this.type,
+                'backup_name': $('backup_name').value,
+            };
+
+            new Ajax.Request(this.backupUrl, {
+                onSuccess: function(transport) {
+                    this.processResponse(transport, 'backup-options');
+                }.bind(this),
+                method: 'post',
+                parameters: data
+            });
+
+            this.modal.modal('closeModal');
+        };
+
+        AdminBackup.prototype.backupConfig['rollback-warning']['actionOk'] = function () {
+            this.submitRollback();
+            this.modal.find('#rollback-form').submit();
+        };
+
         backup = new AdminBackup();
         backup.rollbackUrl = '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote($rollbackUrl);?>';
         backup.backupUrl = '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote($backupUrl);?>';
-//]]>
 
     });
 </script>

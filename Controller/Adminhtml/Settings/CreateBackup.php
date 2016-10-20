@@ -33,13 +33,6 @@ class CreateBackup extends \Magento\Backup\Controller\Adminhtml\Index
         try {
             $type = $this->getRequest()->getParam('type');
 
-            if ($type == \Magento\Framework\Backup\Factory::TYPE_SYSTEM_SNAPSHOT && $this->getRequest()->getParam(
-                    'exclude_media'
-                )
-            ) {
-                $type = \Magento\Framework\Backup\Factory::TYPE_SNAPSHOT_WITHOUT_MEDIA;
-            }
-
             $backupManager = $this->_backupFactory->create(
                 $type
             )->setBackupExtension(
@@ -53,30 +46,6 @@ class CreateBackup extends \Magento\Backup\Controller\Adminhtml\Index
             $backupManager->setName($this->getRequest()->getParam('backup_name'));
 
             $this->_coreRegistry->register('backup_manager', $backupManager);
-
-            if ($this->getRequest()->getParam('maintenance_mode')) {
-                if (!$this->maintenanceMode->set(true)) {
-                    $response->setError(
-                        __(
-                            'You need more permissions to activate maintenance mode right now.'
-                        ) . ' ' . __(
-                            'To create the backup, please deselect '
-                            . '"Put store into maintenance mode" or update your permissions.'
-                        )
-                    );
-                    $backupManager->setErrorMessage(
-                        __("Something went wrong while putting your store into maintenance mode.")
-                    );
-                    return $this->getResponse()->representJson($response->toJson());
-                }
-            }
-
-            if ($type != \Magento\Framework\Backup\Factory::TYPE_DB) {
-                /** @var Filesystem $filesystem */
-                $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
-                $backupManager->setRootDir($filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath())
-                    ->addIgnorePaths($helper->getBackupIgnorePaths());
-            }
 
             $successMessage = $helper->getCreateSuccessMessageByType($type);
 
@@ -98,10 +67,6 @@ class CreateBackup extends \Magento\Backup\Controller\Adminhtml\Index
         if (!empty($errorMessage)) {
             $response->setError($errorMessage);
             $backupManager->setErrorMessage($errorMessage);
-        }
-
-        if ($this->getRequest()->getParam('maintenance_mode')) {
-            $this->maintenanceMode->set(false);
         }
 
         $this->getResponse()->representJson($response->toJson());
