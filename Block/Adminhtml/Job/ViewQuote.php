@@ -4,19 +4,35 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Registry;
 
-class ViewQuote extends Template
+class ViewQuote extends \Magento\Backend\Block\Widget\Container
 {
     protected $_coreRegistry;
     const QUOTE_TEMPLATE = 'job/quote-frame.phtml';
 
     function __construct(
-        Template\Context $context,
+        \Magento\Backend\Block\Widget\Context $context,
         Registry $registry,
         array $data
     ) {
-    
+
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
+    }
+
+    function _construct()
+    {
+        parent::_construct();
+
+        $this->addButton(
+            'back',
+            [
+                'label' => __('Back'),
+                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Index') . '\') ',
+                'class' => 'back',
+                'title' => __('Go to Manage Jobs page')
+            ]
+        );
+
     }
 
     protected function _prepareLayout()
@@ -25,6 +41,8 @@ class ViewQuote extends Template
         if (!$this->getTemplate()) {
             $this->setTemplate(static::QUOTE_TEMPLATE);
         }
+
+
         return $this;
     }
 
