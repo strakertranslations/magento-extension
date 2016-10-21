@@ -133,7 +133,12 @@ class Collection extends JobCollection implements SearchResultInterface
      */
     public function getTotalCount()
     {
-        return $this->getSize();
+        $version = $this->_configHelper->getMagentoVersion();
+        if(version_compare($version, '2.1.0', '>=')){
+            return $this->getSize();
+        }else{
+            return count($this);
+        }
     }
 
     /**

@@ -53,7 +53,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 
         $fieldset = $form->addFieldset(
             'fieldset',
-            ['legend' => __('Products Attributes'), 'class' => 'settings-attributes']
+            ['legend' => __('Product Attributes'), 'class' => 'settings-attributes']
         );
 
         $fieldset2 = $form->addFieldset(
