@@ -20,6 +20,7 @@ class Grid extends Extended
     protected $_sourceStoreId;
 
 
+
     public function __construct(
         Context $context,
         BackendHelperData $backendHelper,
@@ -114,7 +115,7 @@ class Grid extends Extended
             [
                 'header' => __('Action'),
                 'type' => 'action',
-                'getter' => 'getId',
+                'getter' => 'getEntityId',
                 'actions' => [
                     [
                         'caption' => __('View'),
@@ -126,6 +127,21 @@ class Grid extends Extended
                                 'job_type_referrer' => Model\JobType::JOB_TYPE_PRODUCT,
                                 'job_key' => $this->_jobKey,
                                 'source_store_id' => $this->_sourceStoreId
+                            ]
+                        ],
+                        'field' => 'entity_id'
+                    ],
+                    [
+                        'caption' => __('View in the frontend'),
+                        'url' => [
+                            'base' => '*/*/ViewJob',
+                            'params' => [
+                                'job_id' => $this->_job->getJobId(),
+                                'job_type_id' => $this->_jobTypeId,
+                                'job_type_referrer' => Model\JobType::JOB_TYPE_PRODUCT,
+                                'job_key' => $this->_jobKey,
+                                'source_store_id' => $this->_sourceStoreId,
+                                'target_store_id'=>$this->_job->getTargetStoreId()
                             ]
                         ],
                         'field' => 'entity_id'
