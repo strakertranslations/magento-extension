@@ -281,8 +281,6 @@ class Save extends Action
 
     protected function checkEmptyJob($data)
     {
-
-
         $empty=0;
 
         $required = ['products','categories','pages','blocks'];

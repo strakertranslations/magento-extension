@@ -89,8 +89,7 @@ class Grid extends Extended
                 'header' => __('Name'),
                 'type'  => 'text',
                 'index' => 'name',
-                'width' => '50px'
-                ,
+                'width' => '50px',
                 'filter_condition_callback' => [$this, 'filterName']
             ]
         );

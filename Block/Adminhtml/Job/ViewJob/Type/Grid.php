@@ -72,9 +72,10 @@ class Grid extends Extended
                 'header' => __('Job ID'),
                 'type' => 'number',
                 'filter' => false,
+                'sortable' => false,
                 'index' => 'job_id',
                 'header_css_class' => 'col-id',
-                'column_css_class' => 'col-id',
+                'column_css_class' => 'col-id'
             ]
         );
         $this->addColumn(
@@ -82,6 +83,7 @@ class Grid extends Extended
             [
                 'header' => __('Content Type'),
                 'filter' => false,
+                'sortable' => false,
                 'index' => 'job_type',
                 'type' => 'xxx',
                 'width' => '50px',
@@ -92,20 +94,22 @@ class Grid extends Extended
             'created_at',
             [
                 'header' => __('Created At'),
+                'filter' => false,
+                'sortable' => false,
                 'index' => 'created_at',
                 'type' => 'datetime',
-                'width' => '50px',
-                'filter' => false
+                'width' => '50px'
             ]
         );
         $this->addColumn(
             'updated_at',
             [
                 'header' => __('Updated At'),
+                'filter' => false,
+                'sortable' => false,
                 'type' => 'datetime',
                 'index' => 'updated_at',
-                'width' => '50px',
-                'filter' => false
+                'width' => '50px'
             ]
         );
 

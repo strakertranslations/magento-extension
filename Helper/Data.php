@@ -29,6 +29,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         'catalog_url_rewrite_product_category'
     );
 
+    protected $_sandboxLanguages = [
+            ['native_name' => 'Arabic','code' => 'Arabic','name' => 'Arabic','short_code' => 'sa'],
+            ['native_name' => 'Chinese Simplified','code' => 'Chinese_Simplified','name' => 'Chinese Simplified','short_code' => 'zh-cn'],
+            ['native_name' => 'English ( USA )','code' => 'English_US','name' => 'English (USA)','short_code' => 'en-us'],
+            ['native_name' => 'French ( France )','code' => 'French','name' => 'French (France)','short_code' => 'fr-fr'],
+            ['native_name' => 'German','code' => 'German','name' => 'German','short_code' => 'de-de'],
+            ['native_name' => 'Japanese','code' => 'Japanese','name' => 'Japanese','short_code' => 'ja'],
+            ['native_name' => 'Spanish ( Spain )','code' => 'Spanish','name' => 'Spanish (Spain)','short_code' => 'es-es']
+    ];
+
     /**
      * @var StoreManagerInterface $storeManager
      */
@@ -78,11 +88,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
     public function getBackupTableNames($tableName)
     {
-        return $tableName.self::BACKUP_TABLE_SUFFIX;
+        return $tableName . self::BACKUP_TABLE_SUFFIX;
     }
 
     public function getUrl($path = '/', $parameters = [])
     {
         return $this->_backendUrl->getUrl($path, $parameters);
+    }
+
+    public function getSandboxLanguages(){
+        return json_decode(json_encode($this->_sandboxLanguages));
     }
 }

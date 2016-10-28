@@ -52,7 +52,7 @@ class Save extends \Magento\Backend\App\Action
 
                 $this->_setup->saveAttributes($attributes);
 
-                $resultRedirect->setPath('*/jobs/new/');
+                $resultRedirect->setPath('/Setup_TestingStoreView/index/');
 
                 return $resultRedirect;
             } catch (\Magento\Framework\Exception\LocalizedException $e) {

@@ -29,11 +29,7 @@
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="component" xsi:type="string">Magento_Ui/js/grid/provider</item>
                     <item name="update_url" xsi:type="url" path="mui/index/render"/>
-                    <item name="storageConfig" xsi:type="array">
-                        <item name="indexField" xsi:type="string">job_id</item>
-                    </item>
                 </item>
             </argument>
         </argument>
@@ -95,7 +91,6 @@
                 </item>
             </argument>
         </filters>
-
         <paging name="listing_paging">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
@@ -107,19 +102,6 @@
                 </item>
             </argument>
         </paging>
-
-        <!--<paging name="listing_paging"/>-->
-        <!--<paging name="listing_paging">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="storageConfig" xsi:type="array">-->
-                        <!--<item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks</item>-->
-                        <!--<item name="namespace" xsi:type="string">current.paging</item>-->
-                    <!--</item>-->
-                    <!--<item name="selectProvider" xsi:type="string">st_jobs_listing.st_jobs_listing.jobs_grid_columns.ids</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</paging>-->
     </container>
     <columns name="jobs_grid_columns">
         <argument name="data" xsi:type="array">
@@ -140,25 +122,23 @@
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">st_jobs_listing.st_jobs_listing.listing_top.bookmarks</item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
-                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
+                        <item name="namespace" xsi:type="string">current.${ $.storageConfig.root }</item>
                     </item>
                 </item>
             </item>
         </argument>
-        <!--<column name="job_id">-->
-            <!--<argument name="data" xsi:type="array">-->
-                <!--<item name="config" xsi:type="array">-->
-                    <!--<item name="filter" xsi:type="string">false</item>-->
-                    <!--<item name="id" xsi:type="string">job-id</item>-->
-                    <!--<item name="label" xsi:type="string" translate="true">ID</item>-->
-                    <!--<item name="fieldClass" xsi:type="string">job-id</item>-->
-                <!--</item>-->
-            <!--</argument>-->
-        <!--</column>-->
+        <selectionsColumn name="ids">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="indexField" xsi:type="string">job_id</item>
+                </item>
+            </argument>
+        </selectionsColumn>
         <column name="job_number">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Job Number</item>
                 </item>
             </argument>
@@ -169,6 +149,7 @@
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>
                 </item>
             </argument>
@@ -180,6 +161,7 @@
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Updated At</item>
                 </item>
             </argument>
@@ -192,6 +174,7 @@
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Store View</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="headerClass" xsi:type="string">no-display</item>
                 </item>
             </argument>
@@ -202,6 +185,7 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Source Language</item>
                 </item>
             </argument>
@@ -212,6 +196,7 @@
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Target Language</item>
                 </item>
             </argument>
@@ -224,6 +209,7 @@
                     <item name="filter" xsi:type="string">select</item>
                     <item name="dataType" xsi:type="string">select</item>
                     <item name="bodyTmpl" xsi:type="string">ui/grid/cells/html</item>
+                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                 </item>
             </argument>
