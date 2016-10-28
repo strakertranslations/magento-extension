@@ -83,7 +83,7 @@ class DeleteTestingStoreView extends Field
             'name' => $this->_buttonName,
             'label' => __('Delete'),
             'type' => 'button',
-            'disabled' => $this->_setup->isTestingStoreViewExist()
+            'disabled' => !$this->_setup->isTestingStoreViewExist()
         ]);
 
         return $button->toHtml();
