@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
+use Composer\Cache;
 use Exception;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Model\AbstractModel;
@@ -10,40 +11,44 @@ use Magento\Framework\Registry;
 use Magento\Store\Model\Data\StoreConfig;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreFactory;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use \Straker\EasyTranslationPlatform\Helper\Data;
 use Magento\Config\Model\ResourceModel\Config;
-use Magento\Store\Model\StoreManagerInterface;
 
 class Setup extends AbstractModel implements SetupInterface
 {
     protected $_configModel;
-    protected $_storeManager;
     protected $_resourceConnection;
     protected $_dataHelper;
+    protected $_storeFactory;
+    protected $_configHelper;
 
     public function __construct(
         Context $context,
         Registry $registry,
         Config $config,
-        StoreManagerInterface $storeManagerInterface,
         ResourceConnection $resourceConnection,
-        Data $dataHelper
+        Data $dataHelper,
+        StoreFactory $storeFactory,
+        ConfigHelper $configHelper
     ) {
         $this->_configModel = $config;
-        $this->_storeManager = $storeManagerInterface;
         $this->_resourceConnection = $resourceConnection;
         $this->_dataHelper = $dataHelper;
+        $this->_storeFactory = $storeFactory;
+        $this->_configHelper = $configHelper;
         parent::__construct($context, $registry);
     }
 
     public function saveClientData($data)
     {
-        $this->_configModel->SaveConfig('straker/general/name', $data['first_name'] . ' ' . $data['last_name'], 'default', 0);
+        $this->_configModel->saveConfig('straker/general/name', $data['first_name'] . ' ' . $data['last_name'], 'default', 0);
 
-        $this->_configModel->SaveConfig('straker/general/email', $data['email'], 'default', 0);
+        $this->_configModel->saveConfig('straker/general/email', $data['email'], 'default', 0);
 
-        $this->_configModel->SaveConfig('straker/general/url', $data['url'], 'default', 0);
+        $this->_configModel->saveConfig('straker/general/url', $data['url'], 'default', 0);
 
         return $this->_configModel;
     }
@@ -51,7 +56,7 @@ class Setup extends AbstractModel implements SetupInterface
     public function saveAppKey($appKey)
     {
 
-        $this->_configModel->SaveConfig('straker/general/application_key', $appKey, 'default', 0);
+        $this->_configModel->saveConfig('straker/general/application_key', $appKey, 'default', 0);
 
         return $this->_configModel;
     }
@@ -59,7 +64,7 @@ class Setup extends AbstractModel implements SetupInterface
     public function saveAccessToken($accessToken)
     {
 
-        $this->_configModel->SaveConfig('straker/general/access_token', $accessToken, 'default', 0);
+        $this->_configModel->saveConfig('straker/general/access_token', $accessToken, 'default', 0);
 
         return $this->_configModel;
     }
@@ -67,9 +72,9 @@ class Setup extends AbstractModel implements SetupInterface
     public function saveStoreSetup($scopeId, $source_store = '', $source_language = '', $destination_language = '')
     {
 
-        $this->_configModel->SaveConfig('straker/general/source_store', $source_store, ScopeInterface::SCOPE_STORES, $scopeId);
-        $this->_configModel->SaveConfig('straker/general/source_language', $source_language, ScopeInterface::SCOPE_STORES, $scopeId);
-        $this->_configModel->SaveConfig('straker/general/destination_language', $destination_language, ScopeInterface::SCOPE_STORES, $scopeId);
+        $this->_configModel->saveConfig('straker/general/source_store', $source_store, ScopeInterface::SCOPE_STORES, $scopeId);
+        $this->_configModel->saveConfig('straker/general/source_language', $source_language, ScopeInterface::SCOPE_STORES, $scopeId);
+        $this->_configModel->saveConfig('straker/general/destination_language', $destination_language, ScopeInterface::SCOPE_STORES, $scopeId);
 
         return $this->_configModel;
     }
@@ -78,15 +83,15 @@ class Setup extends AbstractModel implements SetupInterface
     {
 
         if (!empty($attributes['custom'])) {
-            $this->_configModel->SaveConfig('straker_config/attribute/product_custom', $attributes['custom'], 'default', 0);
+            $this->_configModel->saveConfig('straker_config/attribute/product_custom', $attributes['custom'], 'default', 0);
         }
 
         if (!empty($attributes['default'])) {
-            $this->_configModel->SaveConfig('straker_config/attribute/product_default', $attributes['default'], 'default', 0);
+            $this->_configModel->saveConfig('straker_config/attribute/product_default', $attributes['default'], 'default', 0);
         }
 
         if (!empty($attributes['category'])) {
-            $this->_configModel->SaveConfig('straker_config/attribute/category', $attributes['category'], 'default', 0);
+            $this->_configModel->saveConfig('straker_config/attribute/category', $attributes['category'], 'default', 0);
         }
 
         return $this->_configModel;
@@ -222,9 +227,42 @@ class Setup extends AbstractModel implements SetupInterface
 
     public function deleteSandboxSetting()
     {
-
-        $this->_configModel->deleteConfig('straker_config/env/sandbox', 'default', 0);
-
+        $this->_configModel->deleteConfig('straker_config/env/site_mode', 'default', 0);
         return  $this->_configModel;
+    }
+
+    /**
+     * @param int $mode 0: sandbox, 1: live
+     */
+    public function setSiteMode( $mode = 0 )
+    {
+        $this->_configModel->saveConfig('straker_config/env/site_mode', $mode,  'default', 0);
+        $this->_clean();
+    }
+
+    private function _clean(){
+        $this->_cacheManager->clean(\Magento\Framework\App\Cache\Type\Config::CACHE_TAG);
+    }
+
+    public function isTestingStoreViewExist(){
+        $testingStore = $this->_storeFactory->create()->load($this->_configHelper->getTestingStoreViewCode());
+        return empty($testingStore->getId()) ? false : $testingStore;
+    }
+
+    public function deleteTestingStoreView()
+    {
+        $result = ['Success' => true, 'Message' => ''];
+        try{
+            if($testingStore = $this->isTestingStoreViewExist()){
+                $testingStore->delete();
+                $this->_eventManager->dispatch('store_delete', ['store' => $testingStore]);
+            }else{
+                $result['Success'] = false;
+                $result['Message'] = __('The testing store does not exist.');
+            }
+        }catch (Exception $e){
+            throw $e;
+        }
+        return $result;
     }
 }

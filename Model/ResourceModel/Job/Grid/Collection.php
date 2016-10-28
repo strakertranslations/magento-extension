@@ -174,6 +174,7 @@ class Collection extends JobCollection implements SearchResultInterface
             $this->getSelect()->order('updated_at DESC');
             $this->_coreRegistry->unregister('job_updated');
         }
+//        var_dump($this->getSelect()->__toString());exit;
         return $this;
     }
 }

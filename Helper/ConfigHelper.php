@@ -214,7 +214,7 @@ class ConfigHelper extends AbstractHelper
 
     public function isSandboxMode()
     {
-        return $this->scopeConfig->getValue('straker_config/env/sandbox');
+        return !$this->scopeConfig->getValue('straker_config/env/site_mode');
     }
 
     public function getSandboxMessage()
@@ -232,5 +232,10 @@ class ConfigHelper extends AbstractHelper
 
     public function getMagentoVersion(){
         return $this->_productMetadata->getVersion();
+    }
+
+    public function getTestingStoreViewCode()
+    {
+        return 'straker_testing_storeview';
     }
 }

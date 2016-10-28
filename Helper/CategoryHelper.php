@@ -42,16 +42,20 @@ class CategoryHelper extends AbstractHelper
     protected $_translatableBackendType =  [
         'varchar', 'text','int'
     ];
-
+    protected $_attributeTranslationFactory;
+    protected $_attributeOptionTranslationFactory;
+    protected $_attributeRepository;
+    protected $_configHelper;
+    protected $_attributeHelper;
+    protected $_xmlHelper;
 
 
     /**
-     * ProductHelper constructor.
+     * CategoryHelper constructor.
      * @param Context $context
-     * @param ProductFactory $productFactory
      * @param AttributeRepository $attributeRepository
      * @param AttributeCollection $attributeCollectionFactory
-     * @param ProductCollection $productCollectionFactory
+     * @param CategoryCollection $categoryCollectionFactory
      * @param AttributeTranslationFactory $attributeTranslationFactory
      * @param AttributeOptionTranslationFactory $attributeOptionTranslationFactory
      * @param Config $eavConfig
@@ -59,6 +63,7 @@ class CategoryHelper extends AbstractHelper
      * @param \Straker\EasyTranslationPlatform\Helper\AttributeHelper $attributeHelper
      * @param \Straker\EasyTranslationPlatform\Helper\XmlHelper $xmlHelper
      * @param Logger $logger
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
@@ -241,7 +246,8 @@ class CategoryHelper extends AbstractHelper
                                 'entity_id' => $data['category_id'],
                                 'attribute_id' => $attribute['attribute_id'],
                                 'original_value' => $attribute['value'],
-                                'is_label' => (bool)0
+                                'is_label' => (bool)0,
+                                'label' => $attribute['label']
                             ]
                         )->save();
 

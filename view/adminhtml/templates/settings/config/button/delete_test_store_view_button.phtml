@@ -1,0 +1,34 @@
+<?php
+/**  @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\DeleteTestingStoreView */
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'. __('This will delete the store view that you created during one step setup. All the jobs applied for the store view will be deleted as well.') .'</span>';
+?>
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/confirm'
+    ], function( $, confirm ){
+
+        var $deleteTestStoreButton = $('#straker_config_env_delete_test_store');
+
+        $deleteTestStoreButton.on('click', function(){
+            confirm({
+                title: '<?php echo __("Please Confirm") ?>',
+                content: '<?php echo __("This will delete the store view that you created during one step setup. All the jobs applied for the store view will be deleted as well.") ?>',
+                actions: {
+                    confirm: function(){
+                        $.ajax({
+                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
+                            method   : 'get',
+                            dataType : 'json',
+                            showLoader :  true,
+                            complete : function(){
+                                location.reload();
+                            }
+                        });
+                    }
+                }
+            });
+        });
+    });
+</script>
