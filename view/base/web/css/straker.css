@@ -82,6 +82,7 @@
     padding-top: 7px;
 }
 
+
 .straker-backup-list.file-actions>a{
     color: inherit;
 }
@@ -288,3 +289,13 @@ div.fieldset-wrapper.straker p{
     margin-bottom: 0 !important;
 }
 
+.anchor-disabled{
+    color: #888;
+    pointer-events: none;
+    text-decoration: underline;
+    cursor: default;
+}
+
+.col-action{
+    width: 200px;
+}

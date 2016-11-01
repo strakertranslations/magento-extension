@@ -107,11 +107,41 @@ class Grid extends Extended
                             ]
                         ],
                         'field' => 'entity_id'
+                    ],
+                    [
+                        'caption' => __('View in the frontend'),
+                        'url' => [
+                            'base' => '*',
+                            'params' => [
+                                'job_id' => $this->_job->getJobId(),
+                                'job_type_id' => $this->_jobTypeId,
+                                'job_type_referrer' => Model\JobType::JOB_TYPE_PAGE,
+                                'job_key' => $this->_jobKey,
+                                'source_store_id' => $this->_sourceStoreId,
+                                'target_store_id'=>$this->_job->getTargetStoreId()
+                            ]
+                        ],
+                        'field' => 'entity_id'
+                    ],
+                    [
+                        'caption' => __('View in the backend'),
+                        'url' => [
+                            'base' => '*',
+                            'params' => [
+                                'job_id' => $this->_job->getJobId(),
+                                'job_type_id' => $this->_jobTypeId,
+                                'job_type_referrer' => Model\JobType::JOB_TYPE_PAGE,
+                                'job_key' => $this->_jobKey,
+                                'source_store_id' => $this->_sourceStoreId,
+                                'target_store_id'=>$this->_job->getTargetStoreId()
+                            ]
+                        ],
+                        'field' => 'entity_id'
                     ]
                 ],
                 'filter' => false,
                 'sortable' => false,
-                'index' => 'view',
+                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Renderer\MultiAction',
                 'header_css_class' => 'col-action',
                 'column_css_class' => 'col-action'
             ]

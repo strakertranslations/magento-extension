@@ -343,4 +343,42 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
         return count($data) + 1;
     }
+
+    public function getTranslatedPageId($sourcePageId){
+        $pageId = null;
+        if($this->getJobTypeId() <> JobType::JOB_TYPE_PAGE){
+            return $pageId;
+        }
+        $targetStoreId = $this->getTargetStoreId();
+        $sourcePage = $this->_pageRepository->getById($sourcePageId);
+        $identifier = $sourcePage->getIdentifier();
+        $collection = $this->_pageCollectionFactory->create()->addFieldToFilter('identifier', ['eq' => $identifier]);
+        foreach ($collection->getItems() as $page){
+            $stores = $page->getStores();
+            if(is_array($stores) && in_array($targetStoreId, $stores)){
+                $pageId = $page->getId();
+                break;
+            }
+        }
+        return $pageId;
+    }
+
+    public function getTranslatedBlockId($sourceBlockId){
+        $blockId = null;
+        if($this->getJobTypeId() <> JobType::JOB_TYPE_BLOCK){
+            return $blockId;
+        }
+        $targetStoreId = $this->getTargetStoreId();
+        $sourceBlock = $this->_blockRepository->getById($sourceBlockId);
+        $identifier = $sourceBlock->getIdentifier();
+        $collection = $this->_blockCollectionFactory->create()->addFieldToFilter('identifier', ['eq' => $identifier]);
+        foreach ($collection->getItems() as $block){
+            $stores = $block->getStores();
+            if(is_array($stores) && in_array($targetStoreId, $stores)){
+                $blockId = $block->getId();
+                break;
+            }
+        }
+        return $blockId;
+    }
 }

@@ -134,7 +134,7 @@ class Grid extends Extended
                     [
                         'caption' => __('View in the frontend'),
                         'url' => [
-                            'base' => '*/*/ViewJob',
+                            'base' => '*',
                             'params' => [
                                 'job_id' => $this->_job->getJobId(),
                                 'job_type_id' => $this->_jobTypeId,
@@ -149,7 +149,7 @@ class Grid extends Extended
                     [
                         'caption' => __('View in the backend'),
                         'url' => [
-                            'base' => '*/*/ViewJob',
+                            'base' => '*',
                             'params' => [
                                 'job_id' => $this->_job->getJobId(),
                                 'job_type_id' => $this->_jobTypeId,
@@ -164,10 +164,9 @@ class Grid extends Extended
                 ],
                 'filter' => false,
                 'sortable' => false,
-                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Renderer\MultiAction'
-//                'index' => 'view',
-//                'header_css_class' => 'col-action',
-//                'column_css_class' => 'col-action'
+                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Renderer\MultiAction',
+                'header_css_class' => 'col-action',
+                'column_css_class' => 'col-action'
             ]
         );
 
