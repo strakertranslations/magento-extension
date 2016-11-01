@@ -17,7 +17,7 @@
     <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
 </ol>
 <?php $params = $this->getRequest()->getParams(); ?>
-<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'internal_product'=>implode(',', $this->getProduct()))) ?>"><?php echo $this->__('Edit Products') ?></a>
+<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr())) ?>"><?php echo $this->__('Edit Products') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
     <input type="hidden" name="product" value="<?php echo implode(',', $this->getProduct()) ?>" >
