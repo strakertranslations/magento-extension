@@ -60,7 +60,8 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Data extends Mage_Core_
     }
 
     public function isSandboxMode(){
-        return (Mage::getStoreConfig('straker/general/site_mode') == 0);
+//        return (Mage::getStoreConfig('straker/general/site_mode') == 0);
+        return false;
     }
 
     public function getSandboxMessage(){
