@@ -109,7 +109,7 @@ class Grid extends Extended
                         'field' => 'entity_id'
                     ],
                     [
-                        'caption' => __('View in the frontend'),
+                        'caption' => __('View in the Frontend'),
                         'url' => [
                             'base' => '*',
                             'params' => [
@@ -124,7 +124,7 @@ class Grid extends Extended
                         'field' => 'entity_id'
                     ],
                     [
-                        'caption' => __('View in the backend'),
+                        'caption' => __('View in the Backend'),
                         'url' => [
                             'base' => '*',
                             'params' => [

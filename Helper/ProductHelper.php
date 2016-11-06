@@ -144,13 +144,12 @@ class ProductHelper extends AbstractHelper
         return $collection;
     }
 
+
     /**
      * @param $product_ids
-     * @param $target_store_id
+     * @param $source_store_id
      * @param bool $includeChildren
-     * @return $this Todo: Add store id to filter products by store
-     * Todo: Add store id to filter products by store
-     * @internal param $store_id
+     * @return $this
      */
     public function getProducts(
         $product_ids,
@@ -158,7 +157,7 @@ class ProductHelper extends AbstractHelper
         $includeChildren = true
     ) {
     
-        if (strpos($product_ids, '&')) {
+        if (strpos($product_ids, '&') !== false) {
             $product_ids = explode('&', $product_ids);
         }
 

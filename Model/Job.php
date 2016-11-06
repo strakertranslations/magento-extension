@@ -306,7 +306,9 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     private function _renameTranslatedFileName($filePath, $originalFileName)
     {
-        $fileName = substr_replace($originalFileName, '_translated', stripos($originalFileName, '.xml'));
+        $pos = stripos($originalFileName, '.xml');
+        $pos = $pos !== false ? $pos : -3;
+        $fileName = substr_replace($originalFileName, '_translated', $pos);
 //        $suffix = date('Y-m-d H:i',time());
         $suffix = '';
         return [ 'path' => $filePath, 'name' => $fileName.'_'. $suffix  .'.xml'];

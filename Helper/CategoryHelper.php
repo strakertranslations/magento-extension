@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -88,7 +89,7 @@ class CategoryHelper extends AbstractHelper
         $this->_attributeHelper = $attributeHelper;
         $this->_xmlHelper = $xmlHelper;
         $this->_logger = $logger;
-        $this->_entityTypeId =  $eavConfig->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
+        $this->_entityTypeId =  $eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
         $this->_storeManager = $storeManager;
 
         parent::__construct($context);
@@ -103,17 +104,16 @@ class CategoryHelper extends AbstractHelper
 
 
     /**
-     * @param $product_ids
-     * @param $store_id
+     * @param $category_ids
+     * @param $source_store_id
      * @return $this
-     * Todo: Add store id to filter products by store
      */
     public function getCategories(
         $category_ids,
         $source_store_id
     ) {
     
-        if (strpos($category_ids, ',')) {
+        if (strpos($category_ids, ',') !== false) {
             $category_ids = explode(',', $category_ids);
         }
 
@@ -181,14 +181,15 @@ class CategoryHelper extends AbstractHelper
         return $this->_xmlHelper->getXmlFileName();
     }
 
+
     /**
-     * @param $productData
+     * @param $categoryData
      * @param $job_id
      * @param $jobtype_id
      * @param $source_store_id
      * @param $target_store_id
      * @param $xmlHelper
-     * @return bool
+     * @return $this|bool
      */
     protected function appendCategoryAttributes(
         $categoryData,

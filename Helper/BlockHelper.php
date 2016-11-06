@@ -76,20 +76,18 @@ class BlockHelper extends AbstractHelper
         return array_column(self::blockAttributes, 'name');
     }
 
+
     /**
-     * @param $page_ids
+     * @param $block_ids
      * @param $source_store_id
-     * @return $this Todo: Add store id to filter products by store
-     * Todo: Add store id to filter products by store
-     * @internal param $product_ids
-     * @internal param $store_id
+     * @return $this
      */
     public function getBlocks(
         $block_ids,
         $source_store_id
     ) {
     
-        if (strpos($block_ids, '&')) {
+        if (strpos($block_ids, '&') !== false) {
             $block_ids = explode('&', $block_ids);
         }
 
