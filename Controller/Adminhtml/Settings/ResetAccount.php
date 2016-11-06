@@ -54,23 +54,21 @@ class ResetAccount extends Action
         try {
             $this->_strakerSetup->saveAccessToken('');
             $this->_strakerSetup->saveAppKey('');
+            $data = ['first_name' => '', 'last_name' => '', 'email' => '', 'url' => ''];
+            $this->_strakerSetup->saveClientData($data);
+            foreach ($this->_storeManager->getStores() as $store) {
+                $this->_strakerSetup->saveStoreSetup($store->getId(), '', '', '');
+            }
             $this->_strakerSetup->deleteSandboxSetting();
-
+            //deleting straker_testing_storeview
+            $this->_strakerSetup->deleteTestingStoreView();
             //clear translations for all stores
             $this->_strakerSetup->clearTranslations();
             //clear all translation jobs
             $this->_strakerSetup->clearStrakerData();
-
-            $data = ['first_name' => '', 'last_name' => '', 'email' => '', 'url' => ''];
-            $this->_strakerSetup->saveClientData($data);
-
-            foreach ($this->_storeManager->getStores() as $store) {
-                $this->_strakerSetup->saveStoreSetup($store->getId(), '', '', '');
-            }
-
             $this->_storeCache->clean(Config::CACHE_TAG);
-            $this->_messageManager->addSuccess(__('Straker Settings has been cleared.'));
-            $this->_logger->info(__('Straker Settings has been cleared.'));
+            $this->_messageManager->addSuccessMessage(__('Straker Translations settings have been cleared.'));
+            $this->_logger->info(__('Straker Translations settings have been cleared.'));
         } catch (Exception $e) {
             $message = __($e->getMessage());
             $this->_messageManager->addError($message);

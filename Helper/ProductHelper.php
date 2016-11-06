@@ -144,13 +144,12 @@ class ProductHelper extends AbstractHelper
         return $collection;
     }
 
+
     /**
      * @param $product_ids
-     * @param $target_store_id
+     * @param $source_store_id
      * @param bool $includeChildren
-     * @return $this Todo: Add store id to filter products by store
-     * Todo: Add store id to filter products by store
-     * @internal param $store_id
+     * @return $this
      */
     public function getProducts(
         $product_ids,
@@ -158,7 +157,7 @@ class ProductHelper extends AbstractHelper
         $includeChildren = true
     ) {
     
-        if (strpos($product_ids, '&')) {
+        if (strpos($product_ids, '&') !== false) {
             $product_ids = explode('&', $product_ids);
         }
 
@@ -344,7 +343,8 @@ class ProductHelper extends AbstractHelper
                                     'attribute_id' => $attribute['attribute_id'],
                                     'original_value' => $attribute['label'],
                                     'has_option' => (bool)1,
-                                    'is_label' => (bool)1
+                                    'is_label' => (bool)1,
+                                    'label' => $attribute['label']
                                 ]
                             )->save();
 
@@ -358,7 +358,8 @@ class ProductHelper extends AbstractHelper
                                     'entity_id' => $data['product_id'],
                                     'attribute_id' => $attribute['attribute_id'],
                                     'original_value' => $attribute['label'],
-                                    'is_label' => (bool)1
+                                    'is_label' => (bool)1,
+                                    'label' => $attribute['label']
                                 ]
                             )->save();
 
@@ -370,7 +371,8 @@ class ProductHelper extends AbstractHelper
                                     'entity_id' => $data['product_id'],
                                     'attribute_id' => $attribute['attribute_id'],
                                     'original_value' => $attribute['value'],
-                                    'is_label' => (bool)0
+                                    'is_label' => (bool)0,
+                                    'label' => $attribute['label']
                                 ]
                             )->save();
 

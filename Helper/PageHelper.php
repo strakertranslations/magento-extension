@@ -6,21 +6,16 @@ use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection as AttributeCollection;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollection;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Data\Collection;
 use Magento\Store\Model\StoreManagerInterface;
 
-use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Straker\EasyTranslationPlatform\Helper\AttributeHelper;
-use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\JobType;
 
 class PageHelper extends AbstractHelper
 {
@@ -97,7 +92,7 @@ class PageHelper extends AbstractHelper
         $source_store_id
     ) {
     
-        if (strpos($page_ids, '&')) {
+        if (strpos($page_ids, '&') !== false) {
             $page_ids = explode('&', $page_ids);
         }
 
@@ -219,18 +214,18 @@ class PageHelper extends AbstractHelper
         foreach ($this->_pageData as $pageKey => $data) {
             foreach ($data['attributes'] as $key => $attribute) {
                 $attributeTranslationModel = $this->_attributeTranslationFactory->create();
-
+                $revisedAttribute =$this->_attributeHelper->getRevisedAttribute(JobType::JOB_TYPE_PAGE, $attribute['attribute_id']);
                 try {
                     $attributeTranslationModel->setData(
                         [
                             'job_id' => $job_id,
                             'entity_id' => $data['page_id'],
-                            'attribute_id' => $attribute['attribute_id'],
+                            'attribute_id' => $revisedAttribute['key'],
                             'original_value' => $attribute['value'],
-                            'is_label' => (bool)0
+                            'is_label' => (bool)0,
+                            'label' => $revisedAttribute['label']
                         ]
                     )->save();
-
                     $this->_pageData[$pageKey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
                     $this->_pageData[$pageKey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
                 } catch (Exception $e) {

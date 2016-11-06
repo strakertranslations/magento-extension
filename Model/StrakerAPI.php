@@ -110,7 +110,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
                 $debugData['response'] = $body;
 
-                if (strpos($contentType, 'json')) {
+                if (strpos($contentType, 'json') !== false) {
                     return json_decode($body);
                 } else {
                     return $body;

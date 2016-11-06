@@ -6,21 +6,16 @@ use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection as AttributeCollection;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollection;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\Data\Collection;
 use Magento\Store\Model\StoreManagerInterface;
 
-use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Straker\EasyTranslationPlatform\Helper\AttributeHelper;
-use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\JobType;
 
 class BlockHelper extends AbstractHelper
 {
@@ -81,20 +76,18 @@ class BlockHelper extends AbstractHelper
         return array_column(self::blockAttributes, 'name');
     }
 
+
     /**
-     * @param $page_ids
+     * @param $block_ids
      * @param $source_store_id
-     * @return $this Todo: Add store id to filter products by store
-     * Todo: Add store id to filter products by store
-     * @internal param $product_ids
-     * @internal param $store_id
+     * @return $this
      */
     public function getBlocks(
         $block_ids,
         $source_store_id
     ) {
     
-        if (strpos($block_ids, '&')) {
+        if (strpos($block_ids, '&') !== false) {
             $block_ids = explode('&', $block_ids);
         }
 
@@ -219,15 +212,16 @@ class BlockHelper extends AbstractHelper
         foreach ($this->_blockData as $blockKey => $data) {
             foreach ($data['attributes'] as $key => $attribute) {
                 $attributeTranslationModel = $this->_attributeTranslationFactory->create();
-
+                $revisedAttribute =$this->_attributeHelper->getRevisedAttribute(JobType::JOB_TYPE_BLOCK, $attribute['attribute_id']);
                 try {
                     $attributeTranslationModel->setData(
                         [
                             'job_id' => $job_id,
                             'entity_id' => $data['block_id'],
-                            'attribute_id' => $attribute['attribute_id'],
+                            'attribute_id' => $revisedAttribute['key'],
                             'original_value' => $attribute['value'],
-                            'is_label' => (bool)0
+                            'is_label' => (bool)0,
+                            'label' => $revisedAttribute['label'],
                         ]
                     )->save();
 

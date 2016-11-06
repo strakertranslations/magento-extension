@@ -6,22 +6,27 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Eav\Model\AttributeRepository;
 
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Straker\EasyTranslationPlatform\Model\Job;
+use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\JobType;
 
 class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
     protected $_translatedAttributeLabels = [];
+    protected $_attributeRepository;
+    protected $_jobFactory;
 
     public function __construct(
-
         Context $context,
         AttributeRepository $attributeRepository,
-        Logger $logger
-
+        Logger $logger,
+        JobFactory $jobFactory
     ) {
 
         $this->_attributeRepository = $attributeRepository;
         $this->_logger = $logger;
+        $this->_jobFactory = $jobFactory;
         parent::__construct($context);
     }
 
@@ -32,19 +37,18 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
 
         $configAttributeData = [];
 
-        foreach ($attributes as $attribute)
-        {
+        foreach ($attributes as $attribute) {
             $value_data = [];
 
-            foreach ($attribute['values'] as $value){
+            foreach ($attribute['values'] as $value) {
 
-                $value_data[] = ['option_id'=>$value['value_index'],'value'=>$value['default_label']];
+                $value_data[] = ['option_id' => $value['value_index'], 'value' => $value['default_label']];
             }
 
             $configAttributeData[] = [
-                'attribute_id'=>$attribute['attribute_id'],
-                'label'=>$attribute['label'],
-                'value'=>$value_data
+                'attribute_id' => $attribute['attribute_id'],
+                'label' => $attribute['label'],
+                'value' => $value_data
             ];
 
         }
@@ -56,21 +60,20 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
     public function findMultiOptionAttributes($attribute_id, $product, $store_id)
     {
 
-        $attribute = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY,$attribute_id)->setStoreFilter($store_id);
+        $attribute = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $attribute_id)->setStoreFilter($store_id);
 
         $options = $product->getResource()->getAttributeRawValue($product->getId(), $attribute, $store_id);
 
-        if($options){
+        if ($options) {
 
             $values['attribute_id'] = $attribute_id;
 
             $values['label'] = $attribute->getFrontendLabel();
 
-            $options = explode(',',$options);
+            $options = explode(',', $options);
 
-            foreach ($options as $option_id)
-            {
-                $values['value'][] = ['option_id'=>$option_id,'value'=>$attribute->getSource()->getOptionText($option_id)];
+            foreach ($options as $option_id) {
+                $values['value'][] = ['option_id' => $option_id, 'value' => $attribute->getSource()->getOptionText($option_id)];
             }
 
             return $values;
@@ -87,35 +90,84 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $jobName,
         $source_store_id,
         $xmlHelper
-    )
-    {
+    ) {
 
-        if($productData){
+        if ($productData) {
 
-            try{
+            try {
 
                 $xmlHelper->appendDataToRoot([
                     'name' => $jobName,
                     'content_context' => 'product_attribute_label',
                     'content_context_url' => $productData['product_url'],
-                    'attribute_translation_id'=>$attribute['label_translation_id'],
-                    'source_store_id'=> $source_store_id,
+                    'attribute_translation_id' => $attribute['label_translation_id'],
+                    'source_store_id' => $source_store_id,
                     'product_id' => $productData['product_id'],
-                    'attribute_id'=>$attribute['attribute_id'],
-                    'attribute_label'=>$attribute['label'],
-                    'value'=>$attribute['label'],
-                    'translate' => in_array($attribute['label'],$this->_translatedAttributeLabels) ? 'false' : 'true'
+                    'attribute_id' => $attribute['attribute_id'],
+                    'attribute_label' => $attribute['label'],
+                    'value' => $attribute['label'],
+                    'translate' => in_array($attribute['label'], $this->_translatedAttributeLabels) ? 'false' : 'true'
                 ]);
 
-                array_push($this->_translatedAttributeLabels,$attribute['label']);
+                array_push($this->_translatedAttributeLabels, $attribute['label']);
 
-            }catch (\Exception $e){
+            } catch (\Exception $e) {
 
-                $this->_logger->error('error',__FILE__.' '.__LINE__.''.$e->getMessage(),$e);
+                $this->_logger->error('error', __FILE__ . ' ' . __LINE__ . '' . $e->getMessage(), $e);
 
             }
         }
     }
 
+    function getAttributeLabel($jobId, $attributeId, $isLabel, $originalValue = '')
+    {
+        $attrLabel = '';
+//        $this->_jobAttributeCollection = $this->_attributeTranslationCollectionFactory->create()
+//            ->addFieldToFilter('job_id', ['eq' => $jobId])
+//            ->addfieldtofilter('is_label', ['eq' => true ]);
 
+        $jobModel = $this->_jobFactory->create()->load($jobId);
+        $jobTypeId = $jobModel->getJobTypeId();
+
+        if (strcasecmp($isLabel, 'yes') === 0) {
+            $attrLabel = $originalValue;
+        } else {
+            $attrLabel = $this->_getFieldLabel($jobTypeId, $attributeId);
+        }
+
+        return $attrLabel;
+    }
+
+    protected function _getFieldLabel($jobTypeId, $attributeId)
+    {
+        $label = '';
+        switch ($jobTypeId) {
+            case JobType::JOB_TYPE_BLOCK:
+                $label = BlockHelper::blockAttributes[$attributeId]['label'];
+                break;
+            case JobType::JOB_TYPE_PAGE:
+                $label = PageHelper::PageAttributes[$attributeId]['label'];
+                break;
+        }
+        return $label;
+    }
+
+    public function getRevisedAttribute($jobType, $attributeCode)
+    {
+        $key = 0;
+        $data = [];
+
+        if (is_numeric($attributeCode)) {
+            return $attributeCode;
+        }
+        if ($jobType == JobType::JOB_TYPE_PAGE) {
+            $key = array_search($attributeCode, array_column(PageHelper::PageAttributes, 'name'));
+            $data = PageHelper::PageAttributes[$key];
+        }
+        if ($jobType == JobType::JOB_TYPE_BLOCK) {
+            $key = array_search($attributeCode, array_column(BlockHelper::blockAttributes, 'name'));
+            $data = BlockHelper::blockAttributes[$key];
+        }
+        return [ 'key' => $key , 'name' => $data['name'], 'label' => $data['label']];
+    }
 }

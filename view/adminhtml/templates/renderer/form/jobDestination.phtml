@@ -1,3 +1,6 @@
+<?php
+/** @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Form\Renderer\JobDestination */
+?>
 <div class="fieldset-wrapper straker">
     <div>
         <h2>Select your Destination Store View</h2>
@@ -7,30 +10,35 @@
     <div class="field field-tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-form-field-tax-class-id" data-attribute-code="tax_class_id">
         <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span>Target Store View</span></label>
         <div class="control">
+
             <select id="destination-checker" name="destination_checker" class="required-entry _required select admin__control-select">
                 <option value=""><?php echo __('Pick a store view') ?></option>
-                <?php foreach ($block->getWebsites() as $website): ?>
-                    <?php $showWebsite = false; ?>
-                    <?php foreach ($website->getGroups() as $group): ?>
-                        <?php $showGroup = false; ?>
-                        <?php foreach ($group->getStores() as $store): ?>
-                            <?php if ($showWebsite == false): ?>
-                                <?php $showWebsite = true; ?>
-                                <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                    <?php foreach ($block->getWebsites() as $website): ?>
+                        <?php $showWebsite = false; ?>
+                        <?php foreach ($website->getGroups() as $group): ?>
+                            <?php $showGroup = false; ?>
+                            <?php foreach ($group->getStores() as $store): ?>
+                                <?php if ($showWebsite == false): ?>
+                                    <?php $showWebsite = true; ?>
+                                    <optgroup label="<?php echo $this->escapeHtml($website->getName()) ?>"></optgroup>
+                                <?php endif; ?>
+                                <?php if ($showGroup == false): ?>
+                                    <?php $showGroup = true; ?>
+                                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                <?php endif; ?>
+                                <?php if(!$block->isSandboxModeEnabled()
+                                            || ($block->isSandboxModeEnabled()
+                                                && strcasecmp($store->getCode(), $block->getTestingStoreCode()) == 0) ): ?>
+                                    <option
+                                        value="<?php echo $this->escapeHtml($store->getId()) ?>">
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                            <?php if ($showGroup): ?>
+                                </optgroup>
                             <?php endif; ?>
-                            <?php if ($showGroup == false): ?>
-                                <?php $showGroup = true; ?>
-                                <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
-                            <?php endif; ?>
-                            <option
-                                value="<?php echo $this->escapeHtml($store->getId()) ?>">
-                                &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
                         <?php endforeach; ?>
-                        <?php if ($showGroup): ?>
-                            </optgroup>
-                        <?php endif; ?>
                     <?php endforeach; ?>
-                <?php endforeach; ?>
             </select>
             <div class="note"><?php echo __('Translations will be imported into this store.')?></div>
         </div>

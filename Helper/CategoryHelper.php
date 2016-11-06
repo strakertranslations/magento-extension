@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Exception;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -42,16 +43,20 @@ class CategoryHelper extends AbstractHelper
     protected $_translatableBackendType =  [
         'varchar', 'text','int'
     ];
-
+    protected $_attributeTranslationFactory;
+    protected $_attributeOptionTranslationFactory;
+    protected $_attributeRepository;
+    protected $_configHelper;
+    protected $_attributeHelper;
+    protected $_xmlHelper;
 
 
     /**
-     * ProductHelper constructor.
+     * CategoryHelper constructor.
      * @param Context $context
-     * @param ProductFactory $productFactory
      * @param AttributeRepository $attributeRepository
      * @param AttributeCollection $attributeCollectionFactory
-     * @param ProductCollection $productCollectionFactory
+     * @param CategoryCollection $categoryCollectionFactory
      * @param AttributeTranslationFactory $attributeTranslationFactory
      * @param AttributeOptionTranslationFactory $attributeOptionTranslationFactory
      * @param Config $eavConfig
@@ -59,6 +64,7 @@ class CategoryHelper extends AbstractHelper
      * @param \Straker\EasyTranslationPlatform\Helper\AttributeHelper $attributeHelper
      * @param \Straker\EasyTranslationPlatform\Helper\XmlHelper $xmlHelper
      * @param Logger $logger
+     * @param StoreManagerInterface $storeManager
      */
     public function __construct(
         Context $context,
@@ -83,7 +89,7 @@ class CategoryHelper extends AbstractHelper
         $this->_attributeHelper = $attributeHelper;
         $this->_xmlHelper = $xmlHelper;
         $this->_logger = $logger;
-        $this->_entityTypeId =  $eavConfig->getEntityType(\Magento\Catalog\Api\Data\CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
+        $this->_entityTypeId =  $eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
         $this->_storeManager = $storeManager;
 
         parent::__construct($context);
@@ -98,17 +104,16 @@ class CategoryHelper extends AbstractHelper
 
 
     /**
-     * @param $product_ids
-     * @param $store_id
+     * @param $category_ids
+     * @param $source_store_id
      * @return $this
-     * Todo: Add store id to filter products by store
      */
     public function getCategories(
         $category_ids,
         $source_store_id
     ) {
     
-        if (strpos($category_ids, ',')) {
+        if (strpos($category_ids, ',') !== false) {
             $category_ids = explode(',', $category_ids);
         }
 
@@ -176,14 +181,15 @@ class CategoryHelper extends AbstractHelper
         return $this->_xmlHelper->getXmlFileName();
     }
 
+
     /**
-     * @param $productData
+     * @param $categoryData
      * @param $job_id
      * @param $jobtype_id
      * @param $source_store_id
      * @param $target_store_id
      * @param $xmlHelper
-     * @return bool
+     * @return $this|bool
      */
     protected function appendCategoryAttributes(
         $categoryData,
@@ -241,7 +247,8 @@ class CategoryHelper extends AbstractHelper
                                 'entity_id' => $data['category_id'],
                                 'attribute_id' => $attribute['attribute_id'],
                                 'original_value' => $attribute['value'],
-                                'is_label' => (bool)0
+                                'is_label' => (bool)0,
+                                'label' => $attribute['label']
                             ]
                         )->save();
 

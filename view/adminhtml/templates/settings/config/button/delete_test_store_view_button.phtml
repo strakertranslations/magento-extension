@@ -1,16 +1,20 @@
+<?php
+/**  @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\DeleteTestingStoreView */
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'. __('This will delete the store view that you created during one step setup. All the jobs applied for the store view will be deleted as well.') .'</span>';
+?>
 <script>
     require([
         'jquery',
         'Magento_Ui/js/modal/confirm'
     ], function( $, confirm ){
 
-        var $resetButton = $('#demonstration_data_reset_account_button');
+        var $deleteTestStoreButton = $('#straker_config_env_delete_test_store');
 
-        $resetButton.on('click', function(){
-
+        $deleteTestStoreButton.on('click', function(){
             confirm({
                 title: '<?php echo __("Please Confirm") ?>',
-                content: '<?php echo __("This will remove all Straker Translations data, including registration, settings, translations and jobs.") ?>',
+                content: '<?php echo __("This will delete the store view that you created during one step setup. All the jobs applied for the store view will be deleted as well.") ?>',
                 actions: {
                     confirm: function(){
                         $.ajax({
@@ -28,7 +32,3 @@
         });
     });
 </script>
-
-<?php
-    echo $block->getButtonHtml();
-    echo '<p class="note"><span>'.__('This will remove all of the saved data, including registration, settings, translated text and jobs.').'</span></p>';

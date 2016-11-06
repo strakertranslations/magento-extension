@@ -73,6 +73,7 @@ class Index extends Action
     {
         $updatedJobs = [];
         $localJobIds = [];
+        $result = ['status' => true, 'message' => ''];
         //refresh all jobs
         try {
             $apiData = $this->_strakerApi->getTranslation();

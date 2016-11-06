@@ -81,10 +81,6 @@ class Rollback extends Action
      */
     public function execute()
     {
-        if (!$this->_objectManager->get('Magento\Backup\Helper\Data')->isRollbackAllowed()) {
-            $this->_forward('denied');
-        }
-
         if (!$this->getRequest()->isAjax()) {
             return $this->_redirect('adminhtml/system_config/edit',  ['section' => 'demonstration']);
         }
@@ -110,7 +106,8 @@ class Rollback extends Action
 
             $type = $backup->getType();
 
-            $backupManager = $this->_dbFactory->create(
+            /** @var \Straker\EasyTranslationPlatform\Model\Db $dbBackupManager */
+            $dbBackupManager = $this->_dbFactory->create(
                 $type
             )->setBackupExtension(
                 $helper->getExtensionByType($type)
@@ -125,60 +122,11 @@ class Rollback extends Action
                 $this->_objectManager->create('Magento\Backup\Model\ResourceModel\Db')
             );
 
-            $this->_coreRegistry->register('backup_manager', $backupManager);
-
-            $passwordValid = $this->_objectManager->create(
-                'Magento\Backup\Model\Backup'
-            )->validateUserPassword(
-                $this->getRequest()->getParam('password')
-            );
-
-            if (!$passwordValid) {
-                $response->setError(__('Please correct the password.'));
-                $backupManager->setErrorMessage(__('Please correct the password.'));
-                return $this->getResponse()->representJson($response->toJson());
-            }
-
-            if ($this->getRequest()->getParam('maintenance_mode')) {
-                if (!$this->maintenanceMode->set(true)) {
-                    $response->setError(
-                        __(
-                            'You need more permissions to activate maintenance mode right now.'
-                        ) . ' ' . __(
-                            'To complete the rollback, please deselect '
-                            . '"Put store into maintenance mode" or update your permissions.'
-                        )
-                    );
-                    $backupManager->setErrorMessage(
-                        __('Something went wrong while putting your store into maintenance mode.')
-                    );
-                    return $this->getResponse()->representJson($response->toJson());
-                }
-            }
-
-            if ($type != \Magento\Framework\Backup\Factory::TYPE_DB) {
-                /** @var Filesystem $filesystem */
-                $filesystem = $this->_objectManager->get('Magento\Framework\Filesystem');
-                $backupManager->setRootDir($filesystem->getDirectoryRead(DirectoryList::ROOT)->getAbsolutePath())
-                    ->addIgnorePaths($helper->getRollbackIgnorePaths());
-
-                if ($this->getRequest()->getParam('use_ftp', false)) {
-                    $backupManager->setUseFtp(
-                        $this->getRequest()->getParam('ftp_host', ''),
-                        $this->getRequest()->getParam('ftp_user', ''),
-                        $this->getRequest()->getParam('ftp_pass', ''),
-                        $this->getRequest()->getParam('ftp_path', '')
-                    );
-                }
-            }
-
-            $backupManager->rollback();
-
+            $this->_coreRegistry->register('backup_manager', $dbBackupManager);
             $helper->invalidateCache();
-
+            $dbBackupManager->rollback();
             $adminSession = $this->_getSession();
             $adminSession->destroy();
-
             $response->setRedirectUrl($this->getUrl('*'));
         } catch (\Magento\Framework\Backup\Exception\CantLoadSnapshot $e) {
             $errorMsg = __('We can\'t find the backup file.');
@@ -196,7 +144,7 @@ class Rollback extends Action
 
         if (!empty($errorMsg)) {
             $response->setError($errorMsg);
-            $backupManager->setErrorMessage($errorMsg);
+            $dbBackupManager->setErrorMessage($errorMsg);
         }
 
         if ($this->getRequest()->getParam('maintenance_mode')) {
