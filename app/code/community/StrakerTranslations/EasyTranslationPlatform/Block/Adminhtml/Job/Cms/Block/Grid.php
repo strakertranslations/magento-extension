@@ -25,7 +25,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Block_
     }
 
     protected function _prepareCollection() {
-        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job_cms_block')->getCollection()

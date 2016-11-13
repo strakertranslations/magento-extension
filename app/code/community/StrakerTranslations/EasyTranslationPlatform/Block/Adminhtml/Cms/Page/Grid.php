@@ -2,11 +2,11 @@
 class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Page_Grid extends Mage_Adminhtml_Block_Cms_Page_Grid {
     protected function _prepareCollection()
     {
+        /* @var $collection Mage_Cms_Model_Resource_Page_Collection */
         $collection = Mage::getModel('cms/page')->getCollection();
-        /* @var $collection Mage_Cms_Model_Mysql4_Page_Collection */
-        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $collection->getSelect()->joinLeft(
-            array('straker' => $prefix.'straker_job_cmspage'),
+            array('straker' => $collection->getTable('straker_job_cmspage')),
             'straker.new_entity_id = main_table.page_id',
             array('straker_translated' => 'straker.version')
         );

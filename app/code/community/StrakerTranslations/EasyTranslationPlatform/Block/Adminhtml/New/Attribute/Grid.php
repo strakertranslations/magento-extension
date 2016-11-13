@@ -22,24 +22,51 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
      */
     protected function _prepareCollection()
     {
+        /** @var \Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('catalog/product_attribute_collection')
             ->addVisibleFilter();
 
         $store = $this->_getStore();
-        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
-        $jobAttributeQuery = 'select a.`version`,  a.`attribute_id` from `'.$prefix.'straker_job_attribute` as a
-                            left join `'.$prefix.'straker_job` as b on a.`job_id`=b.`id`
-                            where b.`store_id` ='.$store->getId().' and a.`version` =1
-                            GROUP BY a.`attribute_id`';
+//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+//        $jobAttributeQuery = 'select a.`version`,  a.`attribute_id` from `'.$prefix.'straker_job_attribute` as a
+//                            left join `'.$prefix.'straker_job` as b on a.`job_id`=b.`id`
+//                            where b.`store_id` ='.$store->getId().' and a.`version` =1
+//                            GROUP BY a.`attribute_id`';
+//
+//        //join straker job product table to get version for each product
+//        $collection->getSelect()->joinLeft(
+//
+//          new Zend_Db_Expr('('.$jobAttributeQuery.')'),
+//          'main_table.attribute_id = t.attribute_id',
+//          array('version')
+//
+//        );
+        /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Attribute_Collection $strakerJobProductCollection */
+        $strakerJobAttributeCollection = Mage::getModel('strakertranslations_easytranslationplatform/job_attribute')->getCollection();
+        $strakerJobAttributeCollection->getSelect()
+            ->reset(Zend_Db_Select::COLUMNS)
+            ->joinLeft(
+                ['b' => $strakerJobAttributeCollection->getTable('strakertranslations_easytranslationplatform/job')],
+                '`main_table`.`job_id` = `b`.`id`',
+                []
+            )->where(
+                '`b`.`store_id` = ?', $store->getId()
+            )->where(
+                '`main_table`.`version` = ?', 1
+            )->group(
+                'main_table.attribute_id'
+            )->columns(
+                ['version' => 'version', 'attribute_id' => 'attribute_id']
+            );
 
-        //join straker job product table to get version for each product
+        $jobAttributeQuery = $strakerJobAttributeCollection->getSelect();
+
         $collection->getSelect()->joinLeft(
-
-          new Zend_Db_Expr('('.$jobAttributeQuery.')'),
-          'main_table.attribute_id = t.attribute_id',
-          array('version')
-
+            $jobAttributeQuery,
+            'main_table.attribute_id = t.attribute_id',
+            array('version')
         );
+
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

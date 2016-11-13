@@ -19,25 +19,33 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Cms_Block_Translate exte
           ->getNewEntityId();
 
 
+//        if ($this->getTranslate()){
+//
+//            $writeConnection = $this->_getConnection();
+//
+//            $query = 'UPDATE `'.Mage::getSingleton('core/resource')->getTableName('cms/block')
+//              . '` SET '.$this->getColumnName() .' = \''.addslashes($this->getTranslate()).' \' WHERE block_id = '.$newEntityId;
+//
+//
+//            $writeConnection->query($query);
+//
+//
+//        }
+
         if ($this->getTranslate()){
-
-            $writeConnection = $this->_getConnection();
-
-            $query = 'UPDATE `'.Mage::getSingleton('core/resource')->getTableName('cms/block')
-              . '` SET '.$this->getColumnName() .' = \''.addslashes($this->getTranslate()).' \' WHERE block_id = '.$newEntityId;
-
-
-            $writeConnection->query($query);
-
-
+            $model = Mage::getModel('cms/block')->load($newEntityId);
+            if($model->getId()){
+                $model->setData($this->getColumnName(), $this->getTranslate());
+                $model->save();
+            }
         }
 
         $this->setIsImported(1)->save();
 
     }
-
-    private function _getConnection() {
-        return Mage::getSingleton('core/resource')->getConnection('core_write');
-    }
+//
+//    private function _getConnection() {
+//        return Mage::getSingleton('core/resource')->getConnection('core_write');
+//    }
 
 }
