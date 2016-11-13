@@ -1,8 +1,10 @@
 <?php
 
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct()
+    {
         parent::__construct();
         $this->setId('strakerJobCategoryGrid');
         $this->setSaveParametersInSession(true);
@@ -13,9 +15,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
         $this->setChild('dispute_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(array(
-                    'label'   => Mage::helper('catalog')->__('Feedback'),
-                    'onclick' => 'disputeForm.show(\''.$this->getRequest()->getParam('job_id').'\')',
-                    'class'   => 'feedback'
+                    'label' => Mage::helper('catalog')->__('Feedback'),
+                    'onclick' => 'disputeForm.show(\'' . $this->getRequest()->getParam('job_id') . '\')',
+                    'class' => 'feedback'
                 ))
         );
 
@@ -23,20 +25,24 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
         return parent::_prepareLayout();
     }
 
-    protected function _prepareCollection() {
-        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+    protected function _prepareCollection()
+    {
+//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
-        $jobAttributes =  Mage::getModel('strakertranslations_easytranslationplatform/category_attributes')->getCollection()->addFieldToFilter('job_id', $job->getId());
+        $jobAttributes = Mage::getModel('strakertranslations_easytranslationplatform/category_attributes')->getCollection()->addFieldToFilter('job_id', $job->getId());
+
+        /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Category_Collection $collection */
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job_category')->getCollection()->addFieldToFilter('main_table.job_id', $job->getId());
 
         //loop through this job's attributes and join them to the collection
-        foreach($jobAttributes as $jobAttribute){
+        foreach ($jobAttributes as $jobAttribute) {
             $attributeCode = Mage::getModel('eav/entity_attribute')->load($jobAttribute->getAttributeId())->getAttributeCode();
             $collection->getSelect()->joinLeft(
-                array($attributeCode => $prefix.'straker_category_translate'),
-                $attributeCode.'.category_id = main_table.category_id AND '.$attributeCode.'.attribute_id = '.$jobAttribute->getAttributeId(). ' AND '
-.$attributeCode.'.job_id = '.$job->getId(),
-                array($attributeCode.'_original' => 'original', $attributeCode.'_translate' => 'translate')
+                array($attributeCode => $collection->getTable('strakertranslations_easytranslationplatform/category_translate')),
+                $attributeCode . '.category_id = main_table.category_id 
+                AND ' . $attributeCode . '.attribute_id = ' . $jobAttribute->getAttributeId() . ' 
+                AND ' . $attributeCode . '.job_id = ' . $job->getId(),
+                array($attributeCode . '_original' => 'original', $attributeCode . '_translate' => 'translate')
             );
         }
 //echo $collection->getSelect()->__toString();
@@ -45,7 +51,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns() {
+    protected function _prepareColumns()
+    {
 //        $this->addColumn('id', array(
 //            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('ID'),
 //            'align' => 'right',
@@ -66,32 +73,32 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
 //        ));
 
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
-        $jobAttributes =  Mage::getModel('strakertranslations_easytranslationplatform/category_attributes')->getCollection()->addFieldToFilter('job_id', $job->getId());
+        $jobAttributes = Mage::getModel('strakertranslations_easytranslationplatform/category_attributes')->getCollection()->addFieldToFilter('job_id', $job->getId());
 
         //loop through this job's attributes and add columns to the grid
-        foreach($jobAttributes as $jobAttribute){
+        foreach ($jobAttributes as $jobAttribute) {
             $attributeCode = Mage::getModel('eav/entity_attribute')->load($jobAttribute->getAttributeId())->getAttributeCode();
             $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(3, $attributeCode);
-            $this->addColumn($attributeCode.'_original', array(
+            $this->addColumn($attributeCode . '_original', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Source', $attrModel->getFrontendLabel()),
                 'align' => 'left',
-                'index' => $attributeCode.'_original',
+                'index' => $attributeCode . '_original',
             ));
 
-            $this->addColumn($attributeCode.'_translate', array(
+            $this->addColumn($attributeCode . '_translate', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Target', $attrModel->getFrontendLabel()),
                 'align' => 'left',
-                'index' => $attributeCode.'_translate',
+                'index' => $attributeCode . '_translate',
             ));
         }
 
-        if ($this->getStatusId() == '4'){
+        if ($this->getStatusId() == '4') {
             $this->addColumn('version', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
                 'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Version',
                 'align' => 'center',
                 'index' => false,
-                'filter'    => false,
+                'filter' => false,
             ));
         }
 
@@ -100,7 +107,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Frontend',
             'align' => 'center',
             'index' => false,
-            'filter'    => false,
+            'filter' => false,
         ));
 
         $this->addColumn('view_backend', array(
@@ -108,13 +115,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Backend',
             'align' => 'center',
             'index' => false,
-            'filter'    => false,
+            'filter' => false,
         ));
 
         return parent::_prepareColumns();
     }
 
-    public function getRowUrl($row) {
+    public function getRowUrl($row)
+    {
 //        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
         return '';
     }
@@ -179,9 +187,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
         if ($this->getStatusId() == '4') {
             $html .= $this->getChildHtml('dispute_button');
         }
-        if($this->getFilterVisibility()){
-            $html.= $this->getResetFilterButtonHtml();
-            $html.= $this->getSearchButtonHtml();
+        if ($this->getFilterVisibility()) {
+            $html .= $this->getResetFilterButtonHtml();
+            $html .= $this->getSearchButtonHtml();
         }
         return $html;
     }

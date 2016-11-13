@@ -223,6 +223,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         if ($helper->getStoreSetup($storeId)) {
             $helper->saveStoreSetup($storeId, '', '', '');
             $session->addSuccess($this->__('Language settings has been reset.'));
+            Mage::app()->getCacheInstance()->cleanType('config');
         } else {
             $session->addError($this->__('Store code is not valid.'));
         }
