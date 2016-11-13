@@ -23,22 +23,23 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
     }
 
     protected function _prepareCollection() {
-        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
+        /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Attribute_Collection $collection */
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job_attribute')->getCollection()
             ->addFieldToFilter('main_table.job_id', $job->getId());
 
-        $collection->getSelect()->joinLeft(
-            array('ea' => $prefix.'eav_attribute'),
-            'ea.attribute_id = main_table.attribute_id',
-            array('attribute_code' => 'attribute_code')
-        );
-        $collection->getSelect()->joinLeft(
-            array('translate' => $prefix.'straker_attribute_translate'),
-            'translate.attribute_id = main_table.attribute_id AND translate.job_id = '.$job->getId(),
-            array('original' => 'original', 'translate' => 'translate')
-        );
+        $collection->getSelect()
+            ->joinLeft(
+                array('ea' => $collection->getTable('eav/attribute')),
+                'ea.attribute_id = main_table.attribute_id',
+                array('attribute_code' => 'attribute_code')
+            )->joinLeft(
+                array('translate' => $collection->getTable('strakertranslations_easytranslationplatform/straker_attribute_translate')),
+                'translate.attribute_id = main_table.attribute_id AND translate.job_id = '.$job->getId(),
+                array('original' => 'original', 'translate' => 'translate')
+            );
 
 
 //echo $collection->getSelect();

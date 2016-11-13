@@ -14,9 +14,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('cms/page')->getCollection();
         /* @var $collection Mage_Cms_Model_Mysql4_Page_Collection */
+        $collection = Mage::getModel('cms/page')->getCollection();
+        //todo: should add $collection->addStoreFilter(sourceStoreId);
         $collection->setFirstStoreFlag(true);
+        //var_dump($collection->getSelect()->__toString());exit;
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

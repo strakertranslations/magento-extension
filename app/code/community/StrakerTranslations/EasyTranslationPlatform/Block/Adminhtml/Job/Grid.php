@@ -39,7 +39,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Grid exten
             Mage::getSingleton('core/resource')->getTableName('strakertranslations_easytranslationplatform/job_status'),
             Mage::getSingleton('core/resource')->getTableName('strakertranslations_easytranslationplatform/job_status').'.status_id = main_table.status_id',
             'status_name'
-
         );
         $collection->getSelect()->joinLeft(
             Mage::getSingleton('core/resource')->getTableName('core/store'),
