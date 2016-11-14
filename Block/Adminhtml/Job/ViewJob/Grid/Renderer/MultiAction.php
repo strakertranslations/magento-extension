@@ -101,7 +101,7 @@ class MultiAction extends Action
     protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
         $text = $action['caption']->getText();
-        if (key_exists('caption', $action) && strcasecmp('View', $text) == 0) {
+        if (key_exists('caption', $action) && strcasecmp('View Details', $text) == 0) {
             return parent::_toLinkHtml($action, $row);
         } else {
             $job = $this->getJob($action);

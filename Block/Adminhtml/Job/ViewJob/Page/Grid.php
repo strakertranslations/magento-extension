@@ -95,7 +95,7 @@ class Grid extends Extended
                 'getter' => 'getPageId',
                 'actions' => [
                     [
-                        'caption' => __('View'),
+                        'caption' => __('View Details'),
                         'url' => [
                             'base' => '*/*/ViewJob',
                             'params' => [
