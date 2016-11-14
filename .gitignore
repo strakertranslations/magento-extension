@@ -1,11 +1,12 @@
 #### Ignore everything ###
 /*
+/*/
 
 #### Unignore the following ####
 !.gitignore
-!app/code/community/StrakerTranslations/EasyTranslationPlatform/
-!app/design/adminhtml/default/straker/
+!app/code/community/StrakerTranslations/EasyTranslationPlatform
+!app/design/adminhtml/default/straker
 !app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
 
-!js/straker/
-!skin/adminhtml/default/straker/
+!js/straker
+!skin/adminhtml/default/straker
