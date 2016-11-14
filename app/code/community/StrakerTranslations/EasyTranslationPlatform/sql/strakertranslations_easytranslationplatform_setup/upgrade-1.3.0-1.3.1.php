@@ -33,12 +33,12 @@ if ($connection->isTableExists($tableName) == true) {
 
 $tables = [
     'straker_actionlog',
-    'st_straker_cms_block_attributes',
-    'st_straker_cms_block_translate',
-    'st_straker_cms_page_attributes',
-    'st_straker_cms_page_translate',
-    'st_straker_job_cmsblock',
-    'st_straker_job_cmspage'
+    'straker_cms_block_attributes',
+    'straker_cms_block_translate',
+    'straker_cms_page_attributes',
+    'straker_cms_page_translate',
+    'straker_job_cmsblock',
+    'straker_job_cmspage'
 ];
 
 $prefix = Mage::getConfig()->getTablePrefix();
