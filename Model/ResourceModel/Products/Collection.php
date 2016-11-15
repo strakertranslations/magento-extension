@@ -1,5 +1,6 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model\ResourceModel\Products;
+
 use Magento\Framework\DB\Select;
 
 /**
@@ -7,14 +8,15 @@ use Magento\Framework\DB\Select;
  */
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
-    public function is_translated()
+
+    public function is_translated($target_store_id=1)
     {
         $strakerJobs = $this->_resource->getTableName('straker_job');
 
         $strakerTrans = $this->_resource->getTableName('straker_attribute_translation');
 
         $this->getSelect()->columns(
-            'if(stTrans.translated_value IS NULL,0,1) as is_translated'
+            'if(stTrans.is_imported IS NULL,0,1) as is_translated'
         )->joinLeft(
             ['stTrans' => $strakerTrans],
             'e.entity_id=stTrans.entity_id',
@@ -25,7 +27,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'stJob.job_id'
         )->joinLeft(
             ['stJob' => $strakerJobs],
-            'stTrans.job_id=stJob.job_id and stJob.target_store_id=1 and stJob.job_type_id=1',
+            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$target_store_id.' and stJob.job_type_id=1',
             []
         )->group('entity_id');
 

@@ -104,6 +104,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'category',
                 'required' => true,
                 'options' => [
+                    ''=>'',
                     'delivery'=>'Delivery',
                     'quality'=>'Quality',
                     'payment'=>'Payment',
@@ -175,6 +176,8 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     {
 
         $options = [];
+
+        $options[] = '';
 
         $jobs = $this->_jobCollection->create()
             ->addFieldToSelect(['job_number']);

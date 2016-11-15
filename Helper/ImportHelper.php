@@ -11,6 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 
 use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
@@ -63,6 +64,7 @@ class ImportHelper extends AbstractHelper
 
     protected $_productData;
     protected $_categoryData;
+    protected $_timezoneInterface;
 
     protected $_selectQuery = 'select option_id from %1$s where option_id = %2$s and store_id = %3$s';
     protected $_updateQuery = 'update %1$s set value = "%2$s" where option_id = %3$s and store_id = %4$s';
@@ -93,7 +95,8 @@ class ImportHelper extends AbstractHelper
         PageFactory $pageFactory,
         BlockFactory $blockFactory,
         StoreManagerInterface $storeManager,
-        UrlFinderInterface $urlFinder
+        UrlFinderInterface $urlFinder,
+        TimezoneInterface $timezone
     ) {
         $this->_logger = $logger;
         $this->_xmlParser = $xmlParser;
@@ -115,6 +118,7 @@ class ImportHelper extends AbstractHelper
         $this->_blockFactory = $blockFactory;
         $this->_storeManager = $storeManager;
         $this->_urlFinder = $urlFinder;
+        $this->_timezoneInterface = $timezone;
 
         parent::__construct($context);
     }
@@ -215,7 +219,7 @@ class ImportHelper extends AbstractHelper
                 try {
                     $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
 
-                    $att_trans_model->addData(['is_imported' => 1, 'translated_value' => $data['_value']['value']]);
+                    $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
 
                     $att_trans_model->save();
 
@@ -232,7 +236,7 @@ class ImportHelper extends AbstractHelper
                 try {
                     $att_opt_model = $this->_attributeOptionTranslationFactory->create()->load($data['_attribute']['option_translation_id']);
 
-                    $att_opt_model->addData(['is_imported' => 1, 'translated_value' => $data['_value']['value']]);
+                    $att_opt_model->addData(['translated_value' => $data['_value']['value']]);
 
                     $att_opt_model->save();
 
@@ -264,12 +268,13 @@ class ImportHelper extends AbstractHelper
     {
         $product_ids = $this->getProductIds($this->_jobModel->getId());
 
-        $this->importTranslatedOptionValues($this->_jobModel->getId());
+        $this->publishTranslatedOptionValues($this->_jobModel->getId());
 
-        $this->importTranslatedAttributeLabels($this->_jobModel->getId());
+        $this->publishTranslatedAttributeLabels($this->_jobModel->getId());
 
         foreach ($product_ids as $id) {
-            $products = $this->_attributeTranslationCollection->create()
+
+            $productData = $this->_attributeTranslationCollection->create()
                 ->addFieldToSelect(['attribute_id', 'original_value', 'translated_value'])
                 ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()))
                 ->addFieldToFilter('entity_id', array('eq' => $id))
@@ -277,13 +282,22 @@ class ImportHelper extends AbstractHelper
 
             $attData = [];
 
-            foreach ($products->toArray()['items'] as $data) {
+            foreach ($productData->getData() as $data) {
 
                 $attData[$data['attribute_id']] = $data['translated_value'];
+
             }
 
-
             $this->_productAction->updateAttributes(array($id), $attData, $this->_jobModel->getTargetStoreId());
+
+            foreach ($productData->getData() as $data){
+
+                $updateRow = $this->_attributeTranslationFactory->create()->load($data['attribute_translation_id']);
+
+                $updateRow->addData(['is_imported'=>1,'imported_at'=> $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
+                $updateRow->save();
+            }
         }
 
         return $this;
@@ -308,7 +322,7 @@ class ImportHelper extends AbstractHelper
 
     }
 
-    protected function importTranslatedAttributeLabels($job_id)
+    protected function publishTranslatedAttributeLabels($job_id)
     {
 
         $labels = $this->_attributeTranslationCollection->create()
@@ -317,9 +331,11 @@ class ImportHelper extends AbstractHelper
             ->addFieldToFilter('is_label', array('eq' => 1))
             ->addFieldToFilter('translated_value', array('notnull' => true));
 
-        $labels->getSelect()->group('attribute_id');
+        $labelData = clone $labels;
 
-        foreach ($labels->toArray()['items'] as $data) {
+        $labelData->getSelect()->group('attribute_id');
+
+        foreach ($labelData->getData() as $data) {
 
             $att = $this->_attributeRepository->get(\Magento\Catalog\Model\Product::ENTITY, $data['attribute_id']);
 
@@ -328,10 +344,20 @@ class ImportHelper extends AbstractHelper
             $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
 
             $att->setStoreLabels($new_labels)->save();
+
+        }
+
+        foreach ($labels->getData() as $data){
+
+            $updateRow = $this->_attributeTranslationFactory->create()->load($data['attribute_translation_id']);
+
+            $updateRow->addData(['is_imported'=>1,'imported_at'=> $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
+            $updateRow->save();
         }
     }
 
-    protected function importTranslatedOptionValues($job_id)
+    protected function publishTranslatedOptionValues($job_id)
     {
 
         $this->getOptionIds($job_id);
@@ -340,17 +366,18 @@ class ImportHelper extends AbstractHelper
             ->addFieldToSelect(['option_id', 'original_value', 'translated_value'])
             ->addFieldToFilter('attribute_translation_id', array('in' => $this->_attributeTranslationIds));
 
-        $translatedOptions->getSelect()->group('option_id');
+        $translatedOptionData = clone $translatedOptions;
 
-        $translatedOptionData = $translatedOptions->toArray()['items'];
+        $translatedOptionData->getSelect()->group('option_id');
 
         $connection = $this->_resourceConnection->getConnection();
 
         $table = $this->_resourceConnection->getTableName('eav_attribute_option_value');
 
-        if (!empty($translatedOptionData)) {
+        if (!empty($translatedOptionData->getData())) {
 
             foreach ($translatedOptionData as $data) {
+
                 $select_query = sprintf($this->_selectQuery, $table, $data['option_id'], $this->_jobModel->getTargetStoreId());
 
                 if ($connection->fetchOne($select_query)) {
@@ -363,6 +390,17 @@ class ImportHelper extends AbstractHelper
                     $connection->insertArray($table, ['option_id', 'store_id', $table.'.value'],
                         [[$data['option_id'], $this->_jobModel->getTargetStoreId(), $data['translated_value']]]);
                 };
+
+            }
+
+            foreach ($translatedOptions->getData() as $data){
+
+                $updateRow = $this->_attributeOptionTranslationFactory->create()->load($data['attribute_option_translation_id']);
+
+                $updateRow->addData(['is_imported'=>1,'imported_at'=> $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
+                $updateRow->save();
+
             }
 
         }
