@@ -110,7 +110,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $collection->setStore($this->sourceStoreId);
 
-        $collection->is_Translated();
+        $collection->is_Translated($this->targetStoreId);
 
         $this->setCollection($collection);
 
