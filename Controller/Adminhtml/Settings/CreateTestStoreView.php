@@ -14,7 +14,7 @@ use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 
-class DeleteTestStoreView extends Action
+class CreateTestStoreView extends Action
 {
     protected $_resultJsonFactory;
     protected $_strakerSetup;
@@ -38,13 +38,14 @@ class DeleteTestStoreView extends Action
 
     public function execute()
     {
-        $result = ['Success' => true] ;
+        $result = ['Success' => true];
         $params = $this->getRequest()->getParams();
+        $storeName = $params['storeName'];
         $siteMode = $params['siteMode'];
         try{
-            $result = $this->_strakerSetup->deleteTestingStoreView($siteMode);
+            $result = $this->_strakerSetup->createTestingStoreView($storeName, $siteMode);
             if($result['Success']){
-                $this->messageManager->addSuccessMessage(__('Test store view deleted successfully.'));
+                $this->messageManager->addSuccessMessage(__('Test store view created successfully.'));
                 if($result['SiteMode'] == SetupInterface::SITE_MODE_LIVE ){
                     $this->messageManager->addSuccessMessage(__('Live mode enabled.'));
                 }else{

@@ -1,34 +1,105 @@
 <?php
 /**  @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\DeleteTestingStoreView */
 echo $block->getButtonHtml();
-echo '<p class="note"><span>'. __('This will delete the store view that you created during one step setup. All the jobs applied for the store view will be deleted as well.') .'</span>';
+echo '<p class="note"><span>'. __('This will delete your Testing Store View and all test jobs created for it.') .'</span>';
+$testStoreView = $block->_getTestStoreView();
 ?>
+
+<div id="delete-test-store-modal" style="display: none;">
+    <p><?php echo __('This will delete your Testing Store View and all test jobs created for it.') ?></p>
+    <fieldset class="fieldset admin__fieldset fieldset-wide">
+        <legend class="admin__legend legend">
+            <span></span>
+        </legend><br>
+
+
+        <div class="messages">
+        </div>
+
+
+        <div class="admin__field field field-site_mode ">
+            <label class="label admin__field-label" for="item_site_mode">
+                <span><?php echo __('Switch Site Mode: '); ?></span>
+            </label>
+            <div class="admin__field-control control">
+                <select id="item_site_mode_live" name="site_mode" class=" select admin__control-select">
+                    <option value="<?php echo \Straker\EasyTranslationPlatform\Api\Data\SetupInterface::SITE_MODE_LIVE; ?>" selected="selected">Live</option>
+                    <option value="<?php echo \Straker\EasyTranslationPlatform\Api\Data\SetupInterface::SITE_MODE_SANDBOX; ?>">Sandbox</option>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+
 <script>
     require([
         'jquery',
-        'Magento_Ui/js/modal/confirm'
-    ], function( $, confirm ){
+        'Magento_Ui/js/modal/modal',
+        'mage/translate'
+    ], function( $, modal ){
+        var options = {
+            type: 'popup',
+            responsive: true,
+            innerScroll: true,
+            title: $.mage.__('Delete Testing Store View: <?php echo $testStoreView->getName(); ?>'),
+            buttons: [
+                {
+                    text: $.mage.__('Cancel'),
+                    class: 'action cancel',
+                    click: function () {
+                        this.closeModal();
+                    }
+                },
+                {
+                    text: $.mage.__('Delete'),
+                    class: 'action primary',
+                    click: function () {
+                        var siteMode = $('#item_site_mode_live').val();
+                        deleteTestStore(siteMode);
+                    }
+                }
+            ]
+        };
+        var popup = modal(options, $('#delete-test-store-modal'));
+
+        function deleteTestStore(siteMode) {
+            $.ajax({
+                url: '<?php echo $block->getAjaxResetUrl(); ?>',
+                data: {siteMode: siteMode },
+                method: 'get',
+                dataType: 'json',
+                showLoader: true,
+                complete: function () {
+                    location.reload();
+                }
+            });
+        }
 
         var $deleteTestStoreButton = $('#straker_config_env_delete_test_store');
 
         $deleteTestStoreButton.on('click', function(){
-            confirm({
-                title: '<?php echo __("Please Confirm") ?>',
-                content: '<?php echo __("This will delete the store view that you created during one step setup. All the jobs applied for the store view will be deleted as well.") ?>',
-                actions: {
-                    confirm: function(){
-                        $.ajax({
-                            url      : '<?php echo $block->getAjaxResetUrl(); ?>',
-                            method   : 'get',
-                            dataType : 'json',
-                            showLoader :  true,
-                            complete : function(){
-                                location.reload();
-                            }
-                        });
-                    }
-                }
-            });
+            $('#delete-test-store-modal').modal('openModal');
         });
+
+//        $deleteTestStoreButton.on('click', function(){
+//            confirm({
+//                title: '<?php //echo __("Please Confirm") ?>//',
+//                content: '<?php //echo __("This will delete your Testing Store View and all test jobs created for it.") ?>//',
+//                actions: {
+//                    confirm: function(){
+//                        $.ajax({
+//                            url      : '<?php //echo $block->getAjaxResetUrl(); ?>//',
+//                            method   : 'get',
+//                            dataType : 'json',
+//                            showLoader :  true,
+//                            complete : function(){
+//                                location.reload();
+//                            }
+//                        });
+//                    }
+//                }
+//            });
+//        });
     });
 </script>

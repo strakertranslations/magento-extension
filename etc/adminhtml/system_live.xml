@@ -43,7 +43,11 @@
                     <label>Site Mode</label>
                     <source_model>Straker\EasyTranslationPlatform\Model\Config\Source\SiteMode</source_model>
                 </field>
-                <field id="delete_test_store" translate="label" type="button" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="create_test_store" translate="label" type="button" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Create Testing Store View</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\CreateTestingStoreView</frontend_model>
+                </field>
+                <field id="delete_test_store" translate="label" type="button" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Delete Testing Store View</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\DeleteTestingStoreView</frontend_model>
                 </field>

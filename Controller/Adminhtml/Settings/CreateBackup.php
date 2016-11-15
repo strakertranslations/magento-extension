@@ -6,10 +6,13 @@
  */
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Settings;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Filesystem;
+use Exception;
+use Magento\Backup\Controller\Adminhtml\Index;
+use Magento\Framework\Backup\Exception\NotEnoughFreeSpace;
+use Magento\Framework\Backup\Exception\NotEnoughPermissions;
+use Magento\Framework\DataObject;
 
-class CreateBackup extends \Magento\Backup\Controller\Adminhtml\Index
+class CreateBackup extends Index
 {
     /**
      * Create backup action
@@ -23,12 +26,14 @@ class CreateBackup extends \Magento\Backup\Controller\Adminhtml\Index
             return $this->_redirect('adminhtml/system_config/edit',  ['section' => 'demonstration']);
         }
 
-        $response = new \Magento\Framework\DataObject();
+        $response = new DataObject();
 
         /**
          * @var \Magento\Backup\Helper\Data $helper
          */
         $helper = $this->_objectManager->get('Magento\Backup\Helper\Data');
+
+        $backupManager = null;
 
         try {
             $type = $this->getRequest()->getParam('type');
@@ -44,22 +49,17 @@ class CreateBackup extends \Magento\Backup\Controller\Adminhtml\Index
             );
 //            $backupManager->setName('straker ' . $this->getRequest()->getParam('backup_name'));
             $backupManager->setName($this->getRequest()->getParam('backup_name'));
-
             $this->_coreRegistry->register('backup_manager', $backupManager);
-
             $successMessage = $helper->getCreateSuccessMessageByType($type);
-
             $backupManager->create();
-
             $this->messageManager->addSuccessMessage($successMessage);
-
             $response->setRedirectUrl($this->getUrl('adminhtml/system_config/edit', ['section' => 'demonstration']));
-        } catch (\Magento\Framework\Backup\Exception\NotEnoughFreeSpace $e) {
+        } catch (NotEnoughFreeSpace $e) {
             $errorMessage = __('You need more free space to create a backup.');
-        } catch (\Magento\Framework\Backup\Exception\NotEnoughPermissions $e) {
+        } catch (NotEnoughPermissions $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
             $errorMessage = __('You need more permissions to create a backup.');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->_objectManager->get('Psr\Log\LoggerInterface')->info($e->getMessage());
             $errorMessage = __('We can\'t create the backup right now.');
         }

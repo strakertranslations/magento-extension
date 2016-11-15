@@ -4,32 +4,23 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
-use Magento\Store\Model\StoreFactory;
-use Magento\Store\Model\Store;
-use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
-class DeleteTestingStoreView extends Field
+class CreateTestingStoreView extends Field
 {
-    const BUTTON_TEMPLATE = 'settings/config/button/delete_test_store_view_button.phtml';
+    const BUTTON_TEMPLATE = 'settings/config/button/create_test_store_view_button.phtml';
 
     private $_buttonId;
     private $_buttonName;
     protected $_setup;
-    protected $_storeFactory;
-    protected $_configHelper;
 
     function __construct
     (
         Context $context,
         SetupInterface $setup,
-        StoreFactory $storeFactory,
-        ConfigHelper $configHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_setup = $setup;
-        $this->_storeFactory = $storeFactory;
-        $this->_configHelper = $configHelper;
     }
 
     /**
@@ -66,7 +57,7 @@ class DeleteTestingStoreView extends Field
      */
     public function getAjaxResetUrl()
     {
-        return $this->getUrl('EasyTranslationPlatform/Settings/DeleteTestStoreView'); //hit controller by ajax call on button click.
+        return $this->getUrl('EasyTranslationPlatform/Settings/CreateTestStoreView'); //hit controller by ajax call on button click.
     }
 
     /**
@@ -85,23 +76,17 @@ class DeleteTestingStoreView extends Field
 
     public function getButtonHtml()
     {
-        $disable = $this->_setup->isTestingStoreViewExist()->getId() ? false : true;
+        $disable = $this->_setup->isTestingStoreViewExist()->getId() ? true : false;
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->addData([
             'id' => $this->_buttonId,
             'name' => $this->_buttonName,
-            'label' => __('Delete'),
+            'label' => __('Create'),
             'type' => 'button',
             'disabled' => $disable
         ]);
-        return $button->toHtml();
-    }
 
-    /**
-     * @return Store
-     */
-    public function _getTestStoreView(){
-        return $this->_storeFactory->create()->load($this->_configHelper->getTestingStoreViewCode());
+        return $button->toHtml();
     }
 }

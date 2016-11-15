@@ -299,3 +299,11 @@ div.fieldset-wrapper.straker p{
 .col-action{
     width: 200px;
 }
+
+#item_store_view_name::before{
+    content: '*';
+}
+.straker_store_error_msg{
+    /*margin-left: 1rem;*/
+    color: red;
+}
