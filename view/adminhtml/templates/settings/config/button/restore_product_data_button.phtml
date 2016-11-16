@@ -30,7 +30,12 @@ $files = $block->getRestoreFileList();
                 <td class="straker-backup-list file-actions">
                     <a href="#"
                        title="Rollback"
-                       onclick="return backup.rollback('<?php echo $type; ?>', '<?php echo $time; ?>')"
+                       class="rollback-backup-anchor"
+                       data-backup-id="<?php echo $id; ?>"
+                       data-backup-name="<?php echo $name; ?>"
+                       data-backup-datetime="<?php echo $datetime; ?>"
+                       data-backup-type="<?php echo $type; ?>"
+                       data-backup-time="<?php echo $time; ?>"
                     >
                         <i class="fa fa-history" aria-hidden="true"></i>
                     </a>
@@ -89,7 +94,7 @@ $files = $block->getRestoreFileList();
 <?php endif; ?>
 
 <script type="text/x-magento-template" id="rollback-warning-template">
-    <p><?php /* @escapeNotVerified */ echo __('Are you sure you want to continue?')?></p>
+
 </script>
 <script type="text/x-magento-template" id="backup-options-template">
     <div class="backup-messages" style="display: none;">
@@ -222,8 +227,25 @@ $backupUrl   = $block->getUrl('EasyTranslationPlatform/Settings/CreateBackup');
     require([
         "jquery",
         "prototype",
+        "mage/mage",
         "mage/adminhtml/backup"
-    ], function(){
+    ], function(jQuery){
+        jQuery('.rollback-backup-anchor').on('click', function (e) {
+            e.preventDefault();
+            var backupName = jQuery(this).data('backupName');
+            var backupDateTime = jQuery(this).data('backupDatetime');
+            var backupTime = jQuery(this).data('backupTime');
+            var backupType = jQuery(this).data('backupType');
+            var rollbackTemplate = jQuery('#rollback-warning-template');
+            var message = jQuery.mage.__('Are you going to rollback data to %1 %2 (%3) %4 ')
+                .replace('%1', '<b>')
+                .replace('%2', backupDateTime)
+                .replace('%3', backupName)
+                .replace('%4', '</b>');
+            rollbackTemplate.html('<p>' + message + '</p>');
+            return backup.rollback(backupType, backupTime);
+        });
+
         AdminBackup.prototype.submitRollback = function() {
             var data = this.modal.find('#rollback-form').serialize(true);
             data['time'] = this.time;
@@ -258,6 +280,10 @@ $backupUrl   = $block->getUrl('EasyTranslationPlatform/Settings/CreateBackup');
             this.submitRollback();
             this.modal.find('#rollback-form').submit();
         };
+
+//        AdminBackup.prototype.backupConfig['rollback-warning']['content'] = function () {
+//            console.log(this);
+//        };
 
         backup = new AdminBackup();
         backup.rollbackUrl = '<?php /* @escapeNotVerified */ echo $block->escapeJsQuote($rollbackUrl);?>';
