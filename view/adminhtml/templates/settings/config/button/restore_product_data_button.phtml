@@ -39,7 +39,10 @@ $files = $block->getRestoreFileList();
                    <a href="#"
                       title="Delete"
                       class="delete-backup-anchor"
-                      data-backup-id="<?php echo $id; ?>">
+                      data-backup-id="<?php echo $id; ?>"
+                      data-backup-name="<?php echo $name; ?>"
+                      data-backup-datetime="<?php echo $datetime; ?>"
+                   >
                        <i class="fa fa-trash" aria-hidden="true"></i>
                    </a>
                 </td>
@@ -57,7 +60,9 @@ $files = $block->getRestoreFileList();
             deleteAnchor.on('click', function(e){
                 e.preventDefault();
                 var fileId = $(this).data('backupId');
-                var confirmContent = '<?php echo __('Do you want to delete this backup file') ?>: <?php echo $name . '[' . $datetime . ']?' ?>';
+                var backupName = $(this).data('backupName');
+                var backupDateTime = $(this).data('backupDatetime');
+                var confirmContent = '<?php echo __('Do you want to delete this backup file') ?>: ' + backupName +  ' [' + backupDateTime + ']?';
                 console.log(confirmContent);
                 confirm({
                     title: '<?php echo __("Please Confirm") ?>',
