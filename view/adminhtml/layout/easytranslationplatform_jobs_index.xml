@@ -5,8 +5,11 @@
         <referenceContainer name="content" >
            <container name="straker.job.content" as="job_grid" htmlTag="div" htmlId="straker-job-grid">
                <uiComponent name="st_jobs_listing"/>
+               <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Index"  template="Straker_EasyTranslationPlatform::job/job-grid-js.phtml"/>
            </container>
         </referenceContainer>
+        <!--<referenceContainer name="js">-->
+        <!--</referenceContainer>-->
     </body>
 </page>
 

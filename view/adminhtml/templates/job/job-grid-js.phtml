@@ -1,18 +1,31 @@
+<?php
+/** @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Index */
+?>
 <script>
-//    require([
-//        'jquery',
-//        'Magento_Ui/js/modal/alert',
-//        'Magento_Ui/js/modal/confirm'
-//    ], function ($, alert, confirm) {
+    require([
+        'jquery',
+        'mage/mage',
+        'Magento_Ui/js/modal/alert',
+        'Magento_Ui/js/modal/confirm'
+    ], function ($, alert, confirm) {
+        var myAccountButton = $('.straker-my-account-button');
+
+        if( typeof myAccountButton.get(0) !== 'undefined' ){
+            var url = '<?php echo $block->_getMyAccountUrl(); ?>';_
+            myAccountButton.on('click', function (e) {
+                e.preventDefault();
+                window.open(url, '_blank');
+            });
+        }
 //        $(function () {
 //            var anchorContent = $('#anchor-content');
 //            var jobGrid = $('#straker-job-grid');
 //            var quoteDiv = $('#straker-quote-frame');
 //            var loadingMask = $('.admin__data-grid-loading-mask');
-
+//
 //            var refreshAllButton = $('#refresh-all-job');
 //            var formKey = $('input[name="form_key"]').val();
-
+//
 //            if( typeof refreshAllButton.get(0) !== 'undefined' ){
 //                refreshAllButton.prop('onclick', null);
 //                refreshAllButton.on('click',function ( e ) {
@@ -44,7 +57,7 @@
 //                    });
 //                })
 //            }
-
+//
 //            if (typeof jobGrid.get(0) !== 'undefined') {
 //                anchorContent.on('click', 'a', function (e) {
 //                    //e.preventDefault();
@@ -72,7 +85,7 @@
 //
 //                        });
 //                    }
-
+//
 //                    if ($(this).text() == 'View Quote') {
 //                        var viewJobId = $(this).closest('tr').children('.job-id').find('.data-grid-cell-content').text();
 //                        loadingMask.show();
@@ -97,11 +110,11 @@
 //
 //                        });
 //                    }
-
+//
 //                    if ($(this).hasClass('straker-job-confirm-anchor')) {
 ////                        console.log('confirm job for ' + jobKey);
 //                    }
-
+//
 //                    if ($(this).hasClass('straker-job-refresh-anchor')) {
 //                        loadingMask.show();
 //                        $.ajax({
@@ -129,17 +142,17 @@
 //                            }
 //                        });
 //                    }
-
+//
 //                    if ($(this).is('#back-to-grid')) {
 ////                        quoteDiv.hide();
 ////                        jobGrid.show();
 //                        location.reload();
 //                    }
-                    // }
-
-                });
-            }
-        });
+//                     }
+//
+//                });
+//            }
+//        });
     });
 
 </script>

@@ -225,7 +225,7 @@ class ConfigHelper extends AbstractHelper
                 'Thank you for installing our plugin. We have enabled the Sandbox testing mode for you. Jobs you create while this is enabled will not be received by Straker Translations, 
                 and content will not be translated by a human - rather it will only be sample text. To change the Sandbox Mode, go to <a href="'
                 . $this->_urlFactory->create()->getUrl('adminhtml/system_config/edit', ['section' => 'straker_config'])
-                . '">Straker Configuration</a>'
+                . '">Configuration</a>'
             )
             . '</p>';
     }
