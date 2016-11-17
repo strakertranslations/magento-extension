@@ -18,7 +18,9 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $jobFactory;
     protected $sourceStoreId;
     protected $_configHelper;
-
+    protected $jobCollectionFactory;
+    protected $resourceConnection;
+    protected $targetStoreId;
 
 
     public function __construct(
@@ -53,32 +55,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->sourceStoreId = $this->getRequest()->getParam('source_store_id');
         $this->targetStoreId = $this->getRequest()->getParam('target_store_id');
     }
-
-//    /**
-//     * add Column Filter To Collection
-//     */
-//    protected function _addColumnFilterToCollection($column)
-//    {
-//        if ($column->getId() == 'in_product') {
-//            $productIds = $this->_getSelectedProducts();
-//
-//            if (empty($productIds)) {
-//                $productIds = 0;
-//            }
-//            if ($column->getFilter()->getValue()) {
-//                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
-//            } else {
-//                if ($productIds) {
-//                    $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
-//                }
-//            }
-//        } else {
-//            parent::_addColumnFilterToCollection($column);
-//        }
-//
-//        return $this;
-//    }
-
 
     protected function _prepareCollection()
     {
@@ -162,9 +138,10 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'width' => '50px',
                 'type'=>'options',
                 'options'=>['1'=>'Yes','0'=>'No'],
-                'filter_index'=>'stTrans.translated_value',
+//                'filter_index'=>'stTrans.translated_value',
                 'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Grid\Renderer\TranslatedValue',
-                'filter_condition_callback' => array($this, '_filterCallback')
+                'filter_condition_callback' => array($this, '_filterCallback'),
+                'order_callback' => [$this, '_orderIsTranslated']
             ]
         );
 
@@ -208,9 +185,22 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 
     protected function _filterCallback($collection, $column)
     {
-
         $condition = $column->getFilter()->getCondition();
         $collection->getSelect()->having('`is_translated` = ' . reset($condition));
         return $this;
     }
+
+    protected function _orderIsTranslated($collection, $column){
+        $collection->getSelect()->order($column->getIndex() . ' ' . strtoupper($column->getDir()));
+    }
+
+    protected function _setCollectionOrder($column)
+    {
+        if ($column->getOrderCallback()) {
+            call_user_func($column->getOrderCallback(), $this->getCollection(), $column);
+            return $this;
+        }
+        return parent::_setCollectionOrder($column);
+    }
+
 }

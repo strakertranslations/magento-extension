@@ -16,7 +16,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $strakerTrans = $this->_resource->getTableName('straker_attribute_translation');
 
         $this->getSelect()->columns(
-            'if(stTrans.is_imported IS NULL,0,1) as is_translated'
+            'if(max(stTrans.is_imported) IS NULL,0,1) as is_translated'
         )->joinLeft(
             ['stTrans' => $strakerTrans],
             'e.entity_id=stTrans.entity_id',
@@ -27,7 +27,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'stJob.job_id'
         )->joinLeft(
             ['stJob' => $strakerJobs],
-            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$target_store_id.' and stJob.job_type_id=1 where job_type_id = 1',
+            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$target_store_id.' and stJob.job_type_id=1',
             []
         )->group('entity_id');
 
@@ -55,8 +55,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $countSelect->reset(Select::COLUMNS);
         $countSelect->reset(Select::HAVING);
         $countSelect->reset(Select::GROUP);
-        $group = $this->getSelect()->getPart(Select::GROUP);
-        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . implode(", ", $group) . ")")));
+//        $group = $this->getSelect()->getPart(Select::GROUP);
+//        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT " . implode(", ", $group) . ")")));
+        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT s.entity_id)")));
+
         return $countSelect;
     }
 }
