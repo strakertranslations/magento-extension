@@ -10,7 +10,6 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
 use Magento\Backend\Block\Template\Context;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
-use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\Config;
 
 class MyAccount extends \Magento\Config\Block\System\Config\Form\Field

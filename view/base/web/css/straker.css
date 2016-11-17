@@ -312,3 +312,8 @@ div.fieldset-wrapper.straker p{
     display: inline-block;
     margin-top: 0.6rem;
 }
+
+button.straker-my-account-button{
+    background-color: #00A5E3 ! important;
+    color: #fff ! important;
+}
