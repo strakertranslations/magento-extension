@@ -27,7 +27,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'stJob.job_id'
         )->joinLeft(
             ['stJob' => $strakerJobs],
-            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$target_store_id.' and stJob.job_type_id=1',
+            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$target_store_id.' and stJob.job_type_id=1 where job_type_id = 1',
             []
         )->group('entity_id');
 
