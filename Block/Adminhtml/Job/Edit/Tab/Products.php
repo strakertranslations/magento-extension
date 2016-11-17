@@ -85,25 +85,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 
         $collection = $this->productCollectionFactory->create();
 
-        $strakerJobs = $this->resourceConnection->getTableName('straker_job');
-        $strakerTrans = $this->resourceConnection->getTableName('straker_attribute_translation');
-
-//        $collection->getSelect()->columns(
-//            'if(stTrans.translated_value IS NULL," ",stTrans.translated_value) as is_translated'
-//        )->joinLeft(
-//            ['stTrans'=>$strakerTrans],
-//            'e.entity_id=stTrans.entity_id',
-//            []
-//        );
-//
-//        $collection->getSelect()->columns(
-//            'stJob.*'
-//        )->joinLeft(
-//            ['stJob'=>$strakerJobs],
-//            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$this->targetStoreId.' and stJob.job_type_id=1',
-//            []
-//        )->group('e.entity_id');
-
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('sku');
         $collection->addAttributeToSelect('price');

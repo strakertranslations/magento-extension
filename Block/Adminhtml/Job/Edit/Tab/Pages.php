@@ -4,7 +4,7 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Helper\Data;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Straker\EasyTranslationPlatform\Model\PageCollection;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -12,7 +12,7 @@ use Straker\EasyTranslationPlatform\Model\JobFactory;
 class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
 {
 
-    protected $pageCollectionFactory;
+    protected $pageCollection;
     protected $jobFactory;
     protected $sourceStoreId;
 
@@ -24,12 +24,12 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
         Context $context,
         Data $backendHelper,
         JobFactory $jobFactory,
-        CollectionFactory $pageCollectionFactory,
+        PageCollection $pageCollection,
         ConfigHelper $configHelper,
         array $data = []
     ) {
         $this->jobFactory = $jobFactory;
-        $this->pageCollectionFactory = $pageCollectionFactory;
+        $this->pageCollection = $pageCollection;
         $this->_configHelper = $configHelper;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -51,8 +51,12 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
 
     protected function _prepareCollection()
     {
-        $collection = $this->pageCollectionFactory->create();
+        $collection = $this->pageCollection;
+
+        $collection->is_translated();
+
         $this->setCollection($collection);
+
         return parent::_prepareCollection();
     }
 
@@ -93,6 +97,20 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
+        $this->addColumn(
+            'is_translated',
+            [
+                'header' => __('Translated'),
+                'index' => 'is_translated',
+                'width' => '50px',
+                'type'=>'options',
+                'options'=>['1'=>'Yes','0'=>'No'],
+                'filter_index'=>'stTrans.translated_value',
+                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Grid\Renderer\TranslatedValue',
+                'filter_condition_callback' => [$this, 'filterName']
+            ]
+        );
+
         return parent::_prepareColumns();
     }
 
@@ -118,5 +136,12 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     public function isHidden()
     {
         return true;
+    }
+
+    function filterName($collection, $column)
+    {
+        $condition = $column->getFilter()->getCondition();
+        $collection->getSelect()->having('`is_translated` LIKE ' . reset($condition));
+        return $this;
     }
 }
