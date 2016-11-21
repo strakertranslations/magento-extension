@@ -21,7 +21,7 @@ class PageCollection extends \Magento\Cms\Model\ResourceModel\Page\Collection
         $strakerTrans = $this->_resource->getTable('straker_attribute_translation');
 
         $this->getSelect()->columns(
-            'if(stTrans.is_imported IS NULL,0,1) as is_translated'
+            'IF(max(stTrans.is_imported) IS NULL, 0, 1) as is_translated'
         )->joinLeft(
             ['stTrans' => $strakerTrans],
             'main_table.page_id=stTrans.entity_id',

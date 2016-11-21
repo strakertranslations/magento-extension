@@ -5,7 +5,7 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
+use Straker\EasyTranslationPlatform\Model\BlockCollection as BlockCollectionFactory;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 
@@ -16,6 +16,8 @@ class Blocks extends Extended
     protected $_jobFactory;
     protected $_sourceStoreId;
     protected $_configHelper;
+    protected $targetStoreId;
+    protected $sourceStoreId;
 
     public function __construct(
         Context $context,
@@ -44,10 +46,8 @@ class Blocks extends Extended
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
-        if ($this->getRequest()->getParam('target_store_id')) {
-            $store_info = $this->_configHelper->getStoreInfo($this->getRequest()->getParam('target_store_id'));
-            $this->_sourceStoreId = $store_info['straker/general/source_store'];
-        }
+        $this->sourceStoreId = $this->getRequest()->getParam('source_store_id');
+        $this->targetStoreId = $this->getRequest()->getParam('target_store_id');
     }
 
     /**
@@ -78,8 +78,9 @@ class Blocks extends Extended
 
     protected function _prepareCollection()
     {
-        $collection = $this->_blockCollectionFactory->create();
-        $collection->addStoreFilter($this->_sourceStoreId);
+        $collection = $this->_blockCollectionFactory;
+//        $collection->addStoreFilter($this->_sourceStoreId);
+        $collection->is_translated($this->targetStoreId,$this->sourceStoreId);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -98,6 +99,7 @@ class Blocks extends Extended
                 'name' => 'in_block',
                 'align' => 'center',
                 'index' => 'block_id',
+                'filter_index'=>'block_id',
                 'values' => $this->_getSelectedBlocks()
             ]
         );
@@ -108,6 +110,7 @@ class Blocks extends Extended
                 'header' => __('Block ID'),
                 'type' => 'number',
                 'index' => 'block_id',
+                'filter_index'=>'block_id',
                 'header_css_class' => 'col-id',
                 'column_css_class' => 'col-id',
             ]
@@ -117,7 +120,22 @@ class Blocks extends Extended
             [
                 'header' => __('Title'),
                 'index' => 'title',
+                'filter_index'=>'title',
                 'class' => 'xxx',
+            ]
+        );
+
+        $this->addColumn(
+            'is_translated',
+            [
+                'header' => __('Translated'),
+                'index' => 'is_translated',
+                'width' => '50px',
+                'type'=>'options',
+                'options'=>['1'=>'Yes','0'=>'No'],
+                'filter_index'=>'is_translated',
+                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Grid\Renderer\TranslatedValueCMS',
+                'filter_condition_callback' => [$this, 'filterName']
             ]
         );
 
@@ -155,5 +173,12 @@ class Blocks extends Extended
     public function isHidden()
     {
         return true;
+    }
+
+    function filterName($collection, $column)
+    {
+        $condition = $column->getFilter()->getCondition();
+        $collection->getSelect()->having('`is_translated` = ' . reset($condition));
+        return $this;
     }
 }

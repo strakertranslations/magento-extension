@@ -46,6 +46,8 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
+        $this->sourceStoreId = $this->getRequest()->getParam('source_store_id');
+        $this->targetStoreId = $this->getRequest()->getParam('target_store_id');
     }
 
 
@@ -53,7 +55,7 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $collection = $this->pageCollection;
 
-        $collection->is_translated();
+        $collection->is_translated($this->targetStoreId);
 
         $this->setCollection($collection);
 
@@ -141,7 +143,7 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     function filterName($collection, $column)
     {
         $condition = $column->getFilter()->getCondition();
-        $collection->getSelect()->having('`is_translated` LIKE ' . reset($condition));
+        $collection->getSelect()->having('`b.is_imported` LIKE ' . reset($condition));
         return $this;
     }
 }
