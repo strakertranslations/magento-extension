@@ -137,7 +137,12 @@ class ImportHelper extends AbstractHelper
 
         $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 
-        $this->_parsedFileData = $parsedData['root']['data'];
+        $dataArray = $parsedData['root']['data'];
+        if(key_exists('_value', $dataArray)){
+            $this->_parsedFileData[0] = $dataArray;
+        }else{
+            $this->_parsedFileData = $parsedData['root']['data'];
+        }
 
         $this->_categoryData = array_filter($this->_parsedFileData, function ($v) {
 

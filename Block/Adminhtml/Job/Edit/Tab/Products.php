@@ -6,6 +6,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Helper\Data;
 use Straker\EasyTranslationPlatform\Model\ProductCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Model\Product\VisibilityFactory;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -21,6 +22,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $jobCollectionFactory;
     protected $resourceConnection;
     protected $targetStoreId;
+    protected $productVisibilityModel;
 
 
     public function __construct(
@@ -31,6 +33,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         ConfigHelper $configHelper,
         JobCollectionFactory $jobCollectionFactory,
         ResourceConnection $resourceConnection,
+        VisibilityFactory $productVisibilityFactory,
         array $data = []
     ) {
         $this->jobFactory = $jobFactory;
@@ -38,6 +41,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_configHelper = $configHelper;
         $this->jobCollectionFactory = $jobCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->productVisibilityModel = $productVisibilityFactory->create();
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -58,16 +62,16 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 
     protected function _prepareCollection()
     {
-
         $collection = $this->productCollectionFactory->create();
 
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('sku');
         $collection->addAttributeToSelect('price');
+//        $collection->addAttributeToSelect('visibility');
 
         $collection->setStore($this->sourceStoreId);
-
-        $collection->is_Translated($this->targetStoreId);
+        $collection->is_translated($this->targetStoreId);
+        $collection->getData();
 
         $this->setCollection($collection);
 
@@ -130,6 +134,17 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
+//        $this->addColumn(
+//            'visibility',
+//            [
+//                'header' => __('Visibility'),
+//                'type' => 'options',
+//                'options' => $this->productVisibilityModel->getOptionArray(),
+//                'index' => 'visibility',
+//                'width' => '50px',
+//            ]
+//        );
+
         $this->addColumn(
             'is_translated',
             [
@@ -190,6 +205,10 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
+
+    //in order to sort and filter on computed columns,
+    //1, rewrite _setCollectionOrder.
+    //2. implement callback defined in column data, like 'order_callback' => [$this, '_orderIsTranslated'].
     protected function _orderIsTranslated($collection, $column){
         $collection->getSelect()->order($column->getIndex() . ' ' . strtoupper($column->getDir()));
     }
@@ -202,5 +221,16 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         }
         return parent::_setCollectionOrder($column);
     }
+
+//    function _prepareMassaction()
+//    {
+//        $this->setMassactionIdField('entity_id');
+//        $this->getMassactionBlock()->setTemplate('Straker_EasyTranslationPlatform::job/massaction_extended.phtml');
+////        $this->getMassactionBlock()->setFormFieldName('entity_id');
+//
+//        $this->getMassactionBlock()->addItem('create', []);
+//
+//        return $this;
+//    }
 
 }
