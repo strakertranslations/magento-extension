@@ -9,3 +9,6 @@
 
 !js/straker
 !skin/adminhtml/default/straker
+
+!Capfile
+!config

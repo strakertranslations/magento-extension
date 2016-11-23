@@ -40,14 +40,24 @@ set :deploy_to, '/mnt/data/apps/php/magento1-ext'
 
 namespace :deploy do
 
-	desc "Git pull from application root"
+	desc "Dev env git pull "
 		task :gitpull do
-			on roles :all do
-			execute "cd /mnt/data/apps/php/mg-dev1 && git pull"
+			on roles :dev do
+      execute "cd /mnt/data/apps/php/mg1-dev1 && git pull"
+			execute "cd /mnt/data/apps/php/mg1-dev2 && git pull"
 		end
 	end
-
 	after "deploy:publishing", "gitpull"
+
+  desc "UAT env git pull "
+    task :gitpull do
+      on roles :uat do
+      execute "cd /mnt/data/apps/php/mg1-uat1 && git pull"
+      execute "cd /mnt/data/apps/php/mg1-uat2 && git pull"
+    end
+  end
+  after "deploy:publishing", "gitpull"
+
 
   desc "Restarting php5-fpm to clear cache"
   task :fpmreload do
@@ -55,7 +65,6 @@ namespace :deploy do
       execute "service php5-fpm restart"
     end
   end
-
   after "deploy:published", "fpmreload"
 
   after :restart, :clear_cache do
