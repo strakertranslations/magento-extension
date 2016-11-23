@@ -64,7 +64,7 @@ foreach ($tables as $table){
         $fk = reset($fks);
         $connection->dropForeignKey($tableName, $fk['FK_NAME']);
         $connection->addForeignKey(
-            $installer->getFkName($tableName, 'user_id', 'admin_user', 'user_id'),
+            $installer->getFkName($table, 'user_id', 'admin_user', 'user_id'),
             $tableName,
             'user_id',
             $installer->getTable('admin_user'),
@@ -73,10 +73,11 @@ foreach ($tables as $table){
         );
     }else{
         foreach ($fks as $fk){
-            if(strcasecmp($installer->getTable($fk['REF_TABLE_NAME']), $fk['REF_TABLE_NAME']) !== 0){
+
+            if(strcasecmp(substr($fk['REF_TABLE_NAME'], 0, strlen($prefix)), $prefix) !== 0){
                 $connection->dropForeignKey($tableName, $fk['FK_NAME']);
                 $connection->addForeignKey(
-                    $installer->getFkName($tableName, $fk['COLUMN_NAME'], $installer->getTable($fk['REF_TABLE_NAME']), $fk['REF_COLUMN_NAME']),
+                    $installer->getFkName($table, $fk['COLUMN_NAME'], $fk['REF_TABLE_NAME'], $fk['REF_COLUMN_NAME']),
                     $tableName,
                     $fk['COLUMN_NAME'],
                     $installer->getTable($fk['REF_TABLE_NAME']),

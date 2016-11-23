@@ -27,10 +27,29 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             ->getCollection()
             ->addFieldToFilter('status_id', array('lt' => 4));
 
-        foreach($collection as $job){
-            $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($job->getId());
-            if ( $job->updateTranslation() ){
-                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+//        foreach($collection as $job){
+//            $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($job->getId());
+//            if ( $job->updateTranslation() ){
+//                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+//            }
+//        }
+        if ($collection->count() > 1){
+            /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $job */
+            $job = Mage::getModel('strakertranslations_easytranslationplatform/job');
+            $response = $job->bulkUpdateTranslation();
+            if ( $response ) {
+                foreach($collection as $jobModel){
+                    foreach ($response as $jobResponse) {
+                        if ($jobResponse->token == $jobModel->getId()) {
+                            $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobModel->getId());
+                            $jobModel->updateJob($jobResponse);
+                        }
+                    }
+                    if ( $job->updateTranslation() ){
+
+                        Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+                    }
+                }
             }
         }
 

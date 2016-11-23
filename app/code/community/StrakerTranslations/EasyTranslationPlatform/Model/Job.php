@@ -773,44 +773,15 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
             $response = $api->getTranslation($request);
             if ($response->job) {
                 foreach ($response->job as $job) {
-
                     if ($job->token == $this->getId()) {
-                        $jobStatusId = $this->_getStatusId($job->status);
-
-                        if ($jobStatusId && $job->status <> $this->getStatusName()) {
-                            $this->setStatusId($jobStatusId)->save();
-                            $updateFlag = true;
-                        }
-
-                        if ($job->tj_number && $job->tj_number <> $this->getTjNumber()) {
-                            $this->setTjNumber($job->tj_number)->save();
-                            $updateFlag = true;
-                        }
-
-                        if ($job->workflow && $job->workflow <> $this->getWorkFlow()) {
-                            $this->setWorkFlow($job->workflow)->save();
-                            $updateFlag = true;
-                        }
-
-                        if ($job->quotation && $job->quotation <> $this->getQuote()) {
-                            $this->setQuote($job->quotation)->save();
-                            $updateFlag = true;
-                        }
-                    }
-
-                    foreach ($job->translated_file as $file) {
-
-                        if ($file->download_url && !$this->getDownloadUrl()) {
-                            $this->setDownloadUrl($file->download_url)->save();
-                            $this->_importTranslation();
-                            $updateFlag = true;
-                        }
+                        $updateFlag = $this->updateJob($job);
                     }
                 }
                 $this->setLastStatus(1);
-            } else {
+            }
+            else{
                 $this->setLastStatus(0);
-                $message = $response->magentoMessage ? $this->setLastMessage($response->magentoMessage) : 'Unknown Error.';
+                $message = $response->magentoMessage?$this->setLastMessage($response->magentoMessage):'Unknown Error.';
                 $this->setLastMessage($message);
             }
 
@@ -818,10 +789,47 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         return $updateFlag;
     }
 
-    protected function _getApi()
-    {
+    public function bulkUpdateTranslation(){
+        $api = $this->_getApi();
+        $response = $api->getTranslation(array());
+        return $response->job ? $response->job : false;
+    }
 
-        return Mage::getModel('strakertranslations_easytranslationplatform/api', array('store' => $this->getStoreId()));
+    public function updateJob($job){
+        $updateFlag = false;
+        $jobStatusId = $this->_getStatusId($job->status);
+
+        if ($jobStatusId && $job->status <> $this->getStatusName()) {
+            $this->setStatusId($jobStatusId)->save();
+            $updateFlag = true;
+        }
+
+        if ($job->tj_number && $job->tj_number <> $this->getTjNumber()) {
+            $this->setTjNumber($job->tj_number)->save();
+            $updateFlag = true;
+        }
+
+        if ($job->workflow && $job->workflow <> $this->getWorkFlow()) {
+            $this->setWorkFlow($job->workflow)->save();
+            $updateFlag = true;
+        }
+
+        if ($job->quotation && $job->quotation <> $this->getQuote()) {
+            $this->setQuote($job->quotation)->save();
+            $updateFlag = true;
+        }
+        foreach ($job->translated_file as $file) {
+            if ($file->download_url && !$this->getDownloadUrl()) {
+                $this->setDownloadUrl($file->download_url)->save();
+                $this->_importTranslation();
+            }
+        }
+        return $updateFlag;
+    }
+
+    protected function _getApi(){
+
+        return Mage::getModel('strakertranslations_easytranslationplatform/api',array('store'=>$this->getStoreId()));
     }
 
     protected function _getStatusId($statusName)
