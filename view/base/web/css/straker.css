@@ -321,3 +321,10 @@ button.straker-my-account-button{
 tr.job-option{
     background-color: #ffffe6;
 }
+
+/* overwrite text align for action cell in manage job page*/
+#straker-job-grid .data-grid .data-grid-actions-cell{
+    padding: 1rem;
+    text-align: left;
+    width: 10%;
+}
