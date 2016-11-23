@@ -6,7 +6,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Page_Grid 
         $collection = Mage::getModel('cms/page')->getCollection();
 //        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $collection->getSelect()->joinLeft(
-            array('straker' => $collection->getTable('straker_job_cmspage')),
+            array('straker' => $collection->getTable('strakertranslations_easytranslationplatform/job_cmspage')),
             'straker.new_entity_id = main_table.page_id',
             array('straker_translated' => 'straker.version')
         );

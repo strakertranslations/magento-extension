@@ -51,6 +51,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
 
     protected function _prepareCollection()
     {
+        /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('path')
             ->addAttributeToSelect('name');
@@ -60,9 +61,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
             $collection->addAttributeToSelect($attr);
         }
 
-        $strakerJobCategoryTable = $collection->getResource()->getTable('straker_job_category');
+        $strakerJobCategoryTable = $collection->getResource()->getTable('strakertranslations_easytranslationplatform/job_category');
 
         //join straker job product table to get version for each product
+
         $collection->getSelect()->joinLeft(
             ['a' => $strakerJobCategoryTable ],
             'a.category_id = e.entity_id AND a.version = 1',

@@ -83,7 +83,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         $strakerJobProductCollection->getSelect()
             ->reset(Zend_Db_Select::COLUMNS)
             ->joinLeft(
-                ['b' => $collection->getTable('straker_job')],
+                ['b' => $collection->getTable('strakertranslations_easytranslationplatform/job')],
                 '`main_table`.`job_id` = `b`.`id`',
                 []
             )->where(
