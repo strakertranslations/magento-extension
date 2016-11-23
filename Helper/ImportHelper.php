@@ -35,7 +35,7 @@ use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeOptionTranslati
 
 class ImportHelper extends AbstractHelper
 {
-    /** @var $this->configHelper \Straker\EasyTranslationPlatform\Helper\ConfigHelper */
+    /** @var $this ->configHelper \Straker\EasyTranslationPlatform\Helper\ConfigHelper */
     public $configHelper;
 
     protected $_logger;
@@ -97,7 +97,8 @@ class ImportHelper extends AbstractHelper
         StoreManagerInterface $storeManager,
         UrlFinderInterface $urlFinder,
         TimezoneInterface $timezone
-    ) {
+    )
+    {
         $this->_logger = $logger;
         $this->_xmlParser = $xmlParser;
         $this->_xmlHelper = $xmlHelper;
@@ -137,12 +138,7 @@ class ImportHelper extends AbstractHelper
 
         $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 
-        $dataArray = $parsedData['root']['data'];
-        if(key_exists('_value', $dataArray)){
-            $this->_parsedFileData[0] = $dataArray;
-        }else{
-            $this->_parsedFileData = $parsedData['root']['data'];
-        }
+        $this->_parsedFileData = $parsedData['root']['data'];
 
         $this->_categoryData = array_filter($this->_parsedFileData, function ($v) {
 
@@ -295,11 +291,11 @@ class ImportHelper extends AbstractHelper
 
             $this->_productAction->updateAttributes(array($id), $attData, $this->_jobModel->getTargetStoreId());
 
-            foreach ($productData->getData() as $data){
+            foreach ($productData->getData() as $data) {
 
                 $updateRow = $this->_attributeTranslationFactory->create()->load($data['attribute_translation_id']);
 
-                $updateRow->addData(['is_imported'=>1,'imported_at'=> $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+                $updateRow->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
                 $updateRow->save();
             }
@@ -352,11 +348,11 @@ class ImportHelper extends AbstractHelper
 
         }
 
-        foreach ($labels->getData() as $data){
+        foreach ($labels->getData() as $data) {
 
             $updateRow = $this->_attributeTranslationFactory->create()->load($data['attribute_translation_id']);
 
-            $updateRow->addData(['is_imported'=>1,'imported_at'=> $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+            $updateRow->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
             $updateRow->save();
         }
@@ -392,17 +388,17 @@ class ImportHelper extends AbstractHelper
 
                 } else {
 
-                    $connection->insertArray($table, ['option_id', 'store_id', $table.'.value'],
+                    $connection->insertArray($table, ['option_id', 'store_id', $table . '.value'],
                         [[$data['option_id'], $this->_jobModel->getTargetStoreId(), $data['translated_value']]]);
                 };
 
             }
 
-            foreach ($translatedOptions->getData() as $data){
+            foreach ($translatedOptions->getData() as $data) {
 
                 $updateRow = $this->_attributeOptionTranslationFactory->create()->load($data['attribute_option_translation_id']);
 
-                $updateRow->addData(['is_imported'=>1,'imported_at'=> $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+                $updateRow->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
                 $updateRow->save();
 
@@ -588,7 +584,9 @@ class ImportHelper extends AbstractHelper
     {
         foreach ($this->_blockData as $data) {
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
-            $att_trans_model->addData(['is_imported' => 1, 'translated_value' => $data['_value']['value']]);
+            $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
+            $att_trans_model->addData(['is_imported' => 1]);
+            $att_trans_model->addData(['imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
             $att_trans_model->save();
 
         }
@@ -600,50 +598,56 @@ class ImportHelper extends AbstractHelper
     {
 
         $translatedBlockAttributes = $this->_attributeTranslationCollection->create()
-            ->addFieldToSelect(['attribute_id', 'translated_value', 'entity_id'])
+            ->addFieldToSelect(['attribute_translation_id','translated_value', 'entity_id', 'attribute_code'])
             ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()));
 
-        $attData = $translatedBlockAttributes->toArray()['items'];
+        $saveData = [];
 
-        $blockData = [];
+        foreach ($translatedBlockAttributes as $attData) {
 
-        foreach ($attData as $key => $data) {
-            $blockData[$data['entity_id']][] = $data;
+            $saveData[$attData->getEntityId()][$attData->getAttributeCode()] = $attData->getTranslatedValue();
+
+            $updateRow = $this->_attributeTranslationFactory->create()->load($attData->getAttributeTranslationId());
+
+            $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
+            $updateRow->save();
+
         }
 
-        foreach ($blockData as $block => $attributes) {
-            $original_block = $this->_blockFactory->create()->load($block);
+        foreach ($saveData as $key => $data){
 
-            $saveData = [
-                'title' => $original_block->getData('title'),
-                'content' => $original_block->getData('content'),
-                'identifier' => $original_block->getData('identifier'),
-                'is_active' => 1,
-                'stores' => array($this->_jobModel->getTargetStoreId())
-            ];
+            $original_block = $this->_blockFactory->create()->load($key);
 
-            $blocks = $this->_blockFactory->create()->getResourceCollection()
-                ->addFieldToFilter('identifier', ['eq' => $original_block->getIdentifier()]);
+            if(in_array($this->_jobModel->getTargetStoreId(),$original_block->getStores())){
 
-            foreach ($attributes as $key => $value) {
-                $saveData[BlockHelper::blockAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
+                $originalData = $original_block->getData();
+
+                $dbData = array_merge($originalData,$data);
+
+                $original_block->setData($dbData)->save();
+
+            }else{
+
+                $originalData = $original_block->getData();
+
+                unset($originalData['block_id']);
+
+                unset($originalData['store_id']);
+
+                unset($originalData['stores']);
+
+                $originalData['stores'] = [$this->_jobModel->getTargetStoreId()];
+
+                $dbData = array_merge($originalData,$data);
+
+                $newBlock = $this->_blockFactory->create();
+
+                $newBlock->setData($dbData)->save();
             }
 
-            if (count($blocks->getData()) > 1) {
-                foreach ($blocks->getItems() as $block){
-                    if( in_array($this->_jobModel->getTargetStoreId(), $block->getStores())){
-                        $block->setTitle($saveData['title'])
-                            ->setContent($saveData['content'])
-                            ->setUpdateTime(time())
-                            ->save();
-                        break;
-                    }
-                }
-            } else {
-                $block = $this->_blockFactory->create();
-                $block->setData($saveData)->save();
-            }
         }
+
         return $this;
 
     }
