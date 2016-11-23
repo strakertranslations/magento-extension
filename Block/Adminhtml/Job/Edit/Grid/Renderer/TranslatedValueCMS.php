@@ -1,6 +1,6 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Renderer;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Grid\Renderer;
 
 use Magento\Backend\Block\Context;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
@@ -15,11 +15,14 @@ use Straker\EasyTranslationPlatform\Api\JobRepositoryInterface;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollection;
 
-class JobAttributeIsLabel extends AbstractRenderer
+class TranslatedValueCMS extends AbstractRenderer
 {
     function render(DataObject $row)
     {
-        $row->setData('is_label', $row->getData('is_label') ? __('Yes') : __('No'));
+        $empty = ($row->getData('is_translated') == 1 )? 'Yes':'No';
+
+        $row->setData('is_translated',$empty);
+
         return parent::render($row);
     }
 }

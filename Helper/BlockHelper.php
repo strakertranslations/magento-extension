@@ -36,10 +36,8 @@ class BlockHelper extends AbstractHelper
     protected $_blockData;
     protected $_storeId;
 
-    const blockAttributes = [
-        ['name'=>'title','label'=>'Title'],
-        ['name'=>'content','label'=>'Content']
-    ];
+    protected $_attributes = ['title','content'];
+
 
 
     public function __construct(
@@ -69,11 +67,9 @@ class BlockHelper extends AbstractHelper
         $this->_storeManager = $storeManager;
 
         parent::__construct($context);
-    }
-
-    public function getAttributes()
-    {
-        return array_column(self::blockAttributes, 'name');
+        ini_set('xdebug.var_display_max_depth', 5);
+        ini_set('xdebug.var_display_max_children', 256);
+        ini_set('xdebug.var_display_max_data', 1024);
     }
 
 
@@ -98,7 +94,7 @@ class BlockHelper extends AbstractHelper
             ->addStoreFilter($source_store_id)
             ->addFieldToFilter('main_table.block_id', [ 'in' => $block_ids ]);
 
-        $this->_blockData = $blocks->toArray()['items'];
+        $this->_blockData = $blocks->getItems();
 
         return $this;
     }
@@ -108,25 +104,29 @@ class BlockHelper extends AbstractHelper
      */
     public function getSelectedBlockAttributes()
     {
+
         $blockData = [];
 
-        foreach ($this->_blockData as $block_key => $attribute_data) {
+        foreach ($this->_blockData as $data) {
+
             $attributeData = [];
 
-            foreach ($attribute_data as $attribute_key => $attribute) {
-                if (in_array($attribute_key, $this->getAttributes()) && !is_null($attribute)) {
+            foreach ($this->_attributes as $attribute){
+
+                if(in_array($attribute,$this->_attributes))
+                {
                     array_push($attributeData, [
-                        'attribute_id'=>$attribute_key,
-                        'label'=>$attribute_key,
-                        'value'=>$attribute
+                        'attribute_code'=>$attribute,
+                        'label'=>$attribute,
+                        'value'=>$data->getData($attribute)
                     ]);
                 }
             }
 
             $blockData[] = [
-                'block_id'=>$this->_blockData[$block_key]['block_id'],
-                'page_title'=>$this->_blockData[$block_key]['title'],
-                'page_url'=>$this->_storeManager->getStore($this->_storeId)->getBaseUrl().$this->_blockData[$block_key]['identifier'].'.html',//check
+                'block_id'=>$data->getId(),
+                'page_title'=>$data->getTitle(),
+                'page_url'=>$this->_storeManager->getStore($this->_storeId)->getBaseUrl().$data->getIdentifier().'.html',//check
                 'attributes'=>$attributeData
             ];
         }
@@ -176,20 +176,25 @@ class BlockHelper extends AbstractHelper
         $target_store_id,
         $xmlHelper
     ) {
+
     
         if ($blockData) {
+
             foreach ($blockData as $data) {
+
                 foreach ($data['attributes'] as $attribute) {
-                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['block_id'].'_'.$attribute['attribute_id'];
+
+                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['block_id'].'_'.$attribute['attribute_code'];
 
                         $xmlHelper->appendDataToRoot([
                             'name' => $job_name,
                             'content_context' => 'block_attribute_value',
                             'content_context_url' => $data['page_url'],
-                            'attribute_translation_id'=>$attribute['value_translation_id'],
                             'source_store_id'=> $source_store_id,
                             'block_id' => $data['block_id'],
-                            'attribute_id'=>$attribute['attribute_id'],
+//                            'attribute_id'=>$attribute['attribute_id'],
+                            'attribute_translation_id'=>$attribute['value_translation_id'],
+                            'attribute_code'=>$attribute['attribute_code'],
                             'attribute_label'=>$attribute['label'],
                             'value' => $attribute['value']
                         ]);
@@ -210,24 +215,29 @@ class BlockHelper extends AbstractHelper
     {
 
         foreach ($this->_blockData as $blockKey => $data) {
-            foreach ($data['attributes'] as $key => $attribute) {
+
+            foreach ($data['attributes'] as $attKey => $attribute) {
+
                 $attributeTranslationModel = $this->_attributeTranslationFactory->create();
-                $revisedAttribute =$this->_attributeHelper->getRevisedAttribute(JobType::JOB_TYPE_BLOCK, $attribute['attribute_id']);
+
+
                 try {
                     $attributeTranslationModel->setData(
                         [
                             'job_id' => $job_id,
                             'entity_id' => $data['block_id'],
-                            'attribute_id' => $revisedAttribute['key'],
+                            'attribute_code' => $attribute['attribute_code'],
                             'original_value' => $attribute['value'],
                             'is_label' => (bool)0,
-                            'label' => $revisedAttribute['label'],
+                            'label' => $attribute['label'],
                         ]
                     )->save();
 
-                    $this->_blockData[$blockKey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
-                    $this->_blockData[$blockKey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
+                    $this->_blockData[$blockKey]['attributes'][$attKey]['value_translation_id'] = $attributeTranslationModel->getId();
+
+
                 } catch (Exception $e) {
+
                     $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
                 }
             }

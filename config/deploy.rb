@@ -8,7 +8,7 @@ set :repo_url, 'git@bitbucket.org:strakertranslations/magento2.git'
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 set :branch, ENV['BRANCH'] || "master"
 # Default deploy_to directory is /var/www/my_app_name
-set :deploy_to, '/mnt/data/apps/php/magento2-ext'
+set :deploy_to, '/mnt/data/apps/php/magento2/app/code/Straker/EasyTranslationPlatform'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -43,69 +43,31 @@ set :deploy_to, '/mnt/data/apps/php/magento2-ext'
 
 namespace :deploy do
 
-	# Dev environment
-	desc "Magento2 git"
-	task :magento2_git do
-		on roles :dev do
-			execute "cd /mnt/data/apps/php/mg2-dev1/app/code/Straker/EasyTranslationPlatform && git pull"
-			execute "cd /mnt/data/apps/php/mg2-dev2/app/code/Straker/EasyTranslationPlatform && git pull"
-		end
-	end
-	after "deploy:publishing", "magento2_git"
+  desc "Magento2 setup"
+  task :magento2_setup do
+    on roles :all do
+      execute "cd /mnt/data/apps/php/magento2/bin; php magento setup:upgrade"
+    end
+  end
 
-	desc "Magento2 setup"
-	task :magento2_ownership do
-		on roles :dev do
-			execute "cd /mnt/data/apps/php/mg2-dev1/bin; php magento setup:upgrade"
-			execute "cd /mnt/data/apps/php/mg2-dev2/bin; php magento setup:upgrade"
-		end
-	end
-	after "deploy:publishing", "magento2_ownership"
+  after "deploy:published", "magento2_setup"
 
-	desc "Magento2 ownership"
-	task :magento2_setup do
-		on roles :dev do
-			execute "cd /mnt/data/apps/php/mg2-dev1 && chown -R www-data:www-data ."
-			execute "cd /mnt/data/apps/php/mg2-dev2 && chown -R www-data:www-data ."
-		end
-	end
-	after "deploy:finishing", "magento2_setup"
+  desc "Magento2 directory ownership"
+  task :magento2_ownership do
+    on roles :all do
+      execute "chmod -R 777 var pub"
+    end
+  end
 
-	# UAT environment
-	desc "Magento2 git"
-	task :magento2_git do
-		on roles :uat do
-			execute "cd /mnt/data/apps/php/mg2-uat1/app/code/Straker/EasyTranslationPlatform && git pull"
-			execute "cd /mnt/data/apps/php/mg2-uat2/app/code/Straker/EasyTranslationPlatform && git pull"
-		end
-	end
-	after "deploy:publishing", "magento2_git"
+  after "deploy:published", "magento2_cache"
 
-	desc "Magento2 setup"
-	task :magento2_ownership do
-		on roles :uat do
-			execute "cd /mnt/data/apps/php/mg2-uat1/bin; php magento setup:upgrade"
-			execute "cd /mnt/data/apps/php/mg2-uat2/bin; php magento setup:upgrade"
-		end
-	end
-	after "deploy:publishing", "magento2_ownership"
+  desc "Magento2 Clear Cache"
+  task :magento2_cache do
+    on roles :all do
+      execute "cd /mnt/data/apps/php/magento2/bin; php magento cache:clean"
+    end
+  end
 
-	desc "Magento2 ownership"
-	task :magento2_setup do
-		on roles :uat do
-			execute "cd /mnt/data/apps/php/mg2-uat1 && chown -R www-data:www-data ."
-			execute "cd /mnt/data/apps/php/mg2-uat2 && chown -R www-data:www-data ."
-		end
-	end
-	after "deploy:finishing", "magento2_setup"
-
-
-	desc "Restarting php5-fpm to clear cache"
-	task :fpmreload do
-		on roles :all do
-			execute "service php5-fpm restart"
-		end
-	end
-	after "deploy:finished", "fpmreload"
+  after "deploy:published", "magento2_cache"
 
 end

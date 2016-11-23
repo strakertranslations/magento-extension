@@ -215,20 +215,10 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     public function updateStatus($jobData)
     {
         $return = ['isSuccess' => true, 'Message' => ''];
-        $isSandbox = $this->_importHelper->configHelper->isSandboxMode();
-        $jobKey = $this->getJobKey();
-        $testJobNumber = $this->getId();
         switch (strtolower($jobData->status)) {
             case 'queued':
                 if (empty($this->getData('job_number')) && !empty($jobData->tj_number)) {
-                    if($isSandbox){
-                        if (!empty($jobKey)) {
-                            $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
-                        }
-                        $this->setData('job_number', 'Test Job ' . $testJobNumber);
-                    }else{
-                        $this->setData('job_number', $jobData->tj_number)->save();
-                    }
+                    $this->setData('job_number', $jobData->tj_number)->save();
                 }
 
                 if (empty($this->getData('job_number'))) {
@@ -268,14 +258,17 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                             $return['Message'] = __('Failed to write content to ' . $fileFullName);
                             $this->_logger->addError($return['Message']);
                         } else {
+                            //TODO save new filename to database
                             $this->setData('download_url', $downloadUrl)
                                 ->setData('translated_file', $fileNameArray['name'])->save();
                             $this->_importHelper->create($this->getId())
                                 ->parseTranslatedFile()
                                 ->saveData();
-                            if (empty($this->getData('job_number')) && $isSandbox) {
+                            if (empty($this->getData('job_number')) && $this->_importHelper->configHelper->isSandboxMode()) {
+                                $jobKey = $this->getJobKey();
+                                $testJobNumber = $this->getId();
                                 if (!empty($jobKey)) {
-                                    $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
+                                    $testJobNumber = $this->getTestJobNumberByJobKey($this->getJobKey());
                                 }
                                 $this->setData('job_number', 'Test Job ' . $testJobNumber);
                             }
@@ -334,7 +327,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
             case JobType::JOB_TYPE_PAGE:
                 $title = $this->_pageRepository->getById($entityId)->getTitle();
                 break;
-            case JobType::JOB_TYPE_BLOCK:
+            case Jobtype::JOB_TYPE_BLOCK:
                 $title = $this->_blockRepository->getById($entityId)->getTitle();
                 break;
         }
@@ -348,9 +341,9 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
             ->addFieldToSelect('job_number')
             ->addFieldToFilter('job_number', ['neq' => null])
             ->addFieldToFilter('is_test_job', ['eq' => 1])
-            ->addFieldToFilter('job_key', ['neq' => $jobKey])
-            ->count();
-        return $data + 1;
+            ->addFieldToFilter('job_key', ['neq' => $jobKey]);
+
+        return count($data) + 1;
     }
 
     public function getTranslatedPageId($sourcePageId)

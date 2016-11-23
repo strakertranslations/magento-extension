@@ -34,6 +34,18 @@
 
             }
 
+            if(settings.url.toLowerCase().search('easytranslationplatform/jobs/pages')>-1)
+            {
+                settings.data = settings.data+'&source_store_id='+source_store_id+'&target_store_id='+destination_store_id;
+
+            }
+
+            if(settings.url.toLowerCase().search('easytranslationplatform/jobs/blocks')>-1)
+            {
+                settings.data = settings.data+'&source_store_id='+source_store_id+'&target_store_id='+destination_store_id;
+
+            }
+
         });
 
         $('select[name="destination_checker"]').on( "change", function () {
