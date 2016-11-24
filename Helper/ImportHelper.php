@@ -517,7 +517,9 @@ class ImportHelper extends AbstractHelper
     {
         foreach ($this->_pageData as $data) {
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
-            $att_trans_model->addData(['is_imported' => 1, 'translated_value' => $data['_value']['value']]);
+            $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
+            $att_trans_model->addData(['is_imported' => 1]);
+            $att_trans_model->addData(['imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
             $att_trans_model->save();
 
         }
@@ -527,52 +529,53 @@ class ImportHelper extends AbstractHelper
     public function publishTranslatedPageData()
     {
 
+        $saveData = [];
+
         $translatedPageAttributes = $this->_attributeTranslationCollection->create()
-            ->addFieldToSelect(['attribute_id', 'translated_value', 'entity_id'])
+            ->addFieldToSelect(['attribute_id', 'translated_value', 'entity_id','attribute_code'])
             ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()));
 
-        $attData = $translatedPageAttributes->toArray()['items'];
 
-        $pageData = [];
+        foreach ($translatedPageAttributes as $attData) {
 
-        foreach ($attData as $key => $data) {
-            $pageData[$data['entity_id']][] = $data;
+            $saveData[$attData->getEntityId()][$attData->getAttributeCode()] = $attData->getTranslatedValue();
+
+            $updateRow = $this->_attributeTranslationFactory->create()->load($attData->getAttributeTranslationId());
+
+            $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
+            $updateRow->save();
+
         }
 
-        foreach ($pageData as $page => $attributes) {
-            $original_page = $this->_pageFactory->create()->load($page);
+        foreach ($saveData as $key => $data) {
 
-            $urlKey = $this->_urlFinder->findOneByData([
-                'request_path' => $original_page->getData('identifier'),
-                'store_id' => $this->_jobModel->getTargetStoreId()
-            ]);
+            $original_page = $this->_pageFactory->create()->load($key);
 
-            $saveData = [
-                'title' => $original_page->getData('title'),
-                'identifier' => $original_page->getData('identifier'),
-                'content' => $original_page->getData('content'),
-                'content_heading' => $original_page->getData('content_heading'),
-                'page_layout' => $original_page->getData('page_layout'),
-                'is_active' => 1,
-                'sort_order' => 0,
-                'stores' => array($this->_jobModel->getTargetStoreId())
-            ];
+            if (in_array($this->_jobModel->getTargetStoreId(), $original_page->getStoreId())) {
 
+                $originalData = $original_page->getData();
 
-            foreach ($attributes as $key => $value) {
-                $saveData[PageHelper::PageAttributes[$value['attribute_id']]['name']] = $value['translated_value'];
-            }
+                $dbData = array_merge($originalData, $data);
 
-            if (!empty($urlKey)) {
-                $page = $this->_pageFactory->create()->load($urlKey->getEntityId())
-                    ->setTitle($saveData['title'])
-                    ->setContent($saveData['content'])
-                    ->setContentHeading($saveData['content_heading'])
-                    ->setUpdateTime(time());
+                $original_page->setData($dbData)->save();
+
             } else {
-                $page = $this->_pageFactory->create()->setData($saveData);
+
+                $originalData = $original_page->getData();
+
+                unset($originalData['page_id']);
+
+                unset($originalData['store_id']);
+
+                $originalData['store_id'] = [$this->_jobModel->getTargetStoreId()];
+
+                $dbData = array_merge($originalData, $data);
+
+                $newBlock = $this->_pageFactory->create();
+
+                $newBlock->setData($dbData)->save();
             }
-            $page->save();
 
         }
 
@@ -598,7 +601,7 @@ class ImportHelper extends AbstractHelper
     {
 
         $translatedBlockAttributes = $this->_attributeTranslationCollection->create()
-            ->addFieldToSelect(['attribute_translation_id','translated_value', 'entity_id', 'attribute_code'])
+            ->addFieldToSelect(['attribute_translation_id', 'translated_value', 'entity_id', 'attribute_code'])
             ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()));
 
         $saveData = [];
@@ -615,19 +618,20 @@ class ImportHelper extends AbstractHelper
 
         }
 
-        foreach ($saveData as $key => $data){
+        foreach ($saveData as $key => $data) {
 
             $original_block = $this->_blockFactory->create()->load($key);
 
-            if(in_array($this->_jobModel->getTargetStoreId(),$original_block->getStores())){
+            if (in_array($this->_jobModel->getTargetStoreId(), $original_block->getStores())) {
 
                 $originalData = $original_block->getData();
 
-                $dbData = array_merge($originalData,$data);
+                $dbData = array_merge($originalData, $data);
 
                 $original_block->setData($dbData)->save();
 
-            }else{
+            } else {
+
 
                 $originalData = $original_block->getData();
 
@@ -639,7 +643,7 @@ class ImportHelper extends AbstractHelper
 
                 $originalData['stores'] = [$this->_jobModel->getTargetStoreId()];
 
-                $dbData = array_merge($originalData,$data);
+                $dbData = array_merge($originalData, $data);
 
                 $newBlock = $this->_blockFactory->create();
 

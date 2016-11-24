@@ -27,7 +27,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $setup->startSetup();
 
-        if (version_compare($context->getVersion(), '1.0.2', '<')) {
+        if (version_compare($context->getVersion(), '1.0.3', '<')) {
             $this->addLabelColumn($setup);
         }
 
@@ -59,17 +59,17 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 'length' => 255,
                 'nullable' => true,
-                'comment' => 'Attribute Lab'
+                'comment' => 'Is Published'
             ]
         );
         $connection->addColumn(
             $setup->getTable(\Straker\EasyTranslationPlatform\Model\AttributeTranslation::ENTITY),
             'published_at',
             [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
                 'length' => 255,
                 'nullable' => true,
-                'comment' => 'Attribute Label'
+                'comment' => 'Published Time'
             ]
         );
         $connection->addColumn(

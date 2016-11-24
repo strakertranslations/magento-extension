@@ -37,13 +37,7 @@ class PageHelper extends AbstractHelper
     protected $_pageData;
     protected $_storeId;
 
-    const PageAttributes = [
-        ['name'=>'title','label'=>'Title'],
-        ['name'=>'meta_keywords','label'=>'Meta Keywords'],
-        ['name'=>'meta_description','label'=>'Meta Description'],
-        ['name'=>'content_heading','label'=>'Content Heading'],
-        ['name'=>'content','label'=>'Content']
-    ];
+    protected $_attributes = ['title','meta_keywords','meta_description','content_heading','content'];
 
     public function __construct(
         Context $context,
@@ -74,10 +68,6 @@ class PageHelper extends AbstractHelper
         parent::__construct($context);
     }
 
-    public function getAttributes()
-    {
-        return array_column(self::PageAttributes, 'name');
-    }
 
     /**
      * @param $page_ids
@@ -102,7 +92,7 @@ class PageHelper extends AbstractHelper
             ->addStoreFilter($this->_storeId)
             ->addFieldToFilter('page_id', [ 'in' => $page_ids ]);
 
-        $this->_pageData = $pages->toArray()['items'];
+        $this->_pageData = $pages->getItems();
 
         return $this;
     }
@@ -112,25 +102,29 @@ class PageHelper extends AbstractHelper
      */
     public function getSelectedPageAttributes()
     {
+
         $pageData = [];
 
-        foreach ($this->_pageData as $page_key => $attribute_data) {
+        foreach ($this->_pageData as $data) {
+
             $attributeData = [];
 
-            foreach ($attribute_data as $attribute_key => $attribute) {
-                if (in_array($attribute_key, $this->getAttributes()) && !is_null($attribute)) {
+            foreach ($this->_attributes as $attribute){
+
+                if(in_array($attribute,$this->_attributes))
+                {
                     array_push($attributeData, [
-                        'attribute_id'=>$attribute_key,
-                        'label'=>$attribute_key,
-                        'value'=>$attribute
+                        'attribute_code'=>$attribute,
+                        'label'=>$attribute,
+                        'value'=>$data->getData($attribute)
                     ]);
                 }
             }
 
             $pageData[] = [
-                'page_id'=>$this->_pageData[$page_key]['page_id'],
-                'page_title'=>$this->_pageData[$page_key]['title'],
-                'page_url'=>$this->_storeManager->getStore($this->_storeId)->getBaseUrl().$this->_pageData[$page_key]['identifier'].'.html',//check
+                'page_id'=>$data->getId(),
+                'page_title'=>$data->getTitle(),
+                'page_url'=>$this->_storeManager->getStore($this->_storeId)->getBaseUrl().$data->getIdentifier().'.html',//check
                 'attributes'=>$attributeData
             ];
         }
@@ -182,9 +176,12 @@ class PageHelper extends AbstractHelper
     ) {
     
         if ($pageData) {
+
             foreach ($pageData as $data) {
+
                 foreach ($data['attributes'] as $attribute) {
-                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['page_id'].'_'.$attribute['attribute_id'];
+
+                        $job_name = $job_id.'_'.$jobType_id.'_'.$target_store_id.'_'.$data['page_id'].'_'.$attribute['attribute_code'];
 
                         $xmlHelper->appendDataToRoot([
                             'name' => $job_name,
@@ -193,7 +190,8 @@ class PageHelper extends AbstractHelper
                             'attribute_translation_id'=>$attribute['value_translation_id'],
                             'source_store_id'=> $source_store_id,
                             'page_id' => $data['page_id'],
-                            'attribute_id'=>$attribute['attribute_id'],
+                            //'attribute_id'=>$attribute['attribute_id'],
+                            'attribute_code'=>$attribute['attribute_code'],
                             'attribute_label'=>$attribute['label'],
                             'value' => $attribute['value']
                         ]);
@@ -212,23 +210,29 @@ class PageHelper extends AbstractHelper
     {
 
         foreach ($this->_pageData as $pageKey => $data) {
-            foreach ($data['attributes'] as $key => $attribute) {
+
+            foreach ($data['attributes'] as $attKey => $attribute) {
+
                 $attributeTranslationModel = $this->_attributeTranslationFactory->create();
-                $revisedAttribute =$this->_attributeHelper->getRevisedAttribute(JobType::JOB_TYPE_PAGE, $attribute['attribute_id']);
+
                 try {
                     $attributeTranslationModel->setData(
                         [
                             'job_id' => $job_id,
                             'entity_id' => $data['page_id'],
-                            'attribute_id' => $revisedAttribute['key'],
+                            'attribute_code' => $attribute['attribute_code'],
                             'original_value' => $attribute['value'],
                             'is_label' => (bool)0,
-                            'label' => $revisedAttribute['label']
+                            'label' => $attribute['label']
                         ]
                     )->save();
-                    $this->_pageData[$pageKey]['attributes'][$key]['value_translation_id'] = $attributeTranslationModel->getId();
-                    $this->_pageData[$pageKey]['attributes'][$key]['attribute_id'] = $attributeTranslationModel->getAttributeId();
+
+
+                    $this->_pageData[$pageKey]['attributes'][$attKey]['value_translation_id'] = $attributeTranslationModel->getId();
+
+
                 } catch (Exception $e) {
+
                     $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
                 }
             }
