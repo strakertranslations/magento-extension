@@ -64,26 +64,35 @@ class Save extends \Magento\Backend\App\Action
         //if testing store exists redirect to new job page
         $testingStore = $this->_storeModel->load($this->_configHelper->getTestingStoreViewCode());
         if (!empty($testingStore->getId())) {
-            $this->_setup->setSiteMode(SetupInterface::SITE_MODE_SANDBOX);
-            $resultRedirect->setPath('*/Jobs/New');
-            return $resultRedirect;
-        }
-        //create testing store
-        $data = $this->getRequest()->getParams();
-        if ($data) {
-            if (key_exists('store_view_name', $data) && !empty($data['store_view_name'])) {
-                //create a store view
-                $result = $this->_setup->createTestingStoreView($data['store_view_name']);
-                if ($result['Success']) {
-                    $resultRedirect->setPath('*/Jobs/New');
-                    return $resultRedirect;
-                } else {
-                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . '', [$result['Message']]);
-                    $this->messageManager->addErrorMessage($result['Message']);
+            if(!$this->_configHelper->isSandboxMode()){
+                $this->_setup->setSiteMode(SetupInterface::SITE_MODE_SANDBOX);
+            }
+        }else{
+            //create testing store if store name is given
+            $data = $this->getRequest()->getParams();
+            if ($data) {
+                if (key_exists('store_view_name', $data) && !empty($data['store_view_name'])) {
+                    //create a store view
+                    $result = $this->_setup->createTestingStoreView($data['store_view_name']);
+                    if ($result['Success']) {
+                        if(!$this->_configHelper->isSandboxMode()){
+                            $this->_setup->setSiteMode(SetupInterface::SITE_MODE_SANDBOX);
+                        }
+                    }else{
+                        if($this->_configHelper->isSandboxMode()){
+                            $this->_setup->setSiteMode(SetupInterface::SITE_MODE_LIVE);
+                        }
+                        $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . '', [$result['Message']]);
+                        $this->messageManager->addErrorMessage($result['Message']);
+                    }
+                }else{
+                    if($this->_configHelper->isSandboxMode()){
+                        $this->_setup->setSiteMode(SetupInterface::SITE_MODE_LIVE);
+                    }
                 }
             }
         }
-        $resultRedirect->setPath('/*/index/');
+        $resultRedirect->setPath('*/Jobs/New');
         return $resultRedirect;
     }
 }
