@@ -45,7 +45,6 @@ class Reimport extends \Magento\Backend\App\Action
     public function execute()
     {
 
-
         $jobData = $this->_jobFactory->create()->load($this->getRequest()->getParam('job_id'));
 
         $originalTranslatedFile = $this->_configHelper->getTranslatedXMLFilePath().'/'.$jobData->getData('translated_file');

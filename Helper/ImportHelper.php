@@ -227,6 +227,7 @@ class ImportHelper extends AbstractHelper
                     (strpos($data['_attribute']['content_context'], 'label') !== false) ? $this->saveLabel($data['_attribute']['attribute_id'], $data['_value']['value']) : false;
 
                 } catch (\Exception $e) {
+
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
                 }
 
@@ -254,6 +255,7 @@ class ImportHelper extends AbstractHelper
                     }
 
                 } catch (\Exception $e) {
+
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
                 }
 
