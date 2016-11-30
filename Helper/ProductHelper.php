@@ -380,13 +380,17 @@ class ProductHelper extends AbstractHelper
                         }
                     }
                 } else {
+
                     $this->_logger->error('error '.__FILE__.' '.__LINE__.''. __(' no product attributes being selected'));
                 }
             }
-            return $this;
+
         } catch (Exception $e) {
+
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
         }
+
+        return $this;
     }
 
     /**

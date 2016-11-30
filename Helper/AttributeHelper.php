@@ -38,6 +38,7 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
         $configAttributeData = [];
 
         foreach ($attributes as $attribute) {
+
             $value_data = [];
 
             foreach ($attribute['values'] as $value) {
@@ -46,6 +47,7 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
             }
 
             $configAttributeData[] = [
+                'attribute_code'=>$attribute['attribute_code'],
                 'attribute_id' => $attribute['attribute_id'],
                 'label' => $attribute['label'],
                 'value' => $value_data
@@ -69,6 +71,8 @@ class AttributeHelper extends \Magento\Framework\App\Helper\AbstractHelper
             $values['attribute_id'] = $attribute_id;
 
             $values['label'] = $attribute->getFrontendLabel();
+
+            $values['attribute_code'] = $attribute->getAttributeCode();
 
             $options = explode(',', $options);
 
