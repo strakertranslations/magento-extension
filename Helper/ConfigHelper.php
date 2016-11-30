@@ -117,6 +117,11 @@ class ConfigHelper extends AbstractHelper
         return $this->_getSiteDomain('my_account_domain').'/'.$this->scopeConfig->getValue('straker/general/api_url/payment_page');
     }
 
+    public function getMyAccountUrl()
+    {
+        return $this->_getSiteDomain('my_account_domain').'/user/login';
+    }
+
     public function getStoreSetup($storeId)
     {
         $collection = $this->_scopeFactory->create(
