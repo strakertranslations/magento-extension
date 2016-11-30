@@ -99,6 +99,7 @@ class Save extends Action
         $this->_logger = $logger;
         $this->_xmlHelper = $xmlHelper;
         $this->_xmlParser = $xmlParser;
+        $this->_configHelper = $configHelper;
 
         parent::__construct($context);
     }
@@ -230,7 +231,9 @@ class Save extends Action
                 $job->setData('source_file', $sourcefile);
                 $job->save();
             }
-            $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
+            if(!$this->_configHelper->isSandboxMode()){
+                $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
+            }
         } catch (\Exception $e) {
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message, [$response]);
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));

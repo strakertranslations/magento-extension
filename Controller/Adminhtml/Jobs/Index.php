@@ -127,9 +127,11 @@ class Index extends Action
             } else {
                 $dataArray = (array)$apiData;
                 $result['status'] = false;
-                $result['message'] =  __( 'Server: ' . $dataArray['message'] );
+                if(key_exists('message', $dataArray)){
+                    $result['message'] =  __( 'Server: ' . $dataArray['message'] );
+                }
 //                $this->messageManager->addErrorMessage( $result['message'] );
-                $this->_logger->addError($result['message']);
+                $this->_logger->addError($result['message'], $dataArray);
             }
         } catch (\Exception $e) {
             $result['status'] = false;
