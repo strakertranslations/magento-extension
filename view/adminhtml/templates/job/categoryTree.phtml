@@ -151,22 +151,22 @@
                 },
 
                 categoryClick: function (node, e) {
-                    var url = this.buildUrl(node.id);
 
-                    this.currentNodeId = node.id;
-                    if (!this.useAjax) {
-                        setLocation(url);
-                        return;
-                    }
-                    if (this.activeTab) {
-                        var params = {active_tab_id: this.activeTab};
-                    }
-                    updateContent(url, params);
+//                    var url = this.buildUrl(node.id);
+//
+//                    this.currentNodeId = node.id;
+//                    if (!this.useAjax) {
+//                        setLocation(url);
+//                        return;
+//                    }
+//                    if (this.activeTab) {
+//                        var params = {active_tab_id: this.activeTab};
+//                    }
+//                    updateContent(url, params);
                 },
 
                 buildUrl: function (id) {
                     var urlExt = (this.storeId ? 'store/' + this.storeId + '/' : '') + 'id/' + id + '/';
-
                     return parseSidUrl(this.baseUrl, urlExt);
                 },
 
@@ -218,7 +218,6 @@
                                 if (!response || !response['parameters']) {
                                     return false;
                                 }
-
                                 _renderNewTree(response, switcherParams.scopeParams);
                             }
                         });
@@ -542,6 +541,8 @@
             window.addNew = addNew;
 
         });
+
+
 
 //        function StrakerRender(values) {
 //            return {
