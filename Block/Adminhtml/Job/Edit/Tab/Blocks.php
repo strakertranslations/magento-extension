@@ -42,7 +42,7 @@ class Blocks extends Extended
     {
         parent::_construct();
         $this->setId('blocksGrid');
-//        $this->setDefaultSort('entity_id');
+        $this->setDefaultSort('block_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
@@ -79,8 +79,10 @@ class Blocks extends Extended
     protected function _prepareCollection()
     {
         $collection = $this->_blockCollectionFactory;
-//        $collection->addStoreFilter($this->_sourceStoreId);
-        $collection->is_translated($this->targetStoreId,$this->sourceStoreId);
+        if($this->sourceStoreId){
+            $collection->addStoreFilter($this->sourceStoreId);
+        }
+        $collection->is_translated($this->targetStoreId);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -91,18 +93,18 @@ class Blocks extends Extended
     protected function _prepareColumns()
     {
 
-        $this->addColumn(
-            'in_block',
-            [
-                'header_css_class' => 'a-center',
-                'type' => 'checkbox',
-                'name' => 'in_block',
-                'align' => 'center',
-                'index' => 'block_id',
-                'filter_index'=>'block_id',
-                'values' => $this->_getSelectedBlocks()
-            ]
-        );
+//        $this->addColumn(
+//            'in_block',
+//            [
+//                'header_css_class' => 'a-center',
+//                'type' => 'checkbox',
+//                'name' => 'in_block',
+//                'align' => 'center',
+//                'index' => 'block_id',
+//                'filter_index'=>'block_id',
+//                'values' => $this->_getSelectedBlocks()
+//            ]
+//        );
 
         $this->addColumn(
             'block_id',
@@ -142,6 +144,15 @@ class Blocks extends Extended
         return parent::_prepareColumns();
     }
 
+    function _prepareMassaction()
+    {
+        $this->setMassactionIdField('block_id');
+        $this->getMassactionBlock()->setTemplate('Straker_EasyTranslationPlatform::job/massaction_extended.phtml');
+        $this->getMassactionBlock()->addItem('create', []);
+
+        return $this;
+    }
+
     protected function _getSelectedBlocks()
     {
         $blocks = $this->getRequest()->getPost('job_blocks');
@@ -178,7 +189,18 @@ class Blocks extends Extended
     function filterName($collection, $column)
     {
         $condition = $column->getFilter()->getCondition();
-        $collection->getSelect()->having('`is_translated` = ' . reset($condition));
+        $collection->getSelect()->having('`is_translated` =  ?', reset($condition));
         return $this;
+    }
+
+    public function getSerializerBlock()
+    {
+        return $this->getLayout()->getBlock('blocks_grid_serializer');
+    }
+
+    public function getHiddenInputElementName()
+    {
+        $serializerBlock = $this->getLayout()->getBlock('blocks_grid_serializer');
+        return empty($serializerBlock) ? 'blocks' : $serializerBlock->getInputElementName();
     }
 }
