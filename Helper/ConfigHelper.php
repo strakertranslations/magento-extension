@@ -66,10 +66,15 @@ class ConfigHelper extends AbstractHelper
         if (empty($siteVersion)) {
             $siteVersion = 'live';
         }
+
+        if(strcasecmp($domain, 'my_account_domain') === 0){
+            return $this->scopeConfig->getValue('straker/general/my_account_domain/'. $siteVersion);
+        }
+
         //set sandbox mode as default
         $siteDomain = $this->scopeConfig->getValue('straker/general/domain/sandbox');
         if (!$this->isSandboxMode()) {
-            $siteDomain = $this->scopeConfig->getValue('straker/general/'. (empty($domain) ? 'domain' : 'my_account_domain') .'/'. $siteVersion);
+            $siteDomain = $this->scopeConfig->getValue('straker/general/domain/'. $siteVersion);
             if (empty($siteDomain)) {
                 $siteDomain = 'https://app.strakertranslations.com';
             }
@@ -115,6 +120,11 @@ class ConfigHelper extends AbstractHelper
     public function getPaymentPageUrl()
     {
         return $this->_getSiteDomain('my_account_domain').'/'.$this->scopeConfig->getValue('straker/general/api_url/payment_page');
+    }
+
+    public function getMyAccountUrl()
+    {
+        return $this->_getSiteDomain('my_account_domain').'/user/login';
     }
 
     public function getStoreSetup($storeId)

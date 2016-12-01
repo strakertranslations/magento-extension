@@ -15,10 +15,8 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $pageCollection;
     protected $jobFactory;
     protected $sourceStoreId;
-
     protected $_configHelper;
-
-
+    protected $targetStoreId;
 
     public function __construct(
         Context $context,
@@ -42,7 +40,7 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         parent::_construct();
         $this->setId('pagesGrid');
-        $this->setDefaultSort('entity_id');
+        $this->setDefaultSort('page_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
@@ -54,11 +52,11 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $collection = $this->pageCollection;
-
+        if($this->sourceStoreId){
+            $collection->addStoreFilter($this->sourceStoreId);
+        }
         $collection->is_translated($this->targetStoreId);
-
         $this->setCollection($collection);
-
         return parent::_prepareCollection();
     }
 
@@ -67,17 +65,17 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-
-        $this->addColumn(
-            'in_page',
-            [
-                'header_css_class' => 'a-center',
-                'type' => 'checkbox',
-                'name' => 'in_page',
-                'align' => 'center',
-                'index' => 'page_id'
-            ]
-        );
+//
+//        $this->addColumn(
+//            'in_page',
+//            [
+//                'header_css_class' => 'a-center',
+//                'type' => 'checkbox',
+//                'name' => 'in_page',
+//                'align' => 'center',
+//                'index' => 'page_id'
+//            ]
+//        );
 
         $this->addColumn(
             'page_id',
@@ -116,6 +114,15 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_prepareColumns();
     }
 
+    function _prepareMassaction()
+    {
+        $this->setMassactionIdField('page_id');
+        $this->getMassactionBlock()->setTemplate('Straker_EasyTranslationPlatform::job/massaction_extended.phtml');
+        $this->getMassactionBlock()->addItem('create', []);
+
+        return $this;
+    }
+
     /**
      * @return string
      */
@@ -143,7 +150,13 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     function filterName($collection, $column)
     {
         $condition = $column->getFilter()->getCondition();
-        $collection->getSelect()->having('`b.is_imported` LIKE ' . reset($condition));
+        $collection->getSelect()->having('`is_translated` = ? ', reset($condition));
         return $this;
+    }
+
+    public function getHiddenInputElementName()
+    {
+        $serializerBlock = $this->getLayout()->getBlock('pages_grid_serializer');
+        return empty($serializerBlock) ? 'pages' : $serializerBlock->getInputElementName();
     }
 }

@@ -59,6 +59,6 @@ class Index extends \Magento\Backend\Block\Widget\Container
     }
 
     public function _getMyAccountUrl(){
-        return 'https://myaccount.strakertranslations.com/user/login';
+        return $this->_configHelper->getMyAccountUrl();
     }
 }

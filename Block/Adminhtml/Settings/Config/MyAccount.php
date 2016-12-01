@@ -29,9 +29,10 @@ class MyAccount extends \Magento\Config\Block\System\Config\Form\Field
     function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
     {
         $this->_cache->clean(Config::CACHE_TAG);
+        $myAccountUrl = $this->_configHelper->getMyAccountUrl();
         $disabled = empty($this->_configHelper->getAccessToken()) ? 'disabled' : '';
         return '<a class="straker-my-account-anchor action-default" 
-                   href="https://myaccount.strakertranslations.com/user/login" 
+                   href="'. $myAccountUrl .'" 
                    target="_blank" 
                    '. $disabled .'    
                 >'

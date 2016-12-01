@@ -67,9 +67,6 @@ class BlockHelper extends AbstractHelper
         $this->_storeManager = $storeManager;
 
         parent::__construct($context);
-        ini_set('xdebug.var_display_max_depth', 5);
-        ini_set('xdebug.var_display_max_children', 256);
-        ini_set('xdebug.var_display_max_data', 1024);
     }
 
 
