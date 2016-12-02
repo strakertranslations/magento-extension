@@ -58,6 +58,14 @@ namespace :deploy do
   end
   after "deploy:publishing", "gitpull"
 
+  desc "Production env git pull "
+    task :gitpull do
+      on roles :demo do
+      execute "cd /mnt/data/apps/php/mg1-demo1 && git pull"
+      execute "cd /mnt/data/apps/php/mg1-demo2 && git pull"
+    end
+  end
+  after "deploy:publishing", "gitpull"
 
   desc "Restarting php5-fpm to clear cache"
   task :fpmreload do
