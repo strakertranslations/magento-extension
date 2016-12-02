@@ -227,9 +227,11 @@ class ImportHelper extends AbstractHelper
 
                     $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
 
+                    $att_trans_model->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
                     $att_trans_model->save();
 
-                    (strpos($data['_attribute']['content_context'], 'label') !== false) ? $this->saveLabel($data['_attribute']['attribute_id'], $data['_value']['value']) : false;
+                    ($data['_attribute']['is_label']==1) ? $this->saveLabel($data['_attribute']['attribute_code'], $data['_value']['value']) : false;
 
                 } catch (\Exception $e) {
 
@@ -245,6 +247,9 @@ class ImportHelper extends AbstractHelper
 
                     $att_opt_model->addData(['translated_value' => $data['_value']['value']]);
 
+                    $att_opt_model->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+
+
                     $att_opt_model->save();
 
                     if (!in_array($att_opt_model->getData('option_id'), $this->_saveOptionIds)) {
@@ -253,7 +258,7 @@ class ImportHelper extends AbstractHelper
                             ->addFieldToFilter('attribute_translation_id', array('in' => $this->_attributeTranslationIds))
                             ->addFieldToFilter('option_id', array('eq' => $att_opt_model->getData('option_id')));
 
-                        $translatedOptions->massUpdate(array('translated_value' => $att_opt_model->getData('translated_value')));
+                        $translatedOptions->massUpdate(array('translated_value' => $att_opt_model->getData('translated_value'),'is_imported'=>1,'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')));
 
                         $this->_saveOptionIds[] = $att_opt_model->getData('option_id');
 
@@ -302,7 +307,7 @@ class ImportHelper extends AbstractHelper
 
                 $updateRow = $this->_attributeTranslationFactory->create()->load($data['attribute_translation_id']);
 
-                $updateRow->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+                $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
                 $updateRow->save();
             }
@@ -317,13 +322,16 @@ class ImportHelper extends AbstractHelper
         $labels = $this->_attributeTranslationCollection->create()
             ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()))
             ->addFieldToFilter('is_label', array('eq' => 1))
-            ->addFieldtoFilter('attribute_id', array('eq' => $label_id))
-            ->addFieldToFilter('translated_value', array('null' => true));
+            ->addFieldtoFilter('attribute_code', array('eq' => $label_id))
+            ->addFieldToFilter('translated_value', array('null' => true))
+            ->addFieldToSelect('*');
 
         try {
-            $labels->massUpdate(array('translated_value' => $value));
+
+            $labels->massUpdate(array('translated_value' => $value,'is_imported'=>1,'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')));
 
         } catch (\Exception $e) {
+
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
         }
 
@@ -359,7 +367,7 @@ class ImportHelper extends AbstractHelper
 
             $updateRow = $this->_attributeTranslationFactory->create()->load($data['attribute_translation_id']);
 
-            $updateRow->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+            $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
             $updateRow->save();
         }
@@ -405,7 +413,7 @@ class ImportHelper extends AbstractHelper
 
                 $updateRow = $this->_attributeOptionTranslationFactory->create()->load($data['attribute_option_translation_id']);
 
-                $updateRow->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
+                $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
                 $updateRow->save();
 
