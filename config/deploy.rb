@@ -99,6 +99,34 @@ namespace :deploy do
   end
   after "deploy:finishing", "magento2_setup"
 
+  # Demo environment
+  desc "Magento2 git"
+  task :magento2_git do
+    on roles :demo do
+      execute "cd /mnt/data/apps/php/mg2-demo1/app/code/Straker/EasyTranslationPlatform && git pull"
+      execute "cd /mnt/data/apps/php/mg2-demo2/app/code/Straker/EasyTranslationPlatform && git pull"
+    end
+  end
+  after "deploy:publishing", "magento2_git"
+
+  desc "Magento2 setup"
+  task :magento2_ownership do
+    on roles :demo do
+      execute "cd /mnt/data/apps/php/mg2-demo1/bin; php magento setup:upgrade"
+      execute "cd /mnt/data/apps/php/mg2-demo2/bin; php magento setup:upgrade"
+    end
+  end
+  after "deploy:publishing", "magento2_ownership"
+
+  desc "Magento2 ownership"
+  task :magento2_setup do
+    on roles :demo do
+      execute "cd /mnt/data/apps/php/mg2-demo1 && chown -R www-data:www-data ."
+      execute "cd /mnt/data/apps/php/mg2-demo2 && chown -R www-data:www-data ."
+    end
+  end
+  after "deploy:finishing", "magento2_setup"
+
 
   desc "Restarting php5-fpm to clear cache"
   task :fpmreload do
