@@ -152,6 +152,11 @@
 
                 categoryClick: function (node, e) {
 
+                    if(node.attributes.checked){
+                        node.getUI().check(0);
+                    }else{
+                        node.getUI().check(1);
+                    }
 //                    var url = this.buildUrl(node.id);
 //
 //                    this.currentNodeId = node.id;
