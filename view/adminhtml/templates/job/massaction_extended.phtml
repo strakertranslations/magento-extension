@@ -158,7 +158,7 @@
             var tdElement = Event.findElement(evt, 'td');
             var trElement = Event.findElement(evt, 'tr');
 
-            if (that.isDisabled(evt)) {
+            if (typeof that.isDisabled != 'undefined' && that.isDisabled(evt)) {
                 return false;
             }
 
