@@ -154,9 +154,21 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
         return $this;
     }
 
-    public function getHiddenInputElementName()
+    public function _getSerializerBlock()
     {
-        $serializerBlock = $this->getLayout()->getBlock('pages_grid_serializer');
+        return $this->getLayout()->getBlock('pages_grid_serializer');
+    }
+
+    public function _getHiddenInputElementName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
         return empty($serializerBlock) ? 'pages' : $serializerBlock->getInputElementName();
     }
+
+    public function _getReloadParamName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'job_pages' : $serializerBlock->getReloadParamName();
+    }
+
 }

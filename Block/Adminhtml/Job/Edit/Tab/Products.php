@@ -83,11 +83,14 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 //        $this->addColumn(
 //            'in_product',
 //            [
-//                'header_css_class' => 'a-center',
-//                'type' => 'multiselect',
+//                'type' => 'massaction',
+////                'reander' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Massaction',
 //                'name' => 'in_product',
 //                'align' => 'center',
 //                'index' => 'entity_id',
+//                'is_system' => true,
+//                'header_css_class' => 'col-select',
+//                'column_css_class' => 'col-select',
 //                'values' => $this->_getSelectedProducts()
 //            ]
 //        );
@@ -130,16 +133,16 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
-//        $this->addColumn(
-//            'visibility',
-//            [
-//                'header' => __('Visibility'),
-//                'type' => 'options',
-//                'options' => $this->productVisibilityModel->getOptionArray(),
-//                'index' => 'visibility',
-//                'width' => '50px',
-//            ]
-//        );
+        $this->addColumn(
+            'visibility',
+            [
+                'header' => __('Visibility'),
+                'type' => 'options',
+                'options' => $this->productVisibilityModel->getOptionArray(),
+                'index' => 'visibility',
+                'width' => '50px',
+            ]
+        );
 
         $this->addColumn(
             'is_translated',
@@ -173,6 +176,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     function _prepareMassaction()
     {
         $this->setMassactionIdField('entity_id');
+        $this->setFormFieldName('products');
         $this->getMassactionBlock()->setTemplate('Straker_EasyTranslationPlatform::job/massaction_extended.phtml');
         $this->getMassactionBlock()->addItem('create', []);
 
@@ -226,9 +230,20 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         return parent::_setCollectionOrder($column);
     }
 
-    public function getHiddenInputElementName()
+    public function _getSerializerBlock()
     {
-        $serializerBlock = $this->getLayout()->getBlock('products_grid_serializer');
+        return $this->getLayout()->getBlock('products_grid_serializer');
+    }
+
+    public function _getHiddenInputElementName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
         return empty($serializerBlock) ? 'products' : $serializerBlock->getInputElementName();
+    }
+
+    public function _getReloadParamName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'job_products' : $serializerBlock->getReloadParamName();
     }
 }

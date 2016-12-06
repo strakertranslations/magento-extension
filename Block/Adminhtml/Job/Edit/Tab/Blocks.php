@@ -193,14 +193,20 @@ class Blocks extends Extended
         return $this;
     }
 
-    public function getSerializerBlock()
+    public function _getSerializerBlock()
     {
         return $this->getLayout()->getBlock('blocks_grid_serializer');
     }
 
-    public function getHiddenInputElementName()
+    public function _getHiddenInputElementName()
     {
-        $serializerBlock = $this->getLayout()->getBlock('blocks_grid_serializer');
+        $serializerBlock = $this->_getSerializerBlock();
         return empty($serializerBlock) ? 'blocks' : $serializerBlock->getInputElementName();
+    }
+
+    public function _getReloadParamName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'job_blocks' : $serializerBlock->getReloadParamName();
     }
 }
