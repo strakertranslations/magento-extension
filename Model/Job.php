@@ -2,18 +2,16 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
-use Magento\Downloadable\Model\SampleFactory;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as ProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as MagentoProductCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory as CategoryCollectionFactory;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as MagentoPageCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as MagentoBlockCollectionFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
@@ -63,10 +61,10 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     public function __construct(
         Context $context,
         Registry $registry,
-        ProductCollectionFactory $productCollectionFactory,
+        MagentoProductCollectionFactory $productCollectionFactory,
         CategoryCollectionFactory $categoryCollectionFactory,
-        PageCollectionFactory $pageCollectionFactory,
-        BlockCollectionFactory $blockCollectionFactory,
+        MagentoPageCollectionFactory $pageCollectionFactory,
+        MagentoBlockCollectionFactory $blockCollectionFactory,
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
