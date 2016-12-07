@@ -43,10 +43,10 @@ echo '<p class="note"><span>'. __('This will create a Testing Store View to be u
 <script>
     require([
         'jquery',
-        'Magento_Ui/js/modal/confirm',
         'Magento_Ui/js/modal/modal',
+        'Magento_Ui/js/modal/alert',
         'mage/translate'
-    ], function( $, confirm, modal ){
+    ], function( $, modal, alert ){
         var options = {
             type: 'popup',
             responsive: true,
@@ -85,8 +85,24 @@ echo '<p class="note"><span>'. __('This will create a Testing Store View to be u
                 method: 'get',
                 dataType: 'json',
                 showLoader: true,
-                complete: function () {
-                    location.reload();
+            }).always( function ( data ) {
+                if( data.Success ){
+                    alert({
+                        title: '',
+                        content: $.mage.__('Test store view created successfully. Click <b>OK</b> to reload this page.'),
+                        actions: {
+                            always: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }else{
+                    var msg = 'Something went wrong while creating test store view. <br/>';
+                    msg += (typeof data.Message != 'undefined') ? '<p><b>Message: </b><i>' + data.Message + '</i></p>' : '';
+                    alert({
+                        title: '',
+                        content: $.mage.__( msg + ' Please try again.')
+                    });
                 }
             });
         }

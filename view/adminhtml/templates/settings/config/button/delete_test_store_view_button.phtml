@@ -36,8 +36,9 @@ $testStoreView = $block->_getTestStoreView();
     require([
         'jquery',
         'Magento_Ui/js/modal/modal',
+        'Magento_Ui/js/modal/alert',
         'mage/translate'
-    ], function( $, modal ){
+    ], function( $, modal, alert ){
         var options = {
             type: 'popup',
             responsive: true,
@@ -67,12 +68,28 @@ $testStoreView = $block->_getTestStoreView();
         function deleteTestStore(siteMode) {
             $.ajax({
                 url: '<?php echo $block->getAjaxResetUrl(); ?>',
-                data: {siteMode: siteMode },
+                data: {siteMode: siteMode},
                 method: 'get',
                 dataType: 'json',
-                showLoader: true,
-                complete: function () {
-                    location.reload();
+                showLoader: true
+            }).always( function ( data ) {
+                if( data.Success ){
+                    alert({
+                        title: '',
+                        content: $.mage.__('Test store view deleted successfully. Click <b>OK</b> to reload this page.'),
+                        actions: {
+                            always: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }else{
+                    var msg = 'Something went wrong while deleting test store view. <br/>';
+                    msg += (typeof data.Message != 'undefined') ? '<p><b>Message: </b><i>' + data.Message + '</i></p>' : '';
+                    alert({
+                        title: '',
+                        content: $.mage.__( msg + ' Please try again.')
+                    });
                 }
             });
         }
@@ -82,25 +99,5 @@ $testStoreView = $block->_getTestStoreView();
         $deleteTestStoreButton.on('click', function(){
             $('#delete-test-store-modal').modal('openModal');
         });
-
-//        $deleteTestStoreButton.on('click', function(){
-//            confirm({
-//                title: '<?php //echo __("Please Confirm") ?>//',
-//                content: '<?php //echo __("This will delete your Testing Store View and all test jobs created for it.") ?>//',
-//                actions: {
-//                    confirm: function(){
-//                        $.ajax({
-//                            url      : '<?php //echo $block->getAjaxResetUrl(); ?>//',
-//                            method   : 'get',
-//                            dataType : 'json',
-//                            showLoader :  true,
-//                            complete : function(){
-//                                location.reload();
-//                            }
-//                        });
-//                    }
-//                }
-//            });
-//        });
     });
 </script>

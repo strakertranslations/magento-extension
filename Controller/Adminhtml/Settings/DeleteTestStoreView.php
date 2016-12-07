@@ -38,28 +38,27 @@ class DeleteTestStoreView extends Action
 
     public function execute()
     {
-        $result = ['Success' => false] ;
-//        $result = ['Success' => true] ;
-//        $params = $this->getRequest()->getParams();
-//        $siteMode = $params['siteMode'];
-//        try{
-//            $result = $this->_strakerSetup->deleteTestingStoreView($siteMode);
-//            if($result['Success']){
-//                $this->messageManager->addSuccessMessage(__('Test store view deleted successfully.'));
-//                if($result['SiteMode'] == SetupInterface::SITE_MODE_LIVE ){
-//                    $this->messageManager->addSuccessMessage(__('Live mode enabled.'));
-//                }else{
-//                    $this->messageManager->addSuccessMessage(__('Sandbox mode enabled'));
-//                }
-//            }else{
-//                $this->messageManager->addWarningMessage($result['Message']);
-//            }
-//        } catch (Exception $e) {
-//            $result['Success'] = false;
-//            $message = __($e->getMessage());
-//            $result['Message'] = $message;
-//            $this->_logger->error($message);
-//        }
+        $result = ['Success' => true];
+        $params = $this->getRequest()->getParams();
+        $siteMode = $params['siteMode'];
+        try{
+            $result = $this->_strakerSetup->deleteTestingStoreView($siteMode);
+            if($result['Success']){
+                $this->messageManager->addSuccessMessage(__('Test store view deleted successfully.'));
+                if($result['SiteMode'] == SetupInterface::SITE_MODE_LIVE ){
+                    $this->messageManager->addSuccessMessage(__('Live mode enabled.'));
+                }else{
+                    $this->messageManager->addSuccessMessage(__('Sandbox mode enabled'));
+                }
+            }else{
+                $this->messageManager->addWarningMessage($result['Message']);
+            }
+        } catch (Exception $e) {
+            $result['Success'] = false;
+            $message = __($e->getMessage());
+            $result['Message'] = $message;
+            $this->_logger->error($message);
+        }
         $jsonResult = $this->_resultJsonFactory->create();
         return $jsonResult->setData($result);
     }
