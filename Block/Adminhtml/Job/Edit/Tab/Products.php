@@ -66,7 +66,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $collection = $this->productCollectionFactory->create();
         $collection->addAttributeToSelect('name');
         $collection->addAttributeToSelect('price');
-//        $collection->addAttributeToSelect('visibility');
+        $collection->addAttributeToSelect('visibility');
 
         $collection->setStore($this->sourceStoreId);
         $collection->is_translated($this->targetStoreId);
