@@ -1,6 +1,11 @@
 #### Ignore everything ###
 /*
 
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+
 #### Unignore the following ####
 !.gitignore
 !app/code/community/StrakerTranslations/EasyTranslationPlatform
@@ -12,3 +17,4 @@
 
 !Capfile
 !config
+
