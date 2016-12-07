@@ -2,23 +2,25 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\LanguagePairs;
 
+use Exception;
+use Magento\Backend\App\Action;
+use Magento\Framework\Exception\LocalizedException;
+use RuntimeException;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
+use Magento\Backend\App\Action\Context;
 
-use Magento\Framework\App\Action\Context;
-
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
+    protected $_setup;
+    protected $_logger;
 
     public function __construct(
         Context $context,
         SetupInterface $setupInterface,
         Logger $logger
     ) {
-    
-
         parent::__construct($context);
-
         $this->_setup = $setupInterface;
         $this->_logger = $logger;
     }
@@ -42,15 +44,15 @@ class Save extends \Magento\Backend\App\Action
                 $resultRedirect->setPath('/Setup_productattributes/index/');
 
                 return $resultRedirect;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the language configuration.'));

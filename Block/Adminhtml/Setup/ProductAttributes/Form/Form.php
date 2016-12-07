@@ -3,43 +3,33 @@
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Setup\ProductAttributes\Form;
 
 use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
-use Magento\Store\Model\System\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Backend\Model\Session;
-
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
+    protected $_Registry;
+    protected $productHelper;
+    protected $categoryHelper;
 
     public function __construct(
         Context $context,
         Registry $registry,
         FormFactory $formFactory,
-        StoreManagerInterface $storeManager,
-        Session $session,
         ProductHelper $productHelper,
         CategoryHelper $categoryHelper,
         array $data = []
     ) {
 
-        $this->_storeManager = $storeManager;
         $this->_formFactory = $formFactory;
         $this->_Registry = $registry;
-        $this->session = $session;
         $this->productHelper = $productHelper;
         $this->categoryHelper = $categoryHelper;
 
         parent::__construct($context, $registry, $formFactory, $data);
-    }
-
-
-    protected function _construct()
-    {
-        parent::_construct();
     }
 
     protected function _prepareForm()

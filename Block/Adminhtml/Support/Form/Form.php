@@ -2,37 +2,29 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Support\Form;
 
+use Magento\Backend\Block\Widget\Form\Generic;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory as JobCollection;
-
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
-use Magento\Store\Model\System\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Backend\Model\Session;
 
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
 
     protected $_jobCollection;
+    protected $_Registry;
 
     public function __construct(
         Context $context,
         Registry $registry,
         FormFactory $formFactory,
-        StoreManagerInterface $storeManager,
         StrakerAPIInterface $strakerAPIInterface,
-        Session $session,
         JobCollection $jobCollection,
         array $data = []
     ) {
-
-        $this->_storeManager = $storeManager;
-        $this->_strakerAPIinterface = $strakerAPIInterface;
         $this->_formFactory = $formFactory;
         $this->_Registry = $registry;
-        $this->session = $session;
         $this->_jobCollection = $jobCollection;
 
         parent::__construct($context, $registry, $formFactory, $data);
