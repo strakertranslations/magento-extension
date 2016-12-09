@@ -19,7 +19,7 @@ echo '<p class="note"><span>'. __('This will restore database from the last back
                 console.log(FORM_KEY);
                 e.preventDefault();
                 confirm({
-                    content: $.mage.__('Are you going to restore Magento database, this process usually takes 3-4 minutes to finish?'),
+                    content: $.mage.__('Are you going to restore Magento database, this process usually takes 3-4 minutes to complete?'),
                     actions: {
                         confirm:  function () {
                             $.ajax({
@@ -30,7 +30,7 @@ echo '<p class="note"><span>'. __('This will restore database from the last back
                                 if(data.success){
                                     alert({
                                         title   : '',
-                                        content : 'Restore finished successfully. Please login again and flush Magento caches.',
+                                        content : $.mage.__('Restore finished successfully. Please login again and flush Magento caches.'),
                                         actions: {
                                             always: function () {
                                                 location.reload();
@@ -38,14 +38,15 @@ echo '<p class="note"><span>'. __('This will restore database from the last back
                                         }
                                     });
                                 }else{
+                                    var msg = (typeof data.message != 'undefined') ? data.message : 'unknown';
                                     alert({
                                         title   : '',
-                                        content : 'Restore failed. Please try again.',
-                                        actions: {
-                                            always: function () {
-                                                location.reload();
-                                            }
-                                        }
+                                        content : $.mage.__('Restore failed. Please try again. <p><b>Reason: </b>' + msg + '</p>')
+//                                        actions: {
+//                                            always: function () {
+//                                                location.reload();
+//                                            }
+//                                        }
                                     });
                                 }
                             });

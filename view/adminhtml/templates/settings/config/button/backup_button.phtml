@@ -22,22 +22,18 @@ echo '<p class="note"><span>'. __('This will backup database.') .'</span>';
                             $.ajax({
                                 url         : '<?php echo $block->getAjaxRequestUrl(); ?>',
                                 showLoader  : true,
-                                data        : {  }
+                                type        : 'get'
                             }).always(function ( data ) {
                                 if(data.success){
                                     alert({
                                         title   : '',
-                                        content : 'Backup finished successfully.'
+                                        content : $.mage.__('Backup finished successfully.')
                                     });
                                 }else{
+                                    var msg = (typeof data.message != 'undefined') ? data.message : 'unknown';
                                     alert({
                                         title   : '',
-                                        content : 'Restore failed. Please try again.',
-                                        actions: {
-                                            always: function () {
-                                                location.reload();
-                                            }
-                                        }
+                                        content : $.mage.__('Backup failed. Please try again. <p><b>Reason: </b>' + msg + '</p>')
                                     });
                                 }
                             });
