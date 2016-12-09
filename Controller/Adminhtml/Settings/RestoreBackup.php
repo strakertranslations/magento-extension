@@ -9,25 +9,34 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Settings;
 use Magento\Backend\App\Action;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
+use Magento\Backup\Helper\Data as BackupHelper;
 
-class CreateBackup extends Action
+class RestoreBackup extends Action
 {
     protected $_api;
     protected $_jsonFactory;
+    protected $_backupHelper;
 
     function __construct(
         Action\Context $context,
         JsonFactory $jsonFactory,
-        StrakerAPIInterface $api
+        StrakerAPIInterface $api,
+        BackupHelper $backupHelper
     ){
         $this->_api = $api;
         $this->_jsonFactory = $jsonFactory;
+        $this->_backupHelper = $backupHelper;
         parent::__construct($context);
     }
 
     public function execute()
     {
-        $response = $this->_api->dbBackup();
+        set_time_limit(0);
+        ignore_user_abort(true);
+        $response = $this->_api->dbRestore();
+        $this->_backupHelper->invalidateCache();
+        $adminSession = $this->_getSession();
+        $adminSession->destroy();
         return $this->_jsonFactory->create()->setData($response);
     }
 }

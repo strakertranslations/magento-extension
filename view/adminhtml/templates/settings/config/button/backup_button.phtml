@@ -1,0 +1,50 @@
+<?php
+/** @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\BackupButton */
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'. __('This will backup database.') .'</span>';
+?>
+
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/alert',
+        'Magento_Ui/js/modal/confirm',
+        'mage/translate'
+    ], function ( $, alert, confirm ) {
+        var backupButton = $('#demonstration_data_straker_backup_button');
+        if( typeof backupButton != 'undefined'){
+            backupButton.on('click', function (e) {
+                e.preventDefault();
+                confirm({
+                    content: $.mage.__('Are you going to backup Magento database?'),
+                    actions: {
+                        confirm:  function () {
+                            $.ajax({
+                                url         : '<?php echo $block->getAjaxRequestUrl(); ?>',
+                                showLoader  : true,
+                                data        : {  }
+                            }).always(function ( data ) {
+                                if(data.success){
+                                    alert({
+                                        title   : '',
+                                        content : 'Backup finished successfully.'
+                                    });
+                                }else{
+                                    alert({
+                                        title   : '',
+                                        content : 'Restore failed. Please try again.',
+                                        actions: {
+                                            always: function () {
+                                                location.reload();
+                                            }
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        }
+    });
+</script>

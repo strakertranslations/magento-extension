@@ -10,6 +10,12 @@ use Magento\Framework\App\ResourceConnection;
 use Straker\EasyTranslationPlatform\Helper\Data;
 use Magento\Backup\Model\Fs\CollectionFactory as FsCollectionFactory;
 
+/*
+ * This class preform Magento database rollback. Since restore functionality has been
+ * change to call portal server to restore, this class is not used but remains here in
+ * case requiring the functionality switch back.
+ */
+
 class RestoreProductData extends Field
 {
     const BUTTON_TEMPLATE = 'settings/config/button/restore_product_data_button.phtml';

@@ -4,7 +4,8 @@ namespace Straker\EasyTranslationPlatform\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
@@ -17,19 +18,22 @@ class ConfigHelper extends AbstractHelper
     protected $_directoryList;
     protected $_urlFactory;
     protected $_productMetadata;
+    protected $_deployConfig;
 
     public function __construct(
         Context $context,
         ScopedFactory $scopedFactory,
         UrlFactory $urlFactory,
         DirectoryList $directoryList,
-        ProductMetadataInterface $productMetadata
+        ProductMetadataInterface $productMetadata,
+        DeploymentConfig $deployConfig
     ) {
-    
+
         $this->_scopeFactory = $scopedFactory;
         $this->_directoryList = $directoryList;
         $this->_urlFactory = $urlFactory;
         $this->_productMetadata = $productMetadata;
+        $this->_deployConfig = $deployConfig;
         parent::__construct($context);
     }
 
@@ -57,12 +61,13 @@ class ConfigHelper extends AbstractHelper
     }
 
     /**
-     * @param string $domain
-     * @return string
+     * @param string $domain: domain ('' or 'my_account_domain')
+     * @param string $version: site verison (live, uat and dev)
+     * @return mixed|string
      */
-    protected function _getSiteDomain($domain = '')
+    protected function _getSiteDomain($domain = '', $version = '')
     {
-        $siteVersion = $this->getVersion();
+        $siteVersion = empty($version) ? $this->getVersion() : $version;
         if (empty($siteVersion)) {
             $siteVersion = 'live';
         }
@@ -71,14 +76,19 @@ class ConfigHelper extends AbstractHelper
             return $this->scopeConfig->getValue('straker/general/my_account_domain/'. $siteVersion);
         }
 
-        //set sandbox mode as default
-        $siteDomain = $this->scopeConfig->getValue('straker/general/domain/sandbox');
-        if (!$this->isSandboxMode()) {
+        if(!empty($version)){
+            return $this->scopeConfig->getValue('straker/general/domain/' . $version);
+        }
+
+        if ($this->isSandboxMode()) {
+            $siteDomain = $this->scopeConfig->getValue('straker/general/domain/sandbox');
+        }else{
             $siteDomain = $this->scopeConfig->getValue('straker/general/domain/'. $siteVersion);
             if (empty($siteDomain)) {
                 $siteDomain = 'https://app.strakertranslations.com';
             }
         }
+
         return rtrim($siteDomain, '/');
     }
 
@@ -125,6 +135,14 @@ class ConfigHelper extends AbstractHelper
     public function getMyAccountUrl()
     {
         return $this->_getSiteDomain('my_account_domain').'/user/login';
+    }
+
+    public function getDbBackupUrl(){
+        return $this->_getSiteDomain('', 'uat', 'backup') . '/' . $this->scopeConfig->getValue('straker/general/api_url/backup');
+    }
+
+    public function getDbRestoreUrl(){
+        return $this->_getSiteDomain('', 'uat', 'restore') . '/' . $this->scopeConfig->getValue('straker/general/api_url/restore');
     }
 
     public function getStoreSetup($storeId)
@@ -247,5 +265,12 @@ class ConfigHelper extends AbstractHelper
     public function getTestingStoreViewCode()
     {
         return 'straker_testing_storeview';
+    }
+
+    public function getDbName(){
+        return $this->_deployConfig->get(
+            ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT .
+            '/' . ConfigOptionsListConstants::KEY_NAME
+        );
     }
 }

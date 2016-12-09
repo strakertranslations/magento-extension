@@ -1,15 +1,12 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
-/*
- * This class preform Magento database backup. Since backup functionality has been
- * change to call portal server to backup, this class is not used but remains here
- * in case requiring the functionality switch back.
- */
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
 
-class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
+class BackupButton extends Field
 {
-    const BUTTON_TEMPLATE = 'settings/config/button/backup_product_data_button.phtml';
+    const BUTTON_TEMPLATE = 'settings/config/button/backup_button.phtml';
 
     private $_buttonId;
     private $_buttonName;
@@ -31,10 +28,10 @@ class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
     /**
      * Render button
      *
-     * @param  \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param  AbstractElement $element
      * @return string
      */
-    public function render(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    public function render(AbstractElement $element)
     {
         // Remove scope label
         $element->unsScope()->unsCanUseWebsiteValue()->unsCanUseDefaultValue();
@@ -46,18 +43,18 @@ class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
      *
      * @return string
      */
-    public function getAjaxResetUrl()
+    public function getAjaxRequestUrl()
     {
-        return $this->getUrl('EasyTranslationPlatform/Settings/BackupProductData'); //hit controller by ajax call on button click.
+        return $this->getUrl('EasyTranslationPlatform/Settings/CreateBackup'); //hit controller by ajax call on button click.
     }
 
     /**
      * Get the button and scripts contents
      *
-     * @param \Magento\Framework\Data\Form\Element\AbstractElement $element
+     * @param AbstractElement $element
      * @return string
      */
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         $this->_buttonId = $element->getId();
         $this->_buttonName = $element->getName();
@@ -71,10 +68,9 @@ class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
             'Magento\Backend\Block\Widget\Button'
         )->addData([
             'id' => $this->_buttonId,
-                'name' => $this->_buttonName,
-                'label' => __('Backup Product Data'),
-                'type' => 'button',
-                'onclick' => 'return backup.backup(\'db\')'
+            'name' => $this->_buttonName,
+            'label' => __('Backup'),
+            'type' => 'button'
         ]);
 
         return $button->toHtml();
