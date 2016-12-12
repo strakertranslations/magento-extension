@@ -36,6 +36,10 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->increaseInt($setup, $context);
         }
 
+        if (version_compare($context->getVersion(), '1.0.5', '<')) {
+            $this->addIncrement($setup);
+        }
+
         $setup->endSetup();
     }
 
@@ -132,6 +136,25 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'option_id',
             $setup->getTable('eav_attribute_option'),
             'option_id'
+        );
+    }
+
+    private function addIncrement(SchemaSetupInterface $setup)
+    {
+
+        $connection = $setup->getConnection();
+
+        $connection->modifyColumn(
+            $setup->getTable('straker_attribute_translation'),
+            'attribute_translation_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                'comment' => 'Attribute Translation Id',
+                'primary' => true,
+                'auto_increment' => true,
+                'unsigned' => false,
+                'nullable' => false,
+            ]
         );
     }
 }
