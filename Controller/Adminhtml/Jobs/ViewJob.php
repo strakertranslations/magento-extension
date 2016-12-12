@@ -24,12 +24,14 @@ class ViewJob extends Action
     protected $_resultPageFactory;
     protected $_configHelper;
     protected $_productLoader;
+    protected $productFactory;
 
     /**
      * ViewJob constructor.
      * @param Context $context
      * @param PageFactory $resultPageFactory
      * @param ConfigHelper $configHelper
+     * @param ProductFactory $productFactory
      */
     public function __construct(
         Context $context,

@@ -94,13 +94,13 @@
                     <label>Reset All</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ResetAccountButton</frontend_model>
                 </field>
-                <field id="backup_product_data_button" translate="label" type="button" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Backup Product Data</label>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\BackupProductData</frontend_model>
+                <field id="straker_backup_button" translate="label" type="button" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Backup</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\BackupButton</frontend_model>
                 </field>
-                <field id="restore_product_data_button" translate="label" type="button" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Restore Product Data</label>
-                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreProductData</frontend_model>
+                <field id="straker_restore_button" translate="label" type="button" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Restore</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\RestoreButton</frontend_model>
                 </field>
             </group>
         </section>

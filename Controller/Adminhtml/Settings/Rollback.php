@@ -10,6 +10,12 @@ use Magento\Backend\App\Action;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 
+/*
+ * This class preform Magento database rollback. Since restore functionality has been
+ * change to call portal server to restore, this class is not used but remains here in
+ * case requiring the functionality switch back.
+ */
+
 class Rollback extends Action
 {
     /**

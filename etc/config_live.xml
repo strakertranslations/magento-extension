@@ -6,6 +6,7 @@
                 <version>live</version>
                 <domain>
                     <live>https://app.strakertranslations.com</live>
+                    <sandbox>https://app-sandbox.strakertranslations.com</sandbox>
                 </domain>
                 <my_account_domain>
                     <live>https://myaccount.strakertranslations.com/</live>

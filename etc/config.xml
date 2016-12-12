@@ -23,6 +23,8 @@
                     <countries>v1/ta4ma/countries</countries>
                     <payment_page>o/?action=api.quote</payment_page>
                     <support>v1/ta4ma/support</support>
+                    <backup>v1/ta4ma/test/backup</backup>
+                    <restore>v1/ta4ma/test/restore</restore>
                 </api_url>
             </general>
         </straker>
