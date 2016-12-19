@@ -138,7 +138,7 @@ class Save extends Action
                 $jobData[] = $this->_jobHelper->createJob($data)->generateProductJob();
             }
 
-            if (strlen($data['categories'])>0 && strlen($data['categories'])>0) {
+            if (isset($data['categories']) && strlen($data['categories'])>0) {
                 $jobData[] = $this->_jobHelper->createJob($data)->generateCategoryJob();
             }
 

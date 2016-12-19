@@ -58,16 +58,17 @@ class JobDestination extends Element implements RendererInterface
     }
 
     public function isSandboxModeEnabled(){
-        if($this->_configHelper->isSandboxMode()){
-            try{
-                $this->_storeManager->getStore($this->_configHelper->getTestingStoreViewCode());
-                return true;
-            }catch (NoSuchEntityException $e){
-                return false;
-            }
-        }else{
-            return false;
-        }
+//        if($this->_configHelper->isSandboxMode()){
+//            try{
+//                $this->_storeManager->getStore($this->_configHelper->getTestingStoreViewCode());
+//                return true;
+//            }catch (NoSuchEntityException $e){
+//                return false;
+//            }
+//        }else{
+//            return false;
+//        }
+        return $this->_configHelper->isSandboxMode();
     }
 
     public function getSandboxLanguages(){

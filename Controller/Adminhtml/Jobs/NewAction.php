@@ -4,6 +4,7 @@ namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\ForwardFactory;
+use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 class NewAction extends \Magento\Backend\App\Action
@@ -13,21 +14,23 @@ class NewAction extends \Magento\Backend\App\Action
      */
     protected $resultForwardFactory;
     protected $_configHelper;
+    protected $_setupApi;
 //    public $resultRedirectFactory;
-
-
     /**
      * @param Context $context
      * @param ForwardFactory $resultForwardFactory
      * @param ConfigHelper $configHelper
+     * @param SetupInterface $setupApi
      */
     public function __construct(
         Context $context,
         ForwardFactory $resultForwardFactory,
-        ConfigHelper $configHelper
+        ConfigHelper $configHelper,
+        SetupInterface $setupApi
     ) {
         $this->resultForwardFactory = $resultForwardFactory;
         $this->_configHelper = $configHelper;
+        $this->_setupApi = $setupApi;
         parent::__construct($context);
     }
 
@@ -49,6 +52,10 @@ class NewAction extends \Magento\Backend\App\Action
     {
         if ($this->_configHelper->isSandboxMode()) {
             $this->messageManager->addNotice($this->_configHelper->getSandboxMessage());
+        }
+
+        if($this->_configHelper->isSandboxMode() && !$this->_setupApi->isTestingStoreViewExist()->getId()){
+            $this->messageManager->addError($this->_configHelper->getCreateTestStoreViewMessage());
         }
         /** @var \Magento\Backend\Model\View\Result\Forward $resultForward */
         $resultForward = $this->resultForwardFactory->create();
