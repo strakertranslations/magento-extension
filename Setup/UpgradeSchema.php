@@ -12,6 +12,7 @@ namespace Straker\EasyTranslationPlatform\Setup;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation;
 
@@ -29,6 +30,14 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
         if (version_compare($context->getVersion(), '1.0.3', '<')) {
             $this->addLabelColumn($setup);
+        }
+
+        if (version_compare($context->getVersion(), '1.0.4', '<')) {
+            $this->increaseInt($setup, $context);
+        }
+
+        if (version_compare($context->getVersion(), '1.0.5', '<')) {
+            $this->addIncrement($setup);
         }
 
         $setup->endSetup();
@@ -80,6 +89,71 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'length' => 255,
                 'nullable' => true,
                 'comment' => 'Attribute Code'
+            ]
+        );
+    }
+
+    private function increaseInt(SchemaSetupInterface $setup){
+
+        $connection = $setup->getConnection();
+
+        $foriegnKeysAttributeOptionName = $connection->getForeignKeys($setup->getTable('straker_attribute_option_translation'));
+
+        foreach($foriegnKeysAttributeOptionName as $data){
+
+            $connection->dropForeignKey($setup->getTable('straker_attribute_option_translation'),$data['FK_NAME']);
+
+
+        }
+
+        $connection->modifyColumn(
+            $setup->getTable('straker_attribute_option_translation'),
+            'attribute_translation_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+            ]
+        );
+
+        $connection->modifyColumn(
+            $setup->getTable('straker_attribute_translation'),
+            'attribute_translation_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+            ]
+        );
+
+        $connection->addForeignKey(
+            $setup->getFkName($setup->getTable('straker_attribute_option_translation'), 'attribute_translation_id', $setup->getTable('straker_attribute_translation'), 'attribute_translation_id'),
+            $setup->getTable('straker_attribute_option_translation'),
+            'attribute_translation_id',
+            $setup->getTable('straker_attribute_translation'),
+            'attribute_translation_id'
+        );
+
+        $connection->addForeignKey(
+            $setup->getFkName($setup->getTable('straker_attribute_option_translation'), 'option_id', 'eav_attribute_option', 'option_id'),
+            $setup->getTable('straker_attribute_option_translation'),
+            'option_id',
+            $setup->getTable('eav_attribute_option'),
+            'option_id'
+        );
+    }
+
+    private function addIncrement(SchemaSetupInterface $setup)
+    {
+
+        $connection = $setup->getConnection();
+
+        $connection->modifyColumn(
+            $setup->getTable('straker_attribute_translation'),
+            'attribute_translation_id',
+            [
+                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                'comment' => 'Attribute Translation Id',
+                'primary' => true,
+                'auto_increment' => true,
+                'unsigned' => false,
+                'nullable' => false,
             ]
         );
     }

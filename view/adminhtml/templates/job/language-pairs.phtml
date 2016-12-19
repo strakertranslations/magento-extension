@@ -168,6 +168,13 @@
             var tab = $('#job_tabs ul.tabs.admin__page-nav-items.ui-tabs-nav').children()[tabNumber];
             $(tab).find('a').show().click();
         }
+
+        $('#save').on("click", function (e) {
+            $('body').trigger('processStart');
+            $(this).attr('disabled',true);
+        });
+
+
     });
 
 </script>

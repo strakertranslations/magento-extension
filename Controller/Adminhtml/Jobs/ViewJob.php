@@ -63,21 +63,6 @@ class ViewJob extends Action
         $resultPage->setActiveMenu('Straker_EasyTranslationPlatform::managejobs');
         $resultPage->getConfig()->getTitle()->prepend(__('Straker Translations'));
 
-        if (array_key_exists('target_store_id',$this->_request->getParams())){
-
-            $productUrl = $this->productFactory->create()->setStoreId($this->_request->getParam('target_store_id'))->load($this->_request->getParam('entity_id'))->getProductUrl();
-
-            //Todo:: This only works if there is admin in the product URL - need to change the way the url is retrieved.
-            //Todo:: Need to add programatic store switcher.
-            $productUrl = str_replace('admin/','',$productUrl);
-
-            $redirect = $this->resultRedirectFactory->create();
-
-            $redirect->setPath($productUrl);
-
-            return $redirect;
-        }
-
         return $resultPage;
     }
 }
