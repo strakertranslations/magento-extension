@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Option\CollectionFactory as OptionCollection;
+use Magento\Cms\Model\ResourceModel\Block\Collection;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Cms\Model\PageFactory as PageFactory;
 use Magento\Cms\Model\BlockFactory as BlockFactory;
@@ -25,6 +26,7 @@ use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 
 use Straker\EasyTranslationPlatform\Model\AttributeTranslation;
+use Straker\EasyTranslationPlatform\Model\BlockCollection;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation as AttributeTranslationResourceModel;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
@@ -72,6 +74,7 @@ class ImportHelper extends AbstractHelper
     protected $_categoryFactory;
     protected $_pageData;
     protected $_blockData;
+    protected $_block;
 
     public function __construct(
 
@@ -96,7 +99,8 @@ class ImportHelper extends AbstractHelper
         BlockFactory $blockFactory,
         StoreManagerInterface $storeManager,
         UrlFinderInterface $urlFinder,
-        TimezoneInterface $timezone
+        TimezoneInterface $timezone,
+        BlockCollection $block
     )
     {
         $this->_logger = $logger;
@@ -120,6 +124,7 @@ class ImportHelper extends AbstractHelper
         $this->_storeManager = $storeManager;
         $this->_urlFinder = $urlFinder;
         $this->_timezoneInterface = $timezone;
+        $this->_blockCollection = $block;
 
         parent::__construct($context);
     }
@@ -567,13 +572,22 @@ class ImportHelper extends AbstractHelper
 
             $original_page = $this->_pageFactory->create()->load($key);
 
-            if (in_array($this->_jobModel->getTargetStoreId(), $original_page->getStoreId())) {
+            $updatePage = $this->_urlFinder->findOneByData(
+                [
+                    'request_path'=>$original_page->getIdentifier(),
+                    'store_id'=>$this->_jobModel->getTargetStoreId()
+                ]
+            );
+
+            if ($updatePage){
 
                 $originalData = $original_page->getData();
 
                 $dbData = array_merge($originalData, $data);
 
-                $original_page->setData($dbData)->save();
+                $updateData = $this->_pageFactory->create()->load($updatePage->getEntityId());
+
+                $updateData->setData($dbData)->save();
 
             } else {
 
@@ -587,9 +601,9 @@ class ImportHelper extends AbstractHelper
 
                 $dbData = array_merge($originalData, $data);
 
-                $newBlock = $this->_pageFactory->create();
+                $newPage = $this->_pageFactory->create();
 
-                $newBlock->setData($dbData)->save();
+                $newPage->setData($dbData)->save();
             }
 
         }
@@ -633,20 +647,24 @@ class ImportHelper extends AbstractHelper
 
         }
 
+
         foreach ($saveData as $key => $data) {
 
             $original_block = $this->_blockFactory->create()->load($key);
 
-            if (in_array($this->_jobModel->getTargetStoreId(), $original_block->getStores())) {
+            $existingBlock = $this->_blockCollection->addFieldToFilter('store_id',$this->_jobModel->getTargetStoreId())->addFieldToFilter('identifier', $original_block->getIdentifier());
 
-                $originalData = $original_block->getData();
+            if (count($existingBlock->getItems()) === 1) {
 
-                $dbData = array_merge($originalData, $data);
+                $items = $existingBlock->getItems();
 
-                $original_block->setData($dbData)->save();
+                $oldBlock = reset($items);
+
+                $data = array_merge($data,$oldBlock->getData());
+
+                $oldBlock->setData($data)->save();
 
             } else {
-
 
                 $originalData = $original_block->getData();
 
