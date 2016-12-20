@@ -26,9 +26,9 @@
                                     <?php $showGroup = true; ?>
                                     <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
                                 <?php endif; ?>
-                                <?php if(!$block->isSandboxModeEnabled()
-                                            || ($block->isSandboxModeEnabled()
-                                                && strcasecmp($store->getCode(), $block->getTestingStoreCode()) == 0) ): ?>
+                                <?php if((!$block->isSandboxModeEnabled() && strcasecmp($store->getCode(), $block->getTestingStoreCode()) != 0)
+                                            || ($block->isSandboxModeEnabled() && strcasecmp($store->getCode(), $block->getTestingStoreCode()) == 0) ): ?>
+
                                     <option
                                         value="<?php echo $this->escapeHtml($store->getId()) ?>">
                                         &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
