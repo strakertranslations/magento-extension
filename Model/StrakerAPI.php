@@ -202,17 +202,17 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     public function getQuote($data)
     {
-        return $this->_call($this->_getQuoteUrl() . '?' . $this->_buildQuery($data));
+        return $this->_call($this->_getQuoteUrl() . 'get' . $this->_buildQuery($data));
     }
 
     public function getPayment($data)
     {
-        return $this->_call($this->_getPaymentUrl() . '?' . $this->_buildQuery($data));
+        return $this->_call($this->_getPaymentUrl() . 'get' . $this->_buildQuery($data));
     }
 
     public function getTranslation($data = [])
     {
-        return $this->_call($this->_getTranslateUrl() . 'post' . $this->_buildQuery($data));
+        return $this->_call($this->_getTranslateUrl() . 'get' . $this->_buildQuery($data));
     }
 
     public function getTranslatedFile($downloadUrl)
