@@ -172,7 +172,6 @@ class Index extends Action
      */
     protected function _compareJobs($apiJob, $localJob)
     {
-
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
             return $localJob->updateStatus($apiJob);
         }
