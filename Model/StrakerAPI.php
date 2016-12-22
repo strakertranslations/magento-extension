@@ -56,10 +56,8 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         //        $this->_headers[] = 'X-Auth-App: '. Mage::getStoreConfig('straker/general/application_key', $this->_storeId);
     }
 
-    protected function _call($url, $method = 'get', array $request = [], $raw = false, $timeout = 60 )
+    protected function _call($url, $method = 'get', array $request = [], $timeout = 60 )
     {
-        $response = [];
-        $retry = 0;
         $httpClient = $this->_httpClient->create();
         switch($method){
             case 'post':
@@ -90,23 +88,20 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
                 $body = $response->getBody();
 
-                $debugData['response'] = $body;
-
                 $this->_logger->addDebug('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
 
-                if(strpos($contentType, 'json') !== false){
-
-                    return json_decode($body);
+                if(strpos($contentType,'application/json') !== false ){
+                    $returnBody = json_decode($body);
+                    return $returnBody;
 
                 }else{
 
                     return $body;
                 }
+            }else{
+                $this->_logger->addError('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
+                return $response;
             }
-
-            $this->_logger->addError('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
-
-            return $response;
 
         }catch(Exception $e){
 
@@ -226,17 +221,17 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     public function getPayment($data)
     {
-        return $this->_call($this->_getPaymentUrl() . '?' . $this->_buildQuery($data));
+        return $this->_call($this->_getPaymentUrl() . '?'.$this->_buildQuery($data));
     }
 
     public function getTranslation($data = [])
     {
-        return $this->_call($this->_getTranslateUrl() . '?' . $this->_buildQuery($data));
+        return $this->_call($this->_getTranslateUrl() . '?'. $this->_buildQuery($data));
     }
 
     public function getTranslatedFile($downloadUrl)
     {
-        return $this->_call($downloadUrl, 'get', [], true);
+        return $this->_call($downloadUrl);
     }
 
     public function getCountries()
@@ -300,11 +295,25 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     public function dbBackup()
     {
-        return $this->_call($this->_configHelper->getDbBackupUrl(), 'post', ['app_title' => $this->_configHelper->getDbName(), 'app_name' => $this->_configHelper->getDbName()]);
+        return $this->_call(
+            $this->_configHelper->getDbBackupUrl(),
+            'post',
+            [
+                'app_title' => $this->_configHelper->getDbName(),
+                'app_name' => $this->_configHelper->getDbName()
+            ]
+        );
     }
 
     public function dbRestore()
     {
-        return $this->_call($this->_configHelper->getDbRestoreUrl(), 'post', ['app_title' => $this->_configHelper->getDbName(), 'app_name' => $this->_configHelper->getDbName()], false, 300);
+        return $this->_call(
+            $this->_configHelper->getDbRestoreUrl(),
+            'post',
+            [
+                'app_title' => $this->_configHelper->getDbName(),
+                'app_name' => $this->_configHelper->getDbName()
+            ]
+        );
     }
 }
