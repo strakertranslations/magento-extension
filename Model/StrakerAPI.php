@@ -77,23 +77,44 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $httpClient->setConfig(['timeout' => $timeout, 'verifypeer' => 0]);
         $httpClient->setHeaders($this->getHeaders());
         $httpClient->setMethod($method);
+
+        $this->_logger->addDebug('strakerAPI-http-request-start '.__FILE__.__LINE__,[$request,$httpClient->getUri(),$url,$method,$timeout]);
+
         try{
+
             $response = $httpClient->request();
+
             if(!$response->isError()){
+
                 $contentType = $response->getHeader('Content-Type');
+
                 $body = $response->getBody();
+
                 $debugData['response'] = $body;
+
+                $this->_logger->addDebug('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
+
                 if(strpos($contentType, 'json') !== false){
+
                     return json_decode($body);
+
                 }else{
+
                     return $body;
                 }
             }
+
+            $this->_logger->addError('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
+
+            return $response;
+
         }catch(Exception $e){
-            $debugData['http_error'] = ['error' => $e->getMessage(), 'code' => $e->getCode()];
-            //throw $e;
+
+            $this->_logger->addError('strakerAPI-http-request-error '.__FILE__.__LINE__,[$e,$httpClient->getUri(),$url,$method,$timeout]);
+
+            $this->_logger->_callStrakerBuglog('strakerAPI-Magento '.$e->getMessage(),$e->__toString());
+
         }
-        return $response;
     }
 
     protected function _buildQuery($request)
