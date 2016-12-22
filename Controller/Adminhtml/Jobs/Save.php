@@ -151,16 +151,28 @@ class Save extends Action
                 $this->_summitJob($jobData);
 
                 return $resultRedirect->setPath('*/*/');
+
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
+
                 $this->messageManager->addError($e->getMessage());
 
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
+
+                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
+
             } catch (\RuntimeException $e) {
+
                 $this->messageManager->addError($e->getMessage());
 
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
+
+                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
+
             } catch (\Exception $e) {
+
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
+
+                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
 
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             }
@@ -194,7 +206,11 @@ class Save extends Action
                     $data['straker_target_language']
                 );
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
+
+
                 $this->messageManager->addError($e->getMessage());
+
+                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
 
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             }
@@ -222,9 +238,10 @@ class Save extends Action
         $this->_jobRequest['source_file'] = $sourcefile;
         $this->_jobRequest['token']       = $strakerJobData->getId();
 
-        $response = $this->_api->callTranslate($this->_jobRequest);
-
         try {
+
+            $response = $this->_api->callTranslate($this->_jobRequest);
+
             foreach ($job_object as $job) {
                 $job->addData(['job_key'=>$response->job_key]);
                 $job->setData('sl', $this->_api->getLanguageName($job->getData('sl')));
@@ -232,11 +249,18 @@ class Save extends Action
                 $job->setData('source_file', $sourcefile);
                 $job->save();
             }
+
             if(!$this->_configHelper->isSandboxMode()){
+
                 $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
             }
+
         } catch (\Exception $e) {
+
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message, [$response]);
+
+            $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
+
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
     }
@@ -244,43 +268,55 @@ class Save extends Action
     protected function mergeJobData($job_object)
     {
 
-        $jobMergeData = [];
+        try{
 
-        $id = '';
+            $jobMergeData = [];
 
-        foreach ($job_object as $key => $data) {
-            $jobMergeData[$key]['id'] =  $data->getData('job_id');
-            $jobMergeData[$key]['file_name'] =  $data->getData('source_file');
-            $id.=  $data->getData('job_id').'&';
-        }
+            $id = '';
 
-
-        $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
-        
-        foreach ($jobMergeData as $file) {
-
-            $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
-
-            if(key_exists('_value', $fileData['root']['data'])){
-
-                $singleData = $fileData['root']['data'];
-                $fileData['root']['data'] = [];
-                $fileData['root']['data'][] = $singleData;
-
+            foreach ($job_object as $key => $data) {
+                $jobMergeData[$key]['id'] =  $data->getData('job_id');
+                $jobMergeData[$key]['file_name'] =  $data->getData('source_file');
+                $id.=  $data->getData('job_id').'&';
             }
 
-            foreach ($fileData['root']['data'] as $data) {
 
-                $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
+            $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
 
-                $this->_xmlHelper->appendDataToRoot($mergeData);
+            foreach ($jobMergeData as $file) {
 
+                $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
+
+                if(key_exists('_value', $fileData['root']['data'])){
+
+                    $singleData = $fileData['root']['data'];
+                    $fileData['root']['data'] = [];
+                    $fileData['root']['data'][] = $singleData;
+
+                }
+
+                foreach ($fileData['root']['data'] as $data) {
+
+                    $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
+
+                    $this->_xmlHelper->appendDataToRoot($mergeData);
+
+                }
             }
+
+            $this->_xmlHelper->saveXmlFile();
+
+            return $this->_xmlHelper->getXmlFileName();
+
+
+        }catch (\Exception $e){
+
+            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
+
+            $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
+
+            return $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
-
-        $this->_xmlHelper->saveXmlFile();
-
-        return $this->_xmlHelper->getXmlFileName();
     }
 
     protected function checkEmptyJob($data)

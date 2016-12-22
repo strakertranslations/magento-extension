@@ -12,7 +12,6 @@ class Form extends Generic
 
     protected $_strakerAPIInterface;
     protected $_Registry;
-    protected $session;
 
     public function __construct(
         Context $context,
@@ -53,7 +52,7 @@ class Form extends Generic
 
         $form->setUseContainer(true);
 
-        $form->setValues($this->session->getData('form_data'));
+        $form->setValues($this->_session->getData('form_data'));
 
         $this->setForm($form);
 
