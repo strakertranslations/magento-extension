@@ -78,15 +78,15 @@ class RefreshJob extends \Magento\Backend\App\Action
                     }
                 } else {
                     $result['status'] = false;
-                    $result['message'] =  __('No job has been found or failed to connect server.');
-                    $this->messageManager->addErrorMessage($result['message']);
+                    $result['message'] =  __('Failed to refresh job - please check log for details');
+                    $this->messageManager->addWarning($result['message']);
                     $this->_logger->addError($result['message']);
                 }
             } catch (\Exception $e) {
                 $result['status'] = false;
-                $result['message'] =  __('Failed to connect server.');
-                $this->messageManager->addErrorMessage($result['message']);
-                $this->_logger->addError($result['message']);
+                $result['message'] =  __('Failed to refresh job - please check log for details');
+                $this->messageManager->addWarning($result['message']);
+                $this->_logger->addError($result['message'],['file'=>__FILE__,'line'=>__LINE__]);
             }
             $redirect = $this->resultRedirectFactory->create()->setPath('EasyTranslationPlatform/jobs/Index');
             return $redirect;
@@ -111,13 +111,13 @@ class RefreshJob extends \Magento\Backend\App\Action
                     }
                 } else {
                     $result['status'] = false;
-                    $result['message'] = __('There are problems in the Internet Connection');
-                    $this->_logger->addError($result['message'], ['job_id'=>$jobId]);
+                    $result['message'] = __('Failed to refresh job - please check log for details');
+                    $this->_logger->addError($result['message'], ['job_id'=>$jobId,'file'=>__FILE__,'line'=>__LINE__]);
                 }
             } catch (\Exception $e) {
                 $result['status'] = false;
-                $result['message'] =  __('Failed to connect server.');
-                $this->_logger->addError($result['message']);
+                $result['message'] =  __('Failed to refresh job - please check log for details');
+                $this->_logger->addError($result['message'],['file'=>__FILE__,'line'=>__LINE__]);
             }
 
             return $this->_resultJsonFactory->create()->setData($result);

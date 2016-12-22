@@ -139,42 +139,58 @@ class ImportHelper extends AbstractHelper
 
     public function parseTranslatedFile()
     {
-        $filePath = $this->configHelper->getTranslatedXMLFilePath() . DIRECTORY_SEPARATOR . $this->_jobModel->getData('translated_file');
 
-        $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
+        try{
+            $filePath = $this->configHelper->getTranslatedXMLFilePath() . DIRECTORY_SEPARATOR . $this->_jobModel->getData('translated_file');
 
-        $dataArray = $parsedData['root']['data'];
-        if(key_exists('_value', $dataArray)){
-            $this->_parsedFileData[0] = $dataArray;
-        }else{
-            $this->_parsedFileData = $parsedData['root']['data'];
+            $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
+
+            $dataArray = $parsedData['root']['data'];
+
+            if(key_exists('_value', $dataArray)){
+
+                $this->_parsedFileData[0] = $dataArray;
+
+            }else{
+
+                $this->_parsedFileData = $parsedData['root']['data'];
+            }
+
+            $this->_categoryData = array_filter($this->_parsedFileData, function ($v) {
+
+                return preg_match('/category/', $v['_attribute']['content_context']);
+
+            });
+
+            $this->_productData = array_filter($this->_parsedFileData, function ($v) {
+
+                return preg_match('/product/', $v['_attribute']['content_context']);
+
+            });
+
+            $this->_pageData = array_filter($this->_parsedFileData, function ($v) {
+
+                return preg_match('/page/', $v['_attribute']['content_context']);
+
+            });
+
+            $this->_blockData = array_filter($this->_parsedFileData, function ($v) {
+
+                return preg_match('/block/', $v['_attribute']['content_context']);
+
+            });
+
+            return $this;
+
+        }catch (\Exception $e){
+
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
+
+
         }
 
-        $this->_categoryData = array_filter($this->_parsedFileData, function ($v) {
-
-            return preg_match('/category/', $v['_attribute']['content_context']);
-
-        });
-
-        $this->_productData = array_filter($this->_parsedFileData, function ($v) {
-
-            return preg_match('/product/', $v['_attribute']['content_context']);
-
-        });
-
-        $this->_pageData = array_filter($this->_parsedFileData, function ($v) {
-
-            return preg_match('/page/', $v['_attribute']['content_context']);
-
-        });
-
-        $this->_blockData = array_filter($this->_parsedFileData, function ($v) {
-
-            return preg_match('/block/', $v['_attribute']['content_context']);
-
-        });
-
-        return $this;
     }
 
     public function saveData()
@@ -254,7 +270,6 @@ class ImportHelper extends AbstractHelper
 
                     $att_opt_model->addData(['is_imported' => 1, 'imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
-
                     $att_opt_model->save();
 
                     if (!in_array($att_opt_model->getData('option_id'), $this->_saveOptionIds)) {
@@ -314,7 +329,16 @@ class ImportHelper extends AbstractHelper
 
                 $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
-                $updateRow->save();
+                try {
+
+                    $updateRow->save();
+
+                } catch (\Exception $e) {
+
+                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                }
+
             }
         }
 
@@ -338,6 +362,7 @@ class ImportHelper extends AbstractHelper
         } catch (\Exception $e) {
 
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
         }
 
 
@@ -364,7 +389,16 @@ class ImportHelper extends AbstractHelper
 
             $new_labels[$this->_jobModel->getTargetStoreId()] = $data['translated_value'];
 
-            $att->setStoreLabels($new_labels)->save();
+            try {
+
+                $att->setStoreLabels($new_labels)->save();
+
+            } catch (\Exception $e) {
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            }
+
 
         }
 
@@ -374,8 +408,18 @@ class ImportHelper extends AbstractHelper
 
             $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
-            $updateRow->save();
+            try {
+
+                $updateRow->save();
+
+            } catch (\Exception $e) {
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            }
         }
+
+        return $this;
     }
 
     protected function publishTranslatedOptionValues($job_id)
@@ -402,14 +446,33 @@ class ImportHelper extends AbstractHelper
                 $select_query = sprintf($this->_selectQuery, $table, $data['option_id'], $this->_jobModel->getTargetStoreId());
 
                 if ($connection->fetchOne($select_query)) {
+
                     $update_query = sprintf($this->_updateQuery, $table, $data['translated_value'], $data['option_id'], $this->_jobModel->getTargetStoreId());
 
-                    $connection->query($update_query);
+                    try{
+
+                        $connection->query($update_query);
+
+                    }catch (\Exception $e){
+
+                        $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                    }
+
 
                 } else {
 
-                    $connection->insertArray($table, ['option_id', 'store_id', $table . '.value'],
-                        [[$data['option_id'], $this->_jobModel->getTargetStoreId(), $data['translated_value']]]);
+                    try{
+
+                        $connection->insertArray($table, ['option_id', 'store_id', $table . '.value'],
+                            [[$data['option_id'], $this->_jobModel->getTargetStoreId(), $data['translated_value']]]);
+
+                    }catch (\Exception $e){
+
+                        $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                    }
+
                 };
 
             }
@@ -420,11 +483,22 @@ class ImportHelper extends AbstractHelper
 
                 $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
-                $updateRow->save();
+                try{
+
+                    $updateRow->save();
+
+                }catch (\Exception $e){
+
+                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                }
+
 
             }
 
         }
+
+        return $this;
 
     }
 
@@ -507,8 +581,18 @@ class ImportHelper extends AbstractHelper
         foreach ($this->_categoryData as $data) {
 
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
+
             $att_trans_model->addData(['is_imported' => 1, 'translated_value' => $data['_value']['value']]);
-            $att_trans_model->save();
+
+            try{
+
+                $att_trans_model->save();
+
+            }catch (\Exception $e){
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            }
 
         }
 
@@ -526,8 +610,20 @@ class ImportHelper extends AbstractHelper
         foreach ($translatedCategories['items'] as $data) {
 
             $attribute_code = $this->_attributeRepository->get(\Magento\Catalog\Model\Category::ENTITY, $data['attribute_id'])->setStoreId($this->_jobModel->getTargetStoreId())->getAttributeCode();
+
             $category = $this->_categoryFactory->create()->load($data['entity_id'])->setStoreId($this->_jobModel->getTargetStoreId());
-            $category->setData($attribute_code, $data['translated_value'])->getResource()->saveAttribute($category, $attribute_code);
+
+            try{
+
+                $category->setData($attribute_code, $data['translated_value'])->getResource()->saveAttribute($category, $attribute_code);
+
+
+            }catch (\Exception $e){
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+
+            }
         }
 
         return $this;
@@ -536,13 +632,28 @@ class ImportHelper extends AbstractHelper
     public function saveTranslatedPageData()
     {
         foreach ($this->_pageData as $data) {
+
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
+
             $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
+
             $att_trans_model->addData(['is_imported' => 1]);
+
             $att_trans_model->addData(['imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
-            $att_trans_model->save();
+
+            try{
+
+                $att_trans_model->save();
+
+            }catch (\Exception $e){
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+
+            }
 
         }
+
         return $this;
     }
 
@@ -564,7 +675,16 @@ class ImportHelper extends AbstractHelper
 
             $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
-            $updateRow->save();
+            try{
+
+                $updateRow->save();
+
+            }catch (\Exception $e){
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+
+            }
 
         }
 
@@ -587,7 +707,16 @@ class ImportHelper extends AbstractHelper
 
                 $updateData = $this->_pageFactory->create()->load($updatePage->getEntityId());
 
-                $updateData->setData($dbData)->save();
+                try{
+
+                    $updateData->setData($dbData)->save();
+
+                }catch (\Exception $e){
+
+                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+
+                }
 
             } else {
 
@@ -603,7 +732,16 @@ class ImportHelper extends AbstractHelper
 
                 $newPage = $this->_pageFactory->create();
 
-                $newPage->setData($dbData)->save();
+                try{
+
+                    $newPage->setData($dbData)->save();
+
+                }catch (\Exception $e){
+
+                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+
+                }
             }
 
         }
@@ -615,11 +753,25 @@ class ImportHelper extends AbstractHelper
     public function saveTranslatedBlockData()
     {
         foreach ($this->_blockData as $data) {
+
             $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
+
             $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
+
             $att_trans_model->addData(['is_imported' => 1]);
+
             $att_trans_model->addData(['imported_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
-            $att_trans_model->save();
+
+            try{
+
+                $att_trans_model->save();
+
+            }catch (\Exception $e){
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            }
+
 
         }
         return $this;
@@ -643,7 +795,16 @@ class ImportHelper extends AbstractHelper
 
             $updateRow->addData(['is_published' => 1, 'published_at' => $this->_timezoneInterface->date()->format('y-m-d H:i:s')]);
 
-            $updateRow->save();
+            try{
+
+                $updateRow->save();
+
+            }catch (\Exception $e){
+
+                $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+
+            }
 
         }
 
@@ -662,7 +823,16 @@ class ImportHelper extends AbstractHelper
 
                 $data = array_merge($data,$oldBlock->getData());
 
-                $oldBlock->setData($data)->save();
+                try{
+
+                    $oldBlock->setData($data)->save();
+
+                }catch (\Exception $e){
+
+                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                }
+
 
             } else {
 
@@ -680,7 +850,15 @@ class ImportHelper extends AbstractHelper
 
                 $newBlock = $this->_blockFactory->create();
 
-                $newBlock->setData($dbData)->save();
+                try{
+
+                    $newBlock->setData($dbData)->save();
+
+                }catch (\Exception $e){
+
+                    $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                }
             }
 
         }
