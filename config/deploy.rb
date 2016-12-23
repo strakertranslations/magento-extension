@@ -54,13 +54,13 @@ namespace :deploy do
   after "deploy:publishing", "magento2_git"
 
   desc "Magento2 setup"
-  task :magento2_ownership do
+  task :magento2_dev_ownership do
     on roles :dev do
       execute "cd /mnt/data/apps/php/mg2-dev1/bin; php magento setup:upgrade"
       execute "cd /mnt/data/apps/php/mg2-dev2/bin; php magento setup:upgrade"
     end
   end
-  after "deploy:publishing", "magento2_ownership"
+  after "deploy:publishing", "magento2_dev_ownership"
 
   desc "Magento2 ownership"
   task :magento2_setup do
@@ -81,14 +81,14 @@ namespace :deploy do
   end
   after "deploy:publishing", "magento2_git"
 
-  desc "Magento2 setup"
-  task :magento2_ownership do
-    on roles :uat do
-      execute "cd /mnt/data/apps/php/mg2-uat1/bin; php magento setup:upgrade"
-      execute "cd /mnt/data/apps/php/mg2-uat2/bin; php magento setup:upgrade"
-    end
-  end
-  after "deploy:publishing", "magento2_ownership"
+  # desc "Magento2 setup"
+  # task :magento2_ownership do
+  #   on roles :uat do
+  #     execute "cd /mnt/data/apps/php/mg2-uat1/bin; php magento setup:upgrade"
+  #     execute "cd /mnt/data/apps/php/mg2-uat2/bin; php magento setup:upgrade"
+  #   end
+  # end
+  # after "deploy:publishing", "magento2_ownership"
 
   desc "Magento2 ownership"
   task :magento2_setup do
@@ -109,14 +109,14 @@ namespace :deploy do
   end
   after "deploy:publishing", "magento2_git"
 
-  desc "Magento2 setup"
-  task :magento2_ownership do
-    on roles :demo do
-      execute "cd /mnt/data/apps/php/mg2-demo1/bin; php magento setup:upgrade"
-      execute "cd /mnt/data/apps/php/mg2-demo2/bin; php magento setup:upgrade"
-    end
-  end
-  after "deploy:publishing", "magento2_ownership"
+  # desc "Magento2 setup"
+  # task :magento2_ownership do
+  #   on roles :demo do
+  #     execute "cd /mnt/data/apps/php/mg2-demo1/bin; php magento setup:upgrade"
+  #     execute "cd /mnt/data/apps/php/mg2-demo2/bin; php magento setup:upgrade"
+  #   end
+  # end
+  # after "deploy:publishing", "magento2_ownership"
 
   desc "Magento2 ownership"
   task :magento2_setup do
