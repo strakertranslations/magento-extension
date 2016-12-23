@@ -88,7 +88,7 @@ namespace :deploy do
       execute "cd /mnt/data/apps/php/mg2-uat2/bin; php magento setup:upgrade"
     end
   end
-  after "deploy:publishing", "magento2_ownership"
+  # after "deploy:publishing", "magento2_ownership"
 
   desc "Magento2 ownership"
   task :magento2_setup do
@@ -116,7 +116,7 @@ namespace :deploy do
       execute "cd /mnt/data/apps/php/mg2-demo2/bin; php magento setup:upgrade"
     end
   end
-  after "deploy:publishing", "magento2_ownership"
+  # after "deploy:publishing", "magento2_ownership"
 
   desc "Magento2 ownership"
   task :magento2_setup do
