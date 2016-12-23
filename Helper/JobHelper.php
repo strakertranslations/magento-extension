@@ -7,6 +7,8 @@ use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
 
+use Magento\Framework\Message\ManagerInterface;
+
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
@@ -33,6 +35,7 @@ class JobHelper extends AbstractHelper
     protected $_pageHelper;
     protected $_blockHelper;
     protected $_jobStatusCollection;
+    protected $_messageManager;
 
     public function __construct(
         Context $context,
@@ -43,7 +46,8 @@ class JobHelper extends AbstractHelper
         ConfigHelper $configHelper,
         BlockHelper $blockHelper,
         JobTypeCollection $jobTypeCollectionFactory,
-        JobStatusCollection $jobStatusFactory
+        JobStatusCollection $jobStatusFactory,
+        ManagerInterface $messageManager
     ) {
 
         $this->_jobFactory = $jobFactory;
@@ -54,6 +58,7 @@ class JobHelper extends AbstractHelper
         $this->_blockHelper = $blockHelper;
         $this->_jobTypeCollection = $jobTypeCollectionFactory;
         $this->_jobStatusCollection = $jobStatusFactory;
+        $this->_messageManager = $messageManager;
         parent::__construct($context);
     }
 
@@ -63,43 +68,66 @@ class JobHelper extends AbstractHelper
      */
     public function createJob($data)
     {
-        $this->jobData = $data;
 
-        $this->jobModel = $this->_jobFactory->create();
+        try{
 
-        $jobData = [
-            'job_status_id'=> JobStatus::JOB_STATUS_INIT,
-            'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
-            'target_store_id'=>$this->jobData['magento_destination_store'],
-            'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
-            'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
-        ];
+            $this->jobData = $data;
 
-        if ($this->_configHelper->isSandboxMode()) {
-            $jobData['is_test_job'] = true;
+            $this->jobModel = $this->_jobFactory->create();
+
+            $jobData = [
+                'job_status_id'=> JobStatus::JOB_STATUS_INIT,
+                'source_store_id'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_store'],
+                'target_store_id'=>$this->jobData['magento_destination_store'],
+                'sl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/source_language'],
+                'tl'=>$this->_configHelper->getStoreInfo($this->jobData['magento_destination_store'])['straker/general/destination_language']
+            ];
+
+            if ($this->_configHelper->isSandboxMode()) {
+                $jobData['is_test_job'] = true;
+            }
+
+            $this->jobModel->setData($jobData);
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+           $this->_messageManager->addError($e->getMessage());
         }
 
-        $this->jobModel->setData($jobData);
-
         return $this;
+
     }
 
     public function generateProductJob()
     {
 
-        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PRODUCT]);
+        try{
 
-        $this->jobModel->save();
+            $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PRODUCT]);
 
-        $jobFile = $this->_productHelper->getProducts($this->jobData['products'], $this->jobModel->getData('source_store_id'))
-            ->getSelectedProductAttributes()
-            ->saveProductData($this->jobModel->getId())
-            ->generateProductXML($this->jobModel);
+            $this->jobModel->save();
 
-        $this->jobModel->addData(['source_file'=>$jobFile]);
+            $jobFile = $this->_productHelper->getProducts($this->jobData['products'], $this->jobModel->getData('source_store_id'))
+                ->getSelectedProductAttributes()
+                ->saveProductData($this->jobModel->getId())
+                ->generateProductXML($this->jobModel);
 
-        $this->jobModel->save();
+            $this->jobModel->addData(['source_file'=>$jobFile]);
+
+            $this->jobModel->save();
+
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            $this->_messageManager->addError($e->getMessage());
+        }
+
         return $this->jobModel;
+
     }
 
     /**
@@ -109,53 +137,85 @@ class JobHelper extends AbstractHelper
     public function generateCategoryJob()
     {
 
-        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_CATEGORY]);
+        try{
 
-        $this->jobModel->save();
+            $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_CATEGORY]);
 
-        $jobFile = $this->_categoryHelper->getCategories($this->jobData['categories'], $this->jobModel->getData('source_store_id'))
-            ->getSelectedCategoryAttributes()
-            ->saveCategoryData($this->jobModel->getId())
-            ->generateCategoryXML($this->jobModel);
+            $this->jobModel->save();
 
-        $this->jobModel->addData(['source_file'=>$jobFile]);
+            $jobFile = $this->_categoryHelper->getCategories($this->jobData['categories'], $this->jobModel->getData('source_store_id'))
+                ->getSelectedCategoryAttributes()
+                ->saveCategoryData($this->jobModel->getId())
+                ->generateCategoryXML($this->jobModel);
 
-        $this->jobModel->save();
+            $this->jobModel->addData(['source_file'=>$jobFile]);
+
+            $this->jobModel->save();
+
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            $this->_messageManager->addError($e->getMessage());
+        }
+
+
         return $this->jobModel;
     }
 
     public function generatePageJob()
     {
-        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PAGE]);
 
-        $this->jobModel->save();
+        try{
 
-        $jobFile = $this->_pageHelper->getPages($this->jobData['pages'], $this->jobModel->getData('source_store_id'))
-            ->getSelectedPageAttributes()
-            ->savePageData($this->jobModel->getId())
-            ->generatePageXML($this->jobModel);
+            $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_PAGE]);
 
-        $this->jobModel->addData(['source_file'=>$jobFile]);
+            $this->jobModel->save();
 
-        $this->jobModel->save();
+            $jobFile = $this->_pageHelper->getPages($this->jobData['pages'], $this->jobModel->getData('source_store_id'))
+                ->getSelectedPageAttributes()
+                ->savePageData($this->jobModel->getId())
+                ->generatePageXML($this->jobModel);
+
+            $this->jobModel->addData(['source_file'=>$jobFile]);
+
+            $this->jobModel->save();
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            $this->_messageManager->addError($e->getMessage());
+        }
 
         return $this->jobModel;
     }
 
     public function generateBlockJob()
     {
-        $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_BLOCK]);
 
-        $this->jobModel->save();
+        try{
 
-        $jobFile = $this->_blockHelper->getBlocks($this->jobData['blocks'], $this->jobModel->getData('source_store_id'))
-            ->getSelectedBlockAttributes()
-            ->saveBlockData($this->jobModel->getId())
-            ->generateBlockXML($this->jobModel);
+            $this->jobModel->addData(['job_type_id'=> JobType::JOB_TYPE_BLOCK]);
 
-        $this->jobModel->addData(['source_file'=>$jobFile]);
+            $this->jobModel->save();
 
-        $this->jobModel->save();
+            $jobFile = $this->_blockHelper->getBlocks($this->jobData['blocks'], $this->jobModel->getData('source_store_id'))
+                ->getSelectedBlockAttributes()
+                ->saveBlockData($this->jobModel->getId())
+                ->generateBlockXML($this->jobModel);
+
+            $this->jobModel->addData(['source_file'=>$jobFile]);
+
+            $this->jobModel->save();
+
+        }catch (\Exception $e)
+        {
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            $this->_messageManager->addError($e->getMessage());
+        }
 
         return $this->jobModel;
     }

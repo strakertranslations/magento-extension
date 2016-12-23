@@ -1,6 +1,7 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model;
 
+use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
@@ -11,6 +12,7 @@ use Straker\EasyTranslationPlatform\Logger\Logger;
 use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Config\Model\ResourceModel\Config;
+use Magento\Framework\Message\ManagerInterface;
 
 class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 {
@@ -34,6 +36,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     protected $_configModel;
     protected $_httpClient;
     protected $_storeManager;
+    protected $_messageManager;
 
     public function __construct(
         Context $context,
@@ -42,7 +45,8 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         Config $configModel,
         ZendClientFactory $httpClient,
         Logger $logger,
-        StoreManagerInterface $storeManagerInterface
+        StoreManagerInterface $storeManagerInterface,
+        ManagerInterface $messageInterface
     ){
         parent::__construct($context, $registry);
         $this->_configHelper = $configHelper;
@@ -50,6 +54,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $this->_httpClient = $httpClient;
         $this->_logger = $logger;
         $this->_storeManager = $storeManagerInterface;
+        $this->_messageManager = $messageInterface;
         //        $this->_storeId = ($this->getStore()) ? $this->getStore() : 0;
         //        $this->_init('strakertranslations_easytranslationplatform/api');
         //        $this->_headers[] = 'Authorization: Bearer '. Mage::getStoreConfig('straker/general/access_token', $this->_storeId);
@@ -91,7 +96,9 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
                 $this->_logger->addDebug('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
 
                 if(strpos($contentType,'application/json') !== false ){
+
                     $returnBody = json_decode($body);
+
                     return $returnBody;
 
                 }else{
@@ -99,13 +106,19 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
                     return $body;
                 }
             }else{
+
                 $this->_logger->addError('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
+
+                $this->_messageManager->addError('Straker API error. Please check logs.');
+
                 return $response;
             }
 
         }catch(Exception $e){
 
             $this->_logger->addError('strakerAPI-http-request-error '.__FILE__.__LINE__,[$e,$httpClient->getUri(),$url,$method,$timeout]);
+
+            $this->_messageManager->addError('Straker API error. Please check logs.');
 
             $this->_logger->_callStrakerBuglog('strakerAPI-Magento '.$e->getMessage(),$e->__toString());
 

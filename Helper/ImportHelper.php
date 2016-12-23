@@ -10,6 +10,8 @@ use Magento\Catalog\Model\Product\Action as ProductAction;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Store\Model\StoreManagerInterface;
 
+use Magento\Framework\Message\ManagerInterface;
+
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 
@@ -76,6 +78,8 @@ class ImportHelper extends AbstractHelper
     protected $_blockData;
     protected $_block;
 
+    protected $_messageManager;
+
     public function __construct(
 
         Context $context,
@@ -100,7 +104,8 @@ class ImportHelper extends AbstractHelper
         StoreManagerInterface $storeManager,
         UrlFinderInterface $urlFinder,
         TimezoneInterface $timezone,
-        BlockCollection $block
+        BlockCollection $block,
+        ManagerInterface $messageManager
     )
     {
         $this->_logger = $logger;
@@ -125,6 +130,7 @@ class ImportHelper extends AbstractHelper
         $this->_urlFinder = $urlFinder;
         $this->_timezoneInterface = $timezone;
         $this->_blockCollection = $block;
+        $this->_messageManager = $messageManager;
 
         parent::__construct($context);
     }
@@ -141,6 +147,7 @@ class ImportHelper extends AbstractHelper
     {
 
         try{
+
             $filePath = $this->configHelper->getTranslatedXMLFilePath() . DIRECTORY_SEPARATOR . $this->_jobModel->getData('translated_file');
 
             $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
@@ -188,6 +195,7 @@ class ImportHelper extends AbstractHelper
 
             $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
 
+            $this->_messageManager->addError($e->getMessage());
 
         }
 
@@ -244,6 +252,7 @@ class ImportHelper extends AbstractHelper
             if (array_key_exists('attribute_translation_id', $data['_attribute'])) {
 
                 try {
+
                     $att_trans_model = $this->_attributeTranslationFactory->create()->load($data['_attribute']['attribute_translation_id']);
 
                     $att_trans_model->addData(['translated_value' => $data['_value']['value']]);
@@ -257,6 +266,8 @@ class ImportHelper extends AbstractHelper
                 } catch (\Exception $e) {
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                    $this->_messageManager->addError($e->getMessage());
                 }
 
             }
@@ -264,6 +275,7 @@ class ImportHelper extends AbstractHelper
             if (array_key_exists('option_translation_id', $data['_attribute'])) {
 
                 try {
+
                     $att_opt_model = $this->_attributeOptionTranslationFactory->create()->load($data['_attribute']['option_translation_id']);
 
                     $att_opt_model->addData(['translated_value' => $data['_value']['value']]);
@@ -273,6 +285,7 @@ class ImportHelper extends AbstractHelper
                     $att_opt_model->save();
 
                     if (!in_array($att_opt_model->getData('option_id'), $this->_saveOptionIds)) {
+
                         $translatedOptions = $this->_attributeOptionTranslationCollection->create()
                             ->addFieldToSelect(['option_id', 'translated_value'])
                             ->addFieldToFilter('attribute_translation_id', array('in' => $this->_attributeTranslationIds))
@@ -287,6 +300,9 @@ class ImportHelper extends AbstractHelper
                 } catch (\Exception $e) {
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                    $this->_messageManager->addError($e->getMessage());
+
                 }
 
             }
@@ -337,6 +353,9 @@ class ImportHelper extends AbstractHelper
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                    $this->_messageManager->addError($e->getMessage());
+
+
                 }
 
             }
@@ -352,7 +371,7 @@ class ImportHelper extends AbstractHelper
             ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()))
             ->addFieldToFilter('is_label', array('eq' => 1))
             ->addFieldtoFilter('attribute_code', array('eq' => $label_id))
-            ->addFieldToFilter('translated_value', array('null' => true))
+            ->addFieldToFilter('translated_value', array('eq' => ' '))
             ->addFieldToSelect('*');
 
         try {
@@ -362,6 +381,9 @@ class ImportHelper extends AbstractHelper
         } catch (\Exception $e) {
 
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+            $this->_messageManager->addError($e->getMessage());
+
 
         }
 
@@ -397,6 +419,9 @@ class ImportHelper extends AbstractHelper
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                $this->_messageManager->addError($e->getMessage());
+
+
             }
 
 
@@ -415,6 +440,9 @@ class ImportHelper extends AbstractHelper
             } catch (\Exception $e) {
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                $this->_messageManager->addError($e->getMessage());
+
 
             }
         }
@@ -457,6 +485,8 @@ class ImportHelper extends AbstractHelper
 
                         $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                        $this->_messageManager->addError($e->getMessage());
+
                     }
 
 
@@ -465,11 +495,15 @@ class ImportHelper extends AbstractHelper
                     try{
 
                         $connection->insertArray($table, ['option_id', 'store_id', $table . '.value'],
+
                             [[$data['option_id'], $this->_jobModel->getTargetStoreId(), $data['translated_value']]]);
 
                     }catch (\Exception $e){
 
                         $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                        $this->_messageManager->addError($e->getMessage());
+
 
                     }
 
@@ -490,6 +524,8 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                    $this->_messageManager->addError($e->getMessage());
 
                 }
 
@@ -591,6 +627,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+                $this->_messageManager->addError($e->getMessage());
 
             }
 
@@ -621,7 +658,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_messageManager->addError($e->getMessage());
 
             }
         }
@@ -649,6 +686,7 @@ class ImportHelper extends AbstractHelper
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                $this->_messageManager->addError($e->getMessage());
 
             }
 
@@ -683,6 +721,7 @@ class ImportHelper extends AbstractHelper
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                $this->_messageManager->addError($e->getMessage());
 
             }
 
@@ -715,6 +754,7 @@ class ImportHelper extends AbstractHelper
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                    $this->_messageManager->addError($e->getMessage());
 
                 }
 
@@ -740,6 +780,7 @@ class ImportHelper extends AbstractHelper
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                    $this->_messageManager->addError($e->getMessage());
 
                 }
             }
@@ -769,6 +810,8 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                $this->_messageManager->addError($e->getMessage());
 
             }
 
@@ -803,6 +846,7 @@ class ImportHelper extends AbstractHelper
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                $this->_messageManager->addError($e->getMessage());
 
             }
 
@@ -831,6 +875,8 @@ class ImportHelper extends AbstractHelper
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
+                    $this->_messageManager->addError($e->getMessage());
+
                 }
 
 
@@ -857,6 +903,8 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+
+                    $this->_messageManager->addError($e->getMessage());
 
                 }
             }

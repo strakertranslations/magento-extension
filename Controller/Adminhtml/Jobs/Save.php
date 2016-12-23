@@ -257,7 +257,7 @@ class Save extends Action
 
         } catch (\Exception $e) {
 
-            $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$response->message, [$response]);
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
 
             $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
 
