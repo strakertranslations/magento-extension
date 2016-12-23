@@ -36,7 +36,11 @@ class Collection extends AbstractCollection
 
     public function massUpdate(array $data)
     {
-        $this->getConnection()->update($this->getResource()->getMainTable(), $data, $this->getResource()->getIdFieldName() . ' IN(' . implode(',', $this->getAllIds()) . ')');
+        if(!empty($this->getData())){
+
+            $this->getConnection()->update($this->getResource()->getMainTable(), $data, $this->getResource()->getIdFieldName() . ' IN(' . implode(',', $this->getAllIds()) . ')');
+
+        }
 
         return $this;
     }
