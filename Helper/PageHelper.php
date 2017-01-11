@@ -113,7 +113,7 @@ class PageHelper extends AbstractHelper
 
             foreach ($this->_attributes as $attribute){
 
-                if(in_array($attribute,$this->_attributes))
+                if(in_array($attribute,$this->_attributes) && (!empty($data->getData($attribute))))
                 {
                     array_push($attributeData, [
                         'attribute_code'=>$attribute,
