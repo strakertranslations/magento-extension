@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection as Attribu
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollection;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\StoreManagerInterface;
-
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -37,8 +37,7 @@ class BlockHelper extends AbstractHelper
     protected $_storeId;
 
     protected $_attributes = ['title','content'];
-
-
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
@@ -52,7 +51,8 @@ class BlockHelper extends AbstractHelper
         AttributeHelper $attributeHelper,
         XmlHelper $xmlHelper,
         Logger $logger,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        StrakerAPIInterface $strakerApi
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_blockCollectionFactory = $blockCollectionFactory;
@@ -65,6 +65,7 @@ class BlockHelper extends AbstractHelper
         $this->_logger = $logger;
         $this->_entityTypeId =  $eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
         $this->_storeManager = $storeManager;
+        $this->_strakerApi = $strakerApi;
 
         parent::__construct($context);
     }
@@ -234,8 +235,8 @@ class BlockHelper extends AbstractHelper
 
 
                 } catch (Exception $e) {
-
                     $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 }
             }
         }

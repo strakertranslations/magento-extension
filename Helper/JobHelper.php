@@ -2,13 +2,14 @@
 
 namespace Straker\EasyTranslationPlatform\Helper;
 
+use Exception;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Category;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
 
 use Magento\Framework\Message\ManagerInterface;
-
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\ProductHelper;
 use Straker\EasyTranslationPlatform\Helper\CategoryHelper;
@@ -36,6 +37,7 @@ class JobHelper extends AbstractHelper
     protected $_blockHelper;
     protected $_jobStatusCollection;
     protected $_messageManager;
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
@@ -47,7 +49,8 @@ class JobHelper extends AbstractHelper
         BlockHelper $blockHelper,
         JobTypeCollection $jobTypeCollectionFactory,
         JobStatusCollection $jobStatusFactory,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        StrakerAPIInterface $strakerApi
     ) {
 
         $this->_jobFactory = $jobFactory;
@@ -59,6 +62,7 @@ class JobHelper extends AbstractHelper
         $this->_jobTypeCollection = $jobTypeCollectionFactory;
         $this->_jobStatusCollection = $jobStatusFactory;
         $this->_messageManager = $messageManager;
+        $this->_strakerApi = $strakerApi;
         parent::__construct($context);
     }
 
@@ -89,11 +93,10 @@ class JobHelper extends AbstractHelper
 
             $this->jobModel->setData($jobData);
 
-        }catch (\Exception $e)
-        {
+        }catch (Exception $e){
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
-           $this->_messageManager->addError($e->getMessage());
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
+            $this->_messageManager->addError($e->getMessage());
         }
 
         return $this;
@@ -119,10 +122,9 @@ class JobHelper extends AbstractHelper
             $this->jobModel->save();
 
 
-        }catch (\Exception $e)
-        {
+        }catch (Exception $e){
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->_messageManager->addError($e->getMessage());
         }
 
@@ -153,10 +155,9 @@ class JobHelper extends AbstractHelper
             $this->jobModel->save();
 
 
-        }catch (\Exception $e)
-        {
+        }catch (Exception $e){
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->_messageManager->addError($e->getMessage());
         }
 
@@ -182,10 +183,9 @@ class JobHelper extends AbstractHelper
 
             $this->jobModel->save();
 
-        }catch (\Exception $e)
-        {
+        }catch (Exception $e){
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->_messageManager->addError($e->getMessage());
         }
 
@@ -210,10 +210,9 @@ class JobHelper extends AbstractHelper
 
             $this->jobModel->save();
 
-        }catch (\Exception $e)
-        {
+        }catch (Exception $e){
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->_messageManager->addError($e->getMessage());
         }
 

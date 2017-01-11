@@ -13,7 +13,7 @@ use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCo
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Data\Collection;
 use Magento\Store\Model\StoreManagerInterface;
-
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
@@ -49,7 +49,7 @@ class CategoryHelper extends AbstractHelper
     protected $_configHelper;
     protected $_attributeHelper;
     protected $_xmlHelper;
-
+    protected $_strakerApi;
 
     /**
      * CategoryHelper constructor.
@@ -65,6 +65,7 @@ class CategoryHelper extends AbstractHelper
      * @param \Straker\EasyTranslationPlatform\Helper\XmlHelper $xmlHelper
      * @param Logger $logger
      * @param StoreManagerInterface $storeManager
+     * @param StrakerAPIInterface $strakerAPI
      */
     public function __construct(
         Context $context,
@@ -78,7 +79,8 @@ class CategoryHelper extends AbstractHelper
         AttributeHelper $attributeHelper,
         XmlHelper $xmlHelper,
         Logger $logger,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        StrakerAPIInterface $strakerAPI
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_categoryCollectionFactory = $categoryCollectionFactory;
@@ -91,7 +93,7 @@ class CategoryHelper extends AbstractHelper
         $this->_logger = $logger;
         $this->_entityTypeId =  $eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
         $this->_storeManager = $storeManager;
-
+        $this->_strakerApi = $strakerAPI;
         parent::__construct($context);
     }
 
@@ -255,6 +257,7 @@ class CategoryHelper extends AbstractHelper
                         $this->_categoryData[$cat_key]['attributes'][$att_key]['value_translation_id'] = $attributeTranslationModel->getId();
                     } catch (Exception $e) {
                         $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
+                        $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     }
                 }
             }

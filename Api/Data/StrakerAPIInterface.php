@@ -22,4 +22,6 @@ interface StrakerAPIInterface
     public function dbBackup();
 
     public function dbRestore();
+
+    public function _callStrakerBugLog($msg, $e = '');
 }

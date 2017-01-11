@@ -11,7 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Category\Attribute\Collection as Attribu
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollection;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\StoreManagerInterface;
-
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Model\AttributeTranslationFactory;
 use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslationFactory;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -38,6 +38,7 @@ class PageHelper extends AbstractHelper
     protected $_storeId;
 
     protected $_attributes = ['title','meta_keywords','meta_description','content_heading','content'];
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
@@ -51,7 +52,8 @@ class PageHelper extends AbstractHelper
         AttributeHelper $attributeHelper,
         XmlHelper $xmlHelper,
         Logger $logger,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        StrakerAPIInterface $strakerAPI
     ) {
         $this->_attributeCollectionFactory = $attributeCollectionFactory;
         $this->_pageCollectionFactory = $pageCollectionFactory;
@@ -64,7 +66,7 @@ class PageHelper extends AbstractHelper
         $this->_logger = $logger;
         $this->_entityTypeId =  $eavConfig->getEntityType(CategoryAttributeInterface::ENTITY_TYPE_CODE)->getEntityTypeId();
         $this->_storeManager = $storeManager;
-
+        $this->_strakerApi = $strakerAPI;
         parent::__construct($context);
     }
 
@@ -232,7 +234,7 @@ class PageHelper extends AbstractHelper
 
 
                 } catch (Exception $e) {
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
                 }
             }

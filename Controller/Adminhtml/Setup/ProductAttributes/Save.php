@@ -2,7 +2,10 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\ProductAttributes;
 
+use Exception;
 use Magento\Framework\Config\CacheInterface;
+use Magento\Framework\Exception\LocalizedException;
+use RuntimeException;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -55,17 +58,17 @@ class Save extends \Magento\Backend\App\Action
                 $resultRedirect->setPath('/Setup_TestingStoreView/index/');
 
                 return $resultRedirect;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addError('There was an error saving Product Attributes');
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addException($e, __('Something went wrong while saving the product attributes.'));
             }
 

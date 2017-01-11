@@ -11,6 +11,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 
@@ -20,18 +21,21 @@ class DeleteTestStoreView extends Action
     protected $_strakerSetup;
     protected $_logger;
     protected $_configHelper;
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
         JsonFactory $resultJsonFactory,
         SetupInterface $strakerSetup,
         Logger $logger,
-        ConfigHelper $configHelper
+        ConfigHelper $configHelper,
+        StrakerAPIInterface $strakerApi
     ) {
         $this->_strakerSetup = $strakerSetup;
         $this->_logger = $logger;
         $this->_resultJsonFactory = $resultJsonFactory;
         $this->_configHelper = $configHelper;
+        $this->_strakerApi = $strakerApi;
         return parent::__construct($context);
     }
 
@@ -58,6 +62,7 @@ class DeleteTestStoreView extends Action
             $message = __($e->getMessage());
             $result['Message'] = $message;
             $this->_logger->error($message);
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
         }
         $jsonResult = $this->_resultJsonFactory->create();
         return $jsonResult->setData($result);

@@ -9,6 +9,7 @@ use Magento\Framework\App\Config;
 use \Magento\Store\Model\StoreManagerInterface;
 use \Magento\Framework\App\CacheInterface;
 use \Magento\Framework\Controller\Result\Json;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use \Straker\EasyTranslationPlatform\Model\Setup;
 use \Straker\EasyTranslationPlatform\Logger\Logger;
 
@@ -22,6 +23,7 @@ class ResetAccount extends Action
     protected $_logger;
 
     public $resultRedirectFactory;
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
@@ -29,14 +31,15 @@ class ResetAccount extends Action
         StoreManagerInterface $storeManager,
         CacheInterface $storeCache,
         Setup $strakerSetup,
-        Logger $logger
+        Logger $logger,
+        StrakerAPIInterface $strakerApi
     ) {
         $this->_storeManager = $storeManager;
         $this->_storeCache = $storeCache;
         $this->_resultJson = $resultJson;
         $this->_strakerSetup = $strakerSetup;
         $this->_logger = $logger;
-
+        $this->_strakerApi = $strakerApi;
         return parent::__construct($context);
     }
 
@@ -67,6 +70,7 @@ class ResetAccount extends Action
             $message = __($e->getMessage());
             $this->messageManager->addError($message);
             $this->_logger->error($message);
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $result['Success'] = false;
         }
 

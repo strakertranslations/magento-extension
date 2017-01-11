@@ -83,6 +83,7 @@ class Save extends \Magento\Backend\App\Action
                             $this->_setup->setSiteMode(SetupInterface::SITE_MODE_LIVE);
                         }
                         $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . '', [$result['Message']]);
+                        $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $result['Message']);
                         $this->messageManager->addErrorMessage($result['Message']);
                     }
                 }else{

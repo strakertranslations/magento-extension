@@ -2,14 +2,16 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
+use Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 
 use Magento\Backend\Helper\Js;
 use Magento\Eav\Model\AttributeRepository;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\Xml\Parser;
-
+use RuntimeException;
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
 use Straker\EasyTranslationPlatform\Model\JobType;
@@ -68,6 +70,7 @@ class Save extends Action
      * @param AttributeRepository $attributeRepository
      * @param StoreManagerInterface $storeManager
      * @param XmlHelper $xmlHelper
+     * @param Parser $xmlParser
      * @param JobRepository $jobRepository
      * @param JobType $jobType
      * @param JobHelper $jobHelper
@@ -152,28 +155,22 @@ class Save extends Action
 
                 return $resultRedirect->setPath('*/*/');
 
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
 
                 $this->messageManager->addError($e->getMessage());
-
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
+                $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
 
-                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
 
                 $this->messageManager->addError($e->getMessage());
-
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
+                $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
 
-                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
 
                 $this->messageManager->addException($e, __('Something went wrong while saving the job.'.$e->getMessage()));
-
-                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
+                $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             }
 
@@ -181,7 +178,6 @@ class Save extends Action
         }
 
         $this->messageManager->addWarningMessage(__('Your job could not be sent. Please select some content.'));
-
         $resultRedirect->setPath('*/*/edit', []);
 
         return $resultRedirect;
@@ -205,13 +201,9 @@ class Save extends Action
                     $data['straker_source_language'],
                     $data['straker_target_language']
                 );
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-
-
+            } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
-
-                $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
+                $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
             }
         }
@@ -255,12 +247,10 @@ class Save extends Action
                 $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
 
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
-            $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
+            $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
     }
@@ -309,12 +299,10 @@ class Save extends Action
             return $this->_xmlHelper->getXmlFileName();
 
 
-        }catch (\Exception $e){
+        }catch (Exception $e){
 
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
-
-            $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
+            $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             return $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
         }
     }

@@ -470,3 +470,233 @@ e8dcc200ea5237d15c0bb8ec922a8fff1b0794aa	refs/heads/production
   INFO [d103c510] Running /usr/bin/env echo "Branch master (at 9a96ab08e725e92a3907b522ca6a41c9a49e5632) deployed as release 20161010004637 by rakeshmistry" >> /mnt/data/apps/php/magento2/app/code/Straker/EasyTranslationPlatform/revisions.log as root@10.53.34.47
  DEBUG [d103c510] Command: cd /mnt/data/apps/php/magento2/app/code/Straker/EasyTranslationPlatform/releases && /usr/bin/env echo "Branch master (at 9a96ab08e725e92a3907b522ca6a41c9a49e5632) deployed as release 20161010004637 by rakeshmistry" >> /mnt/data/apps/php/magento2/app/code/Straker/EasyTranslationPlatform/revisions.log
   INFO [d103c510] Finished in 0.312 seconds with exit status 0 (successful).
+  INFO ---------------------------------------------------------------------------
+  INFO START 2016-12-23 12:38:53 +1300 cap uat deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [1a04fab2] Running /usr/bin/env mkdir -p /tmp as root@10.54.13.226
+ DEBUG [1a04fab2] Command: /usr/bin/env mkdir -p /tmp
+  INFO [1a04fab2] Finished in 2.297 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-straker_magento2_extension-uat-Paul.sh 0.0%
+  INFO Uploading /tmp/git-ssh-straker_magento2_extension-uat-Paul.sh 100.0%
+  INFO [b06b3e79] Running /usr/bin/env chmod 700 /tmp/git-ssh-straker_magento2_extension-uat-Paul.sh as root@10.54.13.226
+ DEBUG [b06b3e79] Command: /usr/bin/env chmod 700 /tmp/git-ssh-straker_magento2_extension-uat-Paul.sh
+  INFO [b06b3e79] Finished in 0.323 seconds with exit status 0 (successful).
+  INFO [c9afff40] Running /usr/bin/env git ls-remote --heads git@bitbucket.org:strakertranslations/magento2.git as root@10.54.13.226
+ DEBUG [c9afff40] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-uat-Paul.sh" ; /usr/bin/env git ls-remote --heads git@bitbucket.org:strakertranslations/magento2.git )
+ DEBUG [c9afff40] 	790d01a7fd37eca79b86d556dcbef6dffdbb5e6b	refs/heads/develop
+0356be3a431fc91eace1eba7fb483122a272c6d3	refs/heads/gitmaster
+3074fcd83b73ad1c254185cbf155fed28924f545	refs/heads/hotfix/IMA-41_remove_required_attribute_from_source_store
+c2dd0090cbf72179b9a09f4e13f0fb2e3d86c561	refs/heads/hotfix/IMA-63_Add_CMS_pages_to_jobs
+695d7ca3b668826cc983236c68363746cd308cfe	refs/heads/hotfix/IMA-90_product_name_should_always_display_in_the_language_of_source_store_view
+0bda3d1c9d639be86d0abbcc179763664b0abaa7	refs/heads/hotfix/IMA-93_move_default_attribute_setting_to_a_new_tab
+f6cbc90720f1665123a802221798bd02d31cb180	refs/heads/hotfix/IMA-94_Change_Status_Ready_to_Quote_Ready
+f8fcbdf97fd293c9279b233319fff4c714d9b058	refs/heads/hotfix/IMA-95_Hide_"View_Quote"_When_Job_is_Paid_For
+9e6e0411c38722e31428e10e663a7ba5db27233b	refs/heads/hotfix/IMA-97_Update_category_jobs
+9e1119c7994a195512d63969739fc26b09d0d7e3	refs/heads/hotfix/IMA41
+7bc0ac39abef4af6c2034df2e2c1cd79ded50cb8	refs/heads/hotfix/IMA89_Categories
+186bd784a4f0d1f75de3c7c4eaa067952eddaac7	refs/heads/hotfix/IMA_104_Setup_Sandbox_Test_Environment
+bca85e4af14bd4365ab8ea37733eeac8138e207e	refs/heads/hotfix/test
+1136298bf7caa06983b5f47aaf1f22156a1e6154	refs/heads/master
+0356be3a431fc91eace1eba7fb483122a272c6d3	refs/heads/production
+  INFO [c9afff40] Finished in 2.134 seconds with exit status 0 (successful).
+  INFO [486deb48] Running /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/shared /mnt/data/apps/php/magento2-ext/releases as root@10.54.13.226
+ DEBUG [486deb48] Command: /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/shared /mnt/data/apps/php/magento2-ext/releases
+  INFO [486deb48] Finished in 0.333 seconds with exit status 0 (successful).
+ DEBUG [cd75dd9e] Running [ -f /mnt/data/apps/php/magento2-ext/current/REVISION ] as root@10.54.13.226
+ DEBUG [cd75dd9e] Command: [ -f /mnt/data/apps/php/magento2-ext/current/REVISION ]
+ DEBUG [cd75dd9e] Finished in 0.322 seconds with exit status 1 (failed).
+ DEBUG [005cbd70] Running [ -f /mnt/data/apps/php/magento2-ext/repo/HEAD ] as root@10.54.13.226
+ DEBUG [005cbd70] Command: [ -f /mnt/data/apps/php/magento2-ext/repo/HEAD ]
+ DEBUG [005cbd70] Finished in 0.323 seconds with exit status 1 (failed).
+ DEBUG [ae2a03dd] Running if test ! -d /mnt/data/apps/php/magento2-ext; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext'" 1>&2; false; fi as root@10.54.13.226
+ DEBUG [ae2a03dd] Command: if test ! -d /mnt/data/apps/php/magento2-ext; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext'" 1>&2; false; fi
+ DEBUG [ae2a03dd] Finished in 0.323 seconds with exit status 0 (successful).
+  INFO [ee433b3f] Running /usr/bin/env git clone --mirror git@bitbucket.org:strakertranslations/magento2.git /mnt/data/apps/php/magento2-ext/repo as root@10.54.13.226
+ DEBUG [ee433b3f] Command: cd /mnt/data/apps/php/magento2-ext && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-uat-Paul.sh" ; /usr/bin/env git clone --mirror git@bitbucket.org:strakertranslations/magento2.git /mnt/data/apps/php/magento2-ext/repo )
+ DEBUG [ee433b3f] 	Cloning into bare repository '/mnt/data/apps/php/magento2-ext/repo'...
+  INFO [ee433b3f] Finished in 6.998 seconds with exit status 0 (successful).
+ DEBUG [f911ad07] Running if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi as root@10.54.13.226
+ DEBUG [f911ad07] Command: if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi
+ DEBUG [f911ad07] Finished in 0.328 seconds with exit status 0 (successful).
+  INFO [b84e04d3] Running /usr/bin/env git remote update --prune as root@10.54.13.226
+ DEBUG [b84e04d3] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-uat-Paul.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [b84e04d3] 	Fetching origin
+  INFO [b84e04d3] Finished in 6.308 seconds with exit status 0 (successful).
+ DEBUG [55b56b1b] Running if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi as root@10.54.13.226
+ DEBUG [55b56b1b] Command: if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi
+ DEBUG [55b56b1b] Finished in 0.321 seconds with exit status 0 (successful).
+  INFO [6472d7b5] Running /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/releases/20161222233901 as root@10.54.13.226
+ DEBUG [6472d7b5] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-uat-Paul.sh" ; /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/releases/20161222233901 )
+  INFO [6472d7b5] Finished in 0.333 seconds with exit status 0 (successful).
+  INFO [07211c39] Running /usr/bin/env git archive master | tar -x -f - -C /mnt/data/apps/php/magento2-ext/releases/20161222233901 as root@10.54.13.226
+ DEBUG [07211c39] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-uat-Paul.sh" ; /usr/bin/env git archive master | tar -x -f - -C /mnt/data/apps/php/magento2-ext/releases/20161222233901 )
+  INFO [07211c39] Finished in 0.373 seconds with exit status 0 (successful).
+ DEBUG [47260263] Running if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi as root@10.54.13.226
+ DEBUG [47260263] Command: if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi
+ DEBUG [47260263] Finished in 0.324 seconds with exit status 0 (successful).
+ DEBUG [3e20de48] Running /usr/bin/env git rev-list --max-count=1 master as root@10.54.13.226
+ DEBUG [3e20de48] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-uat-Paul.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [3e20de48] 	1136298bf7caa06983b5f47aaf1f22156a1e6154
+ DEBUG [3e20de48] Finished in 0.330 seconds with exit status 0 (successful).
+ DEBUG [5c2567ae] Running if test ! -d /mnt/data/apps/php/magento2-ext/releases/20161222233901; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/releases/20161222233901'" 1>&2; false; fi as root@10.54.13.226
+ DEBUG [5c2567ae] Command: if test ! -d /mnt/data/apps/php/magento2-ext/releases/20161222233901; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/releases/20161222233901'" 1>&2; false; fi
+ DEBUG [5c2567ae] Finished in 0.323 seconds with exit status 0 (successful).
+  INFO [d5d5be2a] Running /usr/bin/env echo "1136298bf7caa06983b5f47aaf1f22156a1e6154" >> REVISION as root@10.54.13.226
+ DEBUG [d5d5be2a] Command: cd /mnt/data/apps/php/magento2-ext/releases/20161222233901 && /usr/bin/env echo "1136298bf7caa06983b5f47aaf1f22156a1e6154" >> REVISION
+  INFO [d5d5be2a] Finished in 0.322 seconds with exit status 0 (successful).
+  INFO [60fabffe] Running /usr/bin/env ln -s /mnt/data/apps/php/magento2-ext/releases/20161222233901 /mnt/data/apps/php/magento2-ext/releases/current as root@10.54.13.226
+ DEBUG [60fabffe] Command: /usr/bin/env ln -s /mnt/data/apps/php/magento2-ext/releases/20161222233901 /mnt/data/apps/php/magento2-ext/releases/current
+  INFO [60fabffe] Finished in 0.325 seconds with exit status 0 (successful).
+  INFO [19480258] Running /usr/bin/env mv /mnt/data/apps/php/magento2-ext/releases/current /mnt/data/apps/php/magento2-ext as root@10.54.13.226
+ DEBUG [19480258] Command: /usr/bin/env mv /mnt/data/apps/php/magento2-ext/releases/current /mnt/data/apps/php/magento2-ext
+  INFO [19480258] Finished in 0.322 seconds with exit status 0 (successful).
+  INFO [3550ce1c] Running cd /mnt/data/apps/php/mg2-uat1/app/code/Straker/EasyTranslationPlatform && git pull as root@10.54.13.226
+ DEBUG [3550ce1c] Command: cd /mnt/data/apps/php/mg2-uat1/app/code/Straker/EasyTranslationPlatform && git pull
+ DEBUG [3550ce1c] 	From bitbucket.org:strakertranslations/magento2
+ DEBUG [3550ce1c] 	   681eb16..1136298  master     -> origin/master
+ DEBUG [3550ce1c] 	Updating 681eb16..1136298
+Fast-forward
+ DEBUG [3550ce1c] 	 config/deploy/uat.rb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+  INFO [3550ce1c] Finished in 1.767 seconds with exit status 0 (successful).
+  INFO [d652a2d4] Running cd /mnt/data/apps/php/mg2-uat2/app/code/Straker/EasyTranslationPlatform && git pull as root@10.54.13.226
+ DEBUG [d652a2d4] Command: cd /mnt/data/apps/php/mg2-uat2/app/code/Straker/EasyTranslationPlatform && git pull
+ DEBUG [d652a2d4] 	From bitbucket.org:strakertranslations/magento2
+   681eb16..1136298  master     -> origin/master
+ DEBUG [d652a2d4] 	There is no tracking information for the current branch.
+Please specify which branch you want to merge with.
+See git-pull(1) for details
+
+    git pull <remote> <branch>
+
+If you wish to set tracking information for this branch you can do so with:
+
+    git branch --set-upstream-to=origin/<branch> master
+
+  INFO ---------------------------------------------------------------------------
+  INFO START 2016-12-23 14:52:53 +1300 cap production deploy
+  INFO ---------------------------------------------------------------------------
+  INFO [10d611e7] Running /usr/bin/env mkdir -p /tmp as root@10.53.34.45
+ DEBUG [10d611e7] Command: /usr/bin/env mkdir -p /tmp
+  INFO [10d611e7] Finished in 11.128 seconds with exit status 0 (successful).
+ DEBUG Uploading /tmp/git-ssh-straker_magento2_extension-production-Paul.sh 0.0%
+  INFO Uploading /tmp/git-ssh-straker_magento2_extension-production-Paul.sh 100.0%
+  INFO [1fbb9c3e] Running /usr/bin/env chmod 700 /tmp/git-ssh-straker_magento2_extension-production-Paul.sh as root@10.53.34.45
+ DEBUG [1fbb9c3e] Command: /usr/bin/env chmod 700 /tmp/git-ssh-straker_magento2_extension-production-Paul.sh
+  INFO [1fbb9c3e] Finished in 0.325 seconds with exit status 0 (successful).
+  INFO [4fbe5b27] Running /usr/bin/env git ls-remote --heads git@bitbucket.org:strakertranslations/magento2.git as root@10.53.34.45
+ DEBUG [4fbe5b27] Command: ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-production-Paul.sh" ; /usr/bin/env git ls-remote --heads git@bitbucket.org:strakertranslations/magento2.git )
+ DEBUG [4fbe5b27] 	790d01a7fd37eca79b86d556dcbef6dffdbb5e6b	refs/heads/develop
+0356be3a431fc91eace1eba7fb483122a272c6d3	refs/heads/gitmaster
+3074fcd83b73ad1c254185cbf155fed28924f545	refs/heads/hotfix/IMA-41_remove_required_attribute_from_source_store
+c2dd0090cbf72179b9a09f4e13f0fb2e3d86c561	refs/heads/hotfix/IMA-63_Add_CMS_pages_to_jobs
+695d7ca3b668826cc983236c68363746cd308cfe	refs/heads/hotfix/IMA-90_product_name_should_always_display_in_the_language_of_source_store_view
+0bda3d1c9d639be86d0abbcc179763664b0abaa7	refs/heads/hotfix/IMA-93_move_default_attribute_setting_to_a_new_tab
+f6cbc90720f1665123a802221798bd02d31cb180	refs/heads/hotfix/IMA-94_Change_Status_Ready_to_Quote_Ready
+f8fcbdf97fd293c9279b233319fff4c714d9b058	refs/heads/hotfix/IMA-95_Hide_"View_Quote"_When_Job_is_Paid_For
+9e6e0411c38722e31428e10e663a7ba5db27233b	refs/heads/hotfix/IMA-97_Update_category_jobs
+9e1119c7994a195512d63969739fc26b09d0d7e3	refs/heads/hotfix/IMA41
+7bc0ac39abef4af6c2034df2e2c1cd79ded50cb8	refs/heads/hotfix/IMA89_Categories
+186bd784a4f0d1f75de3c7c4eaa067952eddaac7	refs/heads/hotfix/IMA_104_Setup_Sandbox_Test_Environment
+bca85e4af14bd4365ab8ea37733eeac8138e207e	refs/heads/hotfix/test
+ba27712f2899eb81327552859f472056b8409afa	refs/heads/master
+0356be3a431fc91eace1eba7fb483122a272c6d3	refs/heads/production
+  INFO [4fbe5b27] Finished in 3.854 seconds with exit status 0 (successful).
+  INFO [36824ddd] Running /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/shared /mnt/data/apps/php/magento2-ext/releases as root@10.53.34.45
+ DEBUG [36824ddd] Command: /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/shared /mnt/data/apps/php/magento2-ext/releases
+  INFO [36824ddd] Finished in 0.327 seconds with exit status 0 (successful).
+ DEBUG [555d856e] Running [ -f /mnt/data/apps/php/magento2-ext/current/REVISION ] as root@10.53.34.45
+ DEBUG [555d856e] Command: [ -f /mnt/data/apps/php/magento2-ext/current/REVISION ]
+ DEBUG [555d856e] Finished in 0.324 seconds with exit status 0 (successful).
+ DEBUG [b2e98d7c] Running /usr/bin/env cat /mnt/data/apps/php/magento2-ext/current/REVISION 2>/dev/null as root@10.53.34.45
+ DEBUG [b2e98d7c] Command: /usr/bin/env cat /mnt/data/apps/php/magento2-ext/current/REVISION 2>/dev/null
+ DEBUG [b2e98d7c] 	91882dcb742d9f4d0b79932b36cd7d48b26a8310
+ DEBUG [b2e98d7c] Finished in 0.323 seconds with exit status 0 (successful).
+ DEBUG [a588f6b5] Running [ -f /mnt/data/apps/php/magento2-ext/repo/HEAD ] as root@10.53.34.45
+ DEBUG [a588f6b5] Command: [ -f /mnt/data/apps/php/magento2-ext/repo/HEAD ]
+ DEBUG [a588f6b5] Finished in 0.322 seconds with exit status 0 (successful).
+  INFO The repository mirror is at /mnt/data/apps/php/magento2-ext/repo
+ DEBUG [940024dd] Running if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi as root@10.53.34.45
+ DEBUG [940024dd] Command: if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi
+ DEBUG [940024dd] Finished in 0.321 seconds with exit status 0 (successful).
+  INFO [f9b7f071] Running /usr/bin/env git remote update --prune as root@10.53.34.45
+ DEBUG [f9b7f071] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-production-Paul.sh" ; /usr/bin/env git remote update --prune )
+ DEBUG [f9b7f071] 	Fetching origin
+ DEBUG [f9b7f071] 	From bitbucket.org:strakertranslations/magento2
+   91882dc..ba27712  master     -> master
+  INFO [f9b7f071] Finished in 6.667 seconds with exit status 0 (successful).
+ DEBUG [61bb91c1] Running if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi as root@10.53.34.45
+ DEBUG [61bb91c1] Command: if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi
+ DEBUG [61bb91c1] Finished in 0.474 seconds with exit status 0 (successful).
+  INFO [1d6a99a5] Running /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/releases/20161223015404 as root@10.53.34.45
+ DEBUG [1d6a99a5] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-production-Paul.sh" ; /usr/bin/env mkdir -p /mnt/data/apps/php/magento2-ext/releases/20161223015404 )
+  INFO [1d6a99a5] Finished in 0.328 seconds with exit status 0 (successful).
+  INFO [fb1d4e2a] Running /usr/bin/env git archive master | tar -x -f - -C /mnt/data/apps/php/magento2-ext/releases/20161223015404 as root@10.53.34.45
+ DEBUG [fb1d4e2a] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-production-Paul.sh" ; /usr/bin/env git archive master | tar -x -f - -C /mnt/data/apps/php/magento2-ext/releases/20161223015404 )
+  INFO [fb1d4e2a] Finished in 0.351 seconds with exit status 0 (successful).
+ DEBUG [78f1d19f] Running if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi as root@10.53.34.45
+ DEBUG [78f1d19f] Command: if test ! -d /mnt/data/apps/php/magento2-ext/repo; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/repo'" 1>&2; false; fi
+ DEBUG [78f1d19f] Finished in 0.330 seconds with exit status 0 (successful).
+ DEBUG [58683876] Running /usr/bin/env git rev-list --max-count=1 master as root@10.53.34.45
+ DEBUG [58683876] Command: cd /mnt/data/apps/php/magento2-ext/repo && ( export GIT_ASKPASS="/bin/echo" GIT_SSH="/tmp/git-ssh-straker_magento2_extension-production-Paul.sh" ; /usr/bin/env git rev-list --max-count=1 master )
+ DEBUG [58683876] 	ba27712f2899eb81327552859f472056b8409afa
+ DEBUG [58683876] Finished in 0.341 seconds with exit status 0 (successful).
+ DEBUG [1c482c74] Running if test ! -d /mnt/data/apps/php/magento2-ext/releases/20161223015404; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/releases/20161223015404'" 1>&2; false; fi as root@10.53.34.45
+ DEBUG [1c482c74] Command: if test ! -d /mnt/data/apps/php/magento2-ext/releases/20161223015404; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/releases/20161223015404'" 1>&2; false; fi
+ DEBUG [1c482c74] Finished in 0.341 seconds with exit status 0 (successful).
+  INFO [b2c3933f] Running /usr/bin/env echo "ba27712f2899eb81327552859f472056b8409afa" >> REVISION as root@10.53.34.45
+ DEBUG [b2c3933f] Command: cd /mnt/data/apps/php/magento2-ext/releases/20161223015404 && /usr/bin/env echo "ba27712f2899eb81327552859f472056b8409afa" >> REVISION
+  INFO [b2c3933f] Finished in 0.331 seconds with exit status 0 (successful).
+  INFO [93abcf5a] Running /usr/bin/env ln -s /mnt/data/apps/php/magento2-ext/releases/20161223015404 /mnt/data/apps/php/magento2-ext/releases/current as root@10.53.34.45
+ DEBUG [93abcf5a] Command: /usr/bin/env ln -s /mnt/data/apps/php/magento2-ext/releases/20161223015404 /mnt/data/apps/php/magento2-ext/releases/current
+  INFO [93abcf5a] Finished in 0.331 seconds with exit status 0 (successful).
+  INFO [ac5eeb95] Running /usr/bin/env mv /mnt/data/apps/php/magento2-ext/releases/current /mnt/data/apps/php/magento2-ext as root@10.53.34.45
+ DEBUG [ac5eeb95] Command: /usr/bin/env mv /mnt/data/apps/php/magento2-ext/releases/current /mnt/data/apps/php/magento2-ext
+  INFO [ac5eeb95] Finished in 0.329 seconds with exit status 0 (successful).
+  INFO [32ed24ed] Running cd /mnt/data/apps/php/mg2-demo1/app/code/Straker/EasyTranslationPlatform && git pull as root@10.53.34.45
+ DEBUG [32ed24ed] Command: cd /mnt/data/apps/php/mg2-demo1/app/code/Straker/EasyTranslationPlatform && git pull
+ DEBUG [32ed24ed] 	From bitbucket.org:strakertranslations/magento2
+   91882dc..ba27712  master     -> origin/master
+ DEBUG [32ed24ed] 	Updating 91882dc..ba27712
+Fast-forward
+ DEBUG [32ed24ed] 	 Controller/Adminhtml/Jobs/Save.php                 |   2 +-
+ Helper/ImportHelper.php                            |  54 +++++++-
+ Helper/JobHelper.php                               | 152 ++++++++++++++-------
+ .../AttributeTranslation/Collection.php            |   6 +-
+ Model/StrakerAPI.php                               |  15 +-
+ 5 files changed, 177 insertions(+), 52 deletions(-)
+  INFO [32ed24ed] Finished in 2.364 seconds with exit status 0 (successful).
+  INFO [585d652a] Running cd /mnt/data/apps/php/mg2-demo2/app/code/Straker/EasyTranslationPlatform && git pull as root@10.53.34.45
+ DEBUG [585d652a] Command: cd /mnt/data/apps/php/mg2-demo2/app/code/Straker/EasyTranslationPlatform && git pull
+ DEBUG [585d652a] 	From bitbucket.org:strakertranslations/magento2
+   91882dc..ba27712  master     -> origin/master
+ DEBUG [585d652a] 	Updating 91882dc..ba27712
+Fast-forward
+ DEBUG [585d652a] 	 Controller/Adminhtml/Jobs/Save.php                 |   2 +-
+ Helper/ImportHelper.php                            |  54 +++++++-
+ Helper/JobHelper.php                               | 152 ++++++++++++++-------
+ .../AttributeTranslation/Collection.php            |   6 +-
+ Model/StrakerAPI.php                               |  15 +-
+ 5 files changed, 177 insertions(+), 52 deletions(-)
+  INFO [585d652a] Finished in 2.150 seconds with exit status 0 (successful).
+ DEBUG [5db615c3] Running /usr/bin/env ls -xtr /mnt/data/apps/php/magento2-ext/releases as root@10.53.34.45
+ DEBUG [5db615c3] Command: /usr/bin/env ls -xtr /mnt/data/apps/php/magento2-ext/releases
+ DEBUG [5db615c3] 	20161202015131	20161216021311	20161216024851	20161223004419	20161223015404
+ DEBUG [5db615c3] Finished in 0.328 seconds with exit status 0 (successful).
+  INFO Keeping 5 of 5 deployed releases on 10.53.34.45
+  INFO No old releases (keeping newest 5) on 10.53.34.45
+  INFO [358eae9e] Running cd /mnt/data/apps/php/mg2-demo1 && chown -R www-data:www-data . as root@10.53.34.45
+ DEBUG [358eae9e] Command: cd /mnt/data/apps/php/mg2-demo1 && chown -R www-data:www-data .
+  INFO [358eae9e] Finished in 0.902 seconds with exit status 0 (successful).
+  INFO [8949f4da] Running cd /mnt/data/apps/php/mg2-demo2 && chown -R www-data:www-data . as root@10.53.34.45
+ DEBUG [8949f4da] Command: cd /mnt/data/apps/php/mg2-demo2 && chown -R www-data:www-data .
+  INFO [8949f4da] Finished in 1.230 seconds with exit status 0 (successful).
+ DEBUG [aff9be96] Running if test ! -d /mnt/data/apps/php/magento2-ext/releases; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/releases'" 1>&2; false; fi as root@10.53.34.45
+ DEBUG [aff9be96] Command: if test ! -d /mnt/data/apps/php/magento2-ext/releases; then echo "Directory does not exist '/mnt/data/apps/php/magento2-ext/releases'" 1>&2; false; fi
+ DEBUG [aff9be96] Finished in 0.325 seconds with exit status 0 (successful).
+  INFO [abd7c445] Running /usr/bin/env echo "Branch master (at ba27712f2899eb81327552859f472056b8409afa) deployed as release 20161223015404 by Paul" >> /mnt/data/apps/php/magento2-ext/revisions.log as root@10.53.34.45
+ DEBUG [abd7c445] Command: cd /mnt/data/apps/php/magento2-ext/releases && /usr/bin/env echo "Branch master (at ba27712f2899eb81327552859f472056b8409afa) deployed as release 20161223015404 by Paul" >> /mnt/data/apps/php/magento2-ext/revisions.log
+  INFO [abd7c445] Finished in 0.327 seconds with exit status 0 (successful).
+  INFO [6b856ed0] Running service php5-fpm restart as root@10.53.34.45
+ DEBUG [6b856ed0] Command: service php5-fpm restart
+  INFO [6b856ed0] Finished in 0.331 seconds with exit status 0 (successful).

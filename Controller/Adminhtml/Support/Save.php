@@ -2,6 +2,10 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Support;
 
+use Exception;
+use Magento\Backend\App\Action;
+use Magento\Framework\Exception\LocalizedException;
+use RuntimeException;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -10,7 +14,7 @@ use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Backend\App\Action\Context;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
 
     protected $_config;
@@ -59,22 +63,22 @@ class Save extends \Magento\Backend\App\Action
                     $this->messageManager->addError(__('Your support request could not be submitted'));
 
                     $this->_logger->error('error'.__FILE__.' '.__LINE__.$oSupport->message, []);
-
+                    $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' Your support request could not be submitted', $oSupport->message);
                     $resultRedirect->setPath('/*/*/', $data);
 
                     return $resultRedirect;
                 }
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            } catch (LocalizedException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addError($e->getMessage());
-            } catch (\RuntimeException $e) {
+            } catch (RuntimeException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addError($e->getMessage());
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addException($e, __('Something went wrong while saving your support request.'));
             }
 

@@ -74,6 +74,8 @@ class ConfigHelper extends AbstractHelper
 
         if(strcasecmp($domain, 'my_account_domain') === 0){
             return $this->scopeConfig->getValue('straker/general/my_account_domain/'. $siteVersion);
+        }elseif(strcasecmp($domain, 'straker_bug_log_domain') === 0){
+            return $this->scopeConfig->getValue('straker/general/straker_bug_log_domain/'. $siteVersion);
         }
 
         if(!empty($version)){
@@ -130,6 +132,11 @@ class ConfigHelper extends AbstractHelper
     public function getPaymentPageUrl()
     {
         return $this->_getSiteDomain('my_account_domain').'/'.$this->scopeConfig->getValue('straker/general/api_url/payment_page');
+    }
+
+    public function getBugLogUrl()
+    {
+        return $this->_getSiteDomain('straker_bug_log_domain').'/'.$this->scopeConfig->getValue('straker/general/api_url/bug_log');
     }
 
     public function getMyAccountUrl()

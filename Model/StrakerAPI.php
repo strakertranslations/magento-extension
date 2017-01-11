@@ -13,6 +13,7 @@ use Magento\Framework\HTTP\ZendClientFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\Message\ManagerInterface;
+use Zend_Http_Client;
 
 class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 {
@@ -64,18 +65,21 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
     protected function _call($url, $method = 'get', array $request = [], $timeout = 60 )
     {
         $httpClient = $this->_httpClient->create();
-        switch($method){
+        $return = '';
+
+        switch(strtolower($method)){
             case 'post':
-                $method = \Zend_Http_Client::POST;
+                $method = Zend_Http_Client::POST;
                 $httpClient->setParameterPost($request);
                 if(!empty($request['source_file'])){
                     $httpClient->setFileUpload($request['source_file'], 'source_file');
                 }
                 break;
             case 'get':
-                $method = \Zend_Http_Client::GET;
+                $method = Zend_Http_Client::GET;
                 break;
         }
+
         $httpClient->setUri($url);
         $httpClient->setConfig(['timeout' => $timeout, 'verifypeer' => 0]);
         $httpClient->setHeaders($this->getHeaders());
@@ -84,45 +88,29 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $this->_logger->addDebug('strakerAPI-http-request-start '.__FILE__.__LINE__,[$request,$httpClient->getUri(),$url,$method,$timeout]);
 
         try{
-
             $response = $httpClient->request();
 
             if(!$response->isError()){
-
                 $contentType = $response->getHeader('Content-Type');
-
                 $body = $response->getBody();
-
                 $this->_logger->addDebug('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
 
                 if(strpos($contentType,'application/json') !== false ){
-
-                    $returnBody = json_decode($body);
-
-                    return $returnBody;
-
+                    $return = json_decode($body);
                 }else{
-
-                    return $body;
+                    $return = $body;
                 }
             }else{
-
                 $this->_logger->addError('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
-
                 $this->_messageManager->addError('Straker API error. Please check logs.');
-
-                return $response;
+                $return = $response;
             }
-
         }catch(Exception $e){
-
             $this->_logger->addError('strakerAPI-http-request-error '.__FILE__.__LINE__,[$e,$httpClient->getUri(),$url,$method,$timeout]);
-
             $this->_messageManager->addError('Straker API error. Please check logs.');
-
-            $this->_logger->_callStrakerBuglog('strakerAPI-Magento '.$e->getMessage(),$e->__toString());
-
         }
+
+        return $return;
     }
 
     protected function _buildQuery($request)
@@ -328,5 +316,33 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
                 'app_name' => $this->_configHelper->getDbName()
             ]
         );
+    }
+
+    public function _callStrakerBugLog($msg, $e = '')
+    {
+        $httpClient = $this->_httpClient->create();
+        $url = $this->_configHelper->getBugLogUrl();
+
+        $requestData = [
+            'APIKey'           => $this->_configHelper->getApplicationKey(),
+            'applicationCode'  => 'Magento2 Plugin',
+            'HTMLReport'       => 'HTMLReport',
+            'templatePath'     => $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
+            'message'          => $msg,
+            'severityCode'     => 'ERROR',
+            'exceptionMessage' => $msg,
+            'exceptionDetails' => $e,
+            'userAgent'        => $_SERVER['HTTP_USER_AGENT'],
+            'dateTime'         => date('m/d/Y H:i:s'),
+            'hostName'         => $_SERVER['HTTP_HOST']
+        ];
+
+        $httpClient->setHeaders($this->getHeaders());
+        $httpClient->setConfig(['timeout' => 300, 'verifypeer' => 0]);
+        $httpClient->setMethod(Zend_Http_Client::POST);
+        $httpClient->setParameterPost($requestData);
+        $httpClient->setUri($url);
+
+        $httpClient->request();
     }
 }

@@ -22,7 +22,7 @@ use Magento\Cms\Model\ResourceModel\Block\Collection;
 use Magento\Catalog\Model\CategoryFactory;
 use Magento\Cms\Model\PageFactory as PageFactory;
 use Magento\Cms\Model\BlockFactory as BlockFactory;
-
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Attribute;
 use Straker\EasyTranslationPlatform\Logger\Logger;
 use Straker\EasyTranslationPlatform\Helper\XmlHelper;
@@ -79,9 +79,10 @@ class ImportHelper extends AbstractHelper
     protected $_block;
 
     protected $_messageManager;
+    protected $_blockCollection;
+    protected $_strakerApi;
 
     public function __construct(
-
         Context $context,
         Logger $logger,
         Parser $xmlParser,
@@ -105,7 +106,8 @@ class ImportHelper extends AbstractHelper
         UrlFinderInterface $urlFinder,
         TimezoneInterface $timezone,
         BlockCollection $block,
-        ManagerInterface $messageManager
+        ManagerInterface $messageManager,
+        StrakerAPIInterface $strakerApi
     )
     {
         $this->_logger = $logger;
@@ -131,7 +133,7 @@ class ImportHelper extends AbstractHelper
         $this->_timezoneInterface = $timezone;
         $this->_blockCollection = $block;
         $this->_messageManager = $messageManager;
-
+        $this->_strakerApi = $strakerApi;
         parent::__construct($context);
     }
 
@@ -192,9 +194,7 @@ class ImportHelper extends AbstractHelper
         }catch (\Exception $e){
 
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
-            $this->_logger->_callStrakerBuglog($e->getMessage(),$e->__toString());
-
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->_messageManager->addError($e->getMessage());
 
         }
@@ -266,7 +266,7 @@ class ImportHelper extends AbstractHelper
                 } catch (\Exception $e) {
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
                 }
 
@@ -300,7 +300,7 @@ class ImportHelper extends AbstractHelper
                 } catch (\Exception $e) {
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
                 }
@@ -352,7 +352,7 @@ class ImportHelper extends AbstractHelper
                 } catch (\Exception $e) {
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
 
@@ -381,7 +381,7 @@ class ImportHelper extends AbstractHelper
         } catch (\Exception $e) {
 
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->_messageManager->addError($e->getMessage());
 
 
@@ -418,7 +418,7 @@ class ImportHelper extends AbstractHelper
             } catch (\Exception $e) {
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
 
@@ -440,7 +440,7 @@ class ImportHelper extends AbstractHelper
             } catch (\Exception $e) {
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
 
@@ -484,7 +484,7 @@ class ImportHelper extends AbstractHelper
                     }catch (\Exception $e){
 
                         $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                        $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                         $this->_messageManager->addError($e->getMessage());
 
                     }
@@ -501,7 +501,7 @@ class ImportHelper extends AbstractHelper
                     }catch (\Exception $e){
 
                         $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                        $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                         $this->_messageManager->addError($e->getMessage());
 
 
@@ -524,7 +524,7 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
                 }
@@ -627,6 +627,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
             }
@@ -658,6 +659,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
             }
@@ -685,7 +687,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
             }
@@ -720,7 +722,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
             }
@@ -753,7 +755,7 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
                 }
@@ -779,7 +781,7 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
                 }
@@ -810,7 +812,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
             }
@@ -845,7 +847,7 @@ class ImportHelper extends AbstractHelper
             }catch (\Exception $e){
 
                 $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->_messageManager->addError($e->getMessage());
 
             }
@@ -874,7 +876,7 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
                 }
@@ -903,7 +905,7 @@ class ImportHelper extends AbstractHelper
                 }catch (\Exception $e){
 
                     $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
-
+                    $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                     $this->_messageManager->addError($e->getMessage());
 
                 }
