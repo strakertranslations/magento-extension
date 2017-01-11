@@ -370,9 +370,7 @@ class ImportHelper extends AbstractHelper
         $labels = $this->_attributeTranslationCollection->create()
             ->addFieldToFilter('job_id', array('eq' => $this->_jobModel->getId()))
             ->addFieldToFilter('is_label', array('eq' => 1))
-            ->addFieldtoFilter('attribute_code', array('eq' => $label_id))
-            ->addFieldToFilter('translated_value', array('eq' => ' '))
-            ->addFieldToSelect('*');
+            ->addFieldToFilter('attribute_code',array('eq'=>$label_id));
 
         try {
 
