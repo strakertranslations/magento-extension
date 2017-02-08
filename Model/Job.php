@@ -2,19 +2,17 @@
 
 namespace Straker\EasyTranslationPlatform\Model;
 
-use Magento\Downloadable\Model\SampleFactory;
-use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Straker\EasyTranslationPlatform\Helper\ImportHelper;
 use Straker\EasyTranslationPlatform\Logger\Logger;
-use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory                               as ProductCollectionFactory;
-use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory                             as CategoryCollectionFactory;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory                                      as PageCollectionFactory;
-use Magento\Cms\Model\ResourceModel\Block\CollectionFactory                                     as BlockCollectionFactory;
-use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory  as AttributeTranslationCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory as MagentoProductCollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory as CategoryCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as MagentoPageCollectionFactory;
+use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as MagentoBlockCollectionFactory;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\CollectionFactory as AttributeTranslationCollectionFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
@@ -63,10 +61,10 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     public function __construct(
         Context $context,
         Registry $registry,
-        ProductCollectionFactory $productCollectionFactory,
+        MagentoProductCollectionFactory $productCollectionFactory,
         CategoryCollectionFactory $categoryCollectionFactory,
-        PageCollectionFactory $pageCollectionFactory,
-        BlockCollectionFactory $blockCollectionFactory,
+        MagentoPageCollectionFactory $pageCollectionFactory,
+        MagentoBlockCollectionFactory $blockCollectionFactory,
         AttributeTranslationCollectionFactory $attributeTranslationCollectionFactory,
         ProductRepositoryInterface $productRepository,
         CategoryRepositoryInterface $categoryRepository,
@@ -103,7 +101,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     protected function _construct()
     {
-    
+
         $this->_init('Straker\EasyTranslationPlatform\Model\ResourceModel\Job');
     }
 
@@ -118,7 +116,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     }
 
     /**
-     * @param int $type, either JobType::JOB_TYPE_PRODUCT (default) or (JobType::JOB_TYPE_CATEGORY)
+     * @param int $type , either JobType::JOB_TYPE_PRODUCT (default) or (JobType::JOB_TYPE_CATEGORY)
      * @return array
      */
     public function getEntities($type = JobType::JOB_TYPE_PRODUCT)
@@ -134,7 +132,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     {
         $this->getAttributeTranslationEntityArray();
         $collection = $this->_productCollectionFactory->create()
-            ->addFieldToFilter('entity_id', ['in'=> $this->_entityIds]);
+            ->addFieldToFilter('entity_id', ['in' => $this->_entityIds]);
 
 //        var_dump($collection->getData());exit();
         return $collection;
@@ -176,7 +174,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     public function getAttributeTranslationEntityArray()
     {
-        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
+        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection */
         $collection = $this->_getAttributeTranslationEntityCollection();
         foreach ($collection->getData() as $item) {
             array_push($this->_entityIds, $item['entity_id']);
@@ -186,11 +184,11 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     private function _getAttributeTranslationEntityCollection()
     {
-        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection  */
+        /** @var \Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation\Collection $collection */
         $collection = $this->_attributeTranslationCollectionFactory->create()
             ->distinct(true)
             ->addFieldToSelect('entity_id')
-            ->addFieldToFilter('job_id', [ 'eq' => $this->getId()]);
+            ->addFieldToFilter('job_id', ['eq' => $this->getId()]);
         return $collection;
     }
 
@@ -214,11 +212,21 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
     public function updateStatus($jobData)
     {
-        $return = [ 'isSuccess' => true, 'Message' => ''];
+        $return = ['isSuccess' => true, 'Message' => ''];
+        $isSandbox = $this->_importHelper->configHelper->isSandboxMode();
+        $jobKey = $this->getJobKey();
+        $testJobNumber = $this->getId();
         switch (strtolower($jobData->status)) {
             case 'queued':
                 if (empty($this->getData('job_number')) && !empty($jobData->tj_number)) {
-                    $this->setData('job_number', $jobData->tj_number)->save();
+                    if($isSandbox){
+                        if (!empty($jobKey)) {
+                            $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
+                        }
+                        $this->setData('job_number', 'Test Job ' . $testJobNumber);
+                    }else{
+                        $this->setData('job_number', $jobData->tj_number)->save();
+                    }
                 }
 
                 if (empty($this->getData('job_number'))) {
@@ -258,36 +266,33 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                             $return['Message'] = __('Failed to write content to ' . $fileFullName);
                             $this->_logger->addError($return['Message']);
                         } else {
-                            //TODO save new filename to database
                             $this->setData('download_url', $downloadUrl)
                                 ->setData('translated_file', $fileNameArray['name'])->save();
                             $this->_importHelper->create($this->getId())
                                 ->parseTranslatedFile()
                                 ->saveData();
-                            if (empty($this->getData('job_number')) && $this->_importHelper->configHelper->isSandboxMode()) {
-                                $jobKey = $this->getJobKey();
-                                $testJobNumber = $this->getId();
+                            if (empty($this->getData('job_number')) && $isSandbox) {
                                 if (!empty($jobKey)) {
-                                    $testJobNumber = $this->getTestJobNumberByJobKey($this->getJobKey());
+                                    $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
                                 }
-                                $this->setData('job_number', 'Test Job '. $testJobNumber);
+                                $this->setData('job_number', 'Test Job ' . $testJobNumber);
                             }
                             $this->setData('job_status_id', JobStatus::JOB_STATUS_COMPLETED)->save();
                         }
                     } else {
                         $return['isSuccess'] = false;
-                        $return['Message'] = __('Download url is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
+                        $return['Message'] = __('Download url is not found for the job ( \'job_key\': \'' . $jobData->job_key . '\').');
                         $this->_logger->addError($return['Message']);
                     }
                 } else {
                     $return['isSuccess'] = false;
-                    $return['Message'] = __('Download file is not found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
+                    $return['Message'] = __('Download file is not found for the job ( \'job_key\': \'' . $jobData->job_key . '\').');
                     $this->_logger->addError($return['Message']);
                 }
                 break;
             default:
                 $return['isSuccess'] = false;
-                $return['Message'] = __('Unknown status is found for the job ( \'job_key\': \'' .$jobData->job_key . '\').');
+                $return['Message'] = __('Unknown status is found for the job ( \'job_key\': \'' . $jobData->job_key . '\').');
                 $this->_logger->addError($return['Message']);
                 break;
         }
@@ -311,7 +316,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $fileName = substr_replace($originalFileName, '_translated', $pos);
 //        $suffix = date('Y-m-d H:i',time());
         $suffix = '';
-        return [ 'path' => $filePath, 'name' => $fileName.'_'. $suffix  .'.xml'];
+        return ['path' => $filePath, 'name' => $fileName . '_' . $suffix . '.xml'];
     }
 
     public function getEntityName($entityId = '1')
@@ -327,7 +332,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
             case JobType::JOB_TYPE_PAGE:
                 $title = $this->_pageRepository->getById($entityId)->getTitle();
                 break;
-            case Jobtype::JOB_TYPE_BLOCK:
+            case JobType::JOB_TYPE_BLOCK:
                 $title = $this->_blockRepository->getById($entityId)->getTitle();
                 break;
         }
@@ -339,25 +344,26 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $data = $this->getResourceCollection()
             ->distinct(true)
             ->addFieldToSelect('job_number')
-            ->addFieldToFilter('job_number', ['neq'=> null ])
-            ->addFieldToFilter('is_test_job', ['eq'=> 1 ])
-            ->addFieldToFilter('job_key', ['neq'=> $jobKey ]);
-
-        return count($data) + 1;
+            ->addFieldToFilter('job_number', ['neq' => null])
+            ->addFieldToFilter('is_test_job', ['eq' => 1])
+            ->addFieldToFilter('job_key', ['neq' => $jobKey])
+            ->count();
+        return $data + 1;
     }
 
-    public function getTranslatedPageId($sourcePageId){
+    public function getTranslatedPageId($sourcePageId)
+    {
         $pageId = null;
-        if($this->getJobTypeId() <> JobType::JOB_TYPE_PAGE){
+        if ($this->getJobTypeId() <> JobType::JOB_TYPE_PAGE) {
             return $pageId;
         }
         $targetStoreId = $this->getTargetStoreId();
         $sourcePage = $this->_pageRepository->getById($sourcePageId);
         $identifier = $sourcePage->getIdentifier();
         $collection = $this->_pageCollectionFactory->create()->addFieldToFilter('identifier', ['eq' => $identifier]);
-        foreach ($collection->getItems() as $page){
+        foreach ($collection->getItems() as $page) {
             $stores = $page->getStores();
-            if(is_array($stores) && in_array($targetStoreId, $stores)){
+            if (is_array($stores) && in_array($targetStoreId, $stores)) {
                 $pageId = $page->getId();
                 break;
             }
@@ -365,18 +371,19 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         return $pageId;
     }
 
-    public function getTranslatedBlockId($sourceBlockId){
+    public function getTranslatedBlockId($sourceBlockId)
+    {
         $blockId = null;
-        if($this->getJobTypeId() <> JobType::JOB_TYPE_BLOCK){
+        if ($this->getJobTypeId() <> JobType::JOB_TYPE_BLOCK) {
             return $blockId;
         }
         $targetStoreId = $this->getTargetStoreId();
         $sourceBlock = $this->_blockRepository->getById($sourceBlockId);
         $identifier = $sourceBlock->getIdentifier();
         $collection = $this->_blockCollectionFactory->create()->addFieldToFilter('identifier', ['eq' => $identifier]);
-        foreach ($collection->getItems() as $block){
+        foreach ($collection->getItems() as $block) {
             $stores = $block->getStores();
-            if(is_array($stores) && in_array($targetStoreId, $stores)){
+            if (is_array($stores) && in_array($targetStoreId, $stores)) {
                 $blockId = $block->getId();
                 break;
             }

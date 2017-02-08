@@ -6,18 +6,16 @@ use \Exception;
 use Magento\Framework\App\Action\Action;
 use \Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config;
-use \Magento\Framework\Message\ManagerInterface;
 use \Magento\Store\Model\StoreManagerInterface;
 use \Magento\Framework\App\CacheInterface;
-use \Magento\Framework\App\ObjectManager;
 use \Magento\Framework\Controller\Result\Json;
+use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use \Straker\EasyTranslationPlatform\Model\Setup;
 use \Straker\EasyTranslationPlatform\Logger\Logger;
 
 class ResetAccount extends Action
 {
 
-    protected $_messageManager;
     protected $_storeManager;
     protected $_storeCache;
     protected $_resultJson;
@@ -25,24 +23,23 @@ class ResetAccount extends Action
     protected $_logger;
 
     public $resultRedirectFactory;
+    protected $_strakerApi;
 
     public function __construct(
         Context $context,
         Json $resultJson,
-        ManagerInterface $messageManager,
         StoreManagerInterface $storeManager,
         CacheInterface $storeCache,
         Setup $strakerSetup,
-        Logger $logger
+        Logger $logger,
+        StrakerAPIInterface $strakerApi
     ) {
-    
-        $this->_messageManager = $messageManager;
         $this->_storeManager = $storeManager;
         $this->_storeCache = $storeCache;
         $this->_resultJson = $resultJson;
         $this->_strakerSetup = $strakerSetup;
         $this->_logger = $logger;
-
+        $this->_strakerApi = $strakerApi;
         return parent::__construct($context);
     }
 
@@ -67,12 +64,13 @@ class ResetAccount extends Action
             //clear all translation jobs
             $this->_strakerSetup->clearStrakerData();
             $this->_storeCache->clean(Config::CACHE_TAG);
-            $this->_messageManager->addSuccessMessage(__('Straker Translations settings have been cleared.'));
+            $this->messageManager->addSuccessMessage(__('Straker Translations settings have been cleared.'));
             $this->_logger->info(__('Straker Translations settings have been cleared.'));
         } catch (Exception $e) {
             $message = __($e->getMessage());
-            $this->_messageManager->addError($message);
+            $this->messageManager->addError($message);
             $this->_logger->error($message);
+            $this->_strakerApi->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $result['Success'] = false;
         }
 

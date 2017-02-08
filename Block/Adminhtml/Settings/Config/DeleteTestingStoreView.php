@@ -4,6 +4,9 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 use Magento\Backend\Block\Template\Context;
 use Magento\Config\Block\System\Config\Form\Field;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
+use Magento\Store\Model\StoreFactory;
+use Magento\Store\Model\Store;
+use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 
 class DeleteTestingStoreView extends Field
 {
@@ -12,15 +15,21 @@ class DeleteTestingStoreView extends Field
     private $_buttonId;
     private $_buttonName;
     protected $_setup;
+    protected $_storeFactory;
+    protected $_configHelper;
 
     function __construct
     (
         Context $context,
         SetupInterface $setup,
+        StoreFactory $storeFactory,
+        ConfigHelper $configHelper,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->_setup = $setup;
+        $this->_storeFactory = $storeFactory;
+        $this->_configHelper = $configHelper;
     }
 
     /**
@@ -76,6 +85,7 @@ class DeleteTestingStoreView extends Field
 
     public function getButtonHtml()
     {
+        $disable = $this->_setup->isTestingStoreViewExist()->getId() ? false : true;
         $button = $this->getLayout()->createBlock(
             'Magento\Backend\Block\Widget\Button'
         )->addData([
@@ -83,9 +93,15 @@ class DeleteTestingStoreView extends Field
             'name' => $this->_buttonName,
             'label' => __('Delete'),
             'type' => 'button',
-            'disabled' => !$this->_setup->isTestingStoreViewExist()
+            'disabled' => $disable
         ]);
-
         return $button->toHtml();
+    }
+
+    /**
+     * @return Store
+     */
+    public function _getTestStoreView(){
+        return $this->_storeFactory->create()->load($this->_configHelper->getTestingStoreViewCode());
     }
 }

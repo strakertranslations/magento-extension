@@ -2,32 +2,23 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
-use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
-
+use Magento\Backend\Block\Widget\Form\Generic;
+use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Data\FormFactory;
-use Magento\Store\Model\System\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Backend\Model\Session;
 
-class Destination extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
+class Destination extends Generic implements TabInterface
 {
+    protected $_Registry;
 
     public function __construct(
         Context $context,
         Registry $registry,
-        FormFactory $formFactory,
-        StoreManagerInterface $storeManager,
-        StrakerAPIInterface $strakerAPIInterface,
-        Session $session
+        FormFactory $formFactory
     ) {
-
-        $this->_storeManager = $storeManager;
-        $this->_strakerAPIinterface = $strakerAPIInterface;
         $this->_formFactory = $formFactory;
         $this->_Registry = $registry;
-        $this->session = $session;
 
         parent::__construct($context, $registry, $formFactory);
     }

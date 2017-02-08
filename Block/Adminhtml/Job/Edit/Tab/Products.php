@@ -6,10 +6,12 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Helper\Data;
 use Straker\EasyTranslationPlatform\Model\ProductCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Catalog\Model\Product\VisibilityFactory;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory as JobCollectionFactory;
+use Straker\EasyTranslationPlatform\Model\ResourceModel\Products\Collection;
 
 class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -18,7 +20,10 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $jobFactory;
     protected $sourceStoreId;
     protected $_configHelper;
-
+    protected $jobCollectionFactory;
+    protected $resourceConnection;
+    protected $targetStoreId;
+    protected $productVisibilityModel;
 
 
     public function __construct(
@@ -29,6 +34,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         ConfigHelper $configHelper,
         JobCollectionFactory $jobCollectionFactory,
         ResourceConnection $resourceConnection,
+        VisibilityFactory $productVisibilityFactory,
         array $data = []
     ) {
         $this->jobFactory = $jobFactory;
@@ -36,6 +42,7 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->_configHelper = $configHelper;
         $this->jobCollectionFactory = $jobCollectionFactory;
         $this->resourceConnection = $resourceConnection;
+        $this->productVisibilityModel = $productVisibilityFactory->create();
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -54,66 +61,16 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->targetStoreId = $this->getRequest()->getParam('target_store_id');
     }
 
-//    /**
-//     * add Column Filter To Collection
-//     */
-//    protected function _addColumnFilterToCollection($column)
-//    {
-//        if ($column->getId() == 'in_product') {
-//            $productIds = $this->_getSelectedProducts();
-//
-//            if (empty($productIds)) {
-//                $productIds = 0;
-//            }
-//            if ($column->getFilter()->getValue()) {
-//                $this->getCollection()->addFieldToFilter('entity_id', array('in' => $productIds));
-//            } else {
-//                if ($productIds) {
-//                    $this->getCollection()->addFieldToFilter('entity_id', array('nin' => $productIds));
-//                }
-//            }
-//        } else {
-//            parent::_addColumnFilterToCollection($column);
-//        }
-//
-//        return $this;
-//    }
-
-
     protected function _prepareCollection()
     {
-
         $collection = $this->productCollectionFactory->create();
-
-        $strakerJobs = $this->resourceConnection->getTableName('straker_job');
-        $strakerTrans = $this->resourceConnection->getTableName('straker_attribute_translation');
-
-//        $collection->getSelect()->columns(
-//            'if(stTrans.translated_value IS NULL," ",stTrans.translated_value) as is_translated'
-//        )->joinLeft(
-//            ['stTrans'=>$strakerTrans],
-//            'e.entity_id=stTrans.entity_id',
-//            []
-//        );
-//
-//        $collection->getSelect()->columns(
-//            'stJob.*'
-//        )->joinLeft(
-//            ['stJob'=>$strakerJobs],
-//            'stTrans.job_id=stJob.job_id and stJob.target_store_id='.$this->targetStoreId.' and stJob.job_type_id=1',
-//            []
-//        )->group('e.entity_id');
-
         $collection->addAttributeToSelect('name');
-        $collection->addAttributeToSelect('sku');
         $collection->addAttributeToSelect('price');
+        $collection->addAttributeToSelect('visibility');
 
         $collection->setStore($this->sourceStoreId);
-
-        $collection->is_Translated();
-
+        $collection->is_translated($this->targetStoreId);
         $this->setCollection($collection);
-
         return parent::_prepareCollection();
     }
 
@@ -122,18 +79,21 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-
-        $this->addColumn(
-            'in_product',
-            [
-                'header_css_class' => 'a-center',
-                'type' => 'checkbox',
-                'name' => 'in_product',
-                'align' => 'center',
-                'index' => 'entity_id',
-                'values' => $this->_getSelectedProducts()
-            ]
-        );
+//
+//        $this->addColumn(
+//            'in_product',
+//            [
+//                'type' => 'massaction',
+////                'reander' => 'Magento\Backend\Block\Widget\Grid\Column\Renderer\Massaction',
+//                'name' => 'in_product',
+//                'align' => 'center',
+//                'index' => 'entity_id',
+//                'is_system' => true,
+//                'header_css_class' => 'col-select',
+//                'column_css_class' => 'col-select',
+//                'values' => $this->_getSelectedProducts()
+//            ]
+//        );
 
         $this->addColumn(
             'entity_id',
@@ -174,6 +134,17 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         );
 
         $this->addColumn(
+            'visibility',
+            [
+                'header' => __('Visibility'),
+                'type' => 'options',
+                'options' => $this->productVisibilityModel->getOptionArray(),
+                'index' => 'visibility',
+                'width' => '50px',
+            ]
+        );
+
+        $this->addColumn(
             'is_translated',
             [
                 'header' => __('Translated'),
@@ -181,9 +152,10 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'width' => '50px',
                 'type'=>'options',
                 'options'=>['1'=>'Yes','0'=>'No'],
-                'filter_index'=>'stTrans.translated_value',
+//                'filter_index'=>'stTrans.translated_value',
                 'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Grid\Renderer\TranslatedValue',
-                'filter_condition_callback' => array($this, '_filterCallback')
+                'filter_condition_callback' => array($this, '_filterCallback'),
+                'order_callback' => [$this, '_orderIsTranslated']
             ]
         );
 
@@ -199,6 +171,16 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         return [];
+    }
+
+    function _prepareMassaction()
+    {
+        $this->setMassactionIdField('entity_id');
+        $this->setFormFieldName('products');
+        $this->getMassactionBlock()->setTemplate('Straker_EasyTranslationPlatform::job/massaction_extended.phtml');
+        $this->getMassactionBlock()->addItem('create', []);
+
+        return $this;
     }
 
     /**
@@ -227,9 +209,41 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 
     protected function _filterCallback($collection, $column)
     {
-
         $condition = $column->getFilter()->getCondition();
-        $collection->getSelect()->having('`is_translated` = ' . reset($condition));
+        $collection->getSelect()->having('`is_translated` = ?', reset($condition));
         return $this;
+    }
+
+    //in order to sort and filter on computed columns,
+    //1, rewrite _setCollectionOrder.
+    //2. implement callback defined in column data, like 'order_callback' => [$this, '_orderIsTranslated'].
+    protected function _orderIsTranslated($collection, $column){
+        $collection->getSelect()->order($column->getIndex() . ' ' . strtoupper($column->getDir()));
+    }
+
+    protected function _setCollectionOrder($column)
+    {
+        if ($column->getOrderCallback()) {
+            call_user_func($column->getOrderCallback(), $this->getCollection(), $column);
+            return $this;
+        }
+        return parent::_setCollectionOrder($column);
+    }
+
+    public function _getSerializerBlock()
+    {
+        return $this->getLayout()->getBlock('products_grid_serializer');
+    }
+
+    public function _getHiddenInputElementName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'products' : $serializerBlock->getInputElementName();
+    }
+
+    public function _getReloadParamName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'job_products' : $serializerBlock->getReloadParamName();
     }
 }

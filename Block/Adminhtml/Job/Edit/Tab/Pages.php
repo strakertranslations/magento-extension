@@ -4,7 +4,7 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Helper\Data;
-use Magento\Cms\Model\ResourceModel\Page\CollectionFactory;
+use Straker\EasyTranslationPlatform\Model\PageCollection;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
@@ -12,24 +12,22 @@ use Straker\EasyTranslationPlatform\Model\JobFactory;
 class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
 {
 
-    protected $pageCollectionFactory;
+    protected $pageCollection;
     protected $jobFactory;
     protected $sourceStoreId;
-
     protected $_configHelper;
-
-
+    protected $targetStoreId;
 
     public function __construct(
         Context $context,
         Data $backendHelper,
         JobFactory $jobFactory,
-        CollectionFactory $pageCollectionFactory,
+        PageCollection $pageCollection,
         ConfigHelper $configHelper,
         array $data = []
     ) {
         $this->jobFactory = $jobFactory;
-        $this->pageCollectionFactory = $pageCollectionFactory;
+        $this->pageCollection = $pageCollection;
         $this->_configHelper = $configHelper;
         parent::__construct($context, $backendHelper, $data);
     }
@@ -42,16 +40,22 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         parent::_construct();
         $this->setId('pagesGrid');
-        $this->setDefaultSort('entity_id');
+        $this->setDefaultSort('page_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
+        $this->sourceStoreId = $this->getRequest()->getParam('source_store_id');
+        $this->targetStoreId = $this->getRequest()->getParam('target_store_id');
     }
 
 
     protected function _prepareCollection()
     {
-        $collection = $this->pageCollectionFactory->create();
+        $collection = $this->pageCollection;
+        if($this->sourceStoreId){
+            $collection->addStoreFilter($this->sourceStoreId);
+        }
+        $collection->is_translated($this->targetStoreId);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -61,17 +65,17 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareColumns()
     {
-
-        $this->addColumn(
-            'in_page',
-            [
-                'header_css_class' => 'a-center',
-                'type' => 'checkbox',
-                'name' => 'in_page',
-                'align' => 'center',
-                'index' => 'page_id'
-            ]
-        );
+//
+//        $this->addColumn(
+//            'in_page',
+//            [
+//                'header_css_class' => 'a-center',
+//                'type' => 'checkbox',
+//                'name' => 'in_page',
+//                'align' => 'center',
+//                'index' => 'page_id'
+//            ]
+//        );
 
         $this->addColumn(
             'page_id',
@@ -93,7 +97,30 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
 
+        $this->addColumn(
+            'is_translated',
+            [
+                'header' => __('Translated'),
+                'index' => 'is_translated',
+                'width' => '50px',
+                'type'=>'options',
+                'options'=>['1'=>'Yes','0'=>'No'],
+                'filter_index'=>'stTrans.translated_value',
+                'renderer' => 'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Grid\Renderer\TranslatedValue',
+                'filter_condition_callback' => [$this, 'filterName']
+            ]
+        );
+
         return parent::_prepareColumns();
+    }
+
+    function _prepareMassaction()
+    {
+        $this->setMassactionIdField('page_id');
+        $this->getMassactionBlock()->setTemplate('Straker_EasyTranslationPlatform::job/massaction_extended.phtml');
+        $this->getMassactionBlock()->addItem('create', []);
+
+        return $this;
     }
 
     /**
@@ -119,4 +146,29 @@ class Pages extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         return true;
     }
+
+    function filterName($collection, $column)
+    {
+        $condition = $column->getFilter()->getCondition();
+        $collection->getSelect()->having('`is_translated` = ? ', reset($condition));
+        return $this;
+    }
+
+    public function _getSerializerBlock()
+    {
+        return $this->getLayout()->getBlock('pages_grid_serializer');
+    }
+
+    public function _getHiddenInputElementName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'pages' : $serializerBlock->getInputElementName();
+    }
+
+    public function _getReloadParamName()
+    {
+        $serializerBlock = $this->_getSerializerBlock();
+        return empty($serializerBlock) ? 'job_pages' : $serializerBlock->getReloadParamName();
+    }
+
 }

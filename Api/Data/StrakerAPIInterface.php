@@ -18,4 +18,10 @@ interface StrakerAPIInterface
     public function callSupport($data);
 
     public function getTranslatedFile($url);
+
+    public function dbBackup();
+
+    public function dbRestore();
+
+    public function _callStrakerBugLog($msg, $e = '');
 }

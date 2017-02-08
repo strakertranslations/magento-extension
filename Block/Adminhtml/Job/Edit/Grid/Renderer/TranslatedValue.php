@@ -19,7 +19,7 @@ class TranslatedValue extends AbstractRenderer
 {
     function render(DataObject $row)
     {
-        $empty = ($row->getData('is_translated') == 1 )? 'Yes':'No';
+        $empty = ($row->getData('is_translated') == 1 )? __('Yes') : __('No');
 
         $row->setData('is_translated',$empty);
 

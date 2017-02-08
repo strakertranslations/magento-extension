@@ -97,7 +97,7 @@ class Grid extends Extended
                 'getter' => 'getBlockId',
                 'actions' => [
                     [
-                        'caption' => __('View'),
+                        'caption' => __('View Details'),
                         'url' => [
                             'base' => '*/*/ViewJob',
                             'params' => [

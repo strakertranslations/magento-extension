@@ -1,0 +1,282 @@
+<?php
+/**
+ * Copyright © 2016 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+/** @var $block \Magento\Backend\Block\Widget\Grid\Massaction\Extended */
+?>
+
+<div id="<?php echo $block->getHtmlId() ?>" class="admin__grid-massaction">
+    <?php if ($block->getHideFormElement() !== true):?>
+    <form action="" id="<?php echo $block->getHtmlId() ?>-form" method="post">
+    <?php endif ?>
+        <div class="admin__grid-massaction-form">
+        <?php echo $block->getBlockHtml('formkey')?>
+            <select
+                id="<?php echo $block->getHtmlId() ?>-select"
+                class="local-validation admin__control-select">
+                <option class="admin__control-select-placeholder" value="" selected><?php /* @escapeNotVerified */ echo __('Actions') ?></option>
+                <?php foreach ($block->getItems() as $_item): ?>
+                    <option value="<?php /* @escapeNotVerified */ echo $_item->getId() ?>"<?php echo($_item->getSelected() ? ' selected="selected"' : '')?>><?php /* @escapeNotVerified */ echo $_item->getLabel() ?></option>
+                <?php endforeach; ?>
+            </select>
+            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-hiddens"></span>
+            <span class="outer-span" id="<?php echo $block->getHtmlId() ?>-form-additional"></span>
+            <?php echo $block->getApplyButtonHtml() ?>
+        </div>
+    <?php if ($block->getHideFormElement() !== true):?>
+    </form>
+    <?php endif ?>
+    <div class="no-display">
+        <?php foreach ($block->getItems() as $_item): ?>
+            <div id="<?php echo $block->getHtmlId() ?>-item-<?php /* @escapeNotVerified */ echo $_item->getId() ?>-block">
+                <?php echo $_item->getAdditionalActionBlockHtml() ?>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <div class="mass-select-wrap">
+        <select
+            id="<?php echo $block->getHtmlId() ?>-mass-select"
+            class="action-select-multiselect"
+            data-menu="grid-mass-select">
+<!--            <optgroup label="--><?php ///* @escapeNotVerified */ echo __('Mass Actions')?><!--">-->
+                <option disabled selected></option>
+            <?php if ($block->getUseSelectAll()):?>
+                <option value="selectAll">
+                    <?php /* @escapeNotVerified */ echo __('Select All') ?>
+                </option>
+                <option value="unselectAll">
+                    <?php /* @escapeNotVerified */ echo __('Deselect All') ?>
+                </option>
+            <?php endif; ?>
+                <option value="selectVisible">
+                    <?php /* @escapeNotVerified */ echo __('Select All on This Page') ?>
+                </option>
+                <option value="unselectVisible">
+                    <?php /* @escapeNotVerified */ echo __('Deselect All on This Page') ?>
+                </option>
+<!--            </optgroup>-->
+        </select>
+        <label for="<?php echo $block->getHtmlId() ?>-mass-select"></label>
+    </div>
+</div>
+<script>
+    require([
+        'jquery',
+        'underscore',
+        'mage/adminhtml/grid',
+        'mage/adminhtml/events'
+    ], function(jQuery) {
+        'use strict';
+
+        var showActions = function(gridIdsTotal, pageIdsTotal, pageCheckedIds, inputElement, containerId, massActionId) {
+//            console.log('============================= start showAction ================================');
+            if(typeof containerId == 'undefined' || typeof massActionId == 'undefined'){
+//                console.log('containerId or massActionId undefined');
+                containerId = '<?php echo $block->getParentBlock()->getHtmlId(); ?>';
+                massActionId = '<?php echo $block->getHtmlId() ?>';
+            }
+
+            if(typeof gridIdsTotal == 'undefined' || typeof pageIdsTotal == 'undefined'  || pageCheckedIds == 'undefined' ){
+//                console.log('gridIdsTotal, pageIdsTotal or pageCheckedIds undefined');
+                var pageIds = jQuery('#<?php echo $block->getParentBlock()->getHtmlId(); ?> tr input[type="checkbox"][name="massaction"]');
+                gridIdsTotal = <?php echo count(explode(',',$block->getGridIdsJson())); ?>;
+                pageIdsTotal = pageIds.length;
+                pageCheckedIds = pageIds.filter(':checked').length;
+            }
+
+            var optionSelectAll  = jQuery('#' + massActionId + '-mass-select option[value="selectAll"]');
+            var optionSelectVisible = jQuery('#' + massActionId + '-mass-select option[value="selectVisible"]');
+            var optionUnSelectAll  = jQuery('#' + massActionId + '-mass-select option[value="unselectAll"]');
+            var optionUnSelectVisible = jQuery('#' + massActionId + '-mass-select option[value="unselectVisible"]');
+
+            if(typeof inputElement == 'undefined'){
+//                console.log('inputElement undefined');
+                var inputElementName = '<?php echo $block->getParentBlock()->_getHiddenInputElementName(); ?>';
+                inputElement = jQuery('input[type="hidden"][name="'+ inputElementName +'"]');
+            }
+
+            var inputElementValue = inputElement.val();
+            var allCheckedIds = (inputElementValue.length ? inputElementValue.split('&') : []).length;
+//            console.log('inputElement Name: ' + inputElement.prop('name'));
+//            console.log('input value: ' + inputElementValue);
+//            console.log('Total: ' + gridIdsTotal);
+//            console.log('Checked Total: ' + allCheckedIds);
+//            console.log('Page Total: ' + pageIdsTotal);
+//            console.log('Checked Page Total: ' + pageCheckedIds);
+//            console.log('select all: ' + optionSelectAll.selector);
+//            console.log('Container ID: ' + containerId);
+//            console.log('Mass Action ID: ' + massActionId);
+//            console.log('============================= end showAction ================================');
+
+            jQuery('#'+ massActionId +'-mass-select option').hide();
+
+            gridIdsTotal > allCheckedIds ? optionSelectAll.show() : optionSelectAll.hide();
+            allCheckedIds > 0 && allCheckedIds <= gridIdsTotal ? optionUnSelectAll.show() : optionUnSelectAll.hide();
+            pageIdsTotal > pageCheckedIds ? optionSelectVisible.show() : optionSelectVisible.hide();
+            pageCheckedIds > 0 && pageCheckedIds <= pageIdsTotal ? optionUnSelectVisible.show() : optionUnSelectVisible.hide();
+        };
+
+        showActions();
+
+        var filterAction = jQuery('#<?php echo $block->getParentBlock()->getHtmlId(); ?> .admin__filter-actions');
+        var massActionForm = jQuery('#<?php echo $block->getHtmlId() ?>-form');
+
+        if( typeof filterAction != 'undefined' ){
+            massActionForm.find('select').prop('disabled',true);
+            massActionForm.hide();
+            filterAction.insertAfter(massActionForm);
+        }
+
+        jQuery('#<?php echo $block->getHtmlId() ?>-mass-select').change(function () {
+            var massAction = jQuery('option:selected', this).val();
+
+            switch (massAction) {
+            <?php if ($block->getUseSelectAll()):?>
+                case 'selectAll':
+                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.selectAll();
+                    break;
+                case 'unselectAll':
+                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.unselectAll();
+                    break;
+            <?php endif; ?>
+                case 'selectVisible':
+                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.selectVisible();
+                    break;
+                case 'unselectVisible':
+                    return <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.unselectVisible();
+                    break;
+            }
+
+            this.blur();
+        });
+
+        varienGridMassaction.prototype.onGridRowClick = function(grid, evt) {
+            var that = grid.massaction;
+            var tdElement = Event.findElement(evt, 'td');
+            var trElement = Event.findElement(evt, 'tr');
+
+            if (typeof that.isDisabled != 'undefined' && that.isDisabled(evt)) {
+                return false;
+            }
+
+            if (!$(tdElement).down('input')) {
+                if ($(tdElement).down('a') || $(tdElement).down('select')) {
+                    return;
+                }
+                if (trElement.title && trElement.title.strip() != '#') {
+                    that.getOldCallback('row_click')(grid, evt);
+                }
+                else {
+                    var checkbox = Element.select(trElement, 'input');
+                    var isInput = Event.element(evt).tagName == 'input';
+                    var checked = isInput ? checkbox[0].checked : !checkbox[0].checked;
+
+                    if (checked) {
+                        that.checkedString = varienStringArray.add(checkbox[0].value, that.checkedString);
+                    } else {
+                        that.checkedString = varienStringArray.remove(checkbox[0].value, that.checkedString);
+                    }
+                    that.grid.setCheckboxChecked(checkbox[0], checked);
+                    that.updateCount();
+                }
+                return;
+            }
+
+            if (Event.element(evt).isMassactionCheckbox) {
+                that.setCheckbox(Event.element(evt));
+            } else if (checkbox = that.findCheckbox(evt)) {
+                checkbox.checked = !checkbox.checked;
+                jQuery(checkbox).trigger('change');
+                that.setCheckbox(checkbox);
+            }
+
+        };
+
+        varienGridMassaction.prototype.updateCount = function() {
+            var checkboxesTotal = varienStringArray.count((this.useSelectAll ? this.getGridIds() : this.getCheckboxesValuesAsString())),
+                checkboxesChecked = varienStringArray.count(this.checkedString);
+
+            jQuery('[data-role="counter"]' ,this.count).html(checkboxesChecked);
+
+            if (!checkboxesTotal) {
+                this.multiselect.addClassName('_disabled');
+            } else {
+                this.multiselect.removeClassName('_disabled');
+            }
+            if (checkboxesChecked == checkboxesTotal && checkboxesTotal != 0) {
+                this.count.removeClassName('_empty');
+                this.multiselect.addClassName('_checked').removeClassName('_indeterminate');
+            } else if (checkboxesChecked == 0) {
+                this.count.addClassName('_empty');
+                this.multiselect.removeClassName('_checked').removeClassName('_indeterminate');
+            } else {
+                this.count.removeClassName('_empty');
+                this.multiselect.addClassName('_checked').addClassName('_indeterminate');
+            }
+            if(!this.grid.reloadParams) {
+                this.grid.reloadParams = {};
+            }
+//            console.log(this.grid.containerId);
+            var selectedIds = this.checkedString.replace(new RegExp(',','g'), '&');
+//            console.log('============================= start updateCount ======================================');
+//            console.log('selected ids: ');
+//            console.log(selectedIds);
+//            var inputElement = jQuery('input[type="hidden"][name="' + this.inputFieldName + '"]');
+//            console.log('input field id: ' + this.grid.inputFieldId);
+            var inputElement;
+            if(this.grid.inputFieldId){
+                inputElement = jQuery('#' + this.grid.inputFieldId);
+//                console.log('inputField name: ' + inputElement.prop('name'));
+                inputElement.val(selectedIds);
+//                console.log(inputElement.val());
+            }
+            var gridIdsTotal = (this.gridIds.length ? this.gridIds.split(',') : []).length;
+            var pageIdsTotal = this.grid.rows.length;
+            var pageCheckedIds = jQuery('#' + this.grid.containerId + ' tr input[type="checkbox"][name="massaction"]').filter(':checked').length;
+//            console.log('checked ids: ');
+//            console.log(pageCheckedIds);
+//            console.log('============================= end updateCount ======================================');
+
+            showActions(gridIdsTotal, pageIdsTotal, pageCheckedIds, inputElement, this.grid.containerId, this.containerId);
+            this.grid.reloadParams[this.formFieldNameInternal] = this.checkedString;
+        };
+
+        serializerController.prototype.initialize = function(hiddenDataHolder, predefinedData, inputsToManage, grid, reloadParamName){
+            //Grid inputs
+            this.tabIndex = 1000;
+            this.inputsToManage       = inputsToManage;
+            this.multidimensionalMode = inputsToManage.length > 0;
+
+            //Hash with grid data
+            this.gridData             = this.getGridDataHash(predefinedData);
+
+            //Hidden input data holder
+            this.hiddenDataHolder     = $(hiddenDataHolder);
+            this.hiddenDataHolder.value = this.serializeObject();
+
+            this.grid = grid;
+            this.grid.inputFieldId    = hiddenDataHolder;
+            // Set old callbacks
+            this.setOldCallback('row_click', this.grid.rowClickCallback);
+            this.setOldCallback('init_row', this.grid.initRowCallback);
+            this.setOldCallback('checkbox_check', this.grid.checkboxCheckCallback);
+
+            //Grid
+            this.reloadParamName = reloadParamName;
+            this.grid.reloadParams = {};
+            this.grid.reloadParams[this.reloadParamName+'[]'] = this.getDataForReloadParam();
+            this.grid.rowClickCallback = this.rowClick.bind(this);
+            this.grid.initRowCallback = this.rowInit.bind(this);
+            this.grid.checkboxCheckCallback = this.registerData.bind(this);
+            this.grid.rows.each(this.eachRow.bind(this));
+        }
+    });
+
+    <?php if (!$block->getParentBlock()->canDisplayContainer()): ?>
+    <?php /* @escapeNotVerified */ echo $block->getJsObjectName() ?>.setGridIds('<?php /* @escapeNotVerified */ echo $block->getGridIdsJson() ?>');
+    <?php endif; ?>
+
+</script>

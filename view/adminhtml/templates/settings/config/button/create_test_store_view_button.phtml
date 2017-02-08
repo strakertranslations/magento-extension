@@ -1,0 +1,117 @@
+<?php
+/**  @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\CreateTestingStoreView */
+echo $block->getButtonHtml();
+echo '<p class="note"><span>'. __('This will create a Testing Store View to be used in Sandbox Mode for testing purposes.') .'</span>';
+?>
+
+<div id="create-test-store-modal" style="display: none;">
+    <p><?php echo __('Here you can create a Testing Store View to enable Sandbox Mode for testing purposes. Jobs you create while this is enabled will not be received by Straker Translations, and content will not be translated by a human - rather it will only be sample text. If you prefer to go to Live Mode straight away, please leave the Name field empty. You can switch between Sandbox and Live Modes at any point at Straker Translations/Settings/Configuration/Environment.') ?></p>
+    <fieldset class="fieldset admin__fieldset fieldset-wide">
+        <legend class="admin__legend legend">
+            <span></span>
+        </legend><br>
+
+
+        <div class="messages">
+        </div>
+
+
+        <div class="admin__field field field-store_view_name required">
+            <label class="label admin__field-label" for="item_store_view_name">
+                <span><?php echo __('Name'); ?></span>
+            </label>
+            <div class="admin__field-control control">
+                <input id="item_store_view_name" name="store_view_name" value="" title="Name of Store View" type="text" class=" input-text admin__control-text">
+                <div class="straker_store_error_msg"><span></span></div>
+            </div>
+        </div>
+
+        <div class="admin__field field field-site_mode ">
+            <label class="label admin__field-label" for="item_site_mode">
+                <span><?php echo __('Switch Site Mode: '); ?></span>
+            </label>
+            <div class="admin__field-control control">
+                <select id="item_site_mode_sandbox" name="site_mode" class=" select admin__control-select">
+                    <option value="<?php echo \Straker\EasyTranslationPlatform\Api\Data\SetupInterface::SITE_MODE_SANDBOX; ?>" selected="selected">Sandbox</option>
+                    <option value="<?php echo \Straker\EasyTranslationPlatform\Api\Data\SetupInterface::SITE_MODE_LIVE; ?>">Live</option>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+</div>
+
+<script>
+    require([
+        'jquery',
+        'Magento_Ui/js/modal/modal',
+        'Magento_Ui/js/modal/alert',
+        'mage/translate'
+    ], function( $, modal, alert ){
+        var options = {
+            type: 'popup',
+            responsive: true,
+            innerScroll: true,
+            title: $.mage.__('Create a Testing Store View'),
+            buttons: [
+                {
+                    text: $.mage.__('Cancel'),
+                    class: 'action cancel',
+                    click: function () {
+                        this.closeModal();
+                    }
+                },
+                {
+                    text: $.mage.__('Create'),
+                    class: 'action primary',
+                    click: function () {
+                        var storeName = $('#item_store_view_name').val();
+                        var siteMode = $('#item_site_mode_sandbox').val();
+                        if (storeName.length > 0) {
+                            this.closeModal();
+                            createTestStore(storeName, siteMode);
+                        }else{
+                            $('.straker_store_error_msg span').text('Name is invalid.');
+                        }
+                    }
+                }
+            ]
+        };
+        var popup = modal(options, $('#create-test-store-modal'));
+
+        function createTestStore(storeName, siteMode) {
+            $.ajax({
+                url: '<?php echo $block->getAjaxResetUrl(); ?>',
+                data: {storeName: storeName, siteMode: siteMode },
+                method: 'get',
+                dataType: 'json',
+                showLoader: true,
+            }).always( function ( data ) {
+                if( data.Success ){
+                    alert({
+                        title: '',
+                        content: $.mage.__('Test store view created successfully. Click <b>OK</b> to reload this page.'),
+                        actions: {
+                            always: function () {
+                                location.reload();
+                            }
+                        }
+                    });
+                }else{
+                    var msg = 'Something went wrong while creating test store view. <br/>';
+                    msg += (typeof data.Message != 'undefined') ? '<p><b>Message: </b><i>' + data.Message + '</i></p>' : '';
+                    alert({
+                        title: '',
+                        content: $.mage.__( msg + ' Please try again.')
+                    });
+                }
+            });
+        }
+
+        var $createTestStoreButton = $('#straker_config_env_create_test_store');
+
+        $createTestStoreButton.on('click', function(){
+            $('#create-test-store-modal').modal('openModal');
+        });
+    });
+</script>
+

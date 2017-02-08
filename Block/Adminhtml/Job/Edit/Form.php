@@ -2,11 +2,13 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit;
 
+use Magento\Backend\Block\Widget\Form\Generic;
+
 /**
  * Adminhtml attachment edit form block
  *
  */
-class Form extends \Magento\Backend\Block\Widget\Form\Generic
+class Form extends Generic
 {
     /**
      * Prepare form

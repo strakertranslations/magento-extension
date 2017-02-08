@@ -1,8 +1,10 @@
 <?php
 
-namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job;
+namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit;
 
-class QuoteFrame extends \Magento\Backend\Block\Widget\Form\Generic
+use Magento\Backend\Block\Widget\Form\Generic;
+
+class QuoteFrame extends Generic
 {
     const BUTTON_TEMPLATE = 'job/quote-frame.phtml';
 

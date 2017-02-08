@@ -2,6 +2,8 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Setup\Registration;
 
+use Magento\Backend\App\Action;
+use Magento\Framework\Exception\LocalizedException;
 use Straker\EasyTranslationPlatform\Api\Data\StrakerAPIInterface;
 use Straker\EasyTranslationPlatform\Api\Data\SetupInterface;
 use Straker\EasyTranslationPlatform\Logger\Logger;
@@ -10,7 +12,7 @@ use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Backend\App\Action\Context;
 
-class Save extends \Magento\Backend\App\Action
+class Save extends Action
 {
 
     protected $_config;
@@ -47,33 +49,25 @@ class Save extends \Magento\Backend\App\Action
         if ($data) {
             try {
                 $this->_setup->saveClientData($data);
-
                 $oRegistration = $this->_strakerAPI->callRegister($data);
-
                 $this->_setup->saveAccessToken($oRegistration->access_token);
-
                 $this->_setup->saveAppKey($oRegistration->application_key);
-
                 $this->_reinitConfig->reinit();
-
                 $resultRedirect->setPath('/Setup_productattributes/index/');
-
                 return $resultRedirect;
-            } catch (\Magento\Framework\Exception\LocalizedException $e) {
-                    $this->_logger->error('error'.__FILE__.' '.__LINE__.'', [$e]);
-
-                    $resultRedirect->setPath('/*/index/');
-
-                    $this->messageManager->addError('There was an error registering your details');
-
-                    return $resultRedirect;
+            } catch (LocalizedException $e) {
+                $this->_logger->error('error'.__FILE__.' '.__LINE__.'', [$e]);
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
+                $resultRedirect->setPath('/*/index/');
+                $this->messageManager->addError('There was an error registering your details');
+                return $resultRedirect;
             } catch (\RuntimeException $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addError($e->getMessage());
             } catch (\Exception $e) {
                 $this->_logger->error('error'.__FILE__.' '.__LINE__, [$e]);
-
+                $this->_strakerAPI->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
                 $this->messageManager->addException($e, __('There was an error registering your details'));
             }
 

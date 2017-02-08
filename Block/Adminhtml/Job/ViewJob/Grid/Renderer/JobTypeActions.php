@@ -25,6 +25,6 @@ class JobTypeActions extends AbstractRenderer
                         'job_id' => $row->getJobId()
                     ]
                 )
-                . '" title="'. __('View') . '">' .__('View') . '</a>';
+                . '" title="'. __('View Details') . '">' .__('View Details') . '</a>';
     }
 }

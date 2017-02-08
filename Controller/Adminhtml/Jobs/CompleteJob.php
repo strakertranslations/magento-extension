@@ -26,6 +26,7 @@ class CompleteJob extends Action
      * @param ConfigHelper $configHelper
      * @param JsonFactory $resultJsonFactory
      * @param JobFactory $jobFactory
+     * @param StrakerAPI $strakerAPI
      */
     public function __construct(
         Context $context,

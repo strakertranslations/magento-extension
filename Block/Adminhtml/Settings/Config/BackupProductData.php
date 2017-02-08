@@ -1,6 +1,12 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config;
 
+/*
+ * This class preform Magento database backup. Since backup functionality has been
+ * change to call portal server to backup, this class is not used but remains here
+ * in case requiring the functionality switch back.
+ */
+
 class BackupProductData extends \Magento\Config\Block\System\Config\Form\Field
 {
     const BUTTON_TEMPLATE = 'settings/config/button/backup_product_data_button.phtml';

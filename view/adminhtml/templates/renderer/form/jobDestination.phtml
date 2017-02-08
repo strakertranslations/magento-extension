@@ -26,9 +26,9 @@
                                     <?php $showGroup = true; ?>
                                     <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
                                 <?php endif; ?>
-                                <?php if(!$block->isSandboxModeEnabled()
-                                            || ($block->isSandboxModeEnabled()
-                                                && strcasecmp($store->getCode(), $block->getTestingStoreCode()) == 0) ): ?>
+                                <?php if((!$block->isSandboxModeEnabled() && strcasecmp($store->getCode(), $block->getTestingStoreCode()) != 0)
+                                            || ($block->isSandboxModeEnabled() && strcasecmp($store->getCode(), $block->getTestingStoreCode()) == 0) ): ?>
+
                                     <option
                                         value="<?php echo $this->escapeHtml($store->getId()) ?>">
                                         &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
@@ -40,7 +40,7 @@
                         <?php endforeach; ?>
                     <?php endforeach; ?>
             </select>
-            <div class="note"><?php echo __('Translations will be imported into this store.')?></div>
+            <div class="note"><?php echo __('Translations will be imported into this store')?></div>
         </div>
     </div>
 
@@ -57,7 +57,7 @@
                     </option>
                 <?php endforeach; ?>
             </select>
-            <div class="note"><?php echo __('The target language is the language of the target view')?></div>
+            <div class="note"><?php echo __('The target language is the language of the destination store')?></div>
         </div>
     </div>
 
@@ -65,8 +65,8 @@
 
 <div id="destination-picker" class="fieldset-wrapper straker" style="display:none">
     <div>
-        <h2>Select your Languages Pairs</h2>
-        <p>Select your Source Store and language for your Target Store. This is a one time setup process for each<br>Store View.</p>
+        <h2>Select your source store and language</h2>
+        <p>This is a one time setup process for each Store View.</p>
     </div>
     <div id="source_content">
         <div class="fieldset-wrapper straker-source">
@@ -116,7 +116,7 @@
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <div class="note"><?php echo __('The source language is the language of the source view')?></div>
+                    <div class="note"><?php echo __('The source language is the language of the source store')?></div>
                 </div>
             </div>
         </div>

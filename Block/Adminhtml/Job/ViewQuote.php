@@ -1,20 +1,20 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job;
 
-use Magento\Framework\View\Element\Template;
+use Magento\Backend\Block\Widget\Container;
+use Magento\Backend\Block\Widget\Context;
 use Magento\Framework\Registry;
 
-class ViewQuote extends \Magento\Backend\Block\Widget\Container
+class ViewQuote extends Container
 {
     protected $_coreRegistry;
     const QUOTE_TEMPLATE = 'job/quote-frame.phtml';
 
     function __construct(
-        \Magento\Backend\Block\Widget\Context $context,
+        Context $context,
         Registry $registry,
         array $data
     ) {
-
         $this->_coreRegistry = $registry;
         parent::__construct($context, $data);
     }

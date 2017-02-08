@@ -5,10 +5,11 @@ namespace Straker\EasyTranslationPlatform\Model;
 use Composer\Cache;
 use Exception;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
-use Magento\Store\Model\Data\StoreConfig;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreFactory;
@@ -23,6 +24,7 @@ class Setup extends AbstractModel implements SetupInterface
     protected $_resourceConnection;
     protected $_dataHelper;
     protected $_storeFactory;
+    protected $_storeManager;
     protected $_configHelper;
 
     public function __construct(
@@ -32,12 +34,14 @@ class Setup extends AbstractModel implements SetupInterface
         ResourceConnection $resourceConnection,
         Data $dataHelper,
         StoreFactory $storeFactory,
+        StoreManagerInterface $storeManager,
         ConfigHelper $configHelper
     ) {
         $this->_configModel = $config;
         $this->_resourceConnection = $resourceConnection;
         $this->_dataHelper = $dataHelper;
         $this->_storeFactory = $storeFactory;
+        $this->_storeManager = $storeManager;
         $this->_configHelper = $configHelper;
         parent::__construct($context, $registry);
     }
@@ -246,22 +250,79 @@ class Setup extends AbstractModel implements SetupInterface
 
     public function isTestingStoreViewExist(){
         $testingStore = $this->_storeFactory->create()->load($this->_configHelper->getTestingStoreViewCode());
-        return empty($testingStore->getId()) ? false : $testingStore;
+        return $testingStore;
     }
 
-    public function deleteTestingStoreView()
+    public function deleteTestingStoreView($siteMode = SetupInterface::SITE_MODE_LIVE)
     {
-        $result = ['Success' => true, 'Message' => ''];
+        $result = ['Success' => true, 'Message' => '', 'SiteMode' => SetupInterface::SITE_MODE_SANDBOX];
         try{
-            if($testingStore = $this->isTestingStoreViewExist()){
+            $testingStore = $this->isTestingStoreViewExist();
+            if($testingStore->getId()){
                 $testingStore->delete();
                 $this->_eventManager->dispatch('store_delete', ['store' => $testingStore]);
+                //switch site mode
+                if( $siteMode == SetupInterface::SITE_MODE_LIVE ){
+                    if($this->_configHelper->isSandboxMode()){
+                        $this->setSiteMode(SetupInterface::SITE_MODE_LIVE);
+                    }
+                    $result['SiteMode'] = SetupInterface::SITE_MODE_LIVE;
+                }else{
+                    if(!$this->_configHelper->isSandboxMode()){
+                        $this->setSiteMode(SetupInterface::SITE_MODE_SANDBOX);
+                    }
+                }
             }else{
                 $result['Success'] = false;
                 $result['Message'] = __('The testing store does not exist.');
             }
         }catch (Exception $e){
             throw $e;
+        }
+        return $result;
+    }
+
+    public function createTestingStoreView($storeName = '', $siteMode = SetupInterface::SITE_MODE_SANDBOX)
+    {
+        $result = ['Success' => true, 'Message' => '', 'SiteMode' => SetupInterface::SITE_MODE_LIVE];
+        try{
+            $testingStore = $this->isTestingStoreViewExist();
+            if($testingStore->getId()){
+                $result['Success'] = false;
+                $result['Message'] = __('The testing store exist.');
+            }else{
+                if (!empty(trim($storeName))) {
+                    //create a store view
+                    $testingStore->setName($storeName);
+                    $testingStore->setId(null);
+                    $testingStore->setIsActive(true);
+                    $testingStore->setCode($this->_configHelper->getTestingStoreViewCode());
+                    $currentWebsite = $this->_storeManager->getWebsite();
+                    $defaultGroupId = $currentWebsite->getDefaultGroupId();
+                    $testingStore->setStoreGroupId($defaultGroupId);
+                    $testingStore->setWebsiteId($currentWebsite->getId());
+                    $testingStore->save();
+                    $this->_storeManager->reinitStores();
+                    $this->_eventManager->dispatch('store_add', ['store' => $testingStore]);
+                    //switch site mode
+                    if( $siteMode == SetupInterface::SITE_MODE_SANDBOX ){
+                        if(!$this->_configHelper->isSandboxMode()){
+                            $this->setSiteMode(SetupInterface::SITE_MODE_SANDBOX);
+                        }
+                        $result['SiteMode'] = SetupInterface::SITE_MODE_SANDBOX;
+                    }else{
+                        if($this->_configHelper->isSandboxMode()){
+                            $this->setSiteMode(SetupInterface::SITE_MODE_LIVE);
+                        }
+                    }
+                    return $result;
+                }
+                $result['Success'] = false;
+                $result['Message'] = __('The testing store name is invalid.');
+            }
+        } catch (\Exception $e) {
+            $result['Success'] = false;
+            $result['Message'] = __('There was an error registering your details');
         }
         return $result;
     }

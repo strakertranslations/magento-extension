@@ -12,14 +12,6 @@
             <item name="deps" xsi:type="string">st_jobs_listing.jobs_grid_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">jobs_grid_columns</item>
-        <item name="buttons" xsi:type="array">
-            <item name="add" xsi:type="array">
-                <item name="name" xsi:type="string">add</item>
-                <item name="label" xsi:type="string" translate="true">Add New Job</item>
-                <item name="class" xsi:type="string">primary</item>
-                <item name="url" xsi:type="string">*/*/new</item>
-            </item>
-        </item>
     </argument>
     <dataSource name="jobs_grid_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
@@ -158,7 +150,7 @@
                 </item>
             </argument>
         </column>
-        <column name="updated_at">
+        <column name="updated_at" class="Magento\Ui\Component\Listing\Columns\Date">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">dateRange</item>

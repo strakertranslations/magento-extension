@@ -2,6 +2,7 @@
 
 namespace Straker\EasyTranslationPlatform\Controller\Adminhtml\Jobs;
 
+use Braintree\Exception;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
@@ -127,9 +128,11 @@ class Index extends Action
             } else {
                 $dataArray = (array)$apiData;
                 $result['status'] = false;
-                $result['message'] =  __( 'Server: ' . $dataArray['message'] );
+                if(key_exists('message', $dataArray)){
+                    $result['message'] =  __( 'Server: ' . $dataArray['message'] );
+                }
 //                $this->messageManager->addErrorMessage( $result['message'] );
-                $this->_logger->addError($result['message']);
+                $this->_logger->addError($result['message'], $dataArray);
             }
         } catch (\Exception $e) {
             $result['status'] = false;
@@ -170,7 +173,6 @@ class Index extends Action
      */
     protected function _compareJobs($apiJob, $localJob)
     {
-
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
             return $localJob->updateStatus($apiJob);
         }

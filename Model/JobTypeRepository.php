@@ -1,11 +1,7 @@
 <?php
 namespace Straker\EasyTranslationPlatform\Model;
 
-use Straker\EasyTranslationPlatform\Api\JobTypeRepositoryInterface;
-use Straker\EasyTranslationPlatform\Model\JobTypeInterface;
-use Straker\EasyTranslationPlatform\Model\JobTypeFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\JobType\CollectionFactory;
-
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;

@@ -48,7 +48,7 @@ class JobActions extends Column
                                     'source_store_id' => $item['source_store_id']
                                 ]
                             ),
-                        'label' => __('View')
+                        'label' => __('View Details')
                     ];
 
                     if ($statusId == Model\JobStatus::JOB_STATUS_READY) {

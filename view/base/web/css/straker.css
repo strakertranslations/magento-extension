@@ -173,7 +173,7 @@ a.straker-job-refresh-anchor{
 }
 
 .col-id{
-    width: 10%;
+    width: 15%;
 }
 
 .easytranslationplatform-jobs-index .admin__data-grid-wrap .data-row{
@@ -298,4 +298,33 @@ div.fieldset-wrapper.straker p{
 
 .col-action{
     width: 200px;
+}
+
+#item_store_view_name::before{
+    content: '*';
+}
+.straker_store_error_msg{
+    /*margin-left: 1rem;*/
+    color: red;
+}
+
+.straker-my-account-anchor.action-default{
+    display: inline-block;
+    margin-top: 0.6rem;
+}
+
+button.straker-my-account-button{
+    background-color: #00A5E3 ! important;
+    color: #fff ! important;
+}
+
+tr.job-option{
+    background-color: #ffffe6;
+}
+
+/* overwrite text align for action cell in manage job page*/
+#straker-job-grid .data-grid .data-grid-actions-cell{
+    padding: 1rem;
+    text-align: left;
+    width: 10%;
 }

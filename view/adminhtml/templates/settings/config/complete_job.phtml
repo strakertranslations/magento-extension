@@ -28,12 +28,14 @@
 //                console.log(textStatus);
                 if( textStatus == 'success' && data.success ) {
                     alert({
+                        title: '',
                         content: '<?php echo __('Job completed successfully.'); ?>'
                     });
                     tjNumberInput.val('');
                     location.href = "<?php echo $this->getUrl('EasyTranslationPlatform/Jobs/Index'); ?>";
                 }else{
                     alert({
+                        title: '',
                         content: '<?php echo __('Failed to complete the job.'); ?>'
                     });
                 }

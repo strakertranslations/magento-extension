@@ -8,7 +8,6 @@
 
 namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Grid\Renderer;
 
-
 use Magento\Backend\Block\Context;
 use Magento\Backend\Block\Widget\Grid\Column\Renderer\Action;
 use Magento\Catalog\Model\CategoryFactory;
@@ -24,7 +23,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Straker\EasyTranslationPlatform\Model\Job;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
 use Straker\EasyTranslationPlatform\Model\JobStatus;
-use Straker\EasyTranslationPlatform\Model\JobType;
+use Straker\EasyTranslationPlatform\Model\JobType as JobModelType;
 
 class MultiAction extends Action
 {
@@ -101,7 +100,7 @@ class MultiAction extends Action
     protected function _toLinkHtml($action, \Magento\Framework\DataObject $row)
     {
         $text = $action['caption']->getText();
-        if (key_exists('caption', $action) && strcasecmp('View', $text) == 0) {
+        if (key_exists('caption', $action) && strcasecmp('View Details', $text) == 0) {
             return parent::_toLinkHtml($action, $row);
         } else {
             $job = $this->getJob($action);
@@ -120,7 +119,7 @@ class MultiAction extends Action
                             $isFront = stripos($text, 'frontend');
                             $url = '';
                             switch ($jobType) {
-                                case JobType::JOB_TYPE_PRODUCT:
+                                case JobModelType::JOB_TYPE_PRODUCT:
                                     $this->_productModel->load($entityId)->setStoreId($targetStoreId);
                                     if ($isFront === false) {
                                         $attr .= ' title="View in Backend"';
@@ -134,7 +133,7 @@ class MultiAction extends Action
                                         }
                                     }
                                     break;
-                                case JobType::JOB_TYPE_CATEGORY:
+                                case JobModelType::JOB_TYPE_CATEGORY:
                                     $this->_categoryModel->load($entityId)->setStoreId($targetStoreId);
                                     if ($isFront === false) {
                                         $attr .= ' title="View in Backend"';
@@ -145,7 +144,7 @@ class MultiAction extends Action
                                     }
                                     return sprintf('<a href="%s" %s>%s</a>', $url, $attr, $text);
                                     break;
-                                case JobType::JOB_TYPE_PAGE:
+                                case JobModelType::JOB_TYPE_PAGE:
                                     $pageId = $job->getTranslatedPageId($entityId);
                                     if ($pageId) {
                                         $this->_pageModel->load($pageId);
@@ -159,7 +158,7 @@ class MultiAction extends Action
                                         return sprintf('<a href="%s" %s>%s</a>', $url, $attr, $text);
                                     }
                                     break;
-                                case JobType::JOB_TYPE_BLOCK:
+                                case JobModelType::JOB_TYPE_BLOCK:
                                     $blockId = $job->getTranslatedBlockId($entityId);
                                     $this->_blockModel->load($blockId);
                                     if ($isFront === false) {
@@ -200,9 +199,9 @@ class MultiAction extends Action
     {
         $jobType = $job->getJobTypeId();
         switch ($jobType){
-            case JobType::JOB_TYPE_PAGE:
+            case JobModelType::JOB_TYPE_PAGE:
                 return 'page_id';
-            case JobType::JOB_TYPE_BLOCK:
+            case JobModelType::JOB_TYPE_BLOCK:
                 return 'block_id';
             default:
                 return 'entity_id';

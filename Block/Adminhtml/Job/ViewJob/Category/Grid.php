@@ -102,7 +102,7 @@ class Grid extends Extended
                 'getter' => 'getEntityId',
                 'actions' => [
                     [
-                        'caption' => __('View'),
+                        'caption' => __('View Details'),
                         'url' => [
                             'base' => '*/*/ViewJob',
                             'params' => [
