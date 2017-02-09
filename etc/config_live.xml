@@ -5,20 +5,23 @@
             <general>
                 <version>live</version>
                 <domain>
-                    <live>https://app.strakertranslations.com</live>
                     <sandbox>https://app-sandbox.strakertranslations.com</sandbox>
+                    <live>https://app.strakertranslations.com</live>
                 </domain>
                 <my_account_domain>
                     <live>https://myaccount.strakertranslations.com/</live>
                 </my_account_domain>
+                <straker_bug_log_domain>
+                    <live>https://buglog.strakertranslations.com</live>
+                </straker_bug_log_domain>
                 <api_url>
                     <register>v1/ta4ma/register</register>
-                    <languages>v1/ta4ma/languages</languages>
+                    <languages>v1/languages</languages>
                     <translate>v1/ta4ma/translate</translate>
-                    <payment>v1/ta4ma/payment</payment>
-                    <countries>v1/ta4ma/countries</countries>
+                    <countries>v1/countries</countries>
                     <payment_page>o/?action=api.quote</payment_page>
                     <support>v1/ta4ma/support</support>
+                    <bug_log>bugLog/listeners/bugLogListenerREST.cfm</bug_log>
                 </api_url>
             </general>
         </straker>
