@@ -3,6 +3,7 @@
   "type":"magento2-module",
   "description":"Translation Module for Magento 2",
   "homepage":"https://strakertranslations.com/magento",
+  "version":"0.0.1",
   "license":[
     "OSL-3.0",
     "AFL-3.0"
@@ -26,7 +27,7 @@
         }
   ],
   "require": {
-    "php": "~5.5.0|~5.6.0|~7.0.0",
+    "php":"~5.5.0|~5.6.0|~7.0.0"
   },
   "autoload":{
     "files":["registration.php"],
