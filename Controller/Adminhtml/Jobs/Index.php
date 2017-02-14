@@ -136,7 +136,7 @@ class Index extends Action
             }
         } catch (\Exception $e) {
             $result['status'] = false;
-            $result['message'] =  __('Failed to connect server.');
+            $result['message'] = $e->getMessage();
             $this->messageManager->addErrorMessage($result['message']);
             $this->_logger->addError($result['message'], [ 'exception' => $e->getMessage() ]);
         }
