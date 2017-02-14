@@ -108,6 +108,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         }catch(Exception $e){
             $this->_logger->addError('strakerAPI-http-request-error '.__FILE__.__LINE__,[$e,$httpClient->getUri(),$url,$method,$timeout]);
             $this->_messageManager->addError('Straker API error. Please check logs.');
+            $this->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
         }
 
         return $return;
