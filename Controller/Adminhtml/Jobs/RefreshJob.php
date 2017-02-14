@@ -137,11 +137,16 @@ class RefreshJob extends \Magento\Backend\App\Action
 //                strcasecmp($apiJob->quotation, 'ready') === 0))
 //        {
 
+        $returnStatus = [];
+
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
-            return $localJob->updateStatus($apiJob);
+            $returnStatus = $localJob->updateStatus($apiJob);
+            if($returnStatus['isSuccess']==false){
+                $this->messageManager->addErrorMessage($returnStatus['Message']);
+            }
         }
 
-        return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
+        return $returnStatus;
     }
 
     protected function resolveApiStatus($apiJob)

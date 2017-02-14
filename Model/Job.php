@@ -265,7 +265,6 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
                         if(preg_match('/^[<?xml]+/',$firstLine)==0){
                             $result = false;
-                            exit;
                         }
 
                         if ($result == false) {
