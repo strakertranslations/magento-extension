@@ -258,7 +258,14 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                         $result = true;
 
                         if (!file_exists($fileFullName)) {
-                            $result = file_put_contents($fileFullName, $fileContent);
+                            $result = file_put_contents($fileFullName,$fileContent);
+                        }
+
+                        $firstLine = fgets(fopen($fileFullName, 'r'));
+
+                        if(preg_match('/^[<?xml]+/',$firstLine)==0){
+                            $result = false;
+                            exit;
                         }
 
                         if ($result == false) {
