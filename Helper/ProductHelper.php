@@ -427,7 +427,10 @@ class ProductHelper extends AbstractHelper
 
         $attributeModel->getResource()->getConnection()->insertMultiple($table,$insertData);
 
-        $this->saveOptionValues($optionData,$job_id);
+        if($optionData){
+
+            $this->saveOptionValues($optionData,$job_id);
+        }
 
         return $this;
 
