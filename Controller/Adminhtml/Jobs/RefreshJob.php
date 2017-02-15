@@ -132,8 +132,6 @@ class RefreshJob extends \Magento\Backend\App\Action
     protected function _compareJobs($apiJob, $localJob)
     {
         $returnStatus = [];
-
-        $returnStatus = [];
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
             $returnStatus = $localJob->updateStatus($apiJob);
             if($returnStatus['isSuccess']==false){
