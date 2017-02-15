@@ -173,10 +173,15 @@ class Index extends Action
      */
     protected function _compareJobs($apiJob, $localJob)
     {
+        $returnStatus = [];
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
-            return $localJob->updateStatus($apiJob);
+            $returnStatus = $localJob->updateStatus($apiJob);
+            if($returnStatus['isSuccess']==false){
+                $this->messageManager->addErrorMessage($returnStatus['Message']->getText());
+            }
         }
-        return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
+
+        return $returnStatus;
     }
 
     /**
