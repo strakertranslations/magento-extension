@@ -86,16 +86,10 @@ class Index extends Action
                             $localJobData = $this->_jobFactory->create()->getCollection()->addFieldToFilter('job_key', ['eq' => $apiJob->job_key ])->getItems();
 
                             if (!empty($localJobData)) {
-//                                $localJob = reset( $localJobData );
-//                                array_push( $localJobIds, $localJob->getId() );
-//                                $isUpdate = $this->_compareJobs( $apiJob, $localJob );
-//                                if( $isUpdate['isSuccess'] ){
-//                                    array_push( $updatedJobs, $localJob->getId() );
-//                                }
                                 foreach ($localJobData as $key => $localJob) {
                                     array_push($localJobIds, $localJob->getId());
                                     $isUpdate = $this->_compareJobs($apiJob, $localJob);
-                                    if ($isUpdate['isSuccess']) {
+                                    if (isset($isUpdate['isSuccess'])&&$isUpdate['isSuccess']==true) {
                                         $tjNumber = $localJob->getJobNumber();
                                         if (!empty($tjNumber) && !in_array($tjNumber, $updatedJobs)) {
                                             array_push($updatedJobs, $tjNumber);
