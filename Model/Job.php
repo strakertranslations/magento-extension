@@ -270,7 +270,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                         if ($result == false) {
                             $return['isSuccess'] = false;
                             $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
-                            $return['Message'] = __('Test Job '.$testJobNumber.' - Failed to write content to ' . $fileFullName);
+                            $return['Message'] = __($this->getData('job_number').' - Failed to write content to ' . $fileFullName);
                             $this->_logger->addError($return['Message']);
                         } else {
                             $this->setData('download_url', $downloadUrl)
