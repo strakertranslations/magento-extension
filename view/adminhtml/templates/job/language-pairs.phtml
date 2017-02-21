@@ -70,7 +70,7 @@
                     $('select[name="magento_source_store"]').val(response['store-data']['straker/general/source_store']).prop('enable', true);
                     $('select[name="straker_source_language"]').val(response['store-data']['straker/general/source_language']);
                 }
-                checkSourceData();
+                checkLanguageData();
             })
 
             $("select[name='magento_source_store'] option").attr('disabled',false);
@@ -107,18 +107,6 @@
             $('#save').show();
             $('#reset').show();
             $(this).hide();
-//            if(next<5){
-//                checkOpenTabs(next);
-//                next++;
-//            }
-//
-//            if(next==5){
-//                checkOpenTabs(next);
-//                $(this).hide()
-//                $('#save').show();
-//            }
-
-
         });
 
         $('#back').on("click", function () {
@@ -130,16 +118,21 @@
         });
 
 
-        $('#edit_form').on("change", "input", function (e) {
-            $('#save').attr('disabled', false);
-            checkSourceData();
+        $('#edit_form').on("change", "select", function (e) {
+            $('#next').attr('disabled', false);
+            checkLanguageData();
+        });
+
+        $('#edit_form').on("click", "input", function (e) {
+            checkStoreData();
         });
 
         $('#source_content').on("change", "select", function (e) {
-            checkSourceData();
+            checkLanguageData();
         });
 
-        function checkSourceData() {
+        function checkLanguageData() {
+
             var data = {
                 magento_destination_store: $('select[name="magento_destination_store"]').val(),
                 magento_source_store: $('select[name="magento_source_store"]').val(),
@@ -147,9 +140,8 @@
                 straker_source_language: $('select[name="straker_source_language"]').val()
             };
 
-//            console.log(data);
-
             var empty = 0;
+
             $.each(data, function (key, value) {
                 if (value == "") {
                     empty++
@@ -162,6 +154,31 @@
                 $('#Next').attr('disabled', true);
                 $('#save').attr('disabled', true);
             }
+        }
+
+        function checkStoreData(){
+
+            var data = {
+                product_data: $('input[name="products"]').val(),
+                category_data: $('input[name="categories"]').val(),
+                page_data: $('input[name="pages"]').val(),
+                block_data: $('input[name="blocks"]').val()
+            };
+
+            var empty = 0;
+
+            $.each(data, function (key, value) {
+                if (value == "" || value == undefined) {
+                    empty++
+                }
+            });
+
+            if (empty == 4) {
+                $('#save').attr('disabled', true);
+            } else {
+                $('#save').attr('disabled', false);
+            }
+
         }
 
         function checkOpenTabs(tabNumber) {
