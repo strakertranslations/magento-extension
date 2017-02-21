@@ -218,6 +218,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $testJobNumber = $this->getId();
         switch (strtolower($jobData->status)) {
             case 'queued':
+
                 if (empty($this->getData('job_number')) && !empty($jobData->tj_number)) {
                     if($isSandbox){
                         if (!empty($jobKey)) {
@@ -230,7 +231,11 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                 }
 
                 if (empty($this->getData('job_number'))) {
-                    return false;
+
+                    $return['isSuccess'] = false;
+                    $return['errorType'] = 'info';
+                    $return['Message'] = __('TJ Number is not currently available. Please refresh page to update job information.');
+                    return $return;
                 }
 
                 if (!empty($jobData->quotation) && strcasecmp($jobData->quotation, 'ready') === 0) {

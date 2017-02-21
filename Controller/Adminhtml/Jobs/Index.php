@@ -170,8 +170,12 @@ class Index extends Action
         $returnStatus = [];
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
             $returnStatus = $localJob->updateStatus($apiJob);
-            if($returnStatus['isSuccess']==false){
-                $this->messageManager->addErrorMessage($returnStatus['Message']->getText());
+            if($returnStatus['isSuccess']===false){
+                if(key_exists('errorType', $returnStatus) && $returnStatus['errorType']=='info'){
+                    $this->messageManager->addNoticeMessage($returnStatus['Message']);
+                }else{
+                    $this->messageManager->addErrorMessage($returnStatus['Message']);
+                }
             }
         }
 
