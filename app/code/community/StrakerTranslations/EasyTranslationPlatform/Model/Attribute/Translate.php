@@ -80,7 +80,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
             foreach ($data as $k => $attribute ){
                 if ($k == 'title' && $attribute){
                     $attributeId = (int) $this->getAttributeId();
-                    $newLabel = [$storeId => $attribute];
                     $eavAttributeModel->load($attributeId);
                     if(!empty($eavAttributeModel->getId())){
                         $storeLabels = $eavAttributeModel->getStoreLabels();
@@ -88,7 +87,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
                             //get all current stores
                             $stores = array_keys($storeLabels);
                             if(!in_array($storeId, $stores)){
-                                array_push($storeLabels, $newLabel);
+                                $storeLabels[$storeId] = trim($attribute);
                                 $eavAttributeModel->setData('store_labels', $storeLabels)->save();
                             }
                         }
@@ -104,7 +103,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
 
                     /** @var $valuesCollection Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection */
                     $valuesCollection = Mage::getResourceModel('eav/entity_attribute_option_collection')
-                        ->setStoreFilter(4, false)
+                        ->setStoreFilter($storeId, false)
                         ->setAttributeFilter($attrModel->getId());
 
                     //0 => ['option_id' => '20', 'attribute_id' => '92', 'sort_order' => '0', 'value' => 'Black' ]
@@ -125,7 +124,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
                                 [
                                     'option_id' => $optionId,
                                     'store_id' => $storeId,
-                                    'value' => $optionValue
+                                    'value' => trim($optionValue)
                                 ]
                             );
                         }

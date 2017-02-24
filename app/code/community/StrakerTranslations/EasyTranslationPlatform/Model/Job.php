@@ -617,7 +617,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
                     $rootElement->appendChild($dataElement);
                 }
 
-                if ($k = 'option') {
+                if ($k == 'option') {
                     foreach ($attribute as $optionId => $optionValue) {
                         $dataElement = $_xml->createElement('data');
                         $dataElement->setAttribute('name', $this->getTypeId() . '_' . $this->getStoreId() . '_' . $attributeTranslate->getAttributeId());
