@@ -11,7 +11,7 @@
 !app/code/community/StrakerTranslations/EasyTranslationPlatform
 !app/design/adminhtml/default/straker
 !app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
-
+!app/code/community/StrakerTranslations/EasyTranslationPlatform/etc
 !js/straker
 !skin/adminhtml/default/straker
 
