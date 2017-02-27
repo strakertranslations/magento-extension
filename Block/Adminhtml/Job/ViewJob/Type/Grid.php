@@ -43,7 +43,9 @@ class Grid extends Extended
      */
     protected function _prepareCollection()
     {
+
         $jobCollection = $this->_jobCollectionFactory->create()->addFieldToFilter('job_key', ['eq'=>$this->_jobKey ]);
+        $jobCollection->setOrder('job_type_id','ASC');
         $this->setCollection($jobCollection);
         return parent::_prepareCollection();
     }
@@ -54,15 +56,6 @@ class Grid extends Extended
      */
     protected function _prepareColumns()
     {
-//        $this->addColumn(
-//            'in_product',
-//            [
-//                'type' => 'checkbox',
-//                'name' => 'in_product',
-//                'align' => 'center',
-//                'index' => 'entity_id'
-//            ]
-//        );
 
         $this->_filterVisibility = false;
 
