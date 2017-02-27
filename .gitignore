@@ -1,6 +1,5 @@
 #### Ignore everything ###
-/*
-
+*
 ### macOS ###
 *.DS_Store
 .AppleDouble
@@ -8,13 +7,15 @@
 
 #### Unignore the following ####
 !.gitignore
-!app/code/community/StrakerTranslations/EasyTranslationPlatform
-!app/design/adminhtml/default/straker
+!app/code/community/StrakerTranslations/EasyTranslationPlatform/
+!app/design/adminhtml/default/straker/
 !app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
-!app/code/community/StrakerTranslations/EasyTranslationPlatform/etc
-!js/straker
-!skin/adminhtml/default/straker
+!app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/
+!js/straker/
+!skin/adminhtml/default/straker/
 
 !Capfile
 !config
 
+### even if they are in subdirectories ###
+!*/
