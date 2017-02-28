@@ -4,6 +4,11 @@
     <body>
         <referenceContainer name="content" >
            <container name="straker.job.content" as="job_grid" htmlTag="div" htmlId="straker-job-grid">
+               <block class="Magento\Framework\View\Element\Template" template="Straker_EasyTranslationPlatform::job/viewJobTitle.phtml">
+               <arguments>
+                   <argument name="title" xsi:type="string">Manage Jobs</argument>
+               </arguments>
+               </block>
                <uiComponent name="st_jobs_listing"/>
                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Index"  template="Straker_EasyTranslationPlatform::job/job-grid-js.phtml"/>
            </container>

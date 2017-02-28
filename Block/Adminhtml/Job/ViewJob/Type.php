@@ -80,6 +80,12 @@ class Type extends Container
 
     protected function _prepareLayout()
     {
+
+        $this->addChild(
+            'straker-title-manageJob',
+            'Magento\Framework\View\Element\Template'
+        )->setTemplate('Straker_EasyTranslationPlatform::job/viewJobTitle.phtml')->setData('title','Manage Jobs');
+
         $this->addChild(
             'straker-breadcrumbs',
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',
@@ -103,8 +109,8 @@ class Type extends Container
         return parent::_prepareLayout();
     }
 
-    function _toHtml()
+    public function _toHtml()
     {
-        return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_type_grid');
+        return $this->getChildHtml();
     }
 }

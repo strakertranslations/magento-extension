@@ -125,8 +125,8 @@ class Page extends Container
         return parent::_prepareLayout();
     }
 
-    function _toHtml()
+    public function _toHtml()
     {
-        return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_page_grid');
+        return $this->getChildHtml();
     }
 }
