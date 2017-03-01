@@ -328,3 +328,8 @@ tr.job-option{
     text-align: left;
     width: 10%;
 }
+
+.note.required{
+    display: none;
+    color: red !important;
+}

@@ -71,6 +71,7 @@
                     $('select[name="straker_source_language"]').val(response['store-data']['straker/general/source_language']);
                 }
                 checkLanguageData();
+                $('.note.required.'+$(this).prop('name')+'').hide();
             })
 
             $("select[name='magento_source_store'] option").attr('disabled',false);
@@ -83,6 +84,7 @@
 
             $("select[name='straker_source_language'] option").attr('disabled',false);
             $("select[name='straker_source_language'] option[value='"+targetLanguageId+"']").attr('disabled',true);
+            $('.note.required.'+$(this).prop('name')+'').hide();
 
         });
 
@@ -90,6 +92,7 @@
         $('select[name="magento_source_store"]').on("change", function () {
             $('#productsGrid').empty();
             $('#job_tabs_attachment_products').attr('href', window.products_ajax_url)
+            $('.note.required.'+$(this).prop('name')+'').hide();
         });
 
         $('select[name="straker_source_language"]').on("change", function () {
@@ -99,6 +102,7 @@
             $("select[name='straker_target_language']").find("option[value='" + $(this).val() + "']").prop('disabled', true)
             $removed_language = $(this).val();
             $('#source_content').show();
+            $('.note.required.'+$(this).prop('name')+'').hide();
         });
 
         $('#Next').on("click", function () {
@@ -133,26 +137,30 @@
 
         function checkLanguageData() {
 
-            var data = {
-                magento_destination_store: $('select[name="magento_destination_store"]').val(),
-                magento_source_store: $('select[name="magento_source_store"]').val(),
-                straker_target_language: $('select[name="straker_target_language"]').val(),
-                straker_source_language: $('select[name="straker_source_language"]').val()
+            var languageInputs = {
+                magento_destination_store: $('select[name="magento_destination_store"]'),
+                magento_source_store: $('select[name="magento_source_store"]'),
+                straker_target_language: $('select[name="straker_target_language"]'),
+                straker_source_language: $('select[name="straker_source_language"]')
             };
 
-            var empty = 0;
+            var emptyCount = 0;
 
-            $.each(data, function (key, value) {
-                if (value == "") {
-                    empty++
+            $.each(languageInputs, function (key, element) {
+                if(element.val()==""){
+                    languageInputs[key] = element.val();
+                    emptyCount++;
                 }
             });
 
-            if (empty < 1) {
-                $('#Next').attr('disabled', false);
-            } else {
+            if (emptyCount > 0) {
                 $('#Next').attr('disabled', true);
                 $('#save').attr('disabled', true);
+                return languageInputs;
+            } else {
+                $('#Next').attr('disabled', false);
+                $('.note.required').hide();
+                return languageInputs;
             }
         }
 
@@ -190,6 +198,22 @@
             $('body').trigger('processStart');
             $(this).attr('disabled',true);
         });
+
+        $(document).on('click', 'div.page-actions-buttons', function(e){
+
+            if($('li[aria-labelledby="job_tabs_select_destination"]').hasClass('ui-state-active') && $(this).find('#Next:disabled').prop('disabled')){
+
+                $.each(checkLanguageData(), function (key, element) {
+                    if(element==""){
+                        $('.note.required.'+key+'').show();
+                    }else{
+                        $('.note.required.'+key+'').hide();
+                    }
+                });
+
+            }
+        });
+
 
 
     });
