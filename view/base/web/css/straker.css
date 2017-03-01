@@ -333,3 +333,8 @@ tr.job-option{
     display: none;
     color: red !important;
 }
+
+label[for="source_language"],label[for="source_store"]{
+    padding: 0 0;
+    text-align: left;
+}
