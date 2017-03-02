@@ -25,6 +25,8 @@ class Index extends Action
     protected $_logger;
     protected $_coreRegistry;
 
+    const NO_TJ_MSG = 'TJ Number is not currently available. Please refresh page to update job information.';
+
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
@@ -75,6 +77,7 @@ class Index extends Action
         $updatedJobs = [];
         $localJobIds = [];
         $result = ['status' => true, 'message' => ''];
+        $emptyTj = 0;
         //refresh all jobs
         try {
             $apiData = $this->_strakerApi->getTranslation();
@@ -95,10 +98,20 @@ class Index extends Action
                                             array_push($updatedJobs, $tjNumber);
                                         }
                                     }
+
+                                    if(isset($isUpdate['isSuccess'])&&$isUpdate['isSuccess']==false && isset($isUpdate['emptyTJ']) && $isUpdate['emptyTJ']==true){
+                                        $emptyTj++;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    if($emptyTj>0){
+
+                        $this->messageManager->addNoticeMessage(self::NO_TJ_MSG);
+                    }
+
                     if (count($updatedJobs) > 0) {
                         $this->_coreRegistry->register('job_updated', true );
                         $this->messageManager->addSuccessMessage(__(implode(', ', $updatedJobs)  .' has been updated.'));
@@ -168,15 +181,9 @@ class Index extends Action
     protected function _compareJobs($apiJob, $localJob)
     {
         $returnStatus = [];
+
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
             $returnStatus = $localJob->updateStatus($apiJob);
-            if($returnStatus['isSuccess']===false){
-                if(key_exists('errorType', $returnStatus) && $returnStatus['errorType']=='info'){
-                    $this->messageManager->addNoticeMessage($returnStatus['Message']);
-                }else{
-                    $this->messageManager->addErrorMessage($returnStatus['Message']);
-                }
-            }
         }
 
         return $returnStatus;
