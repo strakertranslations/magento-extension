@@ -5,12 +5,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
     public function __construct()
     {
         parent::__construct();
-        $this->setId('strakerProducts');
+        $this->setId('strakerProductsConfirm');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
-        $this->setUseAjax(false);
-        $this->setVarNameFilter('product_filter');
+        $this->setUseAjax(true);
+//        $this->setVarNameFilter('product_filter');
     }
 
     protected function _getStore()
@@ -119,6 +119,16 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
                 ));
         }
 
+        // required by IMA-159
+        $this->addColumn(
+            'sku',
+            array(
+                'header' => Mage::helper('catalog')->__('Sku'),
+                'index' => 'sku',
+                'filter' => false
+            )
+        );
+
         foreach ($this->getAttrArray() as $attr){
             if ($attr!='name') {
                 $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(4, $attr);
@@ -131,12 +141,34 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
             }
         }
 
+        $this->addColumn(
+            'action',
+            [
+                'header'    => Mage::helper('catalog')->__('Action'),
+                'width'     => '50px',
+                'type'      => 'action',
+                'getter'     => 'getEntityId',
+                'actions'   => array(
+                    array(
+                        'caption' => $this->__('Remove'),
+                        'url'     => [
+                            'base'=>'*/*/removeFromCart'
+                        ],
+                        'field'   => 'entity_id'
+                    )
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'index'     => 'entity_id'
+            ]
+        );
+
         return parent::_prepareColumns();
     }
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/addtoconfirm', array('_current'=>true));
+        return $this->getUrl('*/*/confirmGrid', array('_current'=>true));
     }
 
     public function getRowUrl($row)
