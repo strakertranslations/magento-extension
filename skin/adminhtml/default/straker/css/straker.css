@@ -328,18 +328,19 @@ ol.wizard li.wizard-done:before {
   border: none;
   border-radius: 1.2em;
 }
-ol.wizard li.wizard-todo:before,
-ol.wizard li.wizard-current:before{
+ol.wizard li.wizard-todo:before {
   content: "\039F";
+  color: silver;
   background-color: white;
   font-size: 1.5em;
   bottom: -1.6em;
 }
-ol.wizard li.wizard-current:before{
+ol.wizard li.wizard-current:before {
+  content: "\039F";
   color: #eb5e00;
-}
-ol.wizard li.wizard-todo:before{
-  color: silver;
+  background-color: white;
+  font-size: 1.5em;
+  bottom: -1.6em;
 }
 /*
 Temp UI Updates : Yogi
