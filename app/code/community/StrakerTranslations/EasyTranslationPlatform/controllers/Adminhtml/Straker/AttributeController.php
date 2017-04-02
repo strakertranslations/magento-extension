@@ -50,10 +50,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         $params = $this->getRequest()->getParams();
         if (empty($params['store'])) {
             $this->_redirect('*/straker_new');
-            return;
         }
         else{
-            return $this->_initNewAction()
+            $this->_initNewAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute','strakertranslations_easytranslationplatform_new_attribute',array('setup_store_id' => $params['store'])))
                 ->renderLayout();
         }
@@ -78,7 +77,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
                 ->renderLayout();
         }
         else {
-            $this->_redirect('*/straker_new/', $data);
+            if(array_key_exists('key', $data)){
+                unset($data['key']);
+            }
+            $this->_redirect('*/*/new', $data);
         }
     }
 
@@ -198,4 +200,75 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         $helper->checkSiteMode();
     }
 
+    public function removeFromCartAction(){
+        $attributeId = 0;
+        if(!empty($this->getRequest()->getParam('attribute_id'))){
+            $attributeId = $this->getRequest()->getParam('attribute_id');
+        }
+        $attributeIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
+        if(!is_array($attributeIds)){
+            $attributeIds = [$attributeIds];
+        }
+        if( ($key =  array_search($attributeId, $attributeIds)) !== false ){
+            unset($attributeIds[$key]);
+        }
+        Mage::getSingleton('adminhtml/session')->setData('straker_new_attribute', $attributeIds);
+        $optionIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
+        if(!is_array($optionIds)){
+            $optionIds = [$optionIds];
+        }
+        if( ($key =  array_search($attributeId, $optionIds)) !== false ){
+            unset($optionIds[$key]);
+        }
+//        var_dump($attributeIds);
+//        var_dump($optionIds);
+//        exit;
+        Mage::getSingleton('adminhtml/session')->setData('straker_new_option', implode(',', $optionIds));
+        $this->_redirect('*/*/addtoconfirm');
+    }
+
+    public function gridAction()
+    {
+        $params = $this->getRequest()->getParams();
+        if (empty($params['store'])) {
+            $this->_redirect('*/straker_new');
+        }
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_new_attribute_grid',
+                    'strakertranslations_easytranslationplatform_new_attribute_grid',
+                    [
+                        'setup_store_id' => $params['store']
+                    ]
+                )->toHtml()
+        );
+    }
+
+    public function confirmGridAction()
+    {
+        $data = $this->getRequest()->getParams();
+        if(empty($data['attribute']) && empty($data['option'])){
+            $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
+            $data['option'] = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
+        }
+        $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
+
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_new_attribute_confirm_grid',
+                    'strakertranslations_easytranslationplatform_new_attribute_confirm_grid',
+                    [
+                        'store'     => $data['store'],
+                        'attribute' => $data['attribute'],
+                        'option'    => $data['option']
+                    ]
+                )->toHtml()
+        );
+    }
 }

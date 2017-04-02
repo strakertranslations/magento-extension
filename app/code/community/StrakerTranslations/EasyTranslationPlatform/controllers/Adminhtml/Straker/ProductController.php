@@ -96,7 +96,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
                 ->renderLayout();
         }
         else {
-            $this->_redirect('*/straker_new/', $data);
+            if(array_key_exists('key', $data)){
+                unset($data['key']);
+            }
+            $this->_redirect('*/*/new/', $data);
         }
     }
 

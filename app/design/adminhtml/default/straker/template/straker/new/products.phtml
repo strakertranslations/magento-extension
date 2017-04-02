@@ -33,4 +33,5 @@
     });
     <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.checkedString = '<?php echo join(',', $this->getChild('grid')->getSelectedIds()); ?>';
     <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.checkCheckboxes();
+    <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.updateCount();
 </script>

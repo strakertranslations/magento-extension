@@ -10,7 +10,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
         $this->setDefaultDir('DESC');
         $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
-//        $this->setVarNameFilter('product_filter');
+        $this->setVarNameFilter('product_confirm_filter');
     }
 
     protected function _getStore()
@@ -128,6 +128,21 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
                 'filter' => false
             )
         );
+
+        $sets = Mage::getResourceModel('eav/entity_attribute_set_collection')
+            ->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getTypeId())
+            ->load()
+            ->toOptionHash();
+
+        $this->addColumn('set_name',
+            array(
+                'header'=> Mage::helper('catalog')->__('Attrib. Set Name'),
+                'width' => '100px',
+                'index' => 'attribute_set_id',
+                'type'  => 'options',
+                'options' => $sets,
+                'filter' => false
+            ));
 
         foreach ($this->getAttrArray() as $attr){
             if ($attr!='name') {

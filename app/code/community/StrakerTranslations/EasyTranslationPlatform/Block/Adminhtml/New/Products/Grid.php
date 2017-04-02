@@ -167,6 +167,20 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
             )
         );
 
+        $sets = Mage::getResourceModel('eav/entity_attribute_set_collection')
+            ->setEntityTypeFilter(Mage::getModel('catalog/product')->getResource()->getTypeId())
+            ->load()
+            ->toOptionHash();
+
+        $this->addColumn('set_name',
+            array(
+                'header'=> Mage::helper('catalog')->__('Attrib. Set Name'),
+                'width' => '100px',
+                'index' => 'attribute_set_id',
+                'type'  => 'options',
+                'options' => $sets,
+            ));
+
         foreach ($this->getAttrArray() as $attr){
             if ($attr!='name') {
                 $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(4, $attr);
@@ -291,7 +305,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
     }
 
     public function getSelectedIds(){
-        $selectedColumn = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
-        return empty($selectedColumn) ? [] : $selectedColumn;
+        $selectedIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
+        return empty($selectedIds) ? [] : $selectedIds;
     }
 }
