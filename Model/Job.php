@@ -216,8 +216,10 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $isSandbox = $this->_importHelper->configHelper->isSandboxMode();
         $jobKey = $this->getJobKey();
         $testJobNumber = $this->getId();
+        $empty_file = false;
         switch (strtolower($jobData->status)) {
             case 'queued':
+
                 if (empty($this->getData('job_number')) && !empty($jobData->tj_number)) {
                     if($isSandbox){
                         if (!empty($jobKey)) {
@@ -230,7 +232,10 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                 }
 
                 if (empty($this->getData('job_number'))) {
-                    return false;
+
+                    $return['isSuccess'] = false;
+                    $return['emptyTJ'] = true;
+                    return $return;
                 }
 
                 if (!empty($jobData->quotation) && strcasecmp($jobData->quotation, 'ready') === 0) {
@@ -258,12 +263,21 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                         $result = true;
 
                         if (!file_exists($fileFullName)) {
-                            $result = file_put_contents($fileFullName, $fileContent);
+                            $result = file_put_contents($fileFullName,$fileContent);
                         }
 
-                        if ($result == false) {
+                        $firstLine = fgets(fopen($fileFullName, 'r'));
+
+                        if(preg_match('/^[<?xml]+/',$firstLine)==0){
+                            $result = false;
+                            $empty_file = true;
+                        }
+
+                        if ($result == false && $empty_file == true) {
                             $return['isSuccess'] = false;
-                            $return['Message'] = __('Failed to write content to ' . $fileFullName);
+                            $return['empty_file'] = false;
+                            $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
+                            $return['Message'] = __($this->getData('job_number').' - Failed to write content to ' . $fileFullName);
                             $this->_logger->addError($return['Message']);
                         } else {
                             $this->setData('download_url', $downloadUrl)

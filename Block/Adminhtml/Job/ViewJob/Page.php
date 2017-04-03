@@ -47,22 +47,6 @@ class Page extends Container
             );
         }
 
-//        $this->addButton(
-//            'confirm',
-//            [
-//                'label' => __('Confirm'),
-//                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
-//                        'job_id' => $this->_job->getId(),
-//                        'job_key' => $this->_job->getJobKey(),
-//                        'job_type_id' => $this->_job->getJobTypeId()
-//                    ] ) . '\') ',
-//                'class' => 'primary',
-//                'disabled' => ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) ? '':'disabled'
-//            ],
-//            0,
-//            50
-//        );
-
         $this->addButton(
             'job_type',
             [
@@ -125,8 +109,8 @@ class Page extends Container
         return parent::_prepareLayout();
     }
 
-    function _toHtml()
+    public function _toHtml()
     {
-        return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_page_grid');
+        return $this->getChildHtml();
     }
 }

@@ -328,3 +328,13 @@ tr.job-option{
     text-align: left;
     width: 10%;
 }
+
+.note.required{
+    display: none;
+    color: red !important;
+}
+
+label[for="source_language"],label[for="source_store"]{
+    padding: 0 0 !important;
+    text-align: left !important;
+}

@@ -2,9 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="content" >
-            <container name="straker.job.quote" as="job_quote">
-                <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewQuote" template="Straker_EasyTranslationPlatform::job/quote-frame.phtml"/>
-            </container>
+            <block class="Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewQuote"  name="view_quote_block" />
         </referenceContainer>
     </body>
 </page>

@@ -43,27 +43,4 @@ class Collection extends AbstractCollection
         $this->_init('Straker\EasyTranslationPlatform\Model\Job', 'Straker\EasyTranslationPlatform\Model\ResourceModel\Job');
     }
 
-    /**
-     * @return Select
-     */
-//    public function getSelectCountSql()
-//    {
-//        $this->_renderFilters();
-//
-//        $countSelect = clone $this->getSelect();
-//        $countSelect->reset(Select::ORDER);
-//        $countSelect->reset(Select::LIMIT_COUNT);
-//        $countSelect->reset(Select::LIMIT_OFFSET);
-//        $countSelect->reset(Select::COLUMNS);
-//
-//        if (!count($this->getSelect()->getPart(Select::GROUP))) {
-//            $countSelect->columns(new \Zend_Db_Expr('COUNT(*)'));
-//            return $countSelect;
-//        }
-//
-//        $countSelect->reset(Select::GROUP);
-//        $group = $this->getSelect()->getPart(Select::GROUP);
-//        $countSelect->columns(new \Zend_Db_Expr(("COUNT(DISTINCT ".implode(", ", $group).")")));
-//        return $countSelect;
-//    }
 }

@@ -23,20 +23,6 @@ class JobActions extends Column
 
                     $url = 'EasyTranslationPlatform/Jobs/ViewJob';
 
-//                    $item[$name]['view'] = [
-//                        'href' => $this->getContext()
-//                            ->getUrl(
-//                                $url,
-//                                [
-//                                    'job_id' => $item['job_id'],
-//                                    'job_key' => $item['job_key'],
-//                                    'job_type_id' => $item['job_type_id'],
-//                                    'source_store_id' => $item['source_store_id']
-//                                ]
-//                            ),
-//                        'label' => __('View')
-//                    ];
-
                     $item[$name]['view'] = [
                         'href' => $this->getContext()
                             ->getUrl(
@@ -57,7 +43,9 @@ class JobActions extends Column
                                 ->getUrl(
                                     'EasyTranslationPlatform/Jobs/ViewQuote',
                                     [
-                                        'job_key' => $item['job_key']
+                                        'job_key' => $item['job_key'],
+                                        'job_id' => $item['job_id'],
+                                        'source_store_id' => $item['source_store_id']
                                     ]
                                 ),
                             'label' => __('View Quote')

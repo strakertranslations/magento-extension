@@ -56,10 +56,6 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $this->_logger = $logger;
         $this->_storeManager = $storeManagerInterface;
         $this->_messageManager = $messageInterface;
-        //        $this->_storeId = ($this->getStore()) ? $this->getStore() : 0;
-        //        $this->_init('strakertranslations_easytranslationplatform/api');
-        //        $this->_headers[] = 'Authorization: Bearer '. Mage::getStoreConfig('straker/general/access_token', $this->_storeId);
-        //        $this->_headers[] = 'X-Auth-App: '. Mage::getStoreConfig('straker/general/application_key', $this->_storeId);
     }
 
     protected function _call($url, $method = 'get', array $request = [], $timeout = 60 )
@@ -85,15 +81,12 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $httpClient->setHeaders($this->getHeaders());
         $httpClient->setMethod($method);
 
-        $this->_logger->addDebug('strakerAPI-http-request-start '.__FILE__.__LINE__,[$request,$httpClient->getUri(),$url,$method,$timeout]);
-
         try{
             $response = $httpClient->request();
 
             if(!$response->isError()){
                 $contentType = $response->getHeader('Content-Type');
                 $body = $response->getBody();
-                $this->_logger->addDebug('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
 
                 if(strpos($contentType,'application/json') !== false ){
                     $return = json_decode($body);
@@ -101,12 +94,12 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
                     $return = $body;
                 }
             }else{
-                $this->_logger->addError('strakerAPI-http-request-end '.__FILE__.__LINE__,[$response,$httpClient->getUri(),$url,$method,$timeout]);
                 $this->_messageManager->addError('Straker API error. Please check logs.');
                 $return = $response;
             }
+
         }catch(Exception $e){
-            $this->_logger->addError('strakerAPI-http-request-error '.__FILE__.__LINE__,[$e,$httpClient->getUri(),$url,$method,$timeout]);
+
             $this->_messageManager->addError('Straker API error. Please check logs.');
             $this->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
         }
@@ -343,7 +336,6 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
         $httpClient->setMethod(Zend_Http_Client::POST);
         $httpClient->setParameterPost($requestData);
         $httpClient->setUri($url);
-
         $httpClient->request();
     }
 }

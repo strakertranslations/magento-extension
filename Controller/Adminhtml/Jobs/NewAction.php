@@ -28,6 +28,7 @@ class NewAction extends \Magento\Backend\App\Action
         ConfigHelper $configHelper,
         SetupInterface $setupApi
     ) {
+
         $this->resultForwardFactory = $resultForwardFactory;
         $this->_configHelper = $configHelper;
         $this->_setupApi = $setupApi;

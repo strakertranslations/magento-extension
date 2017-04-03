@@ -245,6 +245,11 @@ class Save extends Action
             if(!$this->_configHelper->isSandboxMode()){
 
                 $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
+
+            }else{
+
+                $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations'));
+
             }
 
         } catch (Exception $e) {

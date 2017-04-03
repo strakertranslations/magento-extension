@@ -56,23 +56,6 @@ class Attribute extends Container
             );
         }
 
-//        $this->addButton(
-//            'confirm',
-//            [
-//                'label' => __('Confirm'),
-//                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
-//                        'job_id' => $this->_job->getId(),
-//                        'job_key' => $this->_job->getJobKey(),
-//                        'job_type_id' => $this->_job->getJobTypeId()
-//                    ] ) . '\') ',
-//                'class' => 'primary',
-//                'disabled' => ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) ? '':'disabled'
-//            ],
-//            0,
-//            50
-//        );
-
-
         $this->addButton(
             'job_product',
             [
@@ -100,6 +83,12 @@ class Attribute extends Container
 
     protected function _prepareLayout()
     {
+
+        $this->addChild(
+            'straker-title-manageJob',
+            'Magento\Framework\View\Element\Template'
+        )->setTemplate('Straker_EasyTranslationPlatform::job/viewJobTitle.phtml')->setData('title','Manage Jobs');
+
         $this->addChild(
             'straker-breadcrumbs',
             'Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Widget\Breadcrumbs',
@@ -175,8 +164,8 @@ class Attribute extends Container
         $this->_jobEntityName = $this->_job->getEntityName($this->_entityId);
     }
 
-    function _toHtml()
+    public function _toHtml()
     {
-        return $this->getChildHtml('straker-breadcrumbs') . $this->getChildHtml('straker_job_attribute_grid');
+        return $this->getChildHtml();
     }
 }

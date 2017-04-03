@@ -48,6 +48,7 @@ class RefreshJob extends \Magento\Backend\App\Action
         $result = [ 'status' => true, 'message' => ''];
         $updatedJobs = [];
 
+
         if (empty($jobKey)) {
             //refresh all jobs
             try {
@@ -67,7 +68,6 @@ class RefreshJob extends \Magento\Backend\App\Action
                             }
                         }
                     }
-//                var_dump($updatedJobs );
                     if (count($updatedJobs) > 0) {
                         $this->messageManager->addSuccessMessage(__('The status of the jobs [Id: '. implode(',', $updatedJobs)  .'] has been updated.'));
                     } else {
@@ -131,17 +131,15 @@ class RefreshJob extends \Magento\Backend\App\Action
      */
     protected function _compareJobs($apiJob, $localJob)
     {
-//        if( strcasecmp($apiJob->status, $localJob->getJobStatus() ) !== 0
-//            || (strcasecmp($apiJob->status, $localJob->getJobStatus() ) === 0 &&
-//                strcasecmp($apiJob->status, 'queued') === 0 &&
-//                strcasecmp($apiJob->quotation, 'ready') === 0))
-//        {
-
+        $returnStatus = [];
         if ($localJob->getJobStatusId() < $this->resolveApiStatus($apiJob)) {
-            return $localJob->updateStatus($apiJob);
+            $returnStatus = $localJob->updateStatus($apiJob);
+            if($returnStatus['isSuccess']==false){
+                $this->messageManager->addErrorMessage($returnStatus['Message']->getText());
+            }
         }
 
-        return ['isSuccess' => false, 'Message'=> __('The status is up to date') ];
+        return $returnStatus;
     }
 
     protected function resolveApiStatus($apiJob)
