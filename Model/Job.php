@@ -216,6 +216,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
         $isSandbox = $this->_importHelper->configHelper->isSandboxMode();
         $jobKey = $this->getJobKey();
         $testJobNumber = $this->getId();
+        $empty_file = false;
         switch (strtolower($jobData->status)) {
             case 'queued':
 
@@ -269,10 +270,12 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
 
                         if(preg_match('/^[<?xml]+/',$firstLine)==0){
                             $result = false;
+                            $empty_file = true;
                         }
 
-                        if ($result == false) {
+                        if ($result == false && $empty_file == true) {
                             $return['isSuccess'] = false;
+                            $return['empty_file'] = false;
                             $testJobNumber = $this->getTestJobNumberByJobKey($jobKey);
                             $return['Message'] = __($this->getData('job_number').' - Failed to write content to ' . $fileFullName);
                             $this->_logger->addError($return['Message']);

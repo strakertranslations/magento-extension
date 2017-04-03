@@ -45,6 +45,7 @@ class Index extends Action
         ConfigHelper $configHelper,
         Registry $registry
     ) {
+
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
         $this->_strakerApi = $strakerAPI;
@@ -87,7 +88,6 @@ class Index extends Action
                     foreach ($apiJobs as $apiJob) {
                         if ($apiJob->job_key) {
                             $localJobData = $this->_jobFactory->create()->getCollection()->addFieldToFilter('job_key', ['eq' => $apiJob->job_key ])->getItems();
-
                             if (!empty($localJobData)) {
                                 foreach ($localJobData as $key => $localJob) {
                                     array_push($localJobIds, $localJob->getId());
@@ -101,6 +101,11 @@ class Index extends Action
 
                                     if(isset($isUpdate['isSuccess'])&&$isUpdate['isSuccess']==false && isset($isUpdate['emptyTJ']) && $isUpdate['emptyTJ']==true){
                                         $emptyTj++;
+                                    }
+
+                                    if(isset($isUpdate['isSuccess'])&&$isUpdate['isSuccess']==false && isset($isUpdate['empty_file']) && $isUpdate['empty_file']==true){
+
+                                        $this->messageManager->addErrorMessage($isUpdate['Message']->getText());
                                     }
                                 }
                             }
@@ -122,13 +127,15 @@ class Index extends Action
                         $this->messageManager->addNoticeMessage($result['message']);
                     } else {
                         $result['status'] = false;
-                        $result['message'] = __('All jobs are up to date.');
-                        $this->_logger->addInfo($result['message']);
-                        //$this->messageManager->addSuccessMessage( $result['message'] );
+                        if(!$this->messageManager->getMessages()->getErrors()){
+                            $result['message'] = __('All jobs are up to date.');
+                            $this->messageManager->addSuccessMessage( $result['message'] );
+                            $this->_logger->addInfo($result['message']);
+                        }
                     }
                 } else {
                     $result['status'] = false;
-                    $result['message'] =  __('No job has been found or failed to connect server.');
+                    $result['message'] =  __('No jobs have been found or failed to connect server.');
                     $this->messageManager->addErrorMessage($result['message']);
                     $this->_logger->addError($result['message']);
                 }
