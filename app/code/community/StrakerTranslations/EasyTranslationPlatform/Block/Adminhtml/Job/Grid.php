@@ -7,7 +7,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Grid exten
         $this->setId('strakerJobGrid');
         $this->setDefaultSort('id');
         $this->setDefaultDir('DESC');
-        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareCollection() {

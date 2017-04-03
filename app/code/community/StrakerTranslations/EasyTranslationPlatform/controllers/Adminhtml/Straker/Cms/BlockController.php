@@ -223,6 +223,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_BlockCon
             $entityId = $this->getRequest()->getParam('block_id');
         }
         $blockIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_cms_block');
+        if(!is_array($blockIds)){
+            $blockIds = explode(',', trim($blockIds, ','));
+        }
         if( ($key =  array_search($entityId, $blockIds)) !== false ){
             unset($blockIds[$key]);
         }

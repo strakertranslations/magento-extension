@@ -31,7 +31,9 @@
         $('strakerProducts').insert({after: buttonHtml});
         $$('.content-header-floating .content-header td.a-right')[0].insert(buttonHtml);
     });
+    <?php if($this->getRequest()->getParam('from') === 'confirm' ): ?>
     <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.checkedString = '<?php echo join(',', $this->getChild('grid')->getSelectedIds()); ?>';
     <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.checkCheckboxes();
     <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.updateCount();
+    <?php endif; ?>
 </script>

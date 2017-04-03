@@ -173,7 +173,7 @@
             }
             url = url || this.url;
             if(this.useAjax){
-                this.reloadParams.internal_option =  $$('#attributeGrid_massaction-form input[name=option]')[0].value;
+//                this.reloadParams.internal_option =  $$('#attributeGrid_massaction-form input[name=option]')[0].value;
                 new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
                     loaderArea: this.containerId,
                     parameters: this.reloadParams || {},
@@ -228,14 +228,10 @@
                 location.href = url;
             }
         };
-//        varienGrid.prototype.setPage = function(pageNumber){
-////            this.addVarToUrl('internal_option', $$('#attributeGrid_massaction-form input[name=option]')[0].value)
-//            this.reload(this.addVarToUrl(this.pageVar, pageNumber));
-//        };
-//        varienGrid.prototype.addVarToUrl  = function(varName, varValue){
-//            this.url = this._addVarToUrl(this.url, varName, varValue);
-//            return this.url;
-//        };
+        varienGrid.prototype.setPage = function(pageNumber){
+            this.reloadParams.internal_option = $$('#attributeGrid_massaction-form input[name=option]')[0].value;
+            this.reload(this.addVarToUrl(this.pageVar, pageNumber));
+        };
         varienGridMassaction.prototype.apply = function() {
             if(varienStringArray.count(this.checkedString) == 0 && varienStringArray.count($$('#attributeGrid_massaction-form input[name=option]')[0].value) == 0) {
                 alert(this.errorText);
@@ -329,12 +325,7 @@
                     }
                 });
             });
-        }
-        Event.observe(window, "load", function() {
-            var buttonHtml = '<button title="Submit" type="button" class="right" onclick="attributeGrid_massactionJsObject.apply()" style=""><span><span><span>Submit</span></span></span></button>';
-            $('attributeGrid').insert({after: buttonHtml});
-            $$('.content-header-floating .content-header td.a-right')[0].insert(buttonHtml);
-        });
+        };
         if( typeof $$('#attributeGrid_table tr.filter th:nth(1)')[0] !== 'undefined' ){
             initGrid();
         }

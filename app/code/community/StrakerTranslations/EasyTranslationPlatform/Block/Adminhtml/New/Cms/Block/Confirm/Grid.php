@@ -9,7 +9,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
         $this->setDefaultSort('identifier');
         $this->setDefaultDir('ASC');
         $this->setUseAjax(true);
-        $this->setSaveParametersInSession(true);
         $this->setVarNameFilter('cms_block_confirm_filter');
         //        $this->setFilterVisibility(false);
     }

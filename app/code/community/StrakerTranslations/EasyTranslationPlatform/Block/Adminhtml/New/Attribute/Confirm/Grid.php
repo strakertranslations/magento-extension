@@ -9,7 +9,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $this->setDefaultSort('attribute_code');
         $this->setDefaultDir('ASC');
         $this->setVarNameFilter('attribute_confirm_filter');
-        $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
     }
 

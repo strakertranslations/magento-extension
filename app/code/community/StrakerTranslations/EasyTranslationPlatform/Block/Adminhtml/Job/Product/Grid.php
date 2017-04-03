@@ -7,7 +7,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
     {
         parent::__construct();
         $this->setId('strakerJobProductGrid');
-        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareLayout()

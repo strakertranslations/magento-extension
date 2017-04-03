@@ -8,7 +8,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
         $this->setId('strakerCmsBlocks');
         $this->setDefaultSort('block_identifier');
         $this->setDefaultDir('ASC');
-        $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
         $this->setVarNameFilter('straker_cmd_block_filter');
     }

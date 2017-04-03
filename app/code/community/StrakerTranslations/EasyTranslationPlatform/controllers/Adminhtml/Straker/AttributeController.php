@@ -52,6 +52,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             $this->_redirect('*/straker_new');
         }
         else{
+            Mage::getSingleton('adminhtml/session')->setData('straker_new_option','');
             $this->_initNewAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute','strakertranslations_easytranslationplatform_new_attribute',array('setup_store_id' => $params['store'])))
                 ->renderLayout();
@@ -207,7 +208,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         }
         $attributeIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
         if(!is_array($attributeIds)){
-            $attributeIds = [$attributeIds];
+            $attributeIds = explode(',', trim($attributeIds,','));
         }
         if( ($key =  array_search($attributeId, $attributeIds)) !== false ){
             unset($attributeIds[$key]);
@@ -215,7 +216,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         Mage::getSingleton('adminhtml/session')->setData('straker_new_attribute', $attributeIds);
         $optionIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
         if(!is_array($optionIds)){
-            $optionIds = [$optionIds];
+            $optionIds = explode(',', trim($optionIds,','));
         }
         if( ($key =  array_search($attributeId, $optionIds)) !== false ){
             unset($optionIds[$key]);

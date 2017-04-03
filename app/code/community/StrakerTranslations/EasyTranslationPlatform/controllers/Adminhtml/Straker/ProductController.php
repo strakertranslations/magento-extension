@@ -210,6 +210,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
             $entityId = $this->getRequest()->getParam('entity_id');
         }
         $productIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
+        if(!is_array($productIds)){
+            $productIds = explode(',', trim($productIds, ','));
+        }
         if( ($key =  array_search($entityId, $productIds)) !== false ){
             unset($productIds[$key]);
         }

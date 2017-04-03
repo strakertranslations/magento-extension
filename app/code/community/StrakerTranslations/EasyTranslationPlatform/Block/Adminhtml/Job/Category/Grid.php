@@ -7,7 +7,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
     {
         parent::__construct();
         $this->setId('strakerJobCategoryGrid');
-        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareLayout()

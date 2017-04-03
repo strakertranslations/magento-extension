@@ -7,7 +7,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Block_
     public function __construct() {
         parent::__construct();
         $this->setId('strakerJobCmsBlockGrid');
-        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareLayout()

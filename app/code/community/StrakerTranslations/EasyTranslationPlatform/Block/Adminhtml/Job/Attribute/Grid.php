@@ -5,7 +5,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
     public function __construct() {
         parent::__construct();
         $this->setId('strakerJobAttributeGrid');
-        $this->setSaveParametersInSession(true);
     }
 
     protected function _prepareLayout()

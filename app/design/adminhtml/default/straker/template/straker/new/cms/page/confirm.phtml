@@ -18,7 +18,7 @@
 </ol>
 <?php $params = $this->getRequest()->getParams(); ?>
 <!--<a href="--><?php //echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/new", array('store'=>$this->getStore(), 'internal_cms_page'=>implode(',', $this->getCmsPage()), 'attr'=>$this->getAttr())) ?><!--">--><?php //echo $this->__('Edit CMS Pages') ?><!--</a>-->
-<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr())) ?>"><?php echo $this->__('Edit CMS Pages') ?></a>
+<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'from' => 'confirm' )) ?>"><?php echo $this->__('Edit CMS Pages') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
     <input type="hidden" name="cms_page" value="<?php echo implode(',', $this->getCmsPage()) ?>" >

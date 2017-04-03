@@ -7,7 +7,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $this->setId('attributeGrid');
         $this->setDefaultSort('attribute_code');
         $this->setDefaultDir('ASC');
-        $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
         $this->setVarNameFilter('straker_attribute_filter');
     }
@@ -167,11 +166,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         ));
         $this->getMassactionBlock()->setTemplate('straker/new/attribute/massaction.phtml');
         $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
+        $optionParam = $this->getRequest()->getParam('internal_option');
+        if( !empty($optionParam) ){
+            Mage::getSingleton('adminhtml/session')->setData('straker_new_option', $optionParam);
+        }
         $internalOption = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
         $internalOption = empty($internalOption) ? '' : $internalOption;
         //todo: refine this
 //        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'.$this->getRequest()->getParam('internal_option').'" />';
-        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'.$internalOption.'" />';
+        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'. $internalOption .'" />';
 
         $this->getMassactionBlock()->setHiddenParams($hiddenParams);
 

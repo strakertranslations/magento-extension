@@ -223,6 +223,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
             $entityId = $this->getRequest()->getParam('page_id');
         }
         $pageIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_cms_page');
+        if(!is_array($pageIds)){
+            $pageIds = explode(',', trim($pageIds, ','));
+        }
         if( ($key =  array_search($entityId, $pageIds)) !== false ){
             unset($pageIds[$key]);
         }

@@ -8,7 +8,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
         $this->setId('strakerCategoriesConfirm');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('DESC');
-        $this->setSaveParametersInSession(true);
         $this->setUseAjax(true);
         $this->setVarNameFilter('category_confirm_filter');
         $this->setTemplate('straker/new/category/confirm/grid.phtml');
