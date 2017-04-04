@@ -26,8 +26,8 @@
 ?>
 <div id="<?php echo $this->getHtmlId() ?>">
     <table cellspacing="0" cellpadding="0" class="massaction">
-        <tr>
-            <td>
+        <tr id="massactions-wrapper">
+            <td colspan="3">
                 <div id="massaction-attribute-label-wrapper">
                     <?php if ($this->getUseSelectAll()):?>
                         <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
@@ -38,9 +38,11 @@
                     <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo $this->__('Select Visible') ?></a>
                     <span class="separator">|</span>
                     <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo $this->__('Unselect Visible') ?></a>
-                    <span class="separator">|</span><br />
+                    <span class="separator">|</span>
                     <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo $this->__('items selected') ?>
                 </div>
+            </td>
+            <td colspan="3">
                 <div id="massaction-attribute-option-wrapper">
                     <?php if ($this->getUseSelectAll()):?>
                         <a href="#" onclick="return selectAllMassActionOptions(event)"><?php echo $this->__('Select All') ?></a>
@@ -51,10 +53,12 @@
                     <a href="#" onclick="return selectVisibleMassActionOptions(event)"><?php echo $this->__('Select Visible') ?></a>
                     <span class="separator">|</span>
                     <a href="#" onclick="return unselectVisibleMassActionOptions(event)"><?php echo $this->__('Unselect Visible') ?></a>
-                    <span class="separator">|</span><br />
+                    <span class="separator">|</span>
                     <strong id="mass-action-options-count">0</strong> <?php echo $this->__('items selected') ?>
                 </div>
             </td>
+        </tr>
+        <tr>
             <td>
                 <div class="right">
                     <div class="entry-edit">
@@ -75,7 +79,7 @@
                         </span>
                                 <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
                                 <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
-                        <span class="field-row">
+                                <span class="field-row">
                             <?php echo $this->getApplyButtonHtml() ?>
                         </span>
                             </fieldset>
@@ -271,8 +275,9 @@
             }
         };
         initGrid = function () {
-            $$('#attributeGrid_table tr.filter th:nth(1)')[0].update($('massaction-attribute-label-wrapper'));
-            $$('#attributeGrid_table tr.filter th:nth(3)')[0].update($('massaction-attribute-option-wrapper'));
+//            $$('#attributeGrid_table tr.filter th:nth(1)')[0].update($('massaction-attribute-label-wrapper'));
+//            $$('#attributeGrid_table tr.filter th:nth(3)')[0].update($('massaction-attribute-option-wrapper')
+            $$('#attributeGrid_table thead')[0].insert({top: $('massactions-wrapper')});
             $$('.checkbox-option').each(function(element) {
                 element.observe('click', function(e){
                     var optionArray = $$('#attributeGrid_massaction-form input[name=option]')[0].value === '' ? [] : $$('#attributeGrid_massaction-form input[name=option]')[0].value.split(',');

@@ -52,7 +52,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             $this->_redirect('*/straker_new');
         }
         else{
-            Mage::getSingleton('adminhtml/session')->setData('straker_new_option','');
+            if( $this->getRequest()->getParam('from') !== 'confirm'){
+                Mage::getSingleton('adminhtml/session')->setData('straker_new_option','');
+            }
             $this->_initNewAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute','strakertranslations_easytranslationplatform_new_attribute',array('setup_store_id' => $params['store'])))
                 ->renderLayout();

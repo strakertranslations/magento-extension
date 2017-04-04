@@ -89,22 +89,29 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Code'),
             'sortable'=>true,
             'index'=>'attribute_code',
-            'filter'    => false
+            'width' => '22%'
         ));
 
         $this->addColumn('frontend_label', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
             'sortable'=>true,
-            'index'=>'frontend_label'
+            'index'=>'frontend_label',
+            'width' => '22%'
         ));
 
         $this->addColumn('translate_options', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Translate Attribute Options'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_TranslateOptions',
             'align' => 'center',
-            'index' => false,
+            'index' => 'frontend_input',
             'sortable'=> false,
-            'filter'    => false,
+            'type'    => 'options',
+            'options' => [
+                'no' => Mage::helper('catalog')->__('No Options'),
+                'select' => Mage::helper('catalog')->__('Has Options')
+            ],
+            'filter_condition_callback' => array($this, '_optionsFilter'),
+            'width' => '22%'
         ));
 
         $this->addColumn('is_visible', array(
@@ -117,6 +124,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
                 '0' => Mage::helper('catalog')->__('No'),
             ),
             'align' => 'center',
+            'width' => '22%'
         ));
 
         $this->addColumn('version',
@@ -148,6 +156,21 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
 
         } elseif ($value == 'Not Translated'){
             $collection->getSelect()->where('t.version is null');
+        }
+
+        return $this;
+    }
+
+    protected function _optionsFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        if ($value == 'select' ){
+            $collection->getSelect()->where('frontend_input=?', 'select');
+        } else {
+            $collection->getSelect()->where('frontend_input<>?', 'select');
         }
 
         return $this;
