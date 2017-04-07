@@ -231,6 +231,27 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
         );
     }
 
+    public function jobGridAction(){
+        $jobId = $this->getRequest()->getParam('job_id');
+        $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
+        $statusId = $job->getStatusId();
+        //        var_dump($params);exit;
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_job_category_grid',
+                    'strakertranslations_easytranslationplatform_job_category_grid',
+                    [
+                        'job_id' => $jobId
+                    ]
+                )
+                ->setStatusId($statusId)
+                ->toHtml()
+        );
+    }
+
     private function _getParamArray(){
         $data = $this->getRequest()->getParams();
         $data['attr'] = !empty($data['attr']) ? $data['attr'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_attr');

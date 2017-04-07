@@ -97,6 +97,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
     public function submitjobAction(){
         $data = $this->getRequest()->getParams();
         if($data['attr'] && $data['store'] && $data['cms_page']){
+            /** @var  $jobModel StrakerTranslations_EasyTranslationPlatform_Model_Job */
             $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job');
             try {
                 $jobModel->checkAndCreateFolder();
@@ -134,6 +135,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
     }
 
     public function copyAllAction(){
+        /** @var  $job StrakerTranslations_EasyTranslationPlatform_Model_Job */
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
         if (!$job->getId()){
@@ -214,6 +216,27 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
                         'store' => $params['store'], 'cms_page' => $params['cms_page'], 'attr' => $params['attr']
                     ]
                 )->toHtml()
+        );
+    }
+
+    public function jobGridAction(){
+        $jobId = $this->getRequest()->getParam('job_id');
+        $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
+        $statusId = $job->getStatusId();
+//        var_dump($params);exit;
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_job_cms_page_grid',
+                    'strakertranslations_easytranslationplatform_job_cms_page_grid',
+                    [
+                        'job_id' => $jobId
+                    ]
+                )
+                ->setStatusId($statusId)
+                ->toHtml()
         );
     }
 

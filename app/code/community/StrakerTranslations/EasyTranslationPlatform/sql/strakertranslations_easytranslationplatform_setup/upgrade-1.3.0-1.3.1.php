@@ -89,3 +89,5 @@ if ($connection->isTableExists($tableName) == true) {
 //     }
 //
 // }
+
+$installer->endSetup();

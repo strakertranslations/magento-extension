@@ -78,7 +78,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     /**
      * Prepare product attributes grid columns
      *
-     * @return Mage_Adminhtml_Block_Catalog_Product_Attribute_Grid
+     * @return StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_Grid
      */
     protected function _prepareColumns()
     {

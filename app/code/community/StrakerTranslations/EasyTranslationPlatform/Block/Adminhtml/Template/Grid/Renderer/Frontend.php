@@ -18,8 +18,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             }
         }
         elseif($row->getCategoryId()){
-            $category = Mage::getModel('catalog/category')->setStoreId($this->getStoreId($row))->load($row->getCategoryId());
-            $html .= '<a target="_blank" href="' . $category->getUrl() . '">' . $this->__('View Category in Frontend') . '</a>';
+            $url = $this->getUrl('catalog/category/view', ['id' => $row->getCategoryId(), '_nosid' => true, '_query' => ['___store' => $this->getStoreId($row) ]]);
+            $html .= '<a target="_blank" href="' . $url . '">' . $this->__('View Category in Frontend') . '</a>';
         }
         return $html;
     }

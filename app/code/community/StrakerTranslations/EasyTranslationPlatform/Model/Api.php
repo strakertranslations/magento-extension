@@ -156,7 +156,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         return Mage::getStoreConfig('straker/api_url/languages');
     }
 
-    protected  function _getCountiresUrl(){
+    protected  function _getCountriesUrl(){
         return Mage::getStoreConfig('straker/api_url/countries');
     }
 
@@ -211,14 +211,88 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         return $this->_call($downloadUrl,'get',array(),true);
     }
 
-    public function getCountries(){
-        $result = $this->_call($this->_getCountiresUrl());
-        return $result->country ? $result->country : false;
+//    public function getCountries(){
+//        $result = $this->_call($this->_getCountiresUrl());
+//        return $result->country ? $result->country : false;
+//    }
+//
+//    public function getLanguages(){
+//        $result = $this->_call($this->_getLanguagesUrl());
+//        return $result->languages ? $result->languages : false;
+//    }
+
+    public function getCountries()
+    {
+        /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        $filePath = $helper->getDataFilePath();
+        $fileName = 'countries.json';
+
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
+
+        $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
+
+        if (file_exists($fileFullPath)) {
+            $result = json_decode(file_get_contents($fileFullPath));
+        } else {
+            $result = $this->_call($this->_getCountriesUrl());
+            if (!empty($result)) {
+                file_put_contents($fileFullPath, json_encode($result));
+            }
+        }
+        return isset($result->country) ?  $result->country : [];
     }
 
-    public function getLanguages(){
-        $result = $this->_call($this->_getLanguagesUrl());
-        return $result->languages ? $result->languages : false;
+    public function getLanguages()
+    {
+        /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
+        $helper = Mage::helper('strakertranslations_easytranslationplatform');
+        $filePath = $helper->getDataFilePath();
+        $fileName = 'languages.json';
+
+        if (!file_exists($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
+
+        $fileFullPath = $filePath . DIRECTORY_SEPARATOR . $fileName;
+
+        if (file_exists($fileFullPath)) {
+            $result = json_decode(file_get_contents($fileFullPath));
+        } else {
+            $result = $this->_call($this->_getLanguagesUrl());
+            if (!empty($result)) {
+                file_put_contents($fileFullPath, json_encode($result));
+            }
+        }
+        return isset($result->languages) ? $result->languages : [];
+    }
+
+    public function _getLanguageName($code = '')
+    {
+        $languages = $this->getLanguages();
+        $languageName = '';
+        $isArray = is_array($code) ? true : false;
+        foreach ($languages as $k => $val) {
+            if( $isArray ){
+                if ( ($key = array_search($val->code,  $code)) !== false ) {
+                    $languageName[$val->code] = $val->name;
+                    unset($code[$key]);
+                }else{
+                    continue;
+                }
+                if( count($code) <= 0 ){
+                    break;
+                }
+            }else{
+                if ($val->code == $code) {
+                    $languageName = $val->name;
+                    break;
+                }
+            }
+        }
+        return $languageName;
     }
 
     public function saveAppKey($appKey){

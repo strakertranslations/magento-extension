@@ -7,6 +7,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
     {
         parent::__construct();
         $this->setId('strakerJobProductGrid');
+        $this->setUseAjax(true);
+        $this->setVarNameFilter('straker_job_product_filter');
     }
 
     protected function _prepareLayout()
@@ -33,6 +35,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
         /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Product_Collection $collection */
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job_product')->getCollection()->addFieldToFilter('main_table.job_id', $job->getId());
 
+        $collection->getSelect()
+            ->joinLeft(
+                ['product' => $collection->getTable('catalog/product') ],
+                'product.entity_id = main_table.product_id',
+                ['sku']
+            );
         //loop through this job's attributes and join them to the collection
         foreach ($jobAttributes as $jobAttribute) {
             $attributeCode = Mage::getModel('eav/entity_attribute')->load($jobAttribute->getAttributeId())->getAttributeCode();
@@ -44,6 +52,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
                 array($attributeCode . '_original' => 'original', $attributeCode . '_translate' => 'translate')
             );
         }
+//        $collection->loadData();
 //echo $collection->getSelect()->__toString();
 //die();
         $this->setCollection($collection);
@@ -54,15 +63,25 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
     {
         $this->addColumn('id', array(
             'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('ID'),
+            'type' => 'number',
             'align' => 'right',
             'width' => '50px',
             'index' => 'id',
+            'filter_index' => 'main_table.id'
         ));
 
         $this->addColumn('product_id', array(
             'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Product ID'),
+            'type' => 'number',
             'align' => 'left',
             'index' => 'product_id',
+            'filter_index' => 'main_table.product_id'
+        ));
+
+        $this->addColumn('sku', array(
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Sku'),
+            'align' => 'left',
+            'index' => 'sku',
         ));
 
 //        $this->addColumn('job_id', array(
@@ -82,22 +101,30 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Source', $attrModel->getFrontendLabel()),
                 'align' => 'left',
                 'index' => $attributeCode . '_original',
+                'filter_index' => $attributeCode.'.original',
             ));
 
             $this->addColumn($attributeCode . '_translate', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Target', $attrModel->getFrontendLabel()),
                 'align' => 'left',
                 'index' => $attributeCode . '_translate',
+                'filter_index' => $attributeCode.'.translate'
             ));
         }
 
-        if ($this->getStatusId() == '4') {
+        if ($this->getStatusId() == '4' || $this->getStatusId() == '5'){
             $this->addColumn('version', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
                 'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Version',
                 'align' => 'center',
-                'index' => false,
-                'filter' => false,
+                'type' => 'options',
+                'index' => 'version',
+                'filter_condition_callback' => [$this, '_filterVersion'],
+                'options' => [
+                    '0' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
+                    '1' => Mage::helper('strakertranslations_easytranslationplatform')->__('Not Published')
+                ],
+                'width' => '20%'
             ));
         }
 
@@ -122,8 +149,20 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
 
     public function getRowUrl($row)
     {
-//        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
         return '';
+    }
+
+    protected function _filterVersion($collection, $column)
+    {
+        if ( ($value = $column->getFilter()->getValue()) === FALSE ) {
+            return $this;
+        }
+        if ($value === '1' ){
+            $this->getCollection()->getSelect()->where('`main_table`.`version` IS NULL');
+        } else {
+            $this->getCollection()->getSelect()->where('`main_table`.`version` IS NOT NULL');
+        }
+        return $this;
     }
 
     protected function _prepareMassaction()
@@ -191,5 +230,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
             $html .= $this->getSearchButtonHtml();
         }
         return $html;
+    }
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/jobGrid', array('_current' => true));
     }
 }
