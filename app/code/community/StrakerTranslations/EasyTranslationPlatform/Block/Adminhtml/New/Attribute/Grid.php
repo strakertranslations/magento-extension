@@ -7,6 +7,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $this->setId('attributeGrid');
         $this->setDefaultSort('attribute_code');
         $this->setDefaultDir('ASC');
+        $this->setUseAjax(true);
+        $this->setVarNameFilter('straker_attribute_filter');
     }
 
     protected function _getStore()
@@ -76,7 +78,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     /**
      * Prepare product attributes grid columns
      *
-     * @return Mage_Adminhtml_Block_Catalog_Product_Attribute_Grid
+     * @return StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_Grid
      */
     protected function _prepareColumns()
     {
@@ -87,22 +89,29 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Code'),
             'sortable'=>true,
             'index'=>'attribute_code',
-            'filter'    => false
+            'width' => '22%'
         ));
 
         $this->addColumn('frontend_label', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
             'sortable'=>true,
-            'index'=>'frontend_label'
+            'index'=>'frontend_label',
+            'width' => '22%'
         ));
 
         $this->addColumn('translate_options', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Translate Attribute Options'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_TranslateOptions',
             'align' => 'center',
-            'index' => false,
+            'index' => 'frontend_input',
             'sortable'=> false,
-            'filter'    => false,
+            'type'    => 'options',
+            'options' => [
+                'no' => Mage::helper('catalog')->__('No Options'),
+                'select' => Mage::helper('catalog')->__('Has Options')
+            ],
+            'filter_condition_callback' => array($this, '_optionsFilter'),
+            'width' => '22%'
         ));
 
         $this->addColumn('is_visible', array(
@@ -115,6 +124,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
                 '0' => Mage::helper('catalog')->__('No'),
             ),
             'align' => 'center',
+            'width' => '22%'
         ));
 
         $this->addColumn('version',
@@ -151,6 +161,21 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         return $this;
     }
 
+    protected function _optionsFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        if ($value == 'select' ){
+            $collection->getSelect()->where('frontend_input=?', 'select');
+        } else {
+            $collection->getSelect()->where('frontend_input<>?', 'select');
+        }
+
+        return $this;
+    }
+
     protected function _prepareMassaction()
     {
         $this->setMassactionIdField('attribute_id');
@@ -163,9 +188,17 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
              'selected' => 1
         ));
         $this->getMassactionBlock()->setTemplate('straker/new/attribute/massaction.phtml');
-
+        $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
+        $optionParam = $this->getRequest()->getParam('internal_option');
+        if( !empty($optionParam) ){
+            Mage::getSingleton('adminhtml/session')->setData('straker_new_option', $optionParam);
+        }
+        $internalOption = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
+        $internalOption = empty($internalOption) ? '' : $internalOption;
         //todo: refine this
-        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'.$this->getRequest()->getParam('internal_option').'" />';
+//        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'.$this->getRequest()->getParam('internal_option').'" />';
+        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'. $internalOption .'" />';
+
         $this->getMassactionBlock()->setHiddenParams($hiddenParams);
 
         Mage::dispatchEvent('adminhtml_strakertranslation_new_products_grid_prepare_massaction', array('block' => $this));
@@ -187,11 +220,21 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/new', array('_current'=>true));
+        return $this->getUrl('*/*/grid', array('_current'=>true));
     }
 
     public function getRowUrl($row)
     {
         return '';
+    }
+
+    public function getMassactionBlockJsObjName()
+    {
+        return $this->getMassactionBlock()->getJsObjectName(); // TODO: Change the autogenerated stub
+    }
+
+    public function getSelectedIds(){
+        $selectedIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
+        return empty($selectedIds) ? [] : $selectedIds;
     }
 }

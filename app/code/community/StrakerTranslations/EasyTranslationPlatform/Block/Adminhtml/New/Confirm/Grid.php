@@ -8,7 +8,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Confirm_Gr
         $this->setId('strakerProducts');
         $this->setDefaultSort('entity_id');
         $this->setDefaultDir('DESC');
-        $this->setSaveParametersInSession(true);
         $this->setUseAjax(false);
         $this->setVarNameFilter('product_filter');
     }

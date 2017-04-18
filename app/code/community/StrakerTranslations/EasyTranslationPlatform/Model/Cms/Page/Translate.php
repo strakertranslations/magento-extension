@@ -33,18 +33,16 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Cms_Page_Translate exten
 //        }
 //
 //        $this->setIsImported(1)->save();
-
-        if ($this->getTranslate()){
-
+        $translation = $this->getTranslate();
+        if( !empty($translation) ){
             $model = Mage::getModel('cms/page')->load($newEntityId);
             if($model->getId()){
-                $model->setData($this->getColumnName(), $this->getTranslate());
+                $model->setData($this->getColumnName(), $translation );
                 $model->save();
+                $model->unsetData();
             }
         }
-
         $this->setIsImported(1)->save();
-
     }
 //
 //    private function _getConnection() {

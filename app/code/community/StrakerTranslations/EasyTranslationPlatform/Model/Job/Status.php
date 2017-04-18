@@ -12,5 +12,5 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job_Status extends Mage_
     {
         $this->_init('strakertranslations_easytranslationplatform/job_status');
     }
-
 }
+

@@ -14,10 +14,11 @@
     <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
     <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
     <li class="wizard-done"><?php echo $this->__('Select Content') ?></li>
-    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+    <li class="wizard-current"><?php echo $this->__('Confirm Content') ?></li>
 </ol>
 <?php $params = $this->getRequest()->getParams(); ?>
-<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/new", array('store'=>$this->getStore(), 'internal_cms_page'=>implode(',', $this->getCmsPage()), 'attr'=>$this->getAttr())) ?>"><?php echo $this->__('Edit CMS Pages') ?></a>
+<!--<a href="--><?php //echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/new", array('store'=>$this->getStore(), 'internal_cms_page'=>implode(',', $this->getCmsPage()), 'attr'=>$this->getAttr())) ?><!--">--><?php //echo $this->__('Edit CMS Pages') ?><!--</a>-->
+<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'from' => 'confirm' )) ?>"><?php echo $this->__('Edit CMS Pages') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_page/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
     <input type="hidden" name="cms_page" value="<?php echo implode(',', $this->getCmsPage()) ?>" >
@@ -33,6 +34,6 @@
 <script>
     Event.observe(window, "load", function() {
         var buttonHtml = '<button title="Submit" type="button" class="right" onclick="$(\'submit-new-job-form\').submit();" style=""><span><span><span>Submit</span></span></span></button>';
-        $('strakerCmsPages').insert({after: buttonHtml});
+        $('strakerCmsPagesConfirm').insert({after: buttonHtml});
     });
 </script>

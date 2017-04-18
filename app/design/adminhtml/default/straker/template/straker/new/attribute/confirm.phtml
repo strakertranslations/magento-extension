@@ -17,12 +17,13 @@
     <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
     <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
     <li class="wizard-done"><?php echo $this->__('Select Content') ?></li>
-    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+    <li class="wizard-current"><?php echo $this->__('Confirm Content') ?></li>
 </ol>
 <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_attribute/new", array(
     'store'=>$this->getStore(),
-    'internal_attribute'=>implode(',', $this->getAttribute()),
-    'internal_option'=>$this->getOption()
+    'from' => 'confirm'
+//    'internal_attribute'=>implode(',', $this->getAttribute()),
+//    'internal_option'=>$this->getOption()
 ) ) ?>"><?php echo $this->__('Edit Attributes') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_attribute/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
@@ -36,6 +37,7 @@
 <script>
     Event.observe(window, "load", function() {
         var buttonHtml = '<button title="Submit" type="button" class="right" onclick="$(\'submit-new-job-form\').submit();" style=""><span><span><span>Submit</span></span></span></button>';
-        $('strakerAttribute').insert({after: buttonHtml});
+        $('strakerAttributeConfirm').insert({after: buttonHtml});
     });
+
 </script>

@@ -19,7 +19,7 @@
 <ol class="wizard" data-wizard-steps="4">
     <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
     <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
-    <li class="wizard-todo"><?php echo $this->__('Select Content') ?></li>
+    <li class="wizard-current"><?php echo $this->__('Select Content') ?></li>
     <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
 </ol>
 <div>
@@ -31,4 +31,9 @@
         $('strakerProducts').insert({after: buttonHtml});
         $$('.content-header-floating .content-header td.a-right')[0].insert(buttonHtml);
     });
+    <?php if($this->getRequest()->getParam('from') === 'confirm' ): ?>
+    <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.checkedString = '<?php echo join(',', $this->getChild('grid')->getSelectedIds()); ?>';
+    <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.checkCheckboxes();
+    <?php echo $this->getChild('grid')->getMassactionBlockJsObjName(); ?>.updateCount();
+    <?php endif; ?>
 </script>

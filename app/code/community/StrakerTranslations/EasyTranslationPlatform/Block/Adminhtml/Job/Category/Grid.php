@@ -7,7 +7,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
     {
         parent::__construct();
         $this->setId('strakerJobCategoryGrid');
-        $this->setSaveParametersInSession(true);
+        $this->setUseAjax(true);
+        $this->setVarNameFilter('straker_job_category_filter');
     }
 
     protected function _prepareLayout()
@@ -64,6 +65,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
             'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Category ID'),
             'align' => 'left',
             'index' => 'category_id',
+            'type' => 'number',
+            'filter_index' => 'main_table.category_id'
         ));
 
 //        $this->addColumn('job_id', array(
@@ -83,22 +86,30 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Source', $attrModel->getFrontendLabel()),
                 'align' => 'left',
                 'index' => $attributeCode . '_original',
+                'filter_index' => $attributeCode.'.original'
             ));
 
             $this->addColumn($attributeCode . '_translate', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Target', $attrModel->getFrontendLabel()),
                 'align' => 'left',
                 'index' => $attributeCode . '_translate',
+                'filter_index' => $attributeCode.'.translate'
             ));
         }
 
-        if ($this->getStatusId() == '4') {
+        if ($this->getStatusId() == '4' || $this->getStatusId() == '5'){
             $this->addColumn('version', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
                 'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Version',
                 'align' => 'center',
-                'index' => false,
-                'filter' => false,
+                'type' => 'options',
+                'index' => 'version',
+                'filter_condition_callback' => [$this, '_filterVersion'],
+                'options' => [
+                    '0' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
+                    '1' => Mage::helper('strakertranslations_easytranslationplatform')->__('Not Published')
+                ],
+                'width' => '20%'
             ));
         }
 
@@ -125,6 +136,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
     {
 //        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
         return '';
+    }
+
+    protected function _filterVersion($collection, $column)
+    {
+        if ( ($value = $column->getFilter()->getValue()) === FALSE ) {
+            return $this;
+        }
+        if ($value === '1' ){
+            $this->getCollection()->getSelect()->where('`main_table`.`version` IS NULL');
+        } else {
+            $this->getCollection()->getSelect()->where('`main_table`.`version` IS NOT NULL');
+        }
+        return $this;
     }
 
     protected function _prepareMassaction()
@@ -192,5 +216,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
             $html .= $this->getSearchButtonHtml();
         }
         return $html;
+    }
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/jobGrid', array('_current' => true));
     }
 }

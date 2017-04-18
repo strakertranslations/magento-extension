@@ -5,11 +5,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     public function __construct()
     {
         parent::__construct();
-        $this->setId('strakerAttribute');
+        $this->setId('strakerAttributeConfirm');
         $this->setDefaultSort('attribute_code');
         $this->setDefaultDir('ASC');
-        $this->setSaveParametersInSession(true);
-        $this->setUseAjax(false);
+        $this->setVarNameFilter('attribute_confirm_filter');
+        $this->setUseAjax(true);
     }
 
     protected function _prepareLayout()
@@ -20,7 +20,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     protected function _prepareColumns()
     {
         parent::_prepareColumns();
-
 
         $this->addColumn('attribute_code', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Code'),
@@ -67,6 +66,27 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             'align' => 'center',
         ));
 
+        $this->addColumn(
+            'action',
+            [
+                'header'    => Mage::helper('catalog')->__('Action'),
+                'width'     => '50px',
+                'type'      => 'action',
+                'getter'     => 'getAttributeId',
+                'actions'   => array(
+                    array(
+                        'caption' => $this->__('Remove'),
+                        'url'     => [
+                            'base'=>'*/*/removeFromCart',
+                        ],
+                        'field'   => 'attribute_id'
+                    )
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'index'     => 'attribute_id'
+            ]
+        );
         return $this;
     }
 
@@ -93,7 +113,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/addtoconfirm', array('_current'=>true));
+        return $this->getUrl('*/*/confirmGrid', array('_current'=>true));
     }
 
     public function getRowUrl($row)

@@ -13,4 +13,11 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job_Type extends Mage_Co
         $this->_init('strakertranslations_easytranslationplatform/job_type');
     }
 
+    public function getOptionArray(){
+        $data = [];
+        foreach($this->getCollection()->getData() as $d){
+            $data[$d['type_id']] = $d['type_name'];
+        }
+        return $data;
+    }
 }

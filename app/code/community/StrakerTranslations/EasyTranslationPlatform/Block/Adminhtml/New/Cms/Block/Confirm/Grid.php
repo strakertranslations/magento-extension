@@ -5,13 +5,18 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
     public function __construct()
     {
         parent::__construct();
-        $this->setId('strakerCmsBlocks');
+        $this->setId('strakerCmsBlocksConfirm');
         $this->setDefaultSort('identifier');
         $this->setDefaultDir('ASC');
-        $this->setUseAjax(false);
-        $this->setFilterVisibility(false);
+        $this->setUseAjax(true);
+        $this->setVarNameFilter('cms_block_confirm_filter');
+        //        $this->setFilterVisibility(false);
     }
 
+    protected function _prepareLayout()
+    {
+        return $this;
+    }
 
     protected function _prepareCollection()
     {
@@ -23,18 +28,18 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
 
     protected function _prepareColumns()
     {
-        $baseUrl = $this->getUrl();
-
         $this->addColumn('title', array(
             'header'    => Mage::helper('cms')->__('Title'),
             'align'     => 'left',
             'index'     => 'title',
+            'filter'    => false,
         ));
 
         $this->addColumn('identifier', array(
             'header'    => Mage::helper('cms')->__('Identifier'),
             'align'     => 'left',
-            'index'     => 'identifier'
+            'index'     => 'identifier',
+            'filter'    => false,
         ));
 
         if (!Mage::app()->isSingleStoreMode()) {
@@ -45,8 +50,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
                 'store_all'     => true,
                 'store_view'    => true,
                 'sortable'      => false,
-                'filter_condition_callback'
-                => array($this, '_filterStoreCondition'),
+//                'filter_condition_callback'
+//                => array($this, '_filterStoreCondition'),
             ));
         }
 
@@ -58,19 +63,44 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
                 0 => Mage::helper('cms')->__('Disabled'),
                 1 => Mage::helper('cms')->__('Enabled')
             ),
+            'filter'    => false,
         ));
 
         $this->addColumn('creation_time', array(
             'header'    => Mage::helper('cms')->__('Date Created'),
             'index'     => 'creation_time',
             'type'      => 'datetime',
+            'filter'    => false,
         ));
 
         $this->addColumn('update_time', array(
             'header'    => Mage::helper('cms')->__('Last Modified'),
             'index'     => 'update_time',
             'type'      => 'datetime',
+            'filter'    => false,
         ));
+
+        $this->addColumn(
+            'action',
+            [
+                'header'    => Mage::helper('catalog')->__('Action'),
+                'width'     => '50px',
+                'type'      => 'action',
+                'getter'     => 'getBlockId',
+                'actions'   => array(
+                    array(
+                        'caption' => $this->__('Remove'),
+                        'url'     => [
+                            'base'=>'*/*/removeFromCart'
+                        ],
+                        'field'   => 'block_id'
+                    )
+                ),
+                'filter'    => false,
+                'sortable'  => false,
+                'index'     => 'block_id'
+            ]
+        );
 
         return parent::_prepareColumns();
     }
@@ -89,6 +119,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
 
         $this->getCollection()->addStoreFilter($value);
     }
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/ConfirmGrid', array('_current'=>true));
+    }
+
     public function getRowUrl($row)
     {
         return '';

@@ -128,4 +128,16 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
         return;
     }
 
+    public function gridAction()
+    {
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_job_grid',
+                    'strakertranslations_easytranslationplatform_adminhtml_job_grid'
+                )->toHtml()
+        );
+    }
 }

@@ -26,8 +26,8 @@
 ?>
 <div id="<?php echo $this->getHtmlId() ?>">
     <table cellspacing="0" cellpadding="0" class="massaction">
-        <tr>
-            <td>
+        <tr id="massactions-wrapper">
+            <td colspan="3">
                 <div id="massaction-attribute-label-wrapper">
                     <?php if ($this->getUseSelectAll()):?>
                         <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
@@ -38,23 +38,27 @@
                     <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo $this->__('Select Visible') ?></a>
                     <span class="separator">|</span>
                     <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo $this->__('Unselect Visible') ?></a>
-                    <span class="separator">|</span><br />
+                    <span class="separator">|</span>
                     <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo $this->__('items selected') ?>
                 </div>
+            </td>
+            <td colspan="3">
                 <div id="massaction-attribute-option-wrapper">
                     <?php if ($this->getUseSelectAll()):?>
-                        <a href="#" onclick="selectAllMassActionOptions()"><?php echo $this->__('Select All') ?></a>
+                        <a href="#" onclick="return selectAllMassActionOptions(event)"><?php echo $this->__('Select All') ?></a>
                         <span class="separator">|</span>
-                        <a href="#" onclick="unselectAllMassActionOptions()"><?php echo $this->__('Unselect All') ?></a>
+                        <a href="#" onclick="return unselectAllMassActionOptions(event)"><?php echo $this->__('Unselect All') ?></a>
                         <span class="separator">|</span>
                     <?php endif; ?>
-                    <a href="#" onclick="selectVisibleMassActionOptions()"><?php echo $this->__('Select Visible') ?></a>
+                    <a href="#" onclick="return selectVisibleMassActionOptions(event)"><?php echo $this->__('Select Visible') ?></a>
                     <span class="separator">|</span>
-                    <a href="#" onclick="unselectVisibleMassActionOptions()"><?php echo $this->__('Unselect Visible') ?></a>
-                    <span class="separator">|</span><br />
+                    <a href="#" onclick="return unselectVisibleMassActionOptions(event)"><?php echo $this->__('Unselect Visible') ?></a>
+                    <span class="separator">|</span>
                     <strong id="mass-action-options-count">0</strong> <?php echo $this->__('items selected') ?>
                 </div>
             </td>
+        </tr>
+        <tr>
             <td>
                 <div class="right">
                     <div class="entry-edit">
@@ -75,7 +79,7 @@
                         </span>
                                 <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-hiddens"></span>
                                 <span class="outer-span" id="<?php echo $this->getHtmlId() ?>-form-additional"></span>
-                        <span class="field-row">
+                                <span class="field-row">
                             <?php echo $this->getApplyButtonHtml() ?>
                         </span>
                             </fieldset>
@@ -101,9 +105,10 @@
         </script>
     <?php endif; ?>
     <script>
-        <?php //JS to control attribute option checkboxes ?>
+        //JS to control attribute option checkboxes
         var allAttributesWithOptions = <?php echo json_encode( $this->getParentBlock()->getAttributesWithOption() ) ?>;
-        selectAllMassActionOptions = function(){
+        selectAllMassActionOptions = function(e){
+            e.preventDefault();
             $$('.checkbox-option').each(function(checkbox) {
                 if(allAttributesWithOptions.indexOf(checkbox.value) !== -1){
                     checkbox.checked = 1
@@ -112,7 +117,8 @@
             $$('#attributeGrid_massaction-form input[name=option]')[0].value = allAttributesWithOptions;
             $('mass-action-options-count').update(allAttributesWithOptions.length);
         };
-        unselectAllMassActionOptions = function(){
+        unselectAllMassActionOptions = function(e){
+            e.preventDefault();
             $$('.checkbox-option').each(function(checkbox) {
                 if(allAttributesWithOptions.indexOf(checkbox.value) !== -1){
                     checkbox.checked = 0;
@@ -121,8 +127,8 @@
             $$('#attributeGrid_massaction-form input[name=option]')[0].value = '';
             $('mass-action-options-count').update(0);
         };
-        selectVisibleMassActionOptions = function(){
-
+        selectVisibleMassActionOptions = function(e){
+            e.preventDefault();
             var optionArray = $$('#attributeGrid_massaction-form input[name=option]')[0].value === '' ? [] : $$('#attributeGrid_massaction-form input[name=option]')[0].value.split(',');
 
             $$('.checkbox-option').each(function(checkbox) {
@@ -134,7 +140,8 @@
             $$('#attributeGrid_massaction-form input[name=option]')[0].value = optionArray;
             $('mass-action-options-count').update(optionArray.length);
         };
-        unselectVisibleMassActionOptions = function(){
+        unselectVisibleMassActionOptions = function(e){
+            e.preventDefault();
             var optionArray = $$('#attributeGrid_massaction-form input[name=option]')[0].value.split(',');
 
             $$('.checkbox-option').each(function(checkbox) {
@@ -152,10 +159,125 @@
                 $('mass-action-options-count').update(optionArray.length);
             }
         };
+        varienGrid.prototype.rowMouseClick = function(){
+            if(event.element().matches('input[type=checkbox]') && this.rowClickCallback){
+                try{
+                    this.rowClickCallback(this, event);
+                }
+                catch(e){}
+            }
+            varienGlobalEvents.fireEvent('gridRowClick', event);
+        };
+        varienGrid.prototype.reload = function(url){
+            if (!this.reloadParams) {
+                this.reloadParams = {form_key: FORM_KEY};
+            }
+            else {
+                this.reloadParams.form_key = FORM_KEY;
+            }
+            url = url || this.url;
+            if(this.useAjax){
+//                this.reloadParams.internal_option =  $$('#attributeGrid_massaction-form input[name=option]')[0].value;
+                new Ajax.Request(url + (url.match(new RegExp('\\?')) ? '&ajax=true' : '?ajax=true' ), {
+                    loaderArea: this.containerId,
+                    parameters: this.reloadParams || {},
+                    evalScripts: true,
+                    onFailure: this._processFailure.bind(this),
+                    onComplete: this.initGridAjax.bind(this),
+                    onSuccess: function(transport) {
+                        try {
+                            var responseText = transport.responseText.replace(/>\s+</g, '><');
 
-        document.observe("dom:loaded", function() {
-            $$('#attributeGrid_table tr.filter th:nth(1)')[0].update($('massaction-attribute-label-wrapper'));
-            $$('#attributeGrid_table tr.filter th:nth(3)')[0].update($('massaction-attribute-option-wrapper'));
+                            if (transport.responseText.isJSON()) {
+                                var response = transport.responseText.evalJSON()
+                                if (response.error) {
+                                    alert(response.message);
+                                }
+                                if(response.ajaxExpired && response.ajaxRedirect) {
+                                    setLocation(response.ajaxRedirect);
+                                }
+                            } else {
+                                /**
+                                 * For IE <= 7.
+                                 * If there are two elements, and first has name, that equals id of second.
+                                 * In this case, IE will choose one that is above
+                                 *
+                                 * @see https://prototype.lighthouseapp.com/projects/8886/tickets/994-id-selector-finds-elements-by-name-attribute-in-ie7
+                                 */
+                                var divId = $(this.containerId);
+                                if (divId.id == this.containerId) {
+                                    divId.update(responseText);
+                                } else {
+                                    $$('div[id="'+this.containerId+'"]')[0].update(responseText);
+                                }
+                            }
+                        } catch (e) {
+                            var divId = $(this.containerId);
+                            if (divId.id == this.containerId) {
+                                divId.update(responseText);
+                            } else {
+                                $$('div[id="'+this.containerId+'"]')[0].update(responseText);
+                            }
+                        }
+                    }.bind(this)
+                });
+                return;
+            }
+            else{
+                if(this.reloadParams){
+                    $H(this.reloadParams).each(function(pair){
+                        url = this.addVarToUrl(pair.key, pair.value);
+                    }.bind(this));
+                }
+                location.href = url;
+            }
+        };
+        varienGrid.prototype.setPage = function(pageNumber){
+            this.reloadParams.internal_option = $$('#attributeGrid_massaction-form input[name=option]')[0].value;
+            this.reload(this.addVarToUrl(this.pageVar, pageNumber));
+        };
+        varienGridMassaction.prototype.apply = function() {
+            if(varienStringArray.count(this.checkedString) == 0 && varienStringArray.count($$('#attributeGrid_massaction-form input[name=option]')[0].value) == 0) {
+                alert(this.errorText);
+                return;
+            }
+            var item = this.getSelectedItem();
+
+            if(!item) {
+                this.validator.validate();
+                return;
+            }
+            this.currentItem = item;
+            var fieldName = (item.field ? item.field : this.formFieldName);
+            var fieldsHtml = '';
+
+            if(this.currentItem.confirm && !window.confirm(this.currentItem.confirm)) {
+                return;
+            }
+            this.formHiddens.update('');
+
+            new Insertion.Bottom(this.formHiddens, this.fieldTemplate.evaluate({name: fieldName, value: this.checkedString}));
+            new Insertion.Bottom(this.formHiddens, this.fieldTemplate.evaluate({name: 'massaction_prepare_key', value: fieldName}));
+
+            if(!this.validator.validate()) {
+                return;
+            }
+
+            if(this.useAjax && item.url) {
+                new Ajax.Request(item.url, {
+                    'method': 'post',
+                    'parameters': this.form.serialize(true),
+                    'onComplete': this.onMassactionComplete.bind(this)
+                });
+            } else if(item.url) {
+                this.form.action = item.url;
+                this.form.submit();
+            }
+        };
+        initGrid = function () {
+//            $$('#attributeGrid_table tr.filter th:nth(1)')[0].update($('massaction-attribute-label-wrapper'));
+//            $$('#attributeGrid_table tr.filter th:nth(3)')[0].update($('massaction-attribute-option-wrapper')
+            $$('#attributeGrid_table thead')[0].insert({top: $('massactions-wrapper')});
             $$('.checkbox-option').each(function(element) {
                 element.observe('click', function(e){
                     var optionArray = $$('#attributeGrid_massaction-form input[name=option]')[0].value === '' ? [] : $$('#attributeGrid_massaction-form input[name=option]')[0].value.split(',');
@@ -179,8 +301,6 @@
                     }
                 });
             });
-
-
             var initOptionArray = $$('#attributeGrid_massaction-form input[name=option]')[0].value === '' ? [] : $$('#attributeGrid_massaction-form input[name=option]')[0].value.split(',');
             $$('.checkbox-option').each(function(checkbox) {
                 if(initOptionArray.indexOf(checkbox.value) !== -1){
@@ -191,7 +311,6 @@
                 }
             });
             $('mass-action-options-count').update(initOptionArray.length);
-
             $$('.massaction-checkbox').each(function(element) {
                 element.observe('click', function(e){
                     if( typeof(e.target.up('tr').down('.checkbox-option')) !== 'undefined' &&
@@ -204,7 +323,6 @@
                     }
                 });
             });
-
             $$('.checkbox-option').each(function(element) {
                 element.observe('click', function(e){
                     if(e.target.checked && !e.target.up('tr').down('.massaction-checkbox').checked){
@@ -212,65 +330,12 @@
                     }
                 });
             });
-
+        };
+        if( typeof $$('#attributeGrid_table tr.filter th:nth(1)')[0] !== 'undefined' ){
+            initGrid();
+        }
+        document.observe("dom:loaded", function() {
+            initGrid();
         });
-
-        varienGrid.prototype.rowMouseClick = function(){
-            if(event.element().matches('input[type=checkbox]') && this.rowClickCallback){
-                try{
-                    this.rowClickCallback(this, event);
-                }
-                catch(e){}
-            }
-            varienGlobalEvents.fireEvent('gridRowClick', event);
-        };
-        varienGrid.prototype.setPage = function(pageNumber){
-            this.addVarToUrl('internal_option', $$('#attributeGrid_massaction-form input[name=option]')[0].value)
-            this.reload(this.addVarToUrl(this.pageVar, pageNumber));
-        };
-
-        varienGrid.prototype.addVarToUrl  = function(varName, varValue){
-            this.url = this._addVarToUrl(this.url, varName, varValue);
-            return this.url;
-        }
-
-        varienGridMassaction.prototype.apply = function() {
-            if(varienStringArray.count(this.checkedString) == 0 && varienStringArray.count($$('#attributeGrid_massaction-form input[name=option]')[0].value) == 0) {
-                alert(this.errorText);
-                return;
-            }
-
-            var item = this.getSelectedItem();
-            if(!item) {
-                this.validator.validate();
-                return;
-            }
-            this.currentItem = item;
-            var fieldName = (item.field ? item.field : this.formFieldName);
-            var fieldsHtml = '';
-
-            if(this.currentItem.confirm && !window.confirm(this.currentItem.confirm)) {
-                return;
-            }
-
-            this.formHiddens.update('');
-            new Insertion.Bottom(this.formHiddens, this.fieldTemplate.evaluate({name: fieldName, value: this.checkedString}));
-            new Insertion.Bottom(this.formHiddens, this.fieldTemplate.evaluate({name: 'massaction_prepare_key', value: fieldName}));
-
-            if(!this.validator.validate()) {
-                return;
-            }
-
-            if(this.useAjax && item.url) {
-                new Ajax.Request(item.url, {
-                    'method': 'post',
-                    'parameters': this.form.serialize(true),
-                    'onComplete': this.onMassactionComplete.bind(this)
-                });
-            } else if(item.url) {
-                this.form.action = item.url;
-                this.form.submit();
-            }
-        }
     </script>
 </div>

@@ -115,9 +115,9 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
                     $newOptionData = [];
                     foreach ($attribute as $optionId => $optionValue) {
                         $optionId = str_replace('id_', '',$optionId);
-                        /** @var Mage_Eav_Model_Entity_Attribute_Option $optionModel */
-                        $optionModel = Mage::getModel('eav/entity_attribute_option');
-                        $optionModel->load($optionId);
+//                        /** @var Mage_Eav_Model_Entity_Attribute_Option $optionModel */
+//                        $optionModel = Mage::getModel('eav/entity_attribute_option');
+//                        $optionModel->load($optionId);
                         if( !in_array($optionId, $optionIds)){
                             array_push(
                                 $newOptionData,

@@ -59,15 +59,14 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
         $params = $this->getRequest()->getParams();
         if (empty($params['store'])) {
             $this->_redirect('*/straker_new');
-            return;
         }
         elseif (empty($params['attr'])) {
-            return $this->_initNewAction()
+            $this->_initNewAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_products_attribute','strakertranslations_easytranslationplatform_new_products_attribute',array('setup_store_id' => $params['store'])))
                 ->renderLayout();
         }
         else{
-            return $this->_initNewAction()
+            $this->_initNewAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_products','strakertranslations_easytranslationplatform_new_products',array('setup_store_id' => $params['store'], 'attr' => $params['attr'])))
                 ->renderLayout();
         }
@@ -85,10 +84,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
     }
 
     public function addtoconfirmAction(){
-        $data = $this->getRequest()->getParams();
-        $data['attr'] = !empty($data['attr']) ? $data['attr'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_attr');
-        $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
-        $data['product'] = !empty($data['product']) ? $data['product'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
+        $data = $this->_getParamArray();
         if(!empty($data['attr']) && !empty($data['store']) && !empty($data['product'])){
             Mage::getSingleton('adminhtml/session')
                 ->setData('straker_new_attr', $data['attr'])
@@ -100,7 +96,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
                 ->renderLayout();
         }
         else {
-            $this->_redirect('*/straker_new/', $data);
+            if(array_key_exists('key', $data)){
+                unset($data['key']);
+            }
+            $this->_redirect('*/*/new/', $data);
         }
     }
 
@@ -203,5 +202,84 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
         /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $helper->checkSiteMode();
+    }
+
+    public function removeFromCartAction(){
+        $entityId = 0;
+        if(!empty($this->getRequest()->getParam('entity_id'))){
+            $entityId = $this->getRequest()->getParam('entity_id');
+        }
+        $productIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
+        if(!is_array($productIds)){
+            $productIds = explode(',', trim($productIds, ','));
+        }
+        if( ($key =  array_search($entityId, $productIds)) !== false ){
+            unset($productIds[$key]);
+        }
+        Mage::getSingleton('adminhtml/session')->setData('straker_new_product', $productIds);
+        $this->_redirect('*/*/addtoconfirm');
+    }
+
+    public function gridAction()
+    {
+        $data = $this->_getParamArray();
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_new_products_grid',
+                    'strakertranslations_easytranslationplatform_new_products_grid',
+                    [
+                        'store' => $data['store'], 'attr' => $data['attr'], 'product' => $data['product']
+                    ]
+                )->toHtml()
+        );
+    }
+
+    public function confirmGridAction()
+    {
+        $data = $this->_getParamArray();
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_new_products_confirm_grid',
+                    'strakertranslations_easytranslationplatform_new_products_confirm_grid',
+                    [
+                        'store' => $data['store'], 'attr' => $data['attr'], 'product' => $data['product']
+                    ]
+                )->toHtml()
+        );
+    }
+
+    public function jobGridAction(){
+        $jobId = $this->getRequest()->getParam('job_id');
+        $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
+        $statusId = $job->getStatusId();
+        //        var_dump($params);exit;
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_job_product_grid',
+                    'strakertranslations_easytranslationplatform_job_product_grid',
+                    [
+                        'job_id' => $jobId
+                    ]
+                )
+                ->setStatusId($statusId)
+                ->toHtml()
+        );
+    }
+
+    private function _getParamArray(){
+        $data = $this->getRequest()->getParams();
+        $data['attr'] = !empty($data['attr']) ? $data['attr'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_attr');
+        $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
+        $data['product'] = !empty($data['product']) ? $data['product'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
+        return $data;
     }
 }

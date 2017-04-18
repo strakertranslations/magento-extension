@@ -86,4 +86,14 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Data extends Mage_Core_
     public function clearSiteMode(){
         return Mage::getModel('core/config')->deleteConfig('straker/general/site_mode', 'default', 0);
     }
+
+    public function getDataFilePath()
+    {
+        return $this->getStrakerPath(). DIRECTORY_SEPARATOR . 'data';
+    }
+
+    public function getStrakerPath()
+    {
+        return Mage::getBaseDir('var').DIRECTORY_SEPARATOR.'straker';
+    }
 }

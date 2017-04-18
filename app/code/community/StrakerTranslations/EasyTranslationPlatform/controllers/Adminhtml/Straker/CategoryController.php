@@ -35,16 +35,15 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
         $params = $this->getRequest()->getParams();
         if (empty($params['store'])) {
             $this->_redirect('*/straker_new');
-            return;
         }
         elseif (empty($params['attr'])) {
-            return $this->_initNewAction()
+            $this->_initNewAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_attribute', 'strakertranslations_easytranslationplatform_new_categories_attribute', array('setup_store_id' => $params['store'])))
                 ->renderLayout();
         }
         else{
-            return $this->_initNewAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_tree', 'strakertranslations_easytranslationplatform_l_new_category_tree', array('setup_store_id' => $params['store'], 'attr' => $params['attr'])))
+            $this->_initNewAction()
+                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_tree', 'strakertranslations_easytranslationplatform_new_category_tree', array('setup_store_id' => $params['store'], 'attr' => $params['attr'])))
                 ->renderLayout();
         }
     }
@@ -60,20 +59,18 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
     }
 
     public function confirmCategoryAction(){
-        $data = $this->getRequest()->getParams();
-        $data['attr'] = !empty($data['attr']) ? $data['attr'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_attr');
-        $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
-        $data['category'] = !empty($data['category']) ? $data['category'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_category');
+        $data = $this->_getParamArray();
         //format category
-        $categoryIds = array_filter(array_unique(explode(',', $data['category'])));
+//        $categoryIds = array_filter(array_unique(explode(',', $data['category'])));
+        $categoryIds = empty($data['category']) ? [] : array_unique(explode(',', $data['category']));
         if(!empty($data['attr']) && !empty($data['store']) && !empty($categoryIds)){
             Mage::getSingleton('adminhtml/session')
                 ->setData('straker_new_attr', $data['attr'])
                 ->setData('straker_new_store', $data['store'])
-                ->setData('straker_new_category', $data['category'])
+                ->setData('straker_new_category', $categoryIds)
             ;
             return $this->_initNewAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_confirm', 'strakertranslations_easytranslationplatform__new_category_confirm', array('store' => $data['store'], 'attr' => $data['attr'], 'category' => $categoryIds)))
+                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_confirm', 'strakertranslations_easytranslationplatform_new_category_confirm', array('store' => $data['store'], 'attr' => $data['attr'], 'category' => $categoryIds)))
                 ->renderLayout();
         }
         else{
@@ -216,4 +213,70 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $helper->checkSiteMode();
     }
+
+    public function confirmGridAction(){
+        $data = $this->_getParamArray();
+        $categoryIds = array_unique($data['category']);
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_new_category_confirm_grid',
+                    'strakertranslations_easytranslationplatform_new_category_confirm_grid',
+                    [
+                        'store' => $data['store'], 'attr' => $data['attr'], 'category' => $categoryIds
+                    ]
+                )->toHtml()
+        );
+    }
+
+    public function jobGridAction(){
+        $jobId = $this->getRequest()->getParam('job_id');
+        $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
+        $statusId = $job->getStatusId();
+        //        var_dump($params);exit;
+        $this->loadLayout();
+        $this->getResponse()->setBody(
+            $this
+                ->getLayout()
+                ->createBlock(
+                    'strakertranslations_easytranslationplatform/adminhtml_job_category_grid',
+                    'strakertranslations_easytranslationplatform_job_category_grid',
+                    [
+                        'job_id' => $jobId
+                    ]
+                )
+                ->setStatusId($statusId)
+                ->toHtml()
+        );
+    }
+
+    private function _getParamArray(){
+        $data = $this->getRequest()->getParams();
+        $data['attr'] = !empty($data['attr']) ? $data['attr'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_attr');
+        $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
+        $data['category'] = !empty($data['category']) ? trim($data['category'],',') : Mage::getSingleton('adminhtml/session')->getData('straker_new_category');
+        return $data;
+    }
+
+    public function removeFromCartAction(){
+        $entityId = 0;
+        if(!empty($this->getRequest()->getParam('entity_id'))){
+            $entityId = $this->getRequest()->getParam('entity_id');
+        }
+        $categoryIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_category');
+        if(!is_array($categoryIds)){
+            $categoryIds = explode(',', trim($categoryIds, ','));
+        }
+        if( ($key =  array_search($entityId, $categoryIds)) !== false ){
+            unset($categoryIds[$key]);
+        }
+        if(is_array($categoryIds)){
+            $categoryIds = implode(',', $categoryIds);
+        }
+        Mage::getSingleton('adminhtml/session')->setData('straker_new_category', $categoryIds);
+        $this->_redirect('*/*/confirmCategory');
+    }
+
 }

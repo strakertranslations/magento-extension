@@ -3,9 +3,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
     public function render(Varien_Object $row){
+        $html = '';
         if (get_class($row) == get_class(Mage::getModel('strakertranslations_easytranslationplatform/job') )) {
-            $html = '';
-
             //if status is QUEUED
             if ($row->getStatusName() == 'QUEUED') {
                 $quote = $row->getQuote();
@@ -26,8 +25,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             elseif ($row->getStatusName() == 'PUBLISHED') {
                 $html = $this->__('Published');
             }
-            return $html;
         }
-
+        return $html;
     }
 }

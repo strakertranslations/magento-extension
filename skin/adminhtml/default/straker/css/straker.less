@@ -332,6 +332,10 @@ ol.wizard {
       color: silver;
       border-bottom: 4px solid silver;
     }
+    &.wizard-current {
+      color: #eb5e00;
+      border-bottom: 4px solid #eb5e00;
+    }
 
     &:after {
       content: "\00a0\00a0";
@@ -356,6 +360,13 @@ ol.wizard {
     &.wizard-todo:before {
       content: "\039F";
       color: silver;
+      background-color: white;
+      font-size: 1.5em;
+      bottom: -1.6em;
+    }
+    &.wizard-current:before{
+      content: "\039F";
+      color: #eb5e00;
       background-color: white;
       font-size: 1.5em;
       bottom: -1.6em;
@@ -519,5 +530,10 @@ ol.wizard{
       vertical-align: top;
       margin-left: 5px;
     }
+  }
+}
+#attributeGrid_table{
+  #massactions-wrapper{
+    background:url(../../default/images/massaction_bg.gif) repeat-x 0 100% #ebebeb
   }
 }

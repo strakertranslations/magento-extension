@@ -78,3 +78,5 @@ $installer->getConnection()
             'default' => 0
         ]
     );
+
+$installer->endSetup();

@@ -7,7 +7,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
     public function __construct() {
         parent::__construct();
         $this->setId('strakerJobCmsPageGrid');
-        $this->setSaveParametersInSession(true);
+        $this->setUseAjax(true);
+        $this->setVarNameFilter('straker_job_cms_page_filter');
     }
 
     protected function _prepareLayout()
@@ -40,10 +41,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
         $this->addColumn('title', array(
             'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Title'),
             'align' => 'center',
-            'index' => 'origin',
-            'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_CmsOriginTitle',
-            'sortable' => false,
-            'filter' => false,
+            'index' => 'title'
+        ));
+
+        $this->addColumn('identifier', array(
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Identifier'),
+            'align' => 'center',
+            'index' => 'identifier'
         ));
 
         if ($this->getStatusId() == '4' || $this->getStatusId() == '5'){
@@ -51,8 +55,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
                 'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_CmsVersion',
                 'align' => 'center',
-                'index' => false,
-                'filter'    => false,
+                'type' => 'options',
+                'index' => 'version',
+                'filter_condition_callback' => [$this, '_filterVersion'],
+                'options' => [
+                    '0' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
+                    '1' => Mage::helper('strakertranslations_easytranslationplatform')->__('Not Published')
+                ],
+                'width' => '20%'
             ));
         }
 
@@ -62,6 +72,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
     public function getRowUrl($row) {
 //        return $this->getUrl('*/*/edit', array('id' => $row->getId()));
         return '';
+    }
+
+    protected function _filterVersion($collection, $column)
+    {
+        if ( ($value = $column->getFilter()->getValue()) === FALSE ) {
+            return $this;
+        }
+        if ($value === '1' ){
+            $this->getCollection()->getSelect()->where('`main_table`.`version` IS NULL');
+        } else {
+            $this->getCollection()->getSelect()->where('`main_table`.`version` IS NOT NULL');
+        }
+        return $this;
     }
 
     protected function _prepareMassaction()
@@ -84,40 +107,40 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
 
 
 //            Mage::dispatchEvent('adminhtml_strakertranslation_job_product_grid_prepare_massaction', array('block' => $this));
-            return $this;
         }
+        return $this;
     }
 
-    protected function _prepareMassactionColumn()
-    {
-        if ($this->getStatusId() == '4') {
-            $columnId = 'massaction';
-            $massactionColumn = $this->getLayout()->createBlock('adminhtml/widget_grid_column')
-                ->setData(array(
-                    'index' => $this->getMassactionIdField(),
-                    'use_index' => $this->getMassactionIdField(),
-                    'filter_index' => $this->getMassactionIdFilter(),
-                    'type' => 'massaction',
-                    'name' => $this->getMassactionBlock()->getFormFieldName(),
-                    'align' => 'center',
-                    'is_system' => true
-                ));
-
-            if ($this->getNoFilterMassactionColumn()) {
-                $massactionColumn->setData('filter', false);
-            }
-
-            $massactionColumn->setSelected($this->getMassactionBlock()->getSelected())
-                ->setGrid($this)
-                ->setId($columnId);
-
-            $oldColumns = $this->_columns;
-            $this->_columns = array();
-            $this->_columns[$columnId] = $massactionColumn;
-            $this->_columns = array_merge($this->_columns, $oldColumns);
-            return $this;
-        }
-    }
+//    protected function _prepareMassactionColumn()
+//    {
+//        if ($this->getStatusId() == '4') {
+//            $columnId = 'massaction';
+//            $massactionColumn = $this->getLayout()->createBlock('adminhtml/widget_grid_column')
+//                ->setData(array(
+//                    'index' => $this->getMassactionIdField(),
+//                    'use_index' => $this->getMassactionIdField(),
+//                    'filter_index' => $this->getMassactionIdFilter(),
+//                    'type' => 'massaction',
+//                    'name' => $this->getMassactionBlock()->getFormFieldName(),
+//                    'align' => 'center',
+//                    'is_system' => true
+//                ));
+//
+//            if ($this->getNoFilterMassactionColumn()) {
+//                $massactionColumn->setData('filter', false);
+//            }
+//
+//            $massactionColumn->setSelected($this->getMassactionBlock()->getSelected())
+//                ->setGrid($this)
+//                ->setId($columnId);
+//
+//            $oldColumns = $this->_columns;
+//            $this->_columns = array();
+//            $this->_columns[$columnId] = $massactionColumn;
+//            $this->_columns = array_merge($this->_columns, $oldColumns);
+//            return $this;
+//        }
+//    }
 
     public function getMainButtonsHtml()
     {
@@ -137,5 +160,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
             $this->_attributes = Mage::getModel('strakertranslations_easytranslationplatform/cms_page_attributes')->getCollection()->addFieldToFilter('job_id',$this->getRequest()->getParam('job_id'));
         }
         return $this->_attributes;
+    }
+
+    public function getGridUrl()
+    {
+        return $this->getUrl('*/*/jobGrid', array('_current' => true));
     }
 }

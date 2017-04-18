@@ -11,7 +11,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             else{
                 $link = Mage::helper("adminhtml")->getUrl("adminhtml/cms_page/edit",array("page_id"=>$row->getNewEntityId()));
             }
-            return '<a href="'.$link.'">View Published</a>';
+            return '<a href="'.$link.'" target="_blank">View Published</a>';
         }
         else{
             return 'Not Published';

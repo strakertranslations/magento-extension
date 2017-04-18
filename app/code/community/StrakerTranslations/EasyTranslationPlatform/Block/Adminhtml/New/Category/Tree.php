@@ -27,11 +27,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_T
      */
     protected function getCategoryIds()
     {
-        $categories = $this->getRequest()->getParam('internal_category');
+//        $categories = $this->getRequest()->getParam('internal_category');
+        $categories =  Mage::getSingleton('adminhtml/session')->getData('straker_new_category');
         if (empty($categories)){
             return array();
         }
-        else {
+        else if(is_array($categories)){
+            return $categories;
+        }else{
             return explode(',', $categories);
         }
 //        return $this->getProduct()->getCategoryIds();
