@@ -12,25 +12,20 @@ Our plugin provides the full round-trip experience – from receiving a quote, t
 
 Straker Translations combines high-quality human translation services with top level automati##on of workflow processes. 
 
-Features List#
+## Features List#
 
 - Translate content & metadata (CMS Pages & Static Blocks for Magento CE, products, categories, & attributes)
 - Multiple source and target stores and language options
 - Flexible product detail translation options
 
-Coming Soon 
-
-- Reimport / Update Translations (July)
-- Compatibility with Magento 2 (Release TBA)
-
-Magento Enterprise Edition 
+## Magento Enterprise Edition 
 
 To install the extension on Magento Enterprise Edition, download the Zip of the extension from our website. 
 
-Help 
+## Help 
 
 Need a little help using our extension? Visit our help site. 
 
-About Straker Translations 
+## About Straker Translations 
 
 Straker Translations is a top 80 language solution provider out of 27,000 global vendors. The award-winning company is changing the way the world translates.
