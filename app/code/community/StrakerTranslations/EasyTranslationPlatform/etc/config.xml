@@ -140,19 +140,16 @@
     </adminhtml>
     <default>
         <straker>
-            <general>
-                <site_mode>0</site_mode>
-            </general>
             <api_url>
-                <register>https://uat-app.strakertranslations.com/v1/ta1ma/register</register>
-                <languages>https://uat-app.strakertranslations.com/v1/languages</languages>
-                <translate>https://uat-app.strakertranslations.com/v1/ta1ma/translate</translate>
-                <translate_sandbox>https://uat-app-sandbox.strakertranslations.com/v1/ta1ma/translate</translate_sandbox>
-                <quote>https://uat-app.strakertranslations.com/v1/quote</quote>
-                <countries>https://uat-app.strakertranslations.com/v1/countries</countries>
-                <payment>https://uat-app.strakertranslations.com/v1/payment</payment>
-                <payment_page>https://uat-myaccount.strakertranslations.com/o/?action=api.quote</payment_page>
-                <support>https://uat-app.strakertranslations.com/v1/ta1ma/support</support>
+                <register>https://app.strakertranslations.com/v1/ta1ma/register</register>
+                <languages>https://app.strakertranslations.com/v1/languages</languages>
+                <translate>https://app.strakertranslations.com/v1/ta1ma/translate</translate>
+                <translate_sandbox>https://app-sandbox.strakertranslations.com/v1/ta1ma/translate</translate_sandbox>
+                <quote>https://app.strakertranslations.com/v1/quote</quote>
+                <countries>https://app.strakertranslations.com/v1/countries</countries>
+                <payment>https://app.strakertranslations.com/v1/payment</payment>
+                <payment_page>https://myaccount.strakertranslations.com/o/?action=api.quote</payment_page>
+                <support>https://app.strakertranslations.com/v1/ta1ma/support</support>
             </api_url>
         </straker>
     </default>
