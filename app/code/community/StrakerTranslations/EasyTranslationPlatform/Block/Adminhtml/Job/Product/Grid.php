@@ -52,9 +52,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
                 array($attributeCode . '_original' => 'original', $attributeCode . '_translate' => 'translate')
             );
         }
-//        $collection->loadData();
-//echo $collection->getSelect()->__toString();
-//die();
+//                    $collection->loadData();
+//                    echo $collection->getSelect()->__toString();
+//        die();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }

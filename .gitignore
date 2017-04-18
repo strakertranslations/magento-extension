@@ -9,6 +9,8 @@
 #### Unignore the following ####
 !.gitignore
 !app/code/community/StrakerTranslations/EasyTranslationPlatform
+/app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/system.xml
+/app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/config.xml
 !app/design/adminhtml/default/straker
 !app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
 
