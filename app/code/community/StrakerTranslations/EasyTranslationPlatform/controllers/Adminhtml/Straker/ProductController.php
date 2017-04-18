@@ -118,7 +118,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
                 ));
                 return;
             }
-            foreach(explode(',', $data['attr']) as $attributeCode){
+            $attributeCodes = array_unique(explode(',', $data['attr']));
+            foreach($attributeCodes as $attributeCode){
                 $attr_ids[] = $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode)->getAttributeId();
             }
