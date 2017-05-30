@@ -1,0 +1,18 @@
+<a href="#" id="feedback-button" class="btn btn-primary btn-large">Report</a>
+
+<script type="text/javascript"
+        src="https://strakertranslations.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/-646wy8/b/c/7ebd7d8b8f8cafb14c7b0966803e5701/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-UK&collectorId=1f7ba3bb"></script>
+
+<script>
+    jQuery(document).ready(function () {
+        window.ATL_JQ_PAGE_PROPS = {
+            "triggerFunction": function (showCollectorDialog) {
+                var supportAnchor = jQuery('#nav span:contains("Straker Translations")').parent().parent().find('span:contains("Feedback")');
+                supportAnchor.click(function (e) {
+                    e.preventDefault();
+                    showCollectorDialog();
+                });
+            }
+        };
+    })
+</script>git

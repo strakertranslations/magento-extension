@@ -19,4 +19,10 @@ Event.observe(window, "load", function() {
         window.open(strakerTermsLink.href, '_blank');
         Event.stop(event);
     });
+
+    var strakerSupportLink = $$('a[href*="/straker_new/support"]')[0];
+    strakerSupportLink.observe('click', function(event) {
+        window.open(strakerSupportLink.href, '_blank');
+        Event.stop(event);
+    });
 });

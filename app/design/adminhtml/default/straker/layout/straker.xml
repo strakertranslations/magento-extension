@@ -9,6 +9,13 @@
                 <name>straker/translations.js</name>
             </action>
         </reference>
+        <reference name="footer">
+            <block type="page/footer" name="footer">
+                <action method="setTemplate">
+                    <template>straker/footer_script.phtml</template>
+                </action>
+            </block>
+        </reference>
     </default>
     <adminhtml_straker_job_index>
         <referense name="head">
