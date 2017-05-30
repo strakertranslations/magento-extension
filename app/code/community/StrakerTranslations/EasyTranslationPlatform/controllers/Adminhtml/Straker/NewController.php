@@ -26,6 +26,11 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         $this->_redirectUrl("https://www.strakertranslations.com/about-us/terms-and-conditions-of-service.cfm");
     }
 
+    public function supportAction()
+    {
+        $this->_redirectUrl("https://help.strakertranslations.com/docs/magento/");
+    }
+
     public function indexAction()
     {
         $params = $this->getRequest()->getParams();

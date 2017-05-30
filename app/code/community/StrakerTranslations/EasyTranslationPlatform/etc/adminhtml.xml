@@ -29,11 +29,20 @@
                     <action>adminhtml/straker_new/account</action>
                     <sort_order>30</sort_order>
                 </account>
+                <support translate="title">
+                    <title><![CDATA[Support]]></title>
+                    <action>adminhtml/straker_new/support</action>
+                    <sort_order>40</sort_order>
+                </support>
                 <terms translate="title">
                     <title><![CDATA[Terms & Conditions]]></title>
                     <action>adminhtml/straker_new/terms</action>
-                    <sort_order>40</sort_order>
+                    <sort_order>50</sort_order>
                 </terms>
+                <feedback translate="title">
+                    <title><![CDATA[Feedback]]></title>
+                    <sort_order>60</sort_order>
+                </feedback>
             </children>
         </straker>
     </menu>
