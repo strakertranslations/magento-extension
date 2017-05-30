@@ -9,7 +9,6 @@
             "triggerFunction": function (showCollectorDialog) {
                 var supportAnchor = jQuery('#nav span:contains("Straker Translations")').parent().parent().find('span:contains("Feedback")');
                 supportAnchor.click(function (e) {
-                    console.log(this);
                     e.preventDefault();
                     showCollectorDialog();
                 });
