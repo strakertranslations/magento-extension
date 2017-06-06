@@ -544,23 +544,27 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         $attributeFrontLabel = array();
 
         foreach ($productTranslateCollection as $productTranslate) {
-            if (!isset($attributeFrontLabel[$productTranslate->getAttributeId()])) {
-                $attributeFrontLabel[$productTranslate->getAttributeId()] =
-                    Mage::getModel('eav/entity_attribute')->load($productTranslate->getAttributeId())->getFrontendLabel();
+            $sCData = $productTranslate->getOriginal();
+            if( isset( $sCData ) ){
+                if (!isset($attributeFrontLabel[$productTranslate->getAttributeId()])) {
+                    $attributeFrontLabel[$productTranslate->getAttributeId()] =
+                        Mage::getModel('eav/entity_attribute')->load($productTranslate->getAttributeId())->getFrontendLabel();
+                }
+
+                $dataElement = $_xml->createElement('data');
+                $dataElement->setAttribute('name', $this->getTypeId() . '_' . $this->getStoreId() . '_' . $productTranslate->getAttributeId() . '_' . $productTranslate->getProductId());
+                $dataElement->setAttribute('content_context', $attributeFrontLabel[$productTranslate->getAttributeId()]);
+                $dataElement->setAttribute('content_context_url',Mage::getStoreConfig('web/unsecure/base_link_url', $this->getStoreId()) . 'catalog/category/view/id/' . $productTranslate->getProductId());
+                $dataElement->setAttribute('content_id', $productTranslate->getId());
+
+                $valueElement = $_xml->createElement('value');
+                $CDATAValueNode = $_xml->createCDATASection($sCData);
+                $valueElement->appendChild($CDATAValueNode);
+
+                $dataElement->appendChild($valueElement);
+                $rootElement->appendChild($dataElement);
             }
 
-            $dataElement = $_xml->createElement('data');
-            $dataElement->setAttribute('name', $this->getTypeId() . '_' . $this->getStoreId() . '_' . $productTranslate->getAttributeId() . '_' . $productTranslate->getProductId());
-            $dataElement->setAttribute('content_context', $attributeFrontLabel[$productTranslate->getAttributeId()]);
-            $dataElement->setAttribute('content_context_url',Mage::getStoreConfig('web/unsecure/base_link_url', $this->getStoreId()) . 'catalog/category/view/id/' . $productTranslate->getProductId());
-            $dataElement->setAttribute('content_id', $productTranslate->getId());
-
-            $valueElement = $_xml->createElement('value');
-            $CDATAValueNode = $_xml->createCDATASection($productTranslate->getOriginal());
-            $valueElement->appendChild($CDATAValueNode);
-
-            $dataElement->appendChild($valueElement);
-            $rootElement->appendChild($dataElement);
         }
 
         $_xml->appendChild($rootElement);
