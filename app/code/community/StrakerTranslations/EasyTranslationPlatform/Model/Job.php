@@ -9,12 +9,15 @@
 class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Model_Abstract
 {
     protected $_attributes = array();
-
     protected $_translateFilePath = '/var/straker/';
+    /** @var $conn Varien_Db_Adapter_Interface */
+    protected $conn;
 
     protected function _construct()
     {
         $this->_init('strakertranslations_easytranslationplatform/job');
+        /** @var $conn Varien_Db_Adapter_Interface */
+        $this->conn = $this->getWriteAdapter();
     }
 
     protected function addProductAttributes($productAttributeIds)
@@ -31,28 +34,48 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
     protected function addProductIds($productIds)
     {
-        $model = Mage::getModel('strakertranslations_easytranslationplatform/job_product');
+        $data = array();
+        $jobProductTableName = $this->getResource()->getTable('strakertranslations_easytranslationplatform/job_product');
+
         foreach ($productIds as $productId) {
-            $model->setProductId($productId);
-            $model->setJobId($this->getId());
-            $model->save();
-            $model->unsetData();
+            $data[] = [
+                'product_id'    => $productId,
+                'job_id'        => $this->getId()
+            ];
         }
+
+        $this->conn->insertMultiple($jobProductTableName, $data);
+//        $model = Mage::getModel('strakertranslations_easytranslationplatform/job_product');
+//        foreach ($productIds as $productId) {
+//            $model->setProductId($productId);
+//            $model->setJobId($this->getId());
+//            $model->save();
+//            $model->unsetData();
+//        }
         return $this;
     }
 
     protected function addProductTranslateOriginal($productAttributeId, $productCollection)
     {
-        $model = Mage::getModel('strakertranslations_easytranslationplatform/product_translate');
+        $data = array();
+        $productTranslateTableName = $this->getResource()->getTable('strakertranslations_easytranslationplatform/product_translate');
         $productAttributeCode = Mage::getModel('eav/entity_attribute')->load($productAttributeId)->getAttributeCode();
+        //        $model = Mage::getModel('strakertranslations_easytranslationplatform/product_translate');
         foreach ($productCollection as $product) {
-            $model->setJobId($this->getId());
-            $model->setProductId($product->getId());
-            $model->setAttributeId($productAttributeId);
-            $model->setOriginal($product->getData($productAttributeCode));
-            $model->save();
-            $model->unsetData();
+            $data[] = [
+                'job_id'        => $this->getId(),
+                'product_id'    => $product->getId(),
+                'attribute_id'  => $productAttributeId,
+                'original'      => $product->getData($productAttributeCode)
+            ];
+//            $model->setJobId($this->getId());
+//            $model->setProductId($product->getId());
+//            $model->setAttributeId($productAttributeId);
+//            $model->setOriginal($product->getData($productAttributeCode));
+//            $model->save();
+//            $model->unsetData();
         }
+        $this->conn->insertMultiple($productTranslateTableName, $data);
         return $this;
     }
 
@@ -521,23 +544,27 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         $attributeFrontLabel = array();
 
         foreach ($productTranslateCollection as $productTranslate) {
-            if (!isset($attributeFrontLabel[$productTranslate->getAttributeId()])) {
-                $attributeFrontLabel[$productTranslate->getAttributeId()] =
-                    Mage::getModel('eav/entity_attribute')->load($productTranslate->getAttributeId())->getFrontendLabel();
+            $sCData = $productTranslate->getOriginal();
+            if( isset( $sCData ) ){
+                if (!isset($attributeFrontLabel[$productTranslate->getAttributeId()])) {
+                    $attributeFrontLabel[$productTranslate->getAttributeId()] =
+                        Mage::getModel('eav/entity_attribute')->load($productTranslate->getAttributeId())->getFrontendLabel();
+                }
+
+                $dataElement = $_xml->createElement('data');
+                $dataElement->setAttribute('name', $this->getTypeId() . '_' . $this->getStoreId() . '_' . $productTranslate->getAttributeId() . '_' . $productTranslate->getProductId());
+                $dataElement->setAttribute('content_context', $attributeFrontLabel[$productTranslate->getAttributeId()]);
+                $dataElement->setAttribute('content_context_url',Mage::getStoreConfig('web/unsecure/base_link_url', $this->getStoreId()) . 'catalog/category/view/id/' . $productTranslate->getProductId());
+                $dataElement->setAttribute('content_id', $productTranslate->getId());
+
+                $valueElement = $_xml->createElement('value');
+                $CDATAValueNode = $_xml->createCDATASection($sCData);
+                $valueElement->appendChild($CDATAValueNode);
+
+                $dataElement->appendChild($valueElement);
+                $rootElement->appendChild($dataElement);
             }
 
-            $dataElement = $_xml->createElement('data');
-            $dataElement->setAttribute('name', $this->getTypeId() . '_' . $this->getStoreId() . '_' . $productTranslate->getAttributeId() . '_' . $productTranslate->getProductId());
-            $dataElement->setAttribute('content_context', $attributeFrontLabel[$productTranslate->getAttributeId()]);
-            $dataElement->setAttribute('content_context_url',Mage::getStoreConfig('web/unsecure/base_link_url', $this->getStoreId()) . 'catalog/category/view/id/' . $productTranslate->getProductId());
-            $dataElement->setAttribute('content_id', $productTranslate->getId());
-
-            $valueElement = $_xml->createElement('value');
-            $CDATAValueNode = $_xml->createCDATASection($productTranslate->getOriginal());
-            $valueElement->appendChild($CDATAValueNode);
-
-            $dataElement->appendChild($valueElement);
-            $rootElement->appendChild($dataElement);
         }
 
         $_xml->appendChild($rootElement);
@@ -690,7 +717,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
     public function submitProducts($productAttributeIds, $productIds)
     {
-
         //product
         $this->setTypeId(1);
         $this->addProducts($productAttributeIds, $productIds)
