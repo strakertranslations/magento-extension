@@ -111,6 +111,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'attribute_translation_id',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                'nullable' => false,
             ]
         );
 
@@ -119,6 +120,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'attribute_translation_id',
             [
                 'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
+                'nullable' => false,
             ]
         );
 
