@@ -54,67 +54,79 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $setup->getTable(AttributeTranslation::ENTITY),
             'label',
             [
-                'type' => Table::TYPE_TEXT,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Attribute Label'
+                'type'      => Table::TYPE_TEXT,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Attribute Label'
             ]
         );
         $connection->addColumn(
             $setup->getTable(AttributeTranslation::ENTITY),
             'is_published',
             [
-                'type' => Table::TYPE_INTEGER,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Is Published'
+                'type'      => Table::TYPE_INTEGER,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Is Published'
             ]
         );
         $connection->addColumn(
             $setup->getTable(AttributeTranslation::ENTITY),
             'published_at',
             [
-                'type' => Table::TYPE_TIMESTAMP,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Published Time'
+                'type'      => Table::TYPE_TIMESTAMP,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Published Time'
             ]
         );
         $connection->addColumn(
             $setup->getTable(AttributeTranslation::ENTITY),
             'attribute_code',
             [
-                'type' => Table::TYPE_TEXT,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Attribute Code'
+                'type'      => Table::TYPE_TEXT,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Attribute Code'
             ]
         );
     }
 
     private function increaseInt(SchemaSetupInterface $setup){
 
-        $connection = $setup->getConnection();
+        $connection  = $setup->getConnection();
         $foreignKeys = $connection->getForeignKeys($setup->getTable('straker_attribute_option_translation'));
 
         foreach($foreignKeys as $foreignKey){
-            $connection->dropForeignKey($setup->getTable('straker_attribute_option_translation'),$foreignKey['FK_NAME']);
+            $connection->dropForeignKey(
+                $setup->getTable('straker_attribute_option_translation'),
+                $foreignKey['FK_NAME']
+            );
         }
 
         $connection->modifyColumn(
-            $setup->getTable('straker_attribute_option_translation'),
-            'attribute_translation_id',
-            [
-                'type' => Table::TYPE_BIGINT,
-            ]
+            $setup->getTable(
+                'straker_attribute_option_translation'),
+                'attribute_translation_id',
+                [
+                    'type'              => Table::TYPE_BIGINT,
+                    'comment'           => 'Attribute Translation Id',
+                    'default'           => '0',
+                    'unsigned'          => true,
+                    'nullable'          => false
+                ]
         );
 
         $connection->modifyColumn(
-            $setup->getTable('straker_attribute_translation'),
-            'attribute_translation_id',
-            [
-                'type' => Table::TYPE_BIGINT,
-            ]
+            $setup->getTable(
+                'straker_attribute_translation'),
+                'attribute_translation_id',
+                [
+                    'type'              => Table::TYPE_BIGINT,
+                    'comment'           => 'Attribute Translation Id',
+                    'unsigned'          => true,
+                    'nullable'          => false
+                ]
         );
 
         $connection->addForeignKey(
@@ -133,23 +145,4 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'option_id'
         );
     }
-
-//    private function addIncrement(SchemaSetupInterface $setup)
-//    {
-//
-//        $connection = $setup->getConnection();
-//
-//        $connection->modifyColumn(
-//            $setup->getTable('straker_attribute_translation'),
-//            'attribute_translation_id',
-//            [
-//                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
-//                'comment' => 'Attribute Translation Id',
-//                'primary' => true,
-//                'auto_increment' => true,
-//                'unsigned' => false,
-//                'nullable' => false,
-//            ]
-//        );
-//    }
 }
