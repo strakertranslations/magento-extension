@@ -9,12 +9,11 @@
 namespace Straker\EasyTranslationPlatform\Setup;
 
 
+use Magento\Framework\DB\Ddl\Table;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-use Magento\Framework\DB\Adapter\AdapterInterface;
-use Straker\EasyTranslationPlatform\Model\AttributeOptionTranslation;
-use Straker\EasyTranslationPlatform\Model\ResourceModel\AttributeTranslation;
+use Straker\EasyTranslationPlatform\Model\AttributeTranslation;
 
 /**
  * Upgrade the CatalogRule module DB scheme
@@ -36,10 +35,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->increaseInt($setup, $context);
         }
 
-        if (version_compare($context->getVersion(), '1.0.5', '<')) {
-            $this->addIncrement($setup);
-        }
-
         $setup->endSetup();
     }
 
@@ -52,40 +47,70 @@ class UpgradeSchema implements UpgradeSchemaInterface
     {
         $connection = $setup->getConnection();
         $connection->addColumn(
-            $setup->getTable(\Straker\EasyTranslationPlatform\Model\AttributeTranslation::ENTITY),
+            $setup->getTable(AttributeTranslation::ENTITY),
             'label',
             [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Attribute Label'
+                'type'      => Table::TYPE_TEXT,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Attribute Label'
             ]
         );
         $connection->addColumn(
-            $setup->getTable(\Straker\EasyTranslationPlatform\Model\AttributeTranslation::ENTITY),
+            $setup->getTable(AttributeTranslation::ENTITY),
             'is_published',
             [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                'type'      => Table::TYPE_INTEGER,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Is Published'
+            ]
+        );
+        $connection->addColumn(
+            $setup->getTable(AttributeTranslation::ENTITY),
+            'published_at',
+            [
+                'type'      => Table::TYPE_TIMESTAMP,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Published Time'
+            ]
+        );
+        $connection->addColumn(
+            $setup->getTable(AttributeTranslation::ENTITY),
+            'attribute_code',
+            [
+                'type'      => Table::TYPE_TEXT,
+                'length'    => 255,
+                'nullable'  => true,
+                'comment'   => 'Attribute Code'
+            ]
+        );
+        $connection->addColumn(
+            $setup->getTable(AttributeTranslation::ENTITY),
+            'is_published',
+            [
+                'type' => Table::TYPE_INTEGER,
                 'length' => 255,
                 'nullable' => true,
                 'comment' => 'Is Published'
             ]
         );
         $connection->addColumn(
-            $setup->getTable(\Straker\EasyTranslationPlatform\Model\AttributeTranslation::ENTITY),
+            $setup->getTable(AttributeTranslation::ENTITY),
             'published_at',
             [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TIMESTAMP,
+                'type' => Table::TYPE_TIMESTAMP,
                 'length' => 255,
                 'nullable' => true,
                 'comment' => 'Published Time'
             ]
         );
         $connection->addColumn(
-            $setup->getTable(\Straker\EasyTranslationPlatform\Model\AttributeTranslation::ENTITY),
+            $setup->getTable(AttributeTranslation::ENTITY),
             'attribute_code',
             [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
+                'type' => Table::TYPE_TEXT,
                 'length' => 255,
                 'nullable' => true,
                 'comment' => 'Attribute Code'
@@ -95,33 +120,39 @@ class UpgradeSchema implements UpgradeSchemaInterface
 
     private function increaseInt(SchemaSetupInterface $setup){
 
-        $connection = $setup->getConnection();
+        $connection  = $setup->getConnection();
+        $foreignKeys = $connection->getForeignKeys($setup->getTable('straker_attribute_option_translation'));
 
-        $foriegnKeysAttributeOptionName = $connection->getForeignKeys($setup->getTable('straker_attribute_option_translation'));
-
-        foreach($foriegnKeysAttributeOptionName as $data){
-
-            $connection->dropForeignKey($setup->getTable('straker_attribute_option_translation'),$data['FK_NAME']);
-
-
+        foreach($foreignKeys as $foreignKey){
+            $connection->dropForeignKey(
+                $setup->getTable('straker_attribute_option_translation'),
+                $foreignKey['FK_NAME']
+            );
         }
 
         $connection->modifyColumn(
-            $setup->getTable('straker_attribute_option_translation'),
-            'attribute_translation_id',
-            [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
-                'nullable' => false,
-            ]
+            $setup->getTable(
+                'straker_attribute_option_translation'),
+                'attribute_translation_id',
+                [
+                    'type'              => Table::TYPE_BIGINT,
+                    'comment'           => 'Attribute Translation Id',
+                    'unsigned'          => true,
+                    'nullable'          => false
+                ]
         );
 
         $connection->modifyColumn(
-            $setup->getTable('straker_attribute_translation'),
-            'attribute_translation_id',
-            [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
-                'nullable' => false,
-            ]
+            $setup->getTable(
+                'straker_attribute_translation'),
+                'attribute_translation_id',
+                [
+                    'type'              => Table::TYPE_BIGINT,
+                    'comment'           => 'Attribute Translation Id',
+                    'identity'          => true,
+                    'unsigned'          => true,
+                    'nullable'          => false
+                ]
         );
 
         $connection->addForeignKey(
@@ -138,25 +169,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             'option_id',
             $setup->getTable('eav_attribute_option'),
             'option_id'
-        );
-    }
-
-    private function addIncrement(SchemaSetupInterface $setup)
-    {
-
-        $connection = $setup->getConnection();
-
-        $connection->modifyColumn(
-            $setup->getTable('straker_attribute_translation'),
-            'attribute_translation_id',
-            [
-                'type' => \Magento\Framework\DB\Ddl\Table::TYPE_BIGINT,
-                'comment' => 'Attribute Translation Id',
-                'primary' => true,
-                'auto_increment' => true,
-                'unsigned' => false,
-                'nullable' => false,
-            ]
         );
     }
 }

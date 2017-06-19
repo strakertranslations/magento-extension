@@ -230,6 +230,8 @@ class Save extends Action
         $this->_jobRequest['source_file'] = $sourcefile;
         $this->_jobRequest['token']       = $strakerJobData->getId();
 
+        $response = '';
+
         try {
 
             $response = $this->_api->callTranslate($this->_jobRequest);
@@ -253,7 +255,7 @@ class Save extends Action
             }
 
         } catch (Exception $e) {
-
+            $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), [$response]);
             $this->_logger->error('error' . __FILE__ . ' ' . __LINE__ . ' ' . $e->getMessage(), array($e));
             $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));
@@ -266,7 +268,6 @@ class Save extends Action
         try{
 
             $jobMergeData = [];
-
             $id = '';
 
             foreach ($job_object as $key => $data) {
@@ -275,7 +276,6 @@ class Save extends Action
                 $id.=  $data->getData('job_id').'&';
             }
 
-
             $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
 
             foreach ($jobMergeData as $file) {
@@ -283,29 +283,21 @@ class Save extends Action
                 $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
 
                 if(key_exists('_value', $fileData['root']['data'])){
-
                     $singleData = $fileData['root']['data'];
                     $fileData['root']['data'] = [];
                     $fileData['root']['data'][] = $singleData;
-
                 }
 
                 foreach ($fileData['root']['data'] as $data) {
-
                     $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
-
                     $this->_xmlHelper->appendDataToRoot($mergeData);
-
                 }
             }
 
             $this->_xmlHelper->saveXmlFile();
-
             return $this->_xmlHelper->getXmlFileName();
 
-
         }catch (Exception $e){
-
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
             $this->_api->_callStrakerBugLog(__FILE__ . ' ' . __METHOD__ . ' ' . $e->getMessage(), $e->__toString());
             return $this->messageManager->addError(__('Something went wrong while submitting your job to Straker Translations.'));

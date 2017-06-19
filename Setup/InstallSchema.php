@@ -33,31 +33,31 @@ class InstallSchema implements InstallSchemaInterface
                 'type_id',
                 Table::TYPE_SMALLINT,
                 null,
-                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
+                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true],
                 'Entity ID'
             )->addColumn(
                 'type_name',
                 Table::TYPE_TEXT,
                 255,
-                ['nullable' => false,],
+                ['nullable' => false],
                 'Name'
             )->addColumn(
                 'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
             )->addColumn(
                 'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
                 'Modification Time'
             )->addColumn(
                 'is_active',
                 Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1',],
+                ['nullable' => false, 'default' => '1'],
                 'Is Active'
             )->addIndex(
                 $installer->getIdxName(Model\JobType::ENTITY, ['type_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
@@ -76,31 +76,31 @@ class InstallSchema implements InstallSchemaInterface
                 'status_id',
                 Table::TYPE_SMALLINT,
                 null,
-                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
+                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true],
                 'Entity ID'
             )->addColumn(
                 'status_name',
                 Table::TYPE_TEXT,
                 255,
-                ['nullable' => false,],
+                ['nullable' => false],
                 'Name'
             )->addColumn(
                 'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
             )->addColumn(
                 'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
                 'Modification Time'
             )->addColumn(
                 'is_active',
                 Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1',],
+                ['nullable' => false, 'default' => '1'],
                 'Is Active'
             )->addIndex(
                 $installer->getIdxName(Model\JobStatus::ENTITY, ['status_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
@@ -191,25 +191,25 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
             )->addColumn(
                 'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
                 'Modification Time'
             )->addColumn(
                 'is_active',
                 Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1',],
+                ['nullable' => false, 'default' => '1'],
                 'Is Active'
             )->addColumn(
                 'is_test_job',
                 Table::TYPE_BOOLEAN,
                 null,
-                ['nullable' => false, 'default' => '0',],
+                ['nullable' => false, 'default' => '0'],
                 'Is Test Job'
             )->addIndex(
                 $installer->getIdxName(Model\Job::ENTITY, ['job_id'], AdapterInterface::INDEX_TYPE_UNIQUE),
@@ -248,7 +248,7 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_translation_id',
                 Table::TYPE_SMALLINT,
                 null,
-                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
+                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true],
                 'Translation ID'
             )->addColumn(
                 'job_id',
@@ -308,19 +308,19 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
             )->addColumn(
                 'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
                 'Modification Time'
             )->addColumn(
                 'is_active',
                 Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1',],
+                ['nullable' => false, 'default' => '1'],
                 'Is Active'
             )->addIndex(
                 $installer->getIdxName(
@@ -358,8 +358,8 @@ class InstallSchema implements InstallSchemaInterface
                 'attribute_option_translation_id',
                 Table::TYPE_SMALLINT,
                 null,
-                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true,],
-                'Translation ID'
+                ['identity' => true, 'nullable' => false, 'primary' => true, 'unsigned' => true],
+                'Attribute Option Translation ID'
             )->addColumn(
                 'attribute_translation_id',
                 Table::TYPE_SMALLINT,
@@ -400,19 +400,19 @@ class InstallSchema implements InstallSchemaInterface
                 'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
                 'Creation Time'
             )->addColumn(
                 'updated_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE,],
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT_UPDATE],
                 'Modification Time'
             )->addColumn(
                 'is_active',
                 Table::TYPE_SMALLINT,
                 null,
-                ['nullable' => false, 'default' => '1',],
+                ['nullable' => false, 'default' => '1'],
                 'Is Active'
             )->addIndex(
                 $installer->getIdxName(
