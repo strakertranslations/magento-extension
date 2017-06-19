@@ -35,10 +35,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $this->increaseInt($setup, $context);
         }
 
-//        if (version_compare($context->getVersion(), '1.0.5', '<')) {
-//            $this->addIncrement($setup);
-//        }
-
         $setup->endSetup();
     }
 
@@ -111,7 +107,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 [
                     'type'              => Table::TYPE_BIGINT,
                     'comment'           => 'Attribute Translation Id',
-                    'default'           => '0',
                     'unsigned'          => true,
                     'nullable'          => false
                 ]
@@ -124,6 +119,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 [
                     'type'              => Table::TYPE_BIGINT,
                     'comment'           => 'Attribute Translation Id',
+                    'identity'          => true,
                     'unsigned'          => true,
                     'nullable'          => false
                 ]
