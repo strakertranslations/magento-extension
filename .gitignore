@@ -44,5 +44,5 @@ Temporary Items
 
 /log/
 /config/
-Capfile
-report.txt
+.gitattributes
+>>>>>>> hotfix/SUP-2567_Magento2_installation_error
