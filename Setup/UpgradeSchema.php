@@ -86,36 +86,6 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 'comment'   => 'Attribute Code'
             ]
         );
-        $connection->addColumn(
-            $setup->getTable(AttributeTranslation::ENTITY),
-            'is_published',
-            [
-                'type' => Table::TYPE_INTEGER,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Is Published'
-            ]
-        );
-        $connection->addColumn(
-            $setup->getTable(AttributeTranslation::ENTITY),
-            'published_at',
-            [
-                'type' => Table::TYPE_TIMESTAMP,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Published Time'
-            ]
-        );
-        $connection->addColumn(
-            $setup->getTable(AttributeTranslation::ENTITY),
-            'attribute_code',
-            [
-                'type' => Table::TYPE_TEXT,
-                'length' => 255,
-                'nullable' => true,
-                'comment' => 'Attribute Code'
-            ]
-        );
     }
 
     private function increaseInt(SchemaSetupInterface $setup){
