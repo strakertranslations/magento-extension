@@ -28,20 +28,49 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
     protected function _prepareCollection() {
 //        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
-
+        $jobAttributes = Mage::getModel('strakertranslations_easytranslationplatform/cms_page_attributes')->getCollection()->addFieldToFilter('job_id', $job->getId());
+        /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Cms_Page_Collection $collection */
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/job_cms_page')->getCollection()
             ->addFieldToFilter('main_table.job_id', $job->getId());
+
+//echo $collection->getSelect(); die();
+        $collection->getSelect()
+            ->joinLeft(
+                array('translate' => $collection->getTable('strakertranslations_easytranslationplatform/cms_page_translate')),
+                'main_table.id = translate.id
+                AND translate.cms_page_id = main_table.page_id AND translate.job_id = '.$job->getId(),
+                array()
+            );
+
+        //loop through this job's attributes and join them to the collection
+        foreach ($jobAttributes as $jobAttribute) {
+            $attributeCode = $jobAttribute->getColumnName();
+            $collection->getSelect()->joinLeft(
+                array($attributeCode => $collection->getTable('strakertranslations_easytranslationplatform/cms_page_translate')),
+                $attributeCode . '.cms_page_id = main_table.page_id 
+                AND ' . $attributeCode . '.column_name = \'' . $attributeCode . '\' 
+                AND ' . $attributeCode . '.job_id = ' . $job->getId(),
+                array($attributeCode . '_original' => 'original', $attributeCode . '_translate' => 'translate')
+            );
+        }
 
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
 
     protected function _prepareColumns() {
-
-        $this->addColumn('title', array(
-            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Title'),
+        $this->addColumn('id', array(
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('ID'),
             'align' => 'center',
-            'index' => 'title'
+            'width' => '50px',
+            'index' => 'id'
+        ));
+
+        $this->addColumn('page_id', array(
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Page ID'),
+            'align' => 'center',
+            'width' => '50px',
+            'index' => 'page_id'
         ));
 
         $this->addColumn('identifier', array(
@@ -50,10 +79,54 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
             'index' => 'identifier'
         ));
 
+        $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
+        $jobAttributes = Mage::getModel('strakertranslations_easytranslationplatform/cms_page_attributes')->getCollection()->addFieldToFilter('job_id', $job->getId());
+        //loop through this job's attributes and add columns to the grid
+        foreach ($jobAttributes as $jobAttribute) {
+            $attributeCode = $jobAttribute->getColumnName();
+            if($attributeCode === 'content'){
+                $this->addColumn($attributeCode . '_original', array(
+                    'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Source', ucfirst($attributeCode)),
+                    'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_TextArea',
+                    'align' => 'left',
+                    'index' => $attributeCode . '_original',
+                    'filter' => false,
+                    'sortable'  => false
+                ));
+
+                $this->addColumn($attributeCode . '_translate', array(
+                    'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Target', ucfirst($attributeCode)),
+                    'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_TextArea',
+                    'align' => 'left',
+                    'index' => $attributeCode . '_translate',
+                    'filter' => false,
+                    'sortable'  => false
+                ));
+            }else{
+                $this->addColumn($attributeCode . '_original', array(
+                    'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Source', ucfirst($attributeCode)),
+                    'align' => 'left',
+                    'index' => $attributeCode . '_original',
+                    //                'filter_index' => $attributeCode.'.original',
+                    'filter' => false,
+                    'sortable'  => false
+                ));
+
+                $this->addColumn($attributeCode . '_translate', array(
+                    'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Target', ucfirst($attributeCode)),
+                    'align' => 'left',
+                    'index' => $attributeCode . '_translate',
+                    //                'filter_index' => $attributeCode.'.translate',
+                    'filter' => false,
+                    'sortable'  => false
+                ));
+            }
+        }
+
         if ($this->getStatusId() == '4' || $this->getStatusId() == '5'){
             $this->addColumn('version', array(
                 'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
-                'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_CmsVersion',
+                'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Version',
                 'align' => 'center',
                 'type' => 'options',
                 'index' => 'version',
@@ -65,6 +138,21 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
                 'width' => '20%'
             ));
         }
+
+        $this->addColumn('view_frontend', array(
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('View Frontend'),
+            'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Frontend',
+            'align' => 'center',
+            'index' => false,
+            'filter' => false,
+        ));
+        $this->addColumn('view_backend', array(
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('View Backend'),
+            'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Backend',
+            'align' => 'center',
+            'index' => false,
+            'filter' => false,
+        ));
 
         return parent::_prepareColumns();
     }
@@ -96,7 +184,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
 
             $this->getMassactionBlock()->addItem('add', array(
                 'label' => Mage::helper('catalog')->__('Publish Translation'),
-                'url' => $this->getUrl('*/*/applyTranslation'),
+                'url' => $this->getUrl('*/*/publish'),
                 'selected' => 1
             ));
 
@@ -111,36 +199,36 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page_G
         return $this;
     }
 
-//    protected function _prepareMassactionColumn()
-//    {
-//        if ($this->getStatusId() == '4') {
-//            $columnId = 'massaction';
-//            $massactionColumn = $this->getLayout()->createBlock('adminhtml/widget_grid_column')
-//                ->setData(array(
-//                    'index' => $this->getMassactionIdField(),
-//                    'use_index' => $this->getMassactionIdField(),
-//                    'filter_index' => $this->getMassactionIdFilter(),
-//                    'type' => 'massaction',
-//                    'name' => $this->getMassactionBlock()->getFormFieldName(),
-//                    'align' => 'center',
-//                    'is_system' => true
-//                ));
-//
-//            if ($this->getNoFilterMassactionColumn()) {
-//                $massactionColumn->setData('filter', false);
-//            }
-//
-//            $massactionColumn->setSelected($this->getMassactionBlock()->getSelected())
-//                ->setGrid($this)
-//                ->setId($columnId);
-//
-//            $oldColumns = $this->_columns;
-//            $this->_columns = array();
-//            $this->_columns[$columnId] = $massactionColumn;
-//            $this->_columns = array_merge($this->_columns, $oldColumns);
-//            return $this;
-//        }
-//    }
+    protected function _prepareMassactionColumn()
+    {
+        if ($this->getStatusId() == '4') {
+            $columnId = 'massaction';
+            $massactionColumn = $this->getLayout()->createBlock('adminhtml/widget_grid_column')
+                ->setData(array(
+                    'index' => $this->getMassactionIdField(),
+                    'use_index' => $this->getMassactionIdField(),
+                    'filter_index' => $this->getMassactionIdFilter(),
+                    'type' => 'massaction',
+                    'name' => $this->getMassactionBlock()->getFormFieldName(),
+                    'align' => 'center',
+                    'is_system' => true
+                ));
+
+            if ($this->getNoFilterMassactionColumn()) {
+                $massactionColumn->setData('filter', false);
+            }
+
+            $massactionColumn->setSelected($this->getMassactionBlock()->getSelected())
+                ->setGrid($this)
+                ->setId($columnId);
+
+            $oldColumns = $this->_columns;
+            $this->_columns = array();
+            $this->_columns[$columnId] = $massactionColumn;
+            $this->_columns = array_merge($this->_columns, $oldColumns);
+            return $this;
+        }
+    }
 
     public function getMainButtonsHtml()
     {

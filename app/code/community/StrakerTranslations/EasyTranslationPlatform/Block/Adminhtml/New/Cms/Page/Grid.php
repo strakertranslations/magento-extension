@@ -108,7 +108,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
 
         $this->getMassactionBlock()->addItem('add', array(
             'label'=> Mage::helper('catalog')->__('Add to Confirm Page'),
-            'url'  => $this->getUrl('*/*/addtoconfirm'),
+            'url'  => $this->getUrl('*/*/addToConfirm'),
             'selected' => 1
         ));
         $this->getMassactionBlock()->setTemplate('straker/new/cms/page/massaction.phtml');

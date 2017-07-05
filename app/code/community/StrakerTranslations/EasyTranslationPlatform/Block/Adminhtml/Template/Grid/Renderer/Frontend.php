@@ -7,20 +7,32 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     public function render(Varien_Object $row){
         $html = '';
         if(!$row->getVersion()){
-            $html .= '<p class="inactive">' . $this->__('View Product in Frontend') . '</p>';
+            $html .= '<p class="inactive">' . $this->__('View in Frontend') . '</p>';
         }
         elseif ($row->getProductId()) {
             $product = Mage::getModel('catalog/product')->setStoreId($this->getStoreId($row))->load($row->getProductId());
             if (!$product->isDisabled() && $product->isVisibleInSiteVisibility()) {
-                $html .= '<a target="_blank" href="' . $product->getProductUrl() . '">' . $this->__('View Product in Frontend') . '</a>';
+                $html .= '<a target="_blank" href="' . $product->getProductUrl() . '">' . $this->__('View in Frontend') . '</a>';
             } else {
                 $html .= 'Product is not visible in frontend';
             }
         }
-        elseif($row->getCategoryId()){
-            $url = $this->getUrl('catalog/category/view', ['id' => $row->getCategoryId(), '_nosid' => true, '_query' => ['___store' => $this->getStoreId($row) ]]);
-            $html .= '<a target="_blank" href="' . $url . '">' . $this->__('View Category in Frontend') . '</a>';
+        elseif($row->getPageId()){
+            $url = '';
+            if ($row->getPreviewUrl()) {
+                $href = $row->getPreviewUrl();
+            } else {
+                $urlModel = Mage::getModel('core/url')->setStore($row->getData('_first_store_id'));
+                $url = $urlModel->getUrl(
+                    $row->getIdentifier(), array(
+                        '_current' => false,
+                        '_query'   => '___store=' . $this->getStoreCode($row),
+                    )
+                );
+            }
+            $html .= '<a target="_blank" href="' . $url . '">' . $this->__('View in Frontend') . '</a>';
         }
+
         return $html;
     }
 
@@ -31,5 +43,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                 ->getStoreId();
         }
         return $this->_storeId;
+    }
+
+    protected function getStoreCode($row){
+        $this->getStoreId($row);
+        return Mage::app()->getStore($this->_storeId)->getCode();
     }
 }

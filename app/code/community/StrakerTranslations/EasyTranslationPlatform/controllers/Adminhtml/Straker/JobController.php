@@ -16,7 +16,6 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
     }
 
     public function indexAction(){
-
         /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $helper->checkSiteMode();
@@ -38,19 +37,22 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             $job = Mage::getModel('strakertranslations_easytranslationplatform/job');
             $response = $job->bulkUpdateTranslation();
             if ( $response ) {
+                /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $jobModel */
                 foreach($collection as $jobModel){
                     foreach ($response as $jobResponse) {
                         if ($jobResponse->token == $jobModel->getId()) {
                             $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobModel->getId());
-                            $jobModel->updateJob($jobResponse);
+                            $result = $jobModel->updateJob($jobResponse);
+                            if($result){
+                                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $jobModel->getId()));
+                            }
                         }
-                    }
-                    if ( $job->updateTranslation() ){
-
-                        Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
                     }
                 }
             }
+        }else if($collection->count() === 1){
+            $id = $collection->getFirstItem()->getData('id');
+            $this->_updateJob($id);
         }
 
         $this->_title($this->__('Straker Translations'))
@@ -61,10 +63,19 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
     }
 
     public function updateJobAction() {
-
         $data = $this->getRequest()->getParams();
-        if($data['job_id']){
-            $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load((int) $data['job_id']);
+        $id = $data['job_id'];
+        if($id){
+            $this->_updateJob($id);
+            $this->_redirect('*/*/');
+        }
+        return false;
+    }
+
+    private function _updateJob($id){
+        if($id){
+            /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $job */
+            $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load((int)$id);
 
             if(!$job->getJobKey()){
                 return false;
@@ -73,15 +84,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             if( $job->updateTranslation() ){
                 Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
             }
-            $this->_redirect('*/*/');
-            return;
-
+            return true;
         }
-
         return false;
-
     }
-
 
     public function disputeAction() {
         $data = $this->getRequest()->getParams();

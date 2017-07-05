@@ -78,7 +78,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
         }
     }
 
-    public function submitjobAction()
+    public function submitJobAction()
     {
         $data = $this->getRequest()->getParams();
         if($data['attr'] && $data['store'] && $data['category']){
@@ -159,7 +159,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
 //        }
     }
 
-    public function copyAllAction(){
+    public function publishAllAction(){
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
         if (!$job->getId()){
@@ -180,7 +180,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
 
     }
 
-    public function applyTranslationAction(){
+    public function publishAction(){
         $jobId = $this->getRequest()->getParam('job_id');
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
 
