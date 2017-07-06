@@ -37,7 +37,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Product_Translate extend
     }
 
     protected function _getAttributeCode($attributeId){
-
         if (!Mage::registry('attributeCodeCache_'.$attributeId)){
             $productAttributeCode = Mage::getModel('eav/entity_attribute')->load($attributeId)->getAttributeCode();
             Mage::register('attributeCodeCache_'.$attributeId,$productAttributeCode);
@@ -45,7 +44,5 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Product_Translate extend
             $productAttributeCode = Mage::registry('attributeCodeCache_'.$attributeId);
         }
         return $productAttributeCode;
-
     }
-
 }

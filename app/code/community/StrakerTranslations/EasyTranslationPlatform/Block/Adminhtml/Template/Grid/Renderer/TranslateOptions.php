@@ -5,7 +5,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     protected $_storeId;
 
     public function render(Varien_Object $row){
-        if ($row->getFrontendInput()=='select') {
+        if ( in_array($row->getFrontendInput(), ['select', 'multiselect'] ) ) {
             $html = '<input type="checkbox" name="option" value="' . $row->getAttributeId() . '" class="checkbox-option">';
         }
         else{
