@@ -210,8 +210,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
     }
 
     public function removeFromCartAction(){
-        $entityId = 0;
-        if(!empty($this->getRequest()->getParam('entity_id'))){
+        $entityId = $this->getRequest()->getParam('entity_id');
+        if(!empty($entityId)){
             $entityId = $this->getRequest()->getParam('entity_id');
         }
         $productIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');

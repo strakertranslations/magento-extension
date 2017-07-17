@@ -242,8 +242,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_BlockCon
     }
 
     public function removeFromCartAction(){
-        $entityId = 0;
-        if(!empty($this->getRequest()->getParam('block_id'))){
+        $entityId = $this->getRequest()->getParam('block_id');
+        if(!empty($entityId)){
             $entityId = $this->getRequest()->getParam('block_id');
         }
         $blockIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_cms_block');

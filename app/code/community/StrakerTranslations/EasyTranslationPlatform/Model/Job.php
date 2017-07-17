@@ -1143,7 +1143,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         $collection->distinct(true)->addFieldToSelect($filter);
         $languages = [];
         foreach ($collection->getData() as $lang) {
-            array_push($languages, $lang[$filter]);
+            $languages[] = $lang[$filter];
         }
         /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Model_Api */
         $helper = Mage::getModel('strakertranslations_easytranslationplatform/api');

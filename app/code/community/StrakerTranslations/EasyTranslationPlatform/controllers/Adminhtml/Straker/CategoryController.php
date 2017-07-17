@@ -262,8 +262,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
     }
 
     public function removeFromCartAction(){
-        $entityId = 0;
-        if(!empty($this->getRequest()->getParam('entity_id'))){
+        $entityId = $this->getRequest()->getParam('entity_id');
+        if(!empty($entityId)){
             $entityId = $this->getRequest()->getParam('entity_id');
         }
         $categoryIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_category');

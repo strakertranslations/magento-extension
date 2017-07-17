@@ -83,7 +83,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
                     if ($k == 'title' && $attribute){
                         $attributeId = (int) $this->getAttributeId();
                         $eavAttributeModel->load($attributeId);
-                        if(!empty($eavAttributeModel->getId())){
+                        $eavAttributeModelId = $eavAttributeModel->getId();
+                        if(!empty($eavAttributeModelId)){
                             $storeLabels = $eavAttributeModel->getStoreLabels();
                             if(is_array($storeLabels)){
                                 //get all current stores
@@ -121,14 +122,11 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
                             //                        $optionModel = Mage::getModel('eav/entity_attribute_option');
                             //                        $optionModel->load($optionId);
                             if( !in_array($optionId, $optionIds)){
-                                array_push(
-                                    $newOptionData,
-                                    [
-                                        'option_id' => $optionId,
-                                        'store_id' => $storeId,
-                                        'value' => trim($optionValue)
-                                    ]
-                                );
+                                $newOptionData[] = [
+                                    'option_id' => $optionId,
+                                    'store_id' => $storeId,
+                                    'value' => trim($optionValue)
+                                ];
                             }
                         }
                         if($newOptionData){

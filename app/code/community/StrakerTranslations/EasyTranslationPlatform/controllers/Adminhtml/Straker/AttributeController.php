@@ -204,8 +204,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
     }
 
     public function removeFromCartAction(){
-        $attributeId = 0;
-        if(!empty($this->getRequest()->getParam('attribute_id'))){
+        $attributeId = $this->getRequest()->getParam('attribute_id');
+        if(!empty($attributeId)){
             $attributeId = $this->getRequest()->getParam('attribute_id');
         }
         $attributeIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
