@@ -71,71 +71,75 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
 //
 //        }
 
-        if ($this->getTranslate()){
-            $dataInJson =  json_encode(simplexml_load_string($this->getTranslate()));
-            $data = json_decode($dataInJson,true);
-            $storeId = (int) $this->getStoreId();
-            /** @var Mage_Eav_Model_Attribute $eavAttributeModel */
-            $eavAttributeModel = Mage::getModel('eav/entity_attribute');
-            foreach ($data as $k => $attribute ){
-                if ($k == 'title' && $attribute){
-                    $attributeId = (int) $this->getAttributeId();
-                    $eavAttributeModel->load($attributeId);
-                    if(!empty($eavAttributeModel->getId())){
-                        $storeLabels = $eavAttributeModel->getStoreLabels();
-                        if(is_array($storeLabels)){
-                            //get all current stores
-                            $stores = array_keys($storeLabels);
-                            if(!in_array($storeId, $stores)){
-                                $storeLabels[$storeId] = trim($attribute);
-                                $eavAttributeModel->setData('store_labels', $storeLabels)->save();
+        $success = true;
+        try{
+            if ($this->getTranslate()){
+                $dataInJson =  json_encode(simplexml_load_string($this->getTranslate()));
+                $data = json_decode($dataInJson,true);
+                $storeId = (int) $this->getStoreId();
+                /** @var Mage_Eav_Model_Attribute $eavAttributeModel */
+                $eavAttributeModel = Mage::getModel('eav/entity_attribute');
+                foreach ($data as $k => $attribute ){
+                    if ($k == 'title' && $attribute){
+                        $attributeId = (int) $this->getAttributeId();
+                        $eavAttributeModel->load($attributeId);
+                        $eavAttributeModelId = $eavAttributeModel->getId();
+                        if(!empty($eavAttributeModelId)){
+                            $storeLabels = $eavAttributeModel->getStoreLabels();
+                            if(is_array($storeLabels)){
+                                //get all current stores
+                                $stores = array_keys($storeLabels);
+                                if(!in_array($storeId, $stores)){
+                                    $storeLabels[$storeId] = trim($attribute);
+                                    $eavAttributeModel->setData('store_labels', $storeLabels)->save();
+                                }
                             }
                         }
                     }
-                }
 
-                if ($k == 'option' && $attribute){
-                    $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
+                    if ($k == 'option' && $attribute){
+                        $setup = new Mage_Eav_Model_Entity_Setup('core_setup');
 
-                    /* @var $model Mage_Catalog_Model_Entity_Attribute */
-                    $attrModel = Mage::getModel('catalog/resource_eav_attribute');
-                    $attrModel->load($this->getAttributeId());
+                        /* @var $model Mage_Catalog_Model_Entity_Attribute */
+                        $attrModel = Mage::getModel('catalog/resource_eav_attribute');
+                        $attrModel->load($this->getAttributeId());
 
-                    /** @var $valuesCollection Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection */
-                    $valuesCollection = Mage::getResourceModel('eav/entity_attribute_option_collection')
-                        ->setStoreFilter($storeId, false)
-                        ->setAttributeFilter($attrModel->getId());
+                        /** @var $valuesCollection Mage_Eav_Model_Resource_Entity_Attribute_Option_Collection */
+                        $valuesCollection = Mage::getResourceModel('eav/entity_attribute_option_collection')
+                            ->setStoreFilter($storeId, false)
+                            ->setAttributeFilter($attrModel->getId());
 
-                    //0 => ['option_id' => '20', 'attribute_id' => '92', 'sort_order' => '0', 'value' => 'Black' ]
-                    $optionData = $valuesCollection->getData();
-                    $optionIds = array_column($optionData, 'option_id');
+                        //0 => ['option_id' => '20', 'attribute_id' => '92', 'sort_order' => '0', 'value' => 'Black' ]
+                        $optionData = $valuesCollection->getData();
+                        $optionIds = array_column($optionData, 'option_id');
 
-                    $optionValueTable = $setup->getTable('eav/attribute_option_value');
+                        $optionValueTable = $setup->getTable('eav/attribute_option_value');
 
-                    $newOptionData = [];
-                    foreach ($attribute as $optionId => $optionValue) {
-                        $optionId = str_replace('id_', '',$optionId);
-//                        /** @var Mage_Eav_Model_Entity_Attribute_Option $optionModel */
-//                        $optionModel = Mage::getModel('eav/entity_attribute_option');
-//                        $optionModel->load($optionId);
-                        if( !in_array($optionId, $optionIds)){
-                            array_push(
-                                $newOptionData,
-                                [
+                        $newOptionData = [];
+                        foreach ($attribute as $optionId => $optionValue) {
+                            $optionId = str_replace('id_', '',$optionId);
+                            //                        /** @var Mage_Eav_Model_Entity_Attribute_Option $optionModel */
+                            //                        $optionModel = Mage::getModel('eav/entity_attribute_option');
+                            //                        $optionModel->load($optionId);
+                            if( !in_array($optionId, $optionIds)){
+                                $newOptionData[] = [
                                     'option_id' => $optionId,
                                     'store_id' => $storeId,
                                     'value' => trim($optionValue)
-                                ]
-                            );
+                                ];
+                            }
                         }
-                    }
-                    if($newOptionData){
-                        $setup->getConnection()->insertMultiple($optionValueTable, $newOptionData);
+                        if($newOptionData){
+                            $setup->getConnection()->insertMultiple($optionValueTable, $newOptionData);
+                        }
                     }
                 }
             }
+            $this->setIsImported(1)->save();
+        }catch(Exception $e){
+            $success = false;
         }
-        $this->setIsImported(1)->save();
+        return $success;
     }
 
 //    private function _getConnection() {

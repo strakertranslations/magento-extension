@@ -260,7 +260,10 @@
   text-decoration: underline;
 }
 .adminhtml-straker-product-index p.inactive,
-.adminhtml-straker-category-index p.inactive {
+.adminhtml-straker-category-index p.inactive,
+.adminhtml-straker-attribute-index p.inactive,
+.adminhtml-straker-cms-page-index p.inactive,
+.adminhtml-straker-cms-block-index p.inactive{
   color: #888888;
   text-decoration: underline;
 }

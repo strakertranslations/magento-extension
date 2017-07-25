@@ -174,7 +174,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product_Gr
 
             $this->getMassactionBlock()->addItem('add', array(
                 'label' => Mage::helper('catalog')->__('Publish Translation'),
-                'url' => $this->getUrl('*/*/applyTranslation'),
+                'url' => $this->getUrl('*/*/publish'),
                 'selected' => 1
             ));
             $this->getMassactionBlock()->setTemplate('straker/job/product/massaction.phtml');

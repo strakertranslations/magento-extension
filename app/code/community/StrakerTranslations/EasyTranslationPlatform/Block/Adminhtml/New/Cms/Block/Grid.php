@@ -14,8 +14,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
 
     protected function _prepareCollection()
     {
-        $collection = Mage::getModel('cms/block')->getCollection();
         /* @var $collection Mage_Cms_Model_Mysql4_Block_Collection */
+        $collection = Mage::getModel('cms/block')->getCollection();
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -94,7 +94,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
 
         $this->getMassactionBlock()->addItem('add', array(
             'label'=> Mage::helper('catalog')->__('Add to Confirm Page'),
-            'url'  => $this->getUrl('*/*/addtoconfirm'),
+            'url'  => $this->getUrl('*/*/addToConfirm'),
             'selected' => 1
         ));
         $this->getMassactionBlock()->setTemplate('straker/new/cms/block/massaction.phtml');

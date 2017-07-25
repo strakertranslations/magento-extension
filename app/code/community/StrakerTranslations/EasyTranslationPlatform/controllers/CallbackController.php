@@ -1,6 +1,6 @@
 <?php
 class StrakerTranslations_EasyTranslationPlatform_CallbackController extends Mage_Core_Controller_Front_Action{
-    function indexAction(){
+    public function indexAction(){
         $data = $this->getRequest()->getPost();
         Mage::log(print_r($data,true), null , 'straker_callback.log' , true);
 

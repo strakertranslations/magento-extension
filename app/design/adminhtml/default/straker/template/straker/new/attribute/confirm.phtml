@@ -28,7 +28,7 @@
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_attribute/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
     <input type="hidden" name="attribute" value="<?php echo implode(',', $this->getAttribute()) ?>" >
-    <input type="hidden" name="option" value="<?php echo empty($this->getOption()) ? '' : $this->getOption() ?>" >
+    <input type="hidden" name="option" value="<?php $options = $this->getOption(); echo empty($options) ? '' : $options ?>" >
     <input type="hidden" name="store" value="<?php echo $this->getStore() ?>" >
 </form>
 <div>

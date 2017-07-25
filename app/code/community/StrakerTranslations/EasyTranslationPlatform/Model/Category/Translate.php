@@ -14,20 +14,26 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Category_Translate exten
     }
 
     public function importTranslation(){
-
-        $category = Mage::getModel('catalog/category')->setStoreId($this->getStoreId())->load($this->getCategoryId());
-
-        $categoryAttributeCode = $this->_getAttributeCode($this->getAttributeId());
-
-        $this->setBackup($category->getData($categoryAttributeCode));
-
-        $category->setData($categoryAttributeCode, $this->getTranslate())
-          ->getResource()
-          ->saveAttribute($category, $categoryAttributeCode);
-        $this->setIsImported(1)->save();
-
-        $category->clearInstance();
-
+        $success = true;
+        try{
+            $translatedValue = $this->getTranslate();
+            //if translated value is null, skip
+            if(!is_null($translatedValue)){
+                $category = Mage::getModel('catalog/category')
+                    ->setStoreId($this->getStoreId())
+                    ->load($this->getCategoryId());
+                $categoryAttributeCode = $this->_getAttributeCode($this->getAttributeId());
+                $this->setBackup($category->getData($categoryAttributeCode));
+                $category->setData($categoryAttributeCode, $translatedValue)
+                    ->getResource()
+                    ->saveAttribute($category, $categoryAttributeCode);
+                $this->setIsImported(1)->save();
+                $category->clearInstance();
+            }
+        }catch(Exception $e){
+            $success = false;
+        }
+        return $success;
     }
 
     protected function _getAttributeCode($attributeId){

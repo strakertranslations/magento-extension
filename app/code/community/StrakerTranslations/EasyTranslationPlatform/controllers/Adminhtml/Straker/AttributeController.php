@@ -61,7 +61,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         }
     }
 
-    public function addtoconfirmAction(){
+    public function addToConfirmAction(){
         $data = $this->getRequest()->getParams();
         if(empty($data['attribute']) && empty($data['option'])){
             $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
@@ -87,7 +87,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         }
     }
 
-    public function submitjobAction(){
+    public function submitJobAction(){
         $data = $this->getRequest()->getParams();
         if( $data['store'] && isset($data['attribute']) && isset($data['option']) ){
             $attribute = !empty($data['attribute'])?explode(',', $data['attribute']):array();
@@ -147,7 +147,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         }
     }
 
-    public function copyAllAction(){
+    public function publishAllAction(){
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
         if (!$job->getId()){
@@ -168,7 +168,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
 
     }
 
-    public function applyTranslationAction(){
+    public function publishAction(){
         $jobId = $this->getRequest()->getParam('job_id');
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
 
@@ -204,8 +204,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
     }
 
     public function removeFromCartAction(){
-        $attributeId = 0;
-        if(!empty($this->getRequest()->getParam('attribute_id'))){
+        $attributeId = $this->getRequest()->getParam('attribute_id');
+        if(!empty($attributeId)){
             $attributeId = $this->getRequest()->getParam('attribute_id');
         }
         $attributeIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
@@ -227,7 +227,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
 //        var_dump($optionIds);
 //        exit;
         Mage::getSingleton('adminhtml/session')->setData('straker_new_option', implode(',', $optionIds));
-        $this->_redirect('*/*/addtoconfirm');
+        $this->_redirect('*/*/addToConfirm');
     }
 
     public function gridAction()

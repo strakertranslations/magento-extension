@@ -135,7 +135,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Confirm_Gr
 
     public function getGridUrl()
     {
-        return $this->getUrl('*/*/addtoconfirm', array('_current'=>true));
+        return $this->getUrl('*/*/addToConfirm', array('_current'=>true));
     }
 
     public function getRowUrl($row)

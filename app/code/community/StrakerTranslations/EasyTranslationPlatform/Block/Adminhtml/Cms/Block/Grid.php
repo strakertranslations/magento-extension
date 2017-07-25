@@ -10,6 +10,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid
             'straker.new_entity_id = main_table.block_id',
             array('straker_translated' => 'straker.version')
         );
+
+        $collection->addFilterToMap('title', 'main_table.title');
+        $collection->addFilterToMap('identifier', 'main_table.identifier');
+
         $this->setCollection($collection);
 
         return Mage_Adminhtml_Block_Widget_Grid::_prepareCollection();

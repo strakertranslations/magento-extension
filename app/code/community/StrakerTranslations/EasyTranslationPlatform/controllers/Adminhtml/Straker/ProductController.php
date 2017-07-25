@@ -83,7 +83,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
         }
     }
 
-    public function addtoconfirmAction(){
+    public function addToConfirmAction(){
         $data = $this->_getParamArray();
         if(!empty($data['attr']) && !empty($data['store']) && !empty($data['product'])){
             Mage::getSingleton('adminhtml/session')
@@ -103,9 +103,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
         }
     }
 
-    public function submitjobAction(){
+    public function submitJobAction(){
         $data = $this->getRequest()->getParams();
         if($data['attr'] && $data['store'] && $data['product']){
+            /** @var  $jobModel StrakerTranslations_EasyTranslationPlatform_Model_Job */
             $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job');
             try {
                 $jobModel->checkAndCreateFolder();
@@ -119,6 +120,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
                 return;
             }
             $attributeCodes = array_unique(explode(',', $data['attr']));
+            $attr_ids = [];
             foreach($attributeCodes as $attributeCode){
                 $attr_ids[] = $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode)->getAttributeId();
@@ -149,7 +151,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
         }
     }
 
-    public function copyAllAction(){
+    public function publishAllAction(){
+        /** @var  $job StrakerTranslations_EasyTranslationPlatform_Model_Job */
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
         if (!$job->getId()){
@@ -170,8 +173,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
 
     }
 
-    public function applyTranslationAction(){
+    public function publishAction(){
         $jobId = $this->getRequest()->getParam('job_id');
+        /** @var  $job StrakerTranslations_EasyTranslationPlatform_Model_Job */
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
 
         if (!$job->getId()){
@@ -206,8 +210,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
     }
 
     public function removeFromCartAction(){
-        $entityId = 0;
-        if(!empty($this->getRequest()->getParam('entity_id'))){
+        $entityId = $this->getRequest()->getParam('entity_id');
+        if(!empty($entityId)){
             $entityId = $this->getRequest()->getParam('entity_id');
         }
         $productIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
@@ -218,7 +222,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
             unset($productIds[$key]);
         }
         Mage::getSingleton('adminhtml/session')->setData('straker_new_product', $productIds);
-        $this->_redirect('*/*/addtoconfirm');
+        $this->_redirect('*/*/addToConfirm');
     }
 
     public function gridAction()
