@@ -8,6 +8,9 @@
                     <live>https://app.strakertranslations.com</live>
                     <sandbox>https://app-sandbox.strakertranslations.com</sandbox>
                 </domain>
+                <straker_bug_log_domain>
+                    <live>https://buglog.strakertranslations.com</live>
+                </straker_bug_log_domain>
                 <my_account_domain>
                     <live>https://myaccount.strakertranslations.com/</live>
                 </my_account_domain>
@@ -19,6 +22,7 @@
                     <countries>v1/ta4ma/countries</countries>
                     <payment_page>o/?action=api.quote</payment_page>
                     <support>v1/ta4ma/support</support>
+                    <bug_log>bugLog/listeners/bugLogListenerREST.cfm</bug_log>
                 </api_url>
             </general>
         </straker>
