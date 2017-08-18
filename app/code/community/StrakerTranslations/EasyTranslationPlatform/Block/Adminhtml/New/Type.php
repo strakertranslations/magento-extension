@@ -7,12 +7,27 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Type exten
         $this->setTemplate('straker/new/type.phtml');
     }
 
-    public function renderTypes(){
+    public function renderTypes() {
+
         $storeId = $this->getRequest()->getParam('store');
         $types = Mage::getModel('strakertranslations_easytranslationplatform/job_type')->getCollection();
         $html = '';
-        foreach ($types as $type){
-            $html .= '<div><a class="job-type-btn" href="' . Mage::helper("adminhtml")->getUrl("adminhtml/straker_".str_replace(' ','_',strtolower($type->getTypeName()))."/new", array("store" => $storeId)) . '">' . $type->getTypeName() . '</a></div>';
+        $title = '';
+        foreach ( $types as $type ) {
+
+            if ( 'Product' == $type->getTypeName() ) {
+                $title = 'Select all your products or specific products you wish to translate, you can filter by product type, SKU, name, etc';
+            } elseif ( 'Attribute' == $type->getTypeName() ) {
+                $title = 'Select all attributes or specific ones';
+            } elseif ( 'Category' == $type->getTypeName() ) {
+                $title = 'Select all categories or specific ones';
+            } elseif ( 'CMS Page' == $type->getTypeName() ) {
+                $title = 'You can select which items from the CMS page to include/exclude: Title, Meta Keywords, Meta Description, Content Heading, Content';
+            } elseif ( 'CMS Block' == $type->getTypeName() ) {
+                $title = 'You can include/exclude the Title and Content';
+            }
+        
+            $html .= '<div class="strakertranslations-adminhtml-job-type"><a class="job-type-btn" href="' . Mage::helper("adminhtml")->getUrl("adminhtml/straker_".str_replace(' ','_',strtolower($type->getTypeName()))."/new", array("store" => $storeId)) . '">' . $type->getTypeName() . '</a></div> <span class="st-tooltip"><img width="18px" src="/skin/adminhtml/default/straker/images/help.svg" /><span class="st-tooltiptext">' . $title . '</span></span>';
 
         }
         return $html;
