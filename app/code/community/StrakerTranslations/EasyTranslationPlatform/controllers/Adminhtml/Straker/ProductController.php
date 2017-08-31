@@ -173,6 +173,14 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
 
     }
 
+    public function exportProductsCsvAction() {
+        
+        $jobId = $this->getRequest()->getParam('job_id');
+        $filename = 'translated_products.csv';
+        $content = Mage::helper('strakertranslations_easytranslationplatform/exportcsv', array( 'job_id' => $jobId ) )->generateMlnList();
+        $this->_prepareDownloadResponse($filename, $content);
+    }
+
     public function publishAction(){
         $jobId = $this->getRequest()->getParam('job_id');
         /** @var  $job StrakerTranslations_EasyTranslationPlatform_Model_Job */

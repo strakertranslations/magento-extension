@@ -486,7 +486,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
         $rootElement = $_xml->createElement('root');
 
-        $cmsTranslateCollection = Mage::getModel('strakertranslations_easytranslationplatform/cms_' . $type . '_translate')->getCollection($this->getWriteAdapter());
+        $cmsTranslateCollection = Mage::getModel('strakertranslations_easytranslationplatform/cms_' . $type . '_translate')->getCollection($this->getWriteAdapter())->setOrder( 'cms_' . $type . '_id', 'ASC');
         $cmsTranslateCollection->addFieldToFilter('job_id', $this->getId());
         foreach ($cmsTranslateCollection as $cmsTranslate) {
             $dataElement = $_xml->createElement('data');
@@ -546,7 +546,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
         $rootElement = $_xml->createElement('root');
 
-        $productTranslateCollection = Mage::getModel('strakertranslations_easytranslationplatform/product_translate')->getCollection($this->getWriteAdapter());
+        $productTranslateCollection = Mage::getModel('strakertranslations_easytranslationplatform/product_translate')->getCollection($this->getWriteAdapter())->setOrder('product_id', 'ASC');
         $productTranslateCollection->addFieldToFilter('job_id', $this->getId());
 
         $attributeFrontLabel = array();

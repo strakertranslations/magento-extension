@@ -21,6 +21,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product ex
             ));
         }
 
+        if ( $jobStatus == '5') {
+            $this->_addButton('export', array(
+                'label'   => Mage::helper('catalog')->__('Export Products'),
+                'onclick' => "setLocation('{$this->getUrl('*/*/exportProductsCsv',array('job_id'=>$jobId))}')",
+                'class'   => 'task'
+            ));
+         }
+        
+
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_job_product_grid', 'job_product.grid'));
         $this->getChild('grid')->setStatusId($jobStatus);
         return parent::_prepareLayout();
