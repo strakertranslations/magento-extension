@@ -13,6 +13,9 @@
         </tr>
     </table>
 </div>
+<div class="container">
+    <input type="button" class="form-button left" value="Back" title="Back" onclick="window.location.href = '<?php echo $this->getUrl('*/straker_cms_block/new', array('store'=> $this->getSetupStoreId())); ?>'">
+</div>
 <ol class="wizard" data-wizard-steps="4">
     <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
     <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
