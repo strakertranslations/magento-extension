@@ -87,7 +87,7 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
                 $io->open(array('path' => $path));
                 $io->streamOpen($file, 'w+');
                 $io->streamLock(true);
-
+                $io->streamWrite(chr(239) . chr(187) . chr(191));
                 $io->streamWriteCsv($this->_getCsvHeaders($items));
                 foreach ($items as $product) {
                     $io->streamWriteCsv($product->getData());
