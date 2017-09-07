@@ -18,12 +18,12 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
     public function accountAction()
     {
-        $this->_redirectUrl("https://myaccount.strakertranslations.com/");
+        $this->_redirectUrl("https://deltaray.strakertranslations.com/");
     }
 
     public function termsAction()
     {
-        $this->_redirectUrl("https://www.strakertranslations.com/about-us/terms-and-conditions-of-service.cfm");
+        $this->_redirectUrl("https://www.strakertranslations.com/terms-conditions/");
     }
 
     public function supportAction()
