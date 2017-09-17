@@ -9,7 +9,7 @@
                     <sandbox>https://app-sandbox.strakertranslations.com</sandbox>
                 </domain>
                 <my_account_domain>
-                    <live>https://myaccount.strakertranslations.com/</live>
+                    <live>https://deltaray.strakertranslations.com/</live>
                 </my_account_domain>
                 <api_url>
                     <register>v1/ta4ma/register</register>

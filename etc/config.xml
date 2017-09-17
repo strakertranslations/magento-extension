@@ -11,9 +11,9 @@
                     <live>https://app.strakertranslations.com</live>
                 </domain>
                 <my_account_domain>
-                    <dev>https://dev-myaccount.strakertranslations.com</dev>
-                    <uat>https://uat-myaccount.strakertranslations.com</uat>
-                    <live>https://myaccount.strakertranslations.com</live>
+                    <dev>https://dev-deltaray.strakertranslations.com</dev>
+                    <uat>https://uat-deltaray.strakertranslations.com</uat>
+                    <live>https://deltaray.strakertranslations.com</live>
                 </my_account_domain>
                 <straker_bug_log_domain>
                     <uat>https://uat-buglog.strakertranslations.com</uat>
