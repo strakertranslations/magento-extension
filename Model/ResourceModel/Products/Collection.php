@@ -19,7 +19,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         $this->getSelect()
             ->reset(Select::COLUMNS)
             ->columns(
-                ['e.entity_id', 'e.sku', 'MAX(IF((stTrans.is_published AND stJob.job_id) IS NULL, 0, 1)) as is_translated']
+                ['e.entity_id', 'e.sku', 'type_id', 'attribute_set_id', 'MAX(IF((stTrans.is_published AND stJob.job_id) IS NULL, 0, 1)) as is_translated']
             )->joinLeft(
                 ['stTrans' => $strakerTrans],
                 'e.entity_id=stTrans.entity_id',

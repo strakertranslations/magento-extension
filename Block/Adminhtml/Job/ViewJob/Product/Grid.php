@@ -5,9 +5,16 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Product;
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Backend\Helper\Data as BackendHelperData;
-use Magento\Framework\View\Element\Template;
 use Straker\EasyTranslationPlatform\Model;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as SetFactory;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\TypeFactory;
+
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteFactory;
+
 
 class Grid extends Extended
 {
@@ -18,16 +25,29 @@ class Grid extends Extended
     protected $_jobKey;
     protected $_jobId;
     protected $_sourceStoreId;
-
-
+    protected $_productModel;
+    protected $_productSetModel;
+    protected $_productTypeModel;
+    protected $_productStatusModel;
+    protected $_websitesModel;
 
     public function __construct(
         Context $context,
         BackendHelperData $backendHelper,
         JobFactory $jobFactory,
+        ProductFactory $productFactory,
+        SetFactory $productSetFactory,
+        Status $productStatus,
+        TypeFactory $productTypeFactory,
+        WebsiteFactory $websitesFactory,
         array $data = []
     ) {
         $this->_jobFactory = $jobFactory;
+        $this->_productTypeModel = $productTypeFactory->create();
+        $this->_productModel = $productFactory->create();
+        $this->_productSetModel = $productSetFactory->create();
+        $this->_websitesModel = $websitesFactory->create();
+        $this->_productStatusModel = $productStatus;
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -47,8 +67,14 @@ class Grid extends Extended
     protected function _prepareCollection()
     {
         $productCollection = $this->_job->getProductCollection()
-            ->addAttributeToSelect('name')
-            ->addAttributeToSelect('price');
+            ->addAttributeToSelect(
+                'name'
+            )->addAttributeToSelect(
+                'price'
+            )->addAttributeToSelect(
+                'status'
+            )->addWebsiteNamesToResult();
+
         if (!empty($this->_sourceStoreId) && is_numeric($this->_sourceStoreId)) {
             $productCollection->addStoreFilter($this->_sourceStoreId);
         }
@@ -92,6 +118,15 @@ class Grid extends Extended
             ]
         );
         $this->addColumn(
+            'type',
+            [
+                'header' => __('Type'),
+                'index' => 'type_id',
+                'type' => 'options',
+                'options' => $this->_productTypeModel->getOptionArray()
+            ]
+        );
+        $this->addColumn(
             'sku',
             [
                 'header' => __('Sku'),
@@ -109,6 +144,43 @@ class Grid extends Extended
                 'width' => '50px',
             ]
         );
+
+        $sets = $this->_productSetModel->setEntityTypeFilter(
+            $this->_productModel->getResource()->getTypeId()
+        )->load()->toOptionHash();
+
+        $this->addColumn(
+            'attribute_set',
+            [
+                'header' => __('Attribute Set'),
+                'index' => 'attribute_set_id',
+                'type' => 'options',
+                'options' => $sets
+            ]
+        );
+
+        $this->addColumn(
+            'status',
+            [
+                'header' => __('Status'),
+                'index' => 'status',
+                'type' => 'options',
+                'options' => $this->_productStatusModel->getOptionArray(),
+            ]
+        );
+
+        if (!$this->_storeManager->isSingleStoreMode()){
+            $this->addColumn(
+                'websites',
+                [
+                    'header' => __('Websites'),
+                    'sortable' => false,
+                    'index' => 'websites',
+                    'type' => 'options',
+                    'options' => $this->_websitesModel->toOptionHash()
+                ]
+            );
+        }
 
         $this->addColumn(
             'view',
@@ -171,6 +243,22 @@ class Grid extends Extended
         );
 
         return parent::_prepareColumns();
+    }
+
+    protected function _addColumnFilterToCollection($column){
+        if ($this->getCollection()) {
+            if ($column->getId() == 'websites') {
+                $this->getCollection()->joinField(
+                    'websites',
+                    'catalog_product_website',
+                    'website_id',
+                    'product_id=entity_id',
+                    null,
+                    'left'
+                );
+            }
+        }
+        return parent::_addColumnFilterToCollection($column);
     }
 
 
