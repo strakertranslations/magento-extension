@@ -4,14 +4,20 @@ namespace Straker\EasyTranslationPlatform\Block\Adminhtml\Job\Edit\Tab;
 
 use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Helper\Data;
-use Straker\EasyTranslationPlatform\Model\ProductCollectionFactory;
 use Magento\Framework\App\ResourceConnection;
+
+use Magento\Store\Model\ResourceModel\Website\CollectionFactory as WebsiteFactory;
+
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Catalog\Model\Product\VisibilityFactory;
+use Magento\Catalog\Model\Product\TypeFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Set\CollectionFactory as SetFactory;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 
 use Straker\EasyTranslationPlatform\Helper\ConfigHelper;
 use Straker\EasyTranslationPlatform\Model\JobFactory;
+use Straker\EasyTranslationPlatform\Model\ProductCollectionFactory;
 use Straker\EasyTranslationPlatform\Model\ResourceModel\Job\CollectionFactory as JobCollectionFactory;
-use Straker\EasyTranslationPlatform\Model\ResourceModel\Products\Collection;
 
 class Products extends \Magento\Backend\Block\Widget\Grid\Extended
 {
@@ -24,17 +30,26 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $resourceConnection;
     protected $targetStoreId;
     protected $productVisibilityModel;
-
+    protected $productTypeModel;
+    protected $productSetModel;
+    protected $productStatusModel;
+    protected $productModel;
+    protected $websitesModel;
 
     public function __construct(
         Context $context,
         Data $backendHelper,
         JobFactory $jobFactory,
+        ProductFactory $productFactory,
         ProductCollectionFactory $productCollectionFactory,
         ConfigHelper $configHelper,
         JobCollectionFactory $jobCollectionFactory,
         ResourceConnection $resourceConnection,
         VisibilityFactory $productVisibilityFactory,
+        TypeFactory $productTypeFactory,
+        SetFactory $productSetFactory,
+        Status $productStatus,
+        WebsiteFactory $websiteFactory,
         array $data = []
     ) {
         $this->jobFactory = $jobFactory;
@@ -43,6 +58,11 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->jobCollectionFactory = $jobCollectionFactory;
         $this->resourceConnection = $resourceConnection;
         $this->productVisibilityModel = $productVisibilityFactory->create();
+        $this->productTypeModel = $productTypeFactory->create();
+        $this->productSetModel = $productSetFactory->create();
+        $this->productModel = $productFactory->create();
+        $this->productStatusModel = $productStatus;
+        $this->websitesModel = $websiteFactory->create();
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -64,12 +84,20 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
     protected function _prepareCollection()
     {
         $collection = $this->productCollectionFactory->create();
-        $collection->addAttributeToSelect('name');
-        $collection->addAttributeToSelect('price');
-        $collection->addAttributeToSelect('visibility');
+        $collection->addAttributeToSelect(
+            'name'
+        )->addAttributeToSelect(
+            'price'
+        )->addAttributeToSelect(
+            'visibility'
+        )->addAttributeToSelect(
+            'status'
+        )->setStore(
+            $this->sourceStoreId
+        )->is_translated(
+            $this->targetStoreId
+        )->addWebsiteNamesToResult();
 
-        $collection->setStore($this->sourceStoreId);
-        $collection->is_translated($this->targetStoreId);
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -111,7 +139,29 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Name'),
                 'index' => 'name',
                 'class' => 'xxx',
-                'width' => '50px',
+            ]
+        );
+        $this->addColumn(
+            'type',
+            [
+                'header' => __('Type'),
+                'index' => 'type_id',
+                'type' => 'options',
+                'options' => $this->productTypeModel->getOptionArray()
+            ]
+        );
+
+        $sets = $this->productSetModel->setEntityTypeFilter(
+            $this->productModel->getResource()->getTypeId()
+        )->load()->toOptionHash();
+
+        $this->addColumn(
+            'attribute_set',
+            [
+                'header' => __('Attribute Set'),
+                'index' => 'attribute_set_id',
+                'type' => 'options',
+                'options' => $sets
             ]
         );
         $this->addColumn(
@@ -120,7 +170,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Sku'),
                 'index' => 'sku',
                 'class' => 'xxx',
-                'width' => '50px',
             ]
         );
         $this->addColumn(
@@ -129,7 +178,6 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'header' => __('Price'),
                 'type' => 'currency',
                 'index' => 'price',
-                'width' => '50px',
             ]
         );
 
@@ -140,9 +188,31 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
                 'type' => 'options',
                 'options' => $this->productVisibilityModel->getOptionArray(),
                 'index' => 'visibility',
-                'width' => '50px',
             ]
         );
+
+        $this->addColumn(
+            'status',
+            [
+                'header' => __('Status'),
+                'index' => 'status',
+                'type' => 'options',
+                'options' => $this->productStatusModel->getOptionArray(),
+            ]
+        );
+
+        if (!$this->_storeManager->isSingleStoreMode()){
+            $this->addColumn(
+                'websites',
+                [
+                    'header' => __('Websites'),
+                    'sortable' => false,
+                    'index' => 'websites',
+                    'type' => 'options',
+                    'options' => $this->websitesModel->toOptionHash()
+                ]
+            );
+        }
 
         $this->addColumn(
             'is_translated',
@@ -181,6 +251,22 @@ class Products extends \Magento\Backend\Block\Widget\Grid\Extended
         $this->getMassactionBlock()->addItem('create', []);
 
         return $this;
+    }
+
+    protected function _addColumnFilterToCollection($column){
+        if ($this->getCollection()) {
+            if ($column->getId() == 'websites') {
+                $this->getCollection()->joinField(
+                    'websites',
+                    'catalog_product_website',
+                    'website_id',
+                    'product_id=entity_id',
+                    null,
+                    'left'
+                );
+            }
+        }
+        return parent::_addColumnFilterToCollection($column);
     }
 
     /**
