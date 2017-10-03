@@ -285,9 +285,9 @@ class ConfigHelper extends AbstractHelper
         return
             '<p>'
             . __(
-                'Cannot found testing store view, please <a href="'
+                'Please <a href="'
                 . $this->_urlFactory->create()->getUrl('adminhtml/system_config/edit', ['section' => 'straker_config'])
-                . '">Create Testing Store View.</a>'
+                . '">create a testing Store View.</a>'
             )
             . '</p>';
     }
