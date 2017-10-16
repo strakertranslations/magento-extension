@@ -10,10 +10,6 @@
 !.gitignore
 !app/code/community/StrakerTranslations/EasyTranslationPlatform
 
-### ignore system.xml and config.xml, since the content are different between live and development ###
-/app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/system.xml
-/app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/config.xml
-
 !app/design/adminhtml/default/straker
 !app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
 
