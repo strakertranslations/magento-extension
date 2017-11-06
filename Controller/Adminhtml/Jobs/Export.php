@@ -43,7 +43,7 @@ class Export extends Action {
             $jobModel = $this->jobFactory->create()->load($jobId);
             $filePath = $jobModel->getData('source_file');
 
-            $filename = substr($filePath, strrpos($filePath, DIRECTORY_SEPARATOR));
+            $filename = substr($filePath, strrpos($filePath, DIRECTORY_SEPARATOR) + 1);
 
             if (file_exists($filePath)) {
                 $sourceFile = file_get_contents($filePath);

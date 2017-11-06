@@ -291,4 +291,26 @@ class ConfigHelper extends AbstractHelper
             )
             . '</p>';
     }
+
+    public function validProperties()
+    {
+        return [
+            'name',
+            'content_context',
+            'content_context_url',
+            'source_store_id',
+            'attribute_translation_id',
+            'attribute_code',
+            'attribute_label',
+            'attribute_id',
+            'category_id',
+            'entity_id',
+            'is_label',
+            'option_translation_id',
+            'is_option',
+            'option_id',
+            'block_id',
+            'page_id'
+        ];
+    }
 }

@@ -40,7 +40,7 @@ class Index extends \Magento\Backend\Block\Widget\Container
             'target' => '_blank',
             'disabled' => $this->shouldDisable()
         ];
-        $this->buttonList->add('add_new', $addNewJobButton, 0, 0);
+        $this->buttonList->add('add_new', $addNewJobButton, 0, 50);
         $this->buttonList->add('my_account', $myAccountButton, 10, 10);
 
         return parent::_prepareLayout();

@@ -13,7 +13,6 @@ class Type extends Container
     protected $_jobFactory;
     /** @var  \Straker\EasyTranslationPlatform\Model\Job */
     protected $_job;
-    protected $_requestData;
     protected $_configHelper;
 
     public function __construct(
@@ -21,76 +20,78 @@ class Type extends Container
         JobFactory $jobFactory,
         ConfigHelper $configHelper,
         array $data = []
-    ) {
-    
+    ){
         $this->_jobFactory = $jobFactory;
         $this->_configHelper = $configHelper;
         parent::__construct($context, $data);
     }
 
-    public function _construct()
+    protected function _construct()
     {
-        $this->_requestData = $this->getRequest()->getParams();
-        $this->_job = $this->_jobFactory->create()->load($this->_requestData['job_id']);
-        $file = $this->_configHelper->getStrakerPath().'/jobs/original/straker_job_1&2_1497831610.xml';
-        if ($this->_job->getJobStatusId() >= JobStatus::JOB_STATUS_INIT) {
-            $this->addButton(
-                'export_source_file',
-                [
-                    'label' => __('Export'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Export', [
-                            'job_id'            => $this->_job->getId(),
-                            'job_key'           => $this->_job->getJobKey(),
-                            'source_store_id'   => $this->_job->getSourceStoreId()
-                        ]) . '\') ',
-                    'class' => 'primary',
-                    'title' => __('Export to XML file.')
-                ],
-                0,
-                50
-            );
+        $params = $this->getRequest()->getParams();
+        $this->_job = $this->_jobFactory->create()->load($params['job_id']);
+
+        //go back button
+        $goBackButton = [
+            'label' => __('Back'),
+            'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/') . '\') ',
+            'class' => 'back',
+            'title' => __('Go to Manage Jobs page')
+        ];
+
+        $exportButtonData = [
+            'label' => __('Export'),
+            'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Export', [
+                    'job_id' => $this->_job->getId(),
+                    'job_key' => $this->_job->getJobKey(),
+                    'source_store_id' => $this->_job->getSourceStoreId()
+                ]) . '\') ',
+            'class' => 'action-default',
+            'title' => __('Export source content to XML file.')
+        ];
+
+        $importButtonData = [
+            'label' => __('Import'),
+            'class' => 'action-secondary',
+            'title' => __('Import Translation')
+        ];
+
+        $publishButtonData = [
+            'label' => __('Publish'),
+            'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
+                    'job_id' => $this->_job->getId(),
+                    'job_key' => $this->_job->getJobKey(),
+                    'job_type_id' => $this->_job->getJobTypeId()
+                ]) . '\') ',
+            'class' => 'primary',
+            'title' => __('Publish the job of ' . $this->_job->getJobNumber())
+        ];
+
+        $this->addButton('manage_job', $goBackButton, 0,10);
+
+        $statusId = $this->_job->_getLowestJobStatusId();
+
+        if($statusId >= JobStatus::JOB_STATUS_INIT){
+            $this->addButton('export_source_file', $exportButtonData, 0, 20);
         }
 
-        if ($this->_job->getJobStatusId() == JobStatus::JOB_STATUS_COMPLETED) {
-            $this->addButton(
-                'publish',
-                [
-                    'label' => __('Publish'),
-                    'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/Confirm', [
-                            'job_id' => $this->_job->getId(),
-                            'job_key' => $this->_job->getJobKey(),
-                            'job_type_id' => $this->_job->getJobTypeId()
-                        ]) . '\') ',
-                    'class' => 'primary',
-                    'title' => __('Publish the job of ' . $this->_job->getJobNumber())
-                ],
-                0,
-                50
-            );
+        if ($statusId >= JobStatus::JOB_STATUS_COMPLETED){
+            $this->addButton('import_translated_file', $importButtonData, 0, 30);
         }
 
-        $this->addButton(
-            'manage_job',
-            [
-                'label' => __('Back'),
-                'onclick' => 'setLocation(\'' . $this->getUrl('EasyTranslationPlatform/Jobs/') . '\') ',
-                'class' => 'back',
-                'title' => __('Go to Manage Jobs page')
-            ],
-            0,
-            30
-        );
+        if ($statusId == JobStatus::JOB_STATUS_COMPLETED){
+            $this->addButton('publish', $publishButtonData, 0, 40);
+        }
 
         parent::_construct();
     }
 
     protected function _prepareLayout()
     {
-
         $this->addChild(
             'straker-title-manageJob',
             'Magento\Framework\View\Element\Template'
-        )->setTemplate('Straker_EasyTranslationPlatform::job/viewJobTitle.phtml')->setData('title','Manage Jobs');
+        )->setTemplate('Straker_EasyTranslationPlatform::job/viewJobTitle.phtml')->setData('title', 'Manage Jobs');
 
         $this->addChild(
             'straker-breadcrumbs',
@@ -118,5 +119,37 @@ class Type extends Container
     public function _toHtml()
     {
         return $this->getChildHtml();
+    }
+
+    public function getButtonHtml($label, $onclick, $class = '', $buttonId = null, $dataAttr = [])
+    {
+        return $this->getLayout()->createBlock(
+            'Magento\Backend\Block\Widget\Button'
+        )->setData(
+            ['label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId]
+        )->setDataAttribute(
+            $dataAttr
+        )->toHtml();
+    }
+
+    public function getJobId()
+    {
+        return $this->_job->getId();
+    }
+
+    public function getJobKey()
+    {
+        return $this->_job->getJobKey();
+    }
+
+    public function getSourceStoreId()
+    {
+        return $this->_job->getSourceStoreId();
+    }
+
+    public function getImportUrl()
+    {
+        return $this->getUrl('EasyTranslationPlatform/Jobs/Import'); //hit controller by ajax call on button click.
+
     }
 }

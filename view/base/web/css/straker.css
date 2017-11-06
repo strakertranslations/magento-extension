@@ -338,3 +338,7 @@ label[for="source_language"],label[for="source_store"]{
     padding: 0 0 !important;
     text-align: left !important;
 }
+
+.import-file-control {
+    line-height: 3.2rem;
+}
