@@ -145,7 +145,6 @@
                     <item name="filter" xsi:type="string">dateRange</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
-                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Created At</item>
                 </item>
             </argument>
@@ -157,7 +156,6 @@
                     <item name="sorting" xsi:type="string">desc</item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
                     <item name="dataType" xsi:type="string">date</item>
-                    <item name="sortable" xsi:type="boolean">true</item>
                     <item name="label" xsi:type="string" translate="true">Updated At</item>
                 </item>
             </argument>
