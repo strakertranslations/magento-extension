@@ -55,6 +55,10 @@
                     <label>Delete Testing Store View</label>
                     <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\DeleteTestingStoreView</frontend_model>
                 </field>
+                <field id="version" translate="label" type="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Module Version</label>
+                    <frontend_model>Straker\EasyTranslationPlatform\Block\Adminhtml\Settings\Config\ModuleVersion</frontend_model>
+                </field>
             </group>
             <group id="attribute" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Attribute Settings</label>

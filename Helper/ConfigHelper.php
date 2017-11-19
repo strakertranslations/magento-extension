@@ -7,6 +7,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -19,14 +20,26 @@ class ConfigHelper extends AbstractHelper
     protected $_urlFactory;
     protected $_productMetadata;
     protected $_deployConfig;
+    protected $_moduleList;
 
+    /**
+     * ConfigHelper constructor.
+     * @param Context $context
+     * @param ScopedFactory $scopedFactory
+     * @param UrlFactory $urlFactory
+     * @param DirectoryList $directoryList
+     * @param ProductMetadataInterface $productMetadata
+     * @param DeploymentConfig $deployConfig
+     * @param ModuleListInterface $moduleList
+     */
     public function __construct(
         Context $context,
         ScopedFactory $scopedFactory,
         UrlFactory $urlFactory,
         DirectoryList $directoryList,
         ProductMetadataInterface $productMetadata,
-        DeploymentConfig $deployConfig
+        DeploymentConfig $deployConfig,
+        ModuleListInterface $moduleList
     ) {
 
         $this->_scopeFactory = $scopedFactory;
@@ -34,6 +47,7 @@ class ConfigHelper extends AbstractHelper
         $this->_urlFactory = $urlFactory;
         $this->_productMetadata = $productMetadata;
         $this->_deployConfig = $deployConfig;
+        $this->_moduleList = $moduleList;
         parent::__construct($context);
     }
 
@@ -53,11 +67,25 @@ class ConfigHelper extends AbstractHelper
     }
 
     /**
-     * @return string or null  current version of the website hard-coded in config.xml
+     * @return string or null  current version of the website hard-coded in config.xml (value would be uat, dev, live ...)
      */
     public function getVersion()
     {
         return $this->scopeConfig->getValue('straker/general/version');
+    }
+
+    public function getModuleVersion()
+    {
+        $moduleName = $this->_getModuleName();
+        if(empty($moduleName)){
+            $moduleName = 'Straker_EasyTranslationPlatform';
+        }
+        $moduleInfoArray = $this->_moduleList->getOne($moduleName);
+        $version = '';
+        if (array_key_exists('setup_version', $moduleInfoArray)) {
+            $version = $moduleInfoArray['setup_version'];
+        }
+        return $version;
     }
 
     /**
