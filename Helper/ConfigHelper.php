@@ -88,6 +88,33 @@ class ConfigHelper extends AbstractHelper
         return $version;
     }
 
+    public function getEnv(){
+        $moduleInfoArray = $this->_moduleList->getAll();
+
+        $env = [];
+
+        if($moduleInfoArray) {
+            $env['active_plugins'] = $moduleInfoArray;
+        }
+
+        $env['server_information']['php_version'] = phpversion();
+        $env['server_information']['server_protocol'] = empty($_SERVER['SERVER_PROTOCOL']) ? '' : $_SERVER['SERVER_PROTOCOL'];
+        $env['server_information']['user_agent'] = empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
+        $env['server_information']['web_server'] = empty($_SERVER['SERVER_SOFTWARE']) ? '' : $_SERVER['SERVER_SOFTWARE'];
+        $env['server_information']['app_name'] = 'magento2';
+
+        $magentoVersion = $this->getMagentoVersion();
+        $env['server_information']['app_version'] = empty($magentoVersion) ? '' : $magentoVersion;
+
+        if (phpversion() >= '5.4.0'){
+            $jsonResult = json_encode($env, JSON_UNESCAPED_SLASHES);
+        }else{
+            $jsonResult = json_encode($env);
+        }
+
+        return $jsonResult;
+    }
+
     /**
      * @param string $domain: domain ('' or 'my_account_domain')
      * @param string $version: site verison (live, uat and dev)
