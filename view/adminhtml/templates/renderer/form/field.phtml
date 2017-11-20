@@ -9,7 +9,7 @@
             <div class="product-create-configuration">
                 <div class="product-create-configuration-info">
                     <div class="note" data-role="product-create-configuration-info">
-                        Where would you like us to put the translated content?
+                        <?php echo __('Where would you like us to put the translated content?')?>
                     </div>
                 </div>
             </div>
@@ -17,7 +17,7 @@
     </div>
 
     <div id="attribute-tax_class_id-container" class="field field-tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-form-field-tax-class-id" data-attribute-code="tax_class_id">
-        <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span>Destination Store</span></label>
+        <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span><?php echo __('Destination Store')?></span></label>
         <div class="control">
             <select name="magento_destination_store" class="required-entry _required select admin__control-select">
                 <option value=""><?php echo __('Pick a store view') ?></option>
@@ -32,11 +32,11 @@
                             <?php endif; ?>
                             <?php if ($showGroup == false): ?>
                                 <?php $showGroup = true; ?>
-                                <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                <optgroup label="<?php echo $this->escapeHtml($group->getName()) ?>">
                             <?php endif; ?>
                             <option
                                 value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>
-                                &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                                <?php echo $this->escapeHtml($store->getName()) ?></option>
                         <?php endforeach; ?>
                         <?php if ($showGroup): ?>
                             </optgroup>
@@ -46,6 +46,7 @@
             </select>
         </div>
     </div>
+
 
     <div class="field field-tax_class_id">
         <label class="label" for="target_language">
@@ -78,7 +79,7 @@
                 <div class="product-create-configuration">
                     <div class="product-create-configuration-info">
                         <div class="note" data-role="product-create-configuration-info">
-                            Where would you like us to take your content from?
+                            <?php echo __('Where would you like us to take your content from?')?>
                         </div>
                     </div>
                 </div>

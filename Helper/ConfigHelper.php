@@ -7,6 +7,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\UrlFactory;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -19,14 +20,26 @@ class ConfigHelper extends AbstractHelper
     protected $_urlFactory;
     protected $_productMetadata;
     protected $_deployConfig;
+    protected $_moduleList;
 
+    /**
+     * ConfigHelper constructor.
+     * @param Context $context
+     * @param ScopedFactory $scopedFactory
+     * @param UrlFactory $urlFactory
+     * @param DirectoryList $directoryList
+     * @param ProductMetadataInterface $productMetadata
+     * @param DeploymentConfig $deployConfig
+     * @param ModuleListInterface $moduleList
+     */
     public function __construct(
         Context $context,
         ScopedFactory $scopedFactory,
         UrlFactory $urlFactory,
         DirectoryList $directoryList,
         ProductMetadataInterface $productMetadata,
-        DeploymentConfig $deployConfig
+        DeploymentConfig $deployConfig,
+        ModuleListInterface $moduleList
     ) {
 
         $this->_scopeFactory = $scopedFactory;
@@ -34,6 +47,7 @@ class ConfigHelper extends AbstractHelper
         $this->_urlFactory = $urlFactory;
         $this->_productMetadata = $productMetadata;
         $this->_deployConfig = $deployConfig;
+        $this->_moduleList = $moduleList;
         parent::__construct($context);
     }
 
@@ -53,11 +67,52 @@ class ConfigHelper extends AbstractHelper
     }
 
     /**
-     * @return string or null  current version of the website hard-coded in config.xml
+     * @return string or null  current version of the website hard-coded in config.xml (value would be uat, dev, live ...)
      */
     public function getVersion()
     {
         return $this->scopeConfig->getValue('straker/general/version');
+    }
+
+    public function getModuleVersion()
+    {
+        $moduleName = $this->_getModuleName();
+        if(empty($moduleName)){
+            $moduleName = 'Straker_EasyTranslationPlatform';
+        }
+        $moduleInfoArray = $this->_moduleList->getOne($moduleName);
+        $version = '';
+        if (array_key_exists('setup_version', $moduleInfoArray)) {
+            $version = $moduleInfoArray['setup_version'];
+        }
+        return $version;
+    }
+
+    public function getEnv(){
+        $moduleInfoArray = $this->_moduleList->getAll();
+
+        $env = [];
+
+        if($moduleInfoArray) {
+            $env['active_plugins'] = $moduleInfoArray;
+        }
+
+        $env['server_information']['php_version'] = phpversion();
+        $env['server_information']['server_protocol'] = empty($_SERVER['SERVER_PROTOCOL']) ? '' : $_SERVER['SERVER_PROTOCOL'];
+        $env['server_information']['user_agent'] = empty($_SERVER['HTTP_USER_AGENT']) ? '' : $_SERVER['HTTP_USER_AGENT'];
+        $env['server_information']['web_server'] = empty($_SERVER['SERVER_SOFTWARE']) ? '' : $_SERVER['SERVER_SOFTWARE'];
+        $env['server_information']['app_name'] = 'magento2';
+
+        $magentoVersion = $this->getMagentoVersion();
+        $env['server_information']['app_version'] = empty($magentoVersion) ? '' : $magentoVersion;
+
+        if (phpversion() >= '5.4.0'){
+            $jsonResult = json_encode($env, JSON_UNESCAPED_SLASHES);
+        }else{
+            $jsonResult = json_encode($env);
+        }
+
+        return $jsonResult;
     }
 
     /**
@@ -199,7 +254,6 @@ class ConfigHelper extends AbstractHelper
         foreach ($collection as $item) {
             $dbStoreConfig[$item->getPath()] = $item->getValue();
         }
-//        var_dump( $dbStoreConfig);exit();
         return $dbStoreConfig;
     }
 
@@ -290,5 +344,27 @@ class ConfigHelper extends AbstractHelper
                 . '">create a testing Store View.</a>'
             )
             . '</p>';
+    }
+
+    public function validProperties()
+    {
+        return [
+            'name',
+            'content_context',
+            'content_context_url',
+            'source_store_id',
+            'attribute_translation_id',
+            'attribute_code',
+            'attribute_label',
+            'attribute_id',
+            'category_id',
+            'entity_id',
+            'is_label',
+            'option_translation_id',
+            'is_option',
+            'option_id',
+            'block_id',
+            'page_id'
+        ];
     }
 }

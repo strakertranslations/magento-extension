@@ -30,7 +30,6 @@
 
     <input type="hidden" name="categories" value="">
 
-    <script id="ie-deferred-loader" defer="defer" src=""></script>
     <script>
         var tree;
         require([
@@ -414,7 +413,6 @@
                         });
                     }
 
-
                 }, tree);
 
                 var catIds = '';
@@ -547,96 +545,5 @@
 
         });
 
-
-
-//        function StrakerRender(values) {
-//            return {
-//                id: '',
-//                values: values.split(","),
-//                findId: function(id,array) {
-//
-//                    var catIndex = array.indexOf(id);
-//
-//                    return catIndex;
-//                },
-//                removeId: function(catIds,categories) {
-//
-//
-//                    jQuery.each(catIds, function(i,v)
-//                    {
-//                        categories.splice(categories.indexOf(v),1)
-//                    })
-//
-//                    jQuery('input[name="categories"]').val(categories.toString());
-//
-//
-//                },
-//                addId: function(catIds,categories) {
-//
-//
-//                    jQuery.each(catIds, function(i,v)
-//                    {
-//                        categories.push(v);
-//                    })
-//
-//
-//                    jQuery('input[name="categories"]').val(categories.toString());
-//
-//                },
-//                unCheckChildren: function(node) {
-//
-//                    var findId = this.findId;
-//                    var values = this.values;
-//                    var removeId = this.removeId;
-//                    var addId = this.addId;
-//                    var catIndex =[];
-//
-//
-//                    if(node.childNodes.length == 0)
-//                    {
-//
-//                        return false;
-//
-//                    }
-//
-//                    if (node.childNodes.length > 0){
-//
-//                        if (!node.ui.checkbox.checked) {
-//
-//                            catIndex = [];
-//
-//                            for (var i = 0; i < node.childNodes.length; i++)
-//                            {
-//                                catIndex.push(node.childNodes[i].id); //push to array
-//                                node.childNodes[i].ui.checkbox.checked = false;
-//                                this.unCheckChildren(node.childNodes[i]);
-//                            }
-//
-//                            removeId(catIndex,values);
-//
-//                        }
-//
-//                        if (node.ui.checkbox.checked) {
-//
-//                            catIndex =[];
-//
-//                            for (var i = 0; i < node.childNodes.length; i++)
-//                            {
-//                                node.childNodes[i].ui.checkbox.checked = true;
-//                                catIndex.push(node.childNodes[i].id);
-//                                this.unCheckChildren(node.childNodes[i]);
-//                            }
-//
-//                            addId(catIndex,values);
-//
-//                        }
-//
-//                    }
-//
-//                    return false;
-//
-//                }
-//            }
-//        };
     </script>
 <?php endif; ?>

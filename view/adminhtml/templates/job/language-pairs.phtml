@@ -8,11 +8,7 @@
         $('#Next').attr('disabled', true);
         $('#reset').hide()
 
-        var next = 1;
-
         $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks').hide();
-
-        var params = window.location.href.split('/');
 
         $removed_language = false;
 
@@ -51,28 +47,26 @@
                 type: 'POST'
 
             }).done(function (response) {
-//                console.log(response);
                 if ($('#productsGrid').length) {
                     $('#productsGrid').empty();
                     $('#job_tabs_attachment_products').attr('href', window.products_ajax_url)
                 }
-
-                if (response['store-data'].length < 1 || response['store-data']['straker/general/destination_language'].length < 1) {
-                    $('select[name="magento_destination_store"]').val(destination_storeId).attr('readonly', true);
-                    $('select[name="straker_target_language"]').val('');
-                    $('select[name="magento_source_store"]').val('');
-                    $('select[name="straker_source_language"]').val('');
-                    $('#destination-picker').show();
-                } else {
+                if (response.hasOwnProperty('store-data') && typeof response['store-data']['straker/general/destination_language'] === 'string' && response['store-data']['straker/general/destination_language'].length) {
                     $('#destination-picker').hide();
                     $('select[name="magento_destination_store"]').val(destination_storeId);
                     $('select[name="straker_target_language"]').val(response['store-data']['straker/general/destination_language']).show();
                     $('select[name="magento_source_store"]').val(response['store-data']['straker/general/source_store']).prop('enable', true);
                     $('select[name="straker_source_language"]').val(response['store-data']['straker/general/source_language']);
+                } else {
+                    $('select[name="magento_destination_store"]').val(destination_storeId).attr('readonly', true);
+                    $('select[name="straker_target_language"]').val('');
+                    $('select[name="magento_source_store"]').val('');
+                    $('select[name="straker_source_language"]').val('');
+                    $('#destination-picker').show();
                 }
                 checkLanguageData();
                 $('.note.required.'+$(this).prop('name')+'').hide();
-            })
+            });
 
             $("select[name='magento_source_store'] option").attr('disabled',false);
             $("select[name='magento_source_store'] option[value='"+destination_storeId+"']").attr('disabled',true);

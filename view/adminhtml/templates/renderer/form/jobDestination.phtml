@@ -3,12 +3,12 @@
 ?>
 <div class="fieldset-wrapper straker">
     <div>
-        <h2>Select your Destination Store View</h2>
-        <p>Please select the destination Store View where you would like this translation to show.</p>
+        <h2><?php echo __('Select your Destination Store View')?></h2>
+        <p><?php echo __('Please select the destination Store View where you would like this translation to show.')?></p>
     </div>
 
     <div class="field field-tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-form-field-tax-class-id" data-attribute-code="tax_class_id">
-        <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span>Target Store View</span></label>
+        <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span><?php echo __('Target Store View')?></span></label>
         <div class="control">
             <div class="control">
                 <select id="destination-checker" name="destination_checker" class="required-entry _required select admin__control-select">
@@ -24,14 +24,11 @@
                                 <?php endif; ?>
                                 <?php if ($showGroup == false): ?>
                                     <?php $showGroup = true; ?>
-                                    <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                    <optgroup label="<?php echo $this->escapeHtml($group->getName()) ?>">
                                 <?php endif; ?>
                                 <?php if((!$block->isSandboxModeEnabled() && strcasecmp($store->getCode(), $block->getTestingStoreCode()) != 0)
                                     || ($block->isSandboxModeEnabled() && strcasecmp($store->getCode(), $block->getTestingStoreCode()) == 0) ): ?>
-
-                                    <option
-                                            value="<?php echo $this->escapeHtml($store->getId()) ?>">
-                                        &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                                    <option value="<?php echo $this->escapeHtml($store->getId()) ?>"><?php echo $this->escapeHtml($store->getName()) ?></option>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                             <?php if ($showGroup): ?>
@@ -70,8 +67,8 @@
 
 <div id="destination-picker" class="fieldset-wrapper straker" style="display:none">
     <div>
-        <h2>Select your source store and language</h2>
-        <p>This is a one time setup process for each Store View.</p>
+        <h2><?php echo __('Select your source store and language')?></h2>
+        <p><?php echo __('This is a one time setup process for each Store View.')?></p>
     </div>
     <div id="source_content">
         <div class="fieldset-wrapper straker-source">
@@ -94,10 +91,9 @@
                                         <?php endif; ?>
                                         <?php if ($showGroup == false): ?>
                                             <?php $showGroup = true; ?>
-                                            <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                            <optgroup label="<?php echo $this->escapeHtml($group->getName()) ?>">
                                         <?php endif; ?>
-                                        <option value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>
-                                            &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                                        <option value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>><?php echo $this->escapeHtml($store->getName()) ?></option>
                                     <?php endforeach; ?>
                                     <?php if ($showGroup): ?>
                                         </optgroup>
@@ -134,7 +130,7 @@
 
         <div class="fieldset-wrapper straker-source">
             <div class="field field-tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-form-field-tax-class-id" data-attribute-code="tax_class_id" style="display:none">
-                <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span>Target Store View</span></label>
+                <label class="label" for="tax_class_id" data-ui-id="product-tabs-attributes-tab-fieldset-element-select-product-tax-class-id-label"><span><?php echo __('Target Store View')?></span></label>
                 <div class="control">
                     <select name="magento_destination_store" class="required-entry _required select admin__control-select">
                         <option value=""><?php echo __('Pick a store view') ?></option>
@@ -149,11 +145,10 @@
                                     <?php endif; ?>
                                     <?php if ($showGroup == false): ?>
                                         <?php $showGroup = true; ?>
-                                        <optgroup label="&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($group->getName()) ?>">
+                                        <optgroup label="<?php echo $this->escapeHtml($group->getName()) ?>">
                                     <?php endif; ?>
                                     <option
-                                        value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;<?php echo $this->escapeHtml($store->getName()) ?></option>
+                                        value="<?php echo $this->escapeHtml($store->getId()) ?>"<?php if ($this->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>><?php echo $this->escapeHtml($store->getName()) ?></option>
                                 <?php endforeach; ?>
                                 <?php if ($showGroup): ?>
                                     </optgroup>

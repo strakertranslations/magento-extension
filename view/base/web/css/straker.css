@@ -134,7 +134,6 @@
 }
 
 .language-pair-message h4{
-
     background-color: #eb5202;
     padding: 0.5rem;
     color: #ffffff;
@@ -195,6 +194,20 @@ a.straker-job-refresh-anchor{
     font-family: 'straker' ! Important;
     content: "\e900";
 }
+
+.straker-setting-tab > div > strong:before {
+    font-family: 'straker' ! important;
+    content: "\e900";
+    display: inline-block;
+    font-size: 1.8rem;
+    color: #00A5E3;
+    padding-right: 5px;
+    vertical-align: text-bottom;
+}
+
+/*.straker-setting-tab > div > strong {*/
+    /*vertical-align: middle;*/
+/*}*/
 
 .attr-option-td{
     padding: 5px ! important;
@@ -337,4 +350,8 @@ tr.job-option{
 label[for="source_language"],label[for="source_store"]{
     padding: 0 0 !important;
     text-align: left !important;
+}
+
+.import-file-control {
+    line-height: 3.2rem;
 }

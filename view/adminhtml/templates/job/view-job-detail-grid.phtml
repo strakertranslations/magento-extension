@@ -1,25 +1,137 @@
 <?php
-    echo $block->getHtml();
+/**  @var $block \Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob */
+echo $block->getHtml();
+
+/** @var $typeBlock \Straker\EasyTranslationPlatform\Block\Adminhtml\Job\ViewJob\Type */
+$typeBlock = $block->getChildBlock('view_job_type_grid');
 ?>
+
+<?php if ( $typeBlock !== false ): ?>
+
+<div id="import-translation-modal" style="display: none;">
+    <form id="import-translation-form" class="admin__fileldset" action="<?php echo $typeBlock->getImportUrl(); ?>" method="post" enctype="multipart/form-data">
+        <?php echo $block->getBlockHtml('formkey')?>
+        <input type="hidden" name="job_id" value="<?php echo $typeBlock->getJobId();?>" />
+        <input type="hidden" name="job_key" value="<?php echo $typeBlock->getJobKey();?>" />
+        <input type="hidden" name="source_store_id" value="<?php echo $typeBlock->getSourceStoreId();?>" />
+        <p><?php echo __('This will import translation by uploading translated file.') ?></p>
+        <fieldset class="fieldset admin__fieldset fieldset-wide">
+            <legend class="admin__legend legend">
+                <span></span>
+            </legend><br>
+
+            <div class="messages">
+            </div>
+
+            <div class="admin__field required">
+                <label for="import_file_uploader" class="admin__field-label">
+                    <span><?php /* @escapeNotVerified */ echo __('Upload Translated File') ?></span>
+                </label>
+                <div class="admin__field-control import-file-control">
+                    <input type="file" id="import_file_uploader" name="translated_file" class="input-file required-entry"/>
+                    <div class="straker_store_error_msg"><span></span></div>
+                </div>
+            </div>
+
+        </fieldset>
+    </form>
+</div>
 
 <script>
     require([
-        'jquery'
+        'jquery',
+        'Magento_Ui/js/modal/modal',
+        'loadingPopup',
+        'mage/translate'
+    ], function ( $, modal ) {
+        var importTranslationModal = $('#import-translation-modal');
+
+        if( typeof importTranslationModal !== 'undefined'){
+            var importButton = $('#import_translated_file');
+            var fileUploader = $('#import_file_uploader');
+
+            if(typeof importButton !== 'undefined' && fileUploader !== 'undefined'){
+                var options = {
+                    type: 'popup',
+                    responsive: true,
+                    innerScroll: true,
+                    title: $.mage.__('Import Translation'),
+                    buttons: [
+                        {
+                            text: $.mage.__('Cancel'),
+                            class: 'action cancel',
+                            click: function () {
+                                this.closeModal();
+                            }
+                        },
+                        {
+                            text: $.mage.__('Import'),
+                            class: 'action primary',
+                            click: function () {
+                                var importTranslationForm = $('#import-translation-form');
+
+                                if ( typeof importTranslationForm !== 'undefined') {
+                                    importTranslationForm.mage('form').mage('validation');
+                                    var filename = fileUploader.val();
+                                    if (filename) {
+                                        $('body').loadingPopup({
+                                            timeout: false
+                                        });
+
+                                        importTranslationForm.submit();
+                                    } else {
+                                        showMessage('File not found.');
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                };
+
+                var popup = modal(options, importTranslationModal);
+
+                function resetFileUploader(){
+                    fileUploader.val('');
+                    resetMessage();
+                }
+
+                function resetMessage() {
+                    $('.straker_store_error_msg span').text('');
+                }
+
+                function showMessage(message){
+                    $('.straker_store_error_msg span').text(message);
+                }
+
+                importButton.on('click', function ( e ) {
+                    e.preventDefault();
+                    resetFileUploader();
+                    $('#import-translation-modal').modal('openModal');
+                });
+
+                fileUploader.on('change', function () {
+                    if ($(this).val()) {
+                        resetMessage();
+                    }
+                })
+            }
+        }
+    })
+
+</script>
+
+<?php endif; ?>
+
+<script>
+    require([
+        'jquery',
+        'mage/translate'
     ], function ( $ ) {
         $(function () {
             var viewJobGrid = $('#straker_job_attribute_grid');
             var grid = $('#straker_job_attribute_grid_table > tbody');
             var rows = grid.children();
             rows.has('a.straker-view-option-anchor').css('cursor','pointer');
-
-//            var spinner = '<div data-role="spinner" data-component="st_jobs_listing.st_jobs_listing.jobs_grid_columns" class="admin__data-grid-loading-mask" style="display:none">\
-//                             <div class="spinner">\
-//                                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>\
-//                             </div>\
-//                          </div>';
-//            $(spinner).appendTo(viewJobGrid);
-//
-//            var loadingMask = $('.admin__data-grid-loading-mask');
 
             viewJobGrid.on('click', 'tr', function ( e ) {
                 e.preventDefault();
@@ -29,7 +141,7 @@
                 if( typeof labelAnchor.get(0) === 'undefined' || !labelAnchor.hasClass('straker-view-option-anchor')){
                     return false;
                 }else{
-                    console.log( labelAnchor.text() );
+//                    console.log( labelAnchor.text() );
                     var attrTranslationId = labelAnchor.data('attrId');
                     var attrOptions = $('.straker-job-attribute-option-' + attrTranslationId);
 
@@ -77,54 +189,10 @@
                             $(row).addClass('even');
                         }
                         i++;
-//                        console.log(i);
                     }
 
                 });
             }
-
-//            viewJobGrid.on('click', 'a', function( e ){
-//                e.preventDefault();
-////                console.log('234234234234'+loadingMask.css('display'));
-//
-//                if($(this).hasClass('straker-view-option-anchor')){
-//                    var attrTranslationId = $(this).data('attrId');
-//                    var currentRow = $(this).parent().parent();
-////                    console.log( currentRow );
-////                    currentRow.css('border','2px solid red');
-//                    var attrOptions = $('.straker-job-attribute-option-' + attrTranslationId);
-//
-//                    if( typeof attrOptions.get(0) === 'undefined' ){
-//                        loadingMask.show();
-//                        $.ajax({
-//                            url: '<?php //echo $this->getUrl('EasyTranslationPlatform/Jobs/AttributeOption'); ?>//',
-//                            data: {attributeTranslationId: attrTranslationId},
-//                            dataType: 'json',
-//                            method: 'get'
-//                        }).done(function (data, textStatus ) {
-//                            if( textStatus == 'success' && data.status ){
-//                                var html = '<tr class="straker-job-attribute-option-'+ attrTranslationId +'">\
-//                                            <td colspan="2"></td>\
-//                                            <td class="attr-option-td" colspan="2">\
-//                                                <table class="attr-option-table" width="100%">';
-//                                $.each(data.option_data, function (index, element ) {
-//                                    html += '<tr>\
-//                                                <td class="a-left col-text col-original_value">' + element['original_value'] + '</td>\
-//                                                <td class="col-text col-translated_value">' + element['translated_value'] + '</td>\
-//                                            </tr>';
-//                                })
-//                                html += '</table></td></tr>';
-//                                $(html).insertAfter(currentRow);
-//                                resetClass();
-//                            }
-//                            loadingMask.hide();
-//                        });
-//                    }else{
-//                        attrOptions.toggle();
-//                        resetClass();
-//                    }
-//                }
-//            });
         });
     });
 </script>

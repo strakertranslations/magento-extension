@@ -737,18 +737,21 @@ class ImportHelper extends AbstractHelper
                     'store_id'=>$this->_jobModel->getTargetStoreId()
                 ]
             );
-
             if ($updatePage){
 
-                $originalData = $original_page->getData();
+//                $originalData = $original_page->getData();
 
-                $dbData = array_merge($originalData, $data);
+//                $dbData = array_merge($originalData, $data);
 
                 $updateData = $this->_pageFactory->create()->load($updatePage->getEntityId());
 
                 try{
+//                    $updateData->setData($dbData)->save();
+                    foreach($data as $k => $v){
+                        $updateData->setData($k, $v);
+                    }
 
-                    $updateData->setData($dbData)->save();
+                    $updateData->save();
 
                 }catch (\Exception $e){
 
@@ -852,7 +855,6 @@ class ImportHelper extends AbstractHelper
 
         }
 
-
         foreach ($saveData as $key => $data) {
 
             $original_block = $this->_blockFactory->create()->load($key);
@@ -865,11 +867,16 @@ class ImportHelper extends AbstractHelper
 
                 $oldBlock = reset($items);
 
-                $data = array_merge($data,$oldBlock->getData());
+//                $data = array_merge($data,$oldBlock->getData());
 
                 try{
 
-                    $oldBlock->setData($data)->save();
+//                    $oldBlock->setData($data)->save();
+
+                    foreach($data as $k => $v){
+                        $oldBlock->setData($k, $v);
+                    }
+                    $oldBlock->save();
 
                 }catch (\Exception $e){
 

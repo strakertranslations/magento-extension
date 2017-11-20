@@ -195,6 +195,7 @@ class StrakerAPI extends AbstractModel implements StrakerAPIInterface
 
     public function callRegister($data)
     {
+        $data['meta_data'] = $this->_configHelper->getEnv();
         return $this->_call($this->_getRegisterUrl(), 'post', $data);
     }
 

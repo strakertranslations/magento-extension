@@ -94,6 +94,21 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     }
 
     /**
+     * @param $sourceFilename
+     * @return array
+     * @internal param $jobData
+     */
+    public function generateTranslatedFilename($sourceFilename)
+    {
+        $filePath = $this->_importHelper->configHelper->getTranslatedXMLFilePath();
+        if(!file_exists($filePath)){
+            mkdir($filePath, 0777, true);
+        }
+        $fileNameArray = $this->_renameTranslatedFileName($filePath, $sourceFilename);
+        return $fileNameArray;
+    }
+
+    /**
      * Initialize resource model
      *
      * @return void
@@ -254,11 +269,7 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
                     $downloadUrl = reset($jobData->translated_file)->download_url;
                     if (!empty($downloadUrl)) {
                         $fileContent = $this->_strakerApi->getTranslatedFile($downloadUrl);
-                        $filePath = $this->_importHelper->configHelper->getTranslatedXMLFilePath();
-                        if (!file_exists($filePath)) {
-                            mkdir($filePath, 0777, true);
-                        }
-                        $fileNameArray = $this->_renameTranslatedFileName($filePath, $jobData->source_file);
+                        $fileNameArray = $this->generateTranslatedFilename($jobData->source_file);
                         $fileFullName = implode(DIRECTORY_SEPARATOR, $fileNameArray);
                         $result = true;
 
@@ -326,11 +337,10 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
     private function _renameTranslatedFileName($filePath, $originalFileName)
     {
         $pos = stripos($originalFileName, '.xml');
-        $pos = $pos !== false ? $pos : -3;
+        $pos = $pos !== false ? $pos : strlen($originalFileName);
         $fileName = substr_replace($originalFileName, '_translated', $pos);
-//        $suffix = date('Y-m-d H:i',time());
-        $suffix = '';
-        return ['path' => $filePath, 'name' => $fileName . '_' . $suffix . '.xml'];
+//        $suffix = date('Y-m-d_H_i',time());
+        return ['path' => $filePath, 'name' => $fileName  . '.xml'];
     }
 
     public function getEntityName($entityId = '1')
@@ -403,5 +413,43 @@ class Job extends AbstractModel implements JobInterface, IdentityInterface
             }
         }
         return $blockId;
+    }
+
+    public function _getLowestJobStatusId()
+    {
+        $jobStatus = $this->_getAllRelatedJobsCollection()
+            ->addFieldToSelect('job_status_id')
+            ->getData();
+
+        $statusId = $this->getJobStatusId();
+
+        foreach($jobStatus as $status) {
+            if ($statusId > $status['job_status_id']) {
+                $statusId = $status['job_status_id'];
+            }
+        }
+
+        return $statusId;
+    }
+
+    public function _setStatusForAllJobs($statusId)
+    {
+        $jobsCollection = $this->_getAllRelatedJobsCollection();
+
+        foreach($jobsCollection as $job){
+            $job->setData('job_status_id', $statusId)->save();
+        }
+    }
+
+    private function _getAllRelatedJobIds(){
+        $jobMatches = [];
+        preg_match("/job_(.*?)_/", $this->getSourceFile(), $jobMatches);
+        return explode('&', $jobMatches[1]);
+    }
+
+    private function _getAllRelatedJobsCollection(){
+        $jobIds = $this->_getAllRelatedJobIds();
+        return $this->getCollection()
+            ->addFieldToFilter('job_id', ['in' => $jobIds]);
     }
 }
