@@ -85,7 +85,7 @@ class ConfigHelper extends AbstractHelper
         if (array_key_exists('setup_version', $moduleInfoArray)) {
             $version = $moduleInfoArray['setup_version'];
         }
-        return $version;
+        return trim($version);
     }
 
     public function getEnv(){
@@ -320,7 +320,7 @@ class ConfigHelper extends AbstractHelper
     }
 
     public function getMagentoVersion(){
-        return $this->_productMetadata->getVersion();
+        return trim($this->_productMetadata->getVersion());
     }
 
     public function getTestingStoreViewCode()

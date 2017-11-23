@@ -58,16 +58,6 @@ class JobDestination extends Element implements RendererInterface
     }
 
     public function isSandboxModeEnabled(){
-//        if($this->_configHelper->isSandboxMode()){
-//            try{
-//                $this->_storeManager->getStore($this->_configHelper->getTestingStoreViewCode());
-//                return true;
-//            }catch (NoSuchEntityException $e){
-//                return false;
-//            }
-//        }else{
-//            return false;
-//        }
         return $this->_configHelper->isSandboxMode();
     }
 
@@ -77,5 +67,50 @@ class JobDestination extends Element implements RendererInterface
 
     public function getTestingStoreCode(){
         return $this->_configHelper->getTestingStoreViewCode();
+    }
+
+    public function listStores($label, $forTarget = false){
+        $options = '<option value="">' . __($label) . '</option>';
+
+        foreach ($this->getWebsites() as $website):
+            $showWebsite = false;
+            foreach ($website->getGroups() as $group):
+                $showGroup = false;
+                    foreach ($group->getStores() as $store):
+                        if ($showWebsite === false):
+                            $showWebsite = true;
+                            $options .= '<optgroup label="' . $this->escapeHtml($website->getName()) . '"></optgroup>';
+                        endif;
+                        if ($showGroup === false):
+                            $showGroup = true;
+                            $options .= '<optgroup label="' . $this->escapeHtml($group->getName())  . '">';
+                        endif;
+                        if($forTarget){
+                            if((!$this->isSandboxModeEnabled()
+                                && strcasecmp($store->getCode(), $this->getTestingStoreCode()) != 0)
+                            || ($this->isSandboxModeEnabled()
+                                && strcasecmp($store->getCode(), $this->getTestingStoreCode()) == 0) ):
+
+                            $options .= '<option value="' . $this->escapeHtml($store->getId()) . '">' . $this->escapeHtml($store->getName()) . '</option>';
+                            endif;
+                        } else {
+                            $options .= '<option value="' . $this->escapeHtml($store->getId()) . '">';
+
+//                            if ($this->getStoreId() == $store->getId()):
+//                                $options .= 'selected="selected"';
+//                            endif;
+//                            $options .= '>';
+
+                            $options .= $this->escapeHtml($store->getName());
+                            $options .= '</option>';
+                        }
+                    endforeach;
+                if ($showGroup):
+                    $options .= '</optgroup>';
+                endif;
+            endforeach;
+        endforeach;
+
+        return $options;
     }
 }

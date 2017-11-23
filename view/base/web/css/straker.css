@@ -279,7 +279,7 @@ div.fieldset-wrapper.straker p{
 }
 
 #source_content div.fieldset-wrapper.straker-source{
-    padding: 0 2em;
+    /*padding: 0 2em;*/
     border: none;
 }
 
@@ -347,10 +347,10 @@ tr.job-option{
     color: red !important;
 }
 
-label[for="source_language"],label[for="source_store"]{
-    padding: 0 0 !important;
-    text-align: left !important;
-}
+/*label[for="source_language"],label[for="source_store"]{*/
+    /*padding: 0 0 !important;*/
+    /*text-align: left !important;*/
+/*}*/
 
 .import-file-control {
     line-height: 3.2rem;

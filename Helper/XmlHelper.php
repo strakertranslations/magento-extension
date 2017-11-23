@@ -58,7 +58,7 @@ class XmlHelper extends AbstractHelper
      * @param $jobId
      * @return bool|\DOMElement
      */
-    public function create($jobId)
+    public function create($jobId, $showAppInfo = false)
     {
         $this->_dom->version = $this->getVersion();
         $this->_dom->encoding = $this->getEncoding();
@@ -82,9 +82,26 @@ class XmlHelper extends AbstractHelper
         }
 
         $this->_root = $this->_dom->createElement('root');
+
+        if($showAppInfo){
+            //add app name
+            $this->_root->setAttribute('app_name', 'magento2');
+
+            //add magento version
+            $appVersion = $this->_configHelper->getMagentoVersion();
+            if($appVersion !== ''){
+                $this->_root->setAttribute('app_ver', $appVersion);
+            }
+
+            //add module version
+            $strakerModuleVersion = $this->_configHelper->getModuleVersion();
+            if($strakerModuleVersion !== ''){
+                $this->_root->setAttribute('straker_ver', $this->_configHelper->getModuleVersion());
+            }
+        }
+
         return true;
     }
-
 
     /**
      * @param array $attributes
@@ -92,8 +109,6 @@ class XmlHelper extends AbstractHelper
      */
     public function appendDataToRoot($attributes = [])
     {
-
-
         $this->_data = $this->_dom->createElement('data');
 
         foreach ($attributes as $key => $value) {
