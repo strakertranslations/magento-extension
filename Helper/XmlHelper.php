@@ -56,6 +56,7 @@ class XmlHelper extends AbstractHelper
 
     /**
      * @param $jobId
+     * @param bool $showAppInfo
      * @return bool|\DOMElement
      */
     public function create($jobId, $showAppInfo = false)
@@ -85,6 +86,14 @@ class XmlHelper extends AbstractHelper
 
         if($showAppInfo){
             //add app name
+            $this->addAppInfoToRoot();
+        }
+
+        return true;
+    }
+
+    function addAppInfoToRoot(){
+        if(!empty($this->_root)){
             $this->_root->setAttribute('app_name', 'magento2');
 
             //add magento version
@@ -99,8 +108,6 @@ class XmlHelper extends AbstractHelper
                 $this->_root->setAttribute('straker_ver', $this->_configHelper->getModuleVersion());
             }
         }
-
-        return true;
     }
 
     /**
