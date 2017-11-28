@@ -122,7 +122,7 @@ class Form extends Generic
                 'name' => 'url',
                 'label' => __('Website Url'),
                 'title' => __('url'),
-                'class'=>'validate-url'
+                'class'=>'validate-clean-url'
             ]
         );
 
