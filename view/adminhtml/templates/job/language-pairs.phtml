@@ -1,27 +1,32 @@
 <script>
     require([
         'jquery',
-        'mage/backend/validation'
-    ], function ( $ ) {
-        //variables
-        var saveButton              = $('#save');
-        var nextButton              = $('#Next');
-        var resetButton             = $('#reset');
-        var sourceStoreWrapper      = $('#source-store-wrapper');
-        var targetStoreElement      = $('select[name="magento_destination_store"]');
-        var targetLanguageElement   = $('select[name="straker_target_language"]');
-        var sourceStoreElement      = $('select[name="magento_source_store"]');
-        var sourceLanguageElement   = $('select[name="straker_source_language"]');
-        var contentTabs             = $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks');
-        var editForm                = $('form#edit_form');
+        'Magento_Ui/js/modal/confirm',
+        'mage/backend/validation',
+        'mage/translate'
+    ], function ( $, confirm ) {
+        //========= variables ==========
+        var saveButton                  = $('#save');
+        var nextButton                  = $('#Next');
+        var resetButton                 = $('#reset');
+        var sourceStoreWrapper          = $('#source-store-wrapper');
+        var destinationStoreElement     = $('select[name="magento_destination_store"]');
+        var destinationLanguageElement  = $('select[name="straker_destination_language"]');
+        var sourceStoreElement          = $('select[name="magento_source_store"]');
+        var sourceLanguageElement       = $('select[name="straker_source_language"]');
+        var tabs                        = $('li[role="tab"]');
+        var contentTabs                 = $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks');
+        var editForm                    = $('form#edit_form');
+        var languagePairSetting         = {};
 
-        //functions
+        //========= functions ==========
         function isEmpty(object) {
             return (
-                typeof object === 'undefined'
-                || object === null
-                || ( typeof object === 'string' && $.trim(object) === '')
-                || ( object instanceof jQuery && typeof object.get(0) === 'undefined' )
+                typeof object === 'undefined' ||
+                object === null ||
+                ( $.isPlainObject(object) && $.isEmptyObject(object) ) ||
+                ( typeof object === 'string' && $.trim(object) === '') ||
+                ( object instanceof jQuery && typeof object.get(0) === 'undefined' )
             );
         }
 
@@ -31,39 +36,68 @@
             return false;
         }
 
-        function triggerValidation() {
-
-            if(!isEmpty(editForm)){
-                editForm.valid();
-            }
-            //it removes the error icon on the first tab if the language pair set properly
-            if(checkLanguageData()){
-                var tabs = $('li[role="tab"]');
-                if(!isEmpty(tabs) && tabs.length > 0 && !isEmpty(tabs[0])){
-                    var cssError = '_error';
-                    var tab = $(tabs[0]);
-                    if(!isEmpty(tab)){
-                        var a = tab.find('a');
-                        if(!isEmpty(a)){
-                            if(a.hasClass(cssError)){
-                                a.removeClass(cssError);
-                            }
+        function removeErrorIconFromTab() {
+            if(!isEmpty(tabs) && tabs.length > 0 && !isEmpty(tabs[0])){
+                var cssError = '_error';
+                var tab = $(tabs[0]);
+                if(!isEmpty(tab)){
+                    var a = tab.find('a');
+                    if(!isEmpty(a)){
+                        if(a.hasClass(cssError)){
+                            a.removeClass(cssError);
                         }
                     }
                 }
             }
         }
 
-        function showSourceStore() {
-            if(!isEmpty(sourceStoreWrapper)){
-                sourceStoreWrapper.show();
+        function enableElement(elem) {
+            if(!isEmpty(elem)) {
+                elem.prop('disabled', false);
             }
         }
 
-        function hideSourceStore() {
-            if(!isEmpty(sourceStoreWrapper)){
-                sourceStoreWrapper.hide();
+        function disableElement(elem) {
+            if(!isEmpty(elem)) {
+                elem.prop('disabled', true);
             }
+        }
+
+        function showElement(elem) {
+            if(!isEmpty(elem)) {
+                elem.show();
+            }
+        }
+
+        function hideElement(elem) {
+            if(!isEmpty(elem)) {
+                elem.hide();
+            }
+        }
+
+        function isFormValid() {
+            var isValid = false;
+
+            if(!isEmpty(editForm)){
+                isValid = editForm.valid();
+            }
+
+            if ( isValid ) {
+                removeErrorIconFromTab();
+                enableElement(nextButton);
+            } else {
+                disableElement(nextButton);
+            }
+
+            return isValid;
+        }
+
+        function showSourceStore() {
+            showElement(sourceStoreWrapper);
+        }
+
+        function hideSourceStore() {
+            hideElement(sourceStoreWrapper);
         }
 
         function showSourceStorePicker(destinationStoreId) {
@@ -73,7 +107,7 @@
                 disableOneOption.apply(sourceStoreElement, [sourceStoreElement, destinationStoreId]);
             }
 
-            targetLanguageElement.val('');
+            destinationLanguageElement.val('');
             sourceStoreElement.val('');
             sourceLanguageElement.val('');
 
@@ -83,22 +117,22 @@
         function hideSourceStorePicker(destinationStoreId, tl, sourceStoreId, sl) {
             hideSourceStore();
 
-            targetStoreElement.val(destinationStoreId);
+            destinationStoreElement.val(destinationStoreId);
             disableOneOption.apply(sourceStoreElement, [sourceStoreElement, destinationStoreId]);
 
-            targetLanguageElement.val(tl);
+            destinationLanguageElement.val(tl);
             disableOneOption.apply(sourceLanguageElement, [sourceLanguageElement, tl]);
 
             sourceStoreElement.val(sourceStoreId);
-            disableOneOption.apply(targetStoreElement, [targetStoreElement, sourceStoreId]);
+            disableOneOption.apply(destinationStoreElement, [destinationStoreElement, sourceStoreId]);
 
             sourceLanguageElement.val(sl);
-            disableOneOption.apply(targetLanguageElement, [targetLanguageElement, sl]);
+            disableOneOption.apply(destinationLanguageElement, [destinationLanguageElement, sl]);
         }
 
         function resetLanguagePairElements() {
-            targetStoreElement.val('');
-            targetLanguageElement.val('');
+            destinationStoreElement.val('');
+            destinationLanguageElement.val('');
             sourceStoreElement.val('');
             sourceLanguageElement.val('');
             enableAllOptions();
@@ -114,8 +148,10 @@
                 //enable disabled options
                 enableOption(selectElement);
                 //disable the option with the same value as ```optionValue```
-                selectElement.find('option[value="' + optionValue + '"]').attr('disabled', true);
-                //turn off error message
+                var option = selectElement.find('option[value="' + optionValue + '"]');
+                if(!isEmpty(option)){
+                    disableElement(option);
+                }
             }
         }
 
@@ -123,16 +159,20 @@
             if(!(element instanceof jQuery)){
                 element = $(element);
             }
-            element.find('option:disabled').prop('disabled', false);
+
+            var option = element.find('option:disabled');
+            if(!isEmpty(option)){
+                enableElement(option);
+            }
         }
 
         function enableAllOptions() {
-            if (!isEmpty(targetStoreElement)) {
-                enableOption(targetStoreElement);
+            if (!isEmpty(destinationStoreElement)) {
+                enableOption(destinationStoreElement);
             }
 
-            if (!isEmpty(targetLanguageElement)) {
-                enableOption(targetLanguageElement);
+            if (!isEmpty(destinationLanguageElement)) {
+                enableOption(destinationLanguageElement);
             }
 
             if (!isEmpty(sourceStoreElement)) {
@@ -146,9 +186,9 @@
 
         function getLanguageData(name = '') {
             var data =  {
-                magento_destination_store: targetStoreElement,
+                magento_destination_store: destinationStoreElement,
                 magento_source_store: sourceStoreElement,
-                straker_target_language: targetLanguageElement,
+                straker_destination_language: destinationLanguageElement,
                 straker_source_language: sourceLanguageElement
             };
 
@@ -161,25 +201,83 @@
             }
         }
 
+        function compareLanguagePairSettings(setting) {
+            var isSame = true;
+            $.each(setting, function (k, v) {
+                if(setting[k] !== languagePairSetting[k]) {
+                    isSame = false;
+                    return isSame;
+                }
+            });
+            return isSame;
+        }
+        
+        function showContentTabs() {
+            contentTabs.show();
+            $('#job_tabs_attachment_products').click();
+        }
+
+        function showConfirm() {
+            var content = $.mage.__('You have previously setup a language pairs that is different from you current setting, do you really want to override previous setting?');
+            confirm({
+                title: 'Please confirm',
+                content: content,
+                actions: {
+                    confirm: showContentTabs
+                }
+            });
+        }
+
+        function getObjectKey(key) {
+            var objKey = '';
+            switch (key) {
+                case 'magento_destination_store':
+                    objKey = 'straker/general/destination_store';
+                    break;
+                case 'straker_destination_language':
+                    objKey = 'straker/general/destination_language';
+                    break;
+                case 'magento_source_store':
+                    objKey = 'straker/general/source_store';
+                    break;
+                case 'straker_source_language':
+                    objKey = 'straker/general/source_language';
+                    break;
+            }
+            return objKey;
+        }
+
         function checkLanguageData() {
             var languageInputs = getLanguageData();
+            var currentLanguagePairSetting = {};
             var emptyCount = 0;
+
             $.each(languageInputs, function (key, element) {
+                var objKey = getObjectKey(key);
+
+                if(!isEmpty(objKey)){
+                    currentLanguagePairSetting[objKey] = element.val();
+                }
+
                 if (element instanceof jQuery && element.val() === '') {
                     emptyCount++;
                 }
             });
 
-
             if (emptyCount > 0) {
-                nextButton.attr('disabled', true);
-                saveButton.attr('disabled', true);
-            } else {
-                nextButton.attr('disabled', false);
+                disableElement(nextButton);
+                disableElement(saveButton);
+                return false;
+            } else if(!isEmpty(languagePairSetting)){
+                var isSame = compareLanguagePairSettings(currentLanguagePairSetting);
+                if(!isSame) {
+                    showConfirm();
+                }else{
+                    return true;
+                }
+            } else{
                 return true;
             }
-            return false;
-
         }
 
         function getStoreData(name = '') {
@@ -209,117 +307,152 @@
             });
 
             if (empty === 4) {
-                if(!isEmpty(saveButton)){
-                    saveButton.attr('disabled', true);
-                }
+                disableElement(saveButton);
             } else {
-                if(!isEmpty(saveButton)){
-                    saveButton.attr('disabled', false);
-                }
+                enableElement(saveButton);
                 return true;
             }
             return false;
 
         }
 
-        (function init() {
-            if (!isEmpty(saveButton)) {
-                saveButton.hide().attr('disabled', true);
-            }
-
-            if (!isEmpty(nextButton)) {
-                nextButton.attr('disabled', true);
-            }
-
-            if (!isEmpty(resetButton)) {
-                resetButton.hide();
-            }
-
-            if (!isEmpty(sourceStoreWrapper)) {
-                sourceStoreWrapper.show();
-            }
-
-            if (!isEmpty(contentTabs)) {
-                contentTabs.hide();
-            }
-        })();
-
-        //============ Event listeners =============
-        //when target store changed
-
-        if (targetStoreElement !== undefined || targetStoreElement !== null) {
-            targetStoreElement.on("change", function () {
-                sourceStoreElement.val('');
-                var destinationStoreId = $(this).val();
-
-                if (destinationStoreId !== '') {
-                    $.ajax({
-                        url: '<?php echo $block->getUrl('EasyTranslationPlatform/Jobs/CheckLanguagePairs') ?>',
-                        data: {
-                            form_key: window.FORM_KEY,
-                            target_store_id: destinationStoreId
-                        },
-                        showLoader: true,
-                        type: 'POST'
-                    }).done(function (response) {
-                        if (response['store-data'] !== undefined) {
-                            var storeData = response['store-data'];
-
-                            var sourceStoreId = '';
-                            var tl = '';
-                            var sl = '';
-
-                            if (!isEmpty(storeData['straker/general/destination_language'])) {
-                                tl = storeData['straker/general/destination_language'];
-                            }
-
-                            if (!isEmpty(storeData['straker/general/source_language'])) {
-                                sl = storeData['straker/general/source_language'];
-                            }
-
-                            if (!isEmpty(storeData['straker/general/source_store'])) {
-                                sourceStoreId = storeData['straker/general/source_store'];
-                            }
-
-                            if (sourceStoreId !== '' && tl !== '' && sl !== '') {
-                                //hide source store picker
-                                hideSourceStorePicker(destinationStoreId, tl, sourceStoreId, sl);
-                            } else {
-                                // show source store picker
-                                showSourceStorePicker(destinationStoreId);
-                            }
-                        }
-                        checkLanguageData();
-                        triggerValidation();
-                    });
-                } else {
-                    resetLanguagePairElements();
-                }
-                triggerValidation();
-            });//end of targetStoreElement.on("change" ...
-        }//end of if ( targetStoreElement !== undefined || targetStoreElement !== null)
-
-        //when target language changed
-        if (!isEmpty(targetLanguageElement)) {
-            targetLanguageElement.on('change', function () {
-                disableOneOption.apply(this, [sourceLanguageElement, $(this).val()]);
-                triggerValidation();
-            })
+        function accessLanguageTab(){
+            showElement(nextButton);
+            hideElement(saveButton);
+            hideElement(resetButton);
         }
 
-        //when source store changed
-        if(!isEmpty(sourceStoreElement)){
-            sourceStoreElement.on("change", function () {
-                disableOneOption.apply(this, [targetStoreElement, $(this).val()]);
-                triggerValidation();
+        function accessOtherTab() {
+            hideElement(nextButton);
+            showElement(saveButton);
+            showElement(resetButton);
+        }
+
+        (function init() {
+            disableElement(saveButton);
+            disableElement(nextButton);
+            accessLanguageTab();
+            showElement(sourceStoreWrapper);
+            hideElement(contentTabs);
+        })();
+
+        function getLanguagePairSetting() {
+            var destinationStoreId = '';
+
+            if( !isEmpty(sourceStoreElement) ) {
+                sourceStoreElement.val('');
+            }
+
+            if( !isEmpty(destinationStoreElement) ) {
+                destinationStoreId = destinationStoreElement.val();
+            }
+
+            if (destinationStoreId !== '') {
+                $.ajax({
+                    url: '<?php echo $block->getUrl('EasyTranslationPlatform/Jobs/CheckLanguagePairs') ?>',
+                    data: {
+                        form_key: window.FORM_KEY,
+                        target_store_id: destinationStoreId
+                    },
+                    showLoader: true,
+                    type: 'POST'
+                }).done(function (response) {
+                    if (response['store-data'] !== undefined) {
+                        var storeData = response['store-data'];
+                        var sourceStoreId = '';
+                        var tl = '';
+                        var sl = '';
+
+                        if (!isEmpty(storeData['straker/general/destination_language'])) {
+                            tl = storeData['straker/general/destination_language'];
+                        }
+
+                        if (!isEmpty(storeData['straker/general/source_language'])) {
+                            sl = storeData['straker/general/source_language'];
+                        }
+
+                        if (!isEmpty(storeData['straker/general/source_store'])) {
+                            sourceStoreId = storeData['straker/general/source_store'];
+                        }
+
+                        if (sourceStoreId !== '' && tl !== '' && sl !== '') {
+                            languagePairSetting = storeData;
+                            languagePairSetting['straker/general/destination_store'] = destinationStoreId;
+                            //hide source store picker
+                            hideSourceStorePicker(destinationStoreId, tl, sourceStoreId, sl);
+                        } else {
+                            languagePairSetting = {};
+                            // show source store picker
+                            showSourceStorePicker(destinationStoreId);
+                        }
+                    }
+                    isFormValid();
+                });
+            } else {
+                resetLanguagePairElements();
+            }
+        }
+
+        //============ Event listeners =============
+        if(!isEmpty(tabs)){
+            tabs.on('click', 'a', function () {
+                if(this.id === 'job_tabs_select_destination'){
+                    accessLanguageTab();
+                }else{
+                    accessOtherTab();
+                }
             });
         }
 
-        //when source language changed
-        if (!isEmpty(sourceLanguageElement)) {
-            sourceLanguageElement.on('change', function () {
-                disableOneOption.apply(this, [targetLanguageElement, $(this).val()]);
-                triggerValidation();
+        if(!isEmpty(nextButton)){
+            nextButton.on("click", function (e) {
+                e.preventDefault();
+                if(!checkLanguageData()){
+                    isFormValid();
+                    return stopEvent(e);
+                }
+                showContentTabs();
+            });
+        }
+
+        if(!isEmpty(editForm)){
+            //when language & store changes
+            editForm.on("change", "select", function (e) {
+                var targetObj = $(e.target);
+                if(!isEmpty(targetObj)){
+                    var id = targetObj.prop('id');
+                    switch(id){
+                        case 'magento_destination_store':
+                            getLanguagePairSetting();
+                            break;
+                        case 'straker_destination_language':
+                            disableOneOption.apply(this, [sourceLanguageElement, targetObj.val()]);
+                            break;
+                        case 'magento_source_store':
+                            disableOneOption.apply(this, [destinationStoreElement, targetObj.val()]);
+                            break;
+                        case 'straker_source_language':
+                            disableOneOption.apply(this, [destinationLanguageElement, targetObj.val()]);
+                            break;
+                    }
+                }
+                isFormValid();
+            });
+
+            //when job content (products, categories, cms pages and cms blocks) checked
+            editForm.on("click", "input", function () {
+                checkStoreData();
+            });
+
+        }
+
+        if (!isEmpty(saveButton)) {
+            saveButton.on("click", function (e) {
+                if(!checkStoreData()){
+                    return stopEvent(e);
+                }
+                $('body').trigger('processStart');
+                disableElement($(this));
             });
         }
 
@@ -327,8 +460,8 @@
             var destination_store_id;
             var source_store_id;
 
-            if(!isEmpty(targetStoreElement)){
-                destination_store_id = targetStoreElement.val();
+            if(!isEmpty(destinationStoreElement)){
+                destination_store_id = destinationStoreElement.val();
             }
 
             if(!isEmpty(sourceStoreElement)){
@@ -352,45 +485,5 @@
                 settings.data = settings.data + '&source_store_id=' + source_store_id + '&target_store_id=' + destination_store_id;
             }
         });
-
-
-        if(!isEmpty(nextButton)){
-            nextButton.on("click", function (e) {
-                e.preventDefault();
-                if(!checkLanguageData()){
-                    triggerValidation();
-                    return stopEvent(e);
-                }
-                contentTabs.show();
-                $('#job_tabs_attachment_products').click();
-                $('#save').show();
-                $('#reset').show();
-                $(this).hide();
-            });
-        }
-
-        if(!isEmpty(editForm)){
-            editForm.on("change", "select", function () {
-                if(checkLanguageData()){
-                    if(!isEmpty(nextButton)) {
-                        nextButton.attr('disabled', false);
-                    }
-                }
-            });
-            editForm.on("click", "input", function (e) {
-                checkStoreData();
-            });
-
-        }
-
-        if (!isEmpty(saveButton)) {
-            saveButton.on("click", function (e) {
-                if(!checkStoreData()){
-                    return stopEvent(e);
-                }
-                $('body').trigger('processStart');
-                $(this).attr('disabled', true);
-            });
-        }
     });
 </script>

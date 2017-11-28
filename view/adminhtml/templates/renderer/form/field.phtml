@@ -53,7 +53,7 @@
             <span>Language</span>
         </label>
         <div class="control">
-            <select name="straker_target_language" id="source-language" class="select admin__control-select" style="display:none">
+            <select name="straker_destination_language" id="source-language" class="select admin__control-select" style="display:none">
                 <option value=""><?php echo __('Select target language') ?></option>
                 <?php foreach ($block->getOptions() as $languages): ?>
                     <option value="<?php echo $languages->code ?>">

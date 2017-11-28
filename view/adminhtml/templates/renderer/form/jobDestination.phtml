@@ -15,17 +15,16 @@
             <select id="magento_destination_store" name="magento_destination_store" class="required-entry admin__control-select">
                 <?php echo $block->listStores('Pick a store view', true); ?>
             </select>
-<!--            <div class="note required magento_destination_store">--><?php //echo __('Please fill out this field.')?><!--</div>-->
             <div class="note"><?php echo __('Translations will be imported into this store')?></div>
         </div>
     </div>
 
     <div class="field">
-        <label class="label" for="straker_target_language">
+        <label class="label" for="straker_destination_language">
             <span><?php echo __('Target Language') ?></span>
         </label>
         <div class="control">
-            <select  id="straker_target_language" name="straker_target_language" class="required-entry admin__control-select">
+            <select  id="straker_destination_language" name="straker_destination_language" class="required-entry admin__control-select">
                 <option value=""><?php echo __('Select target language') ?></option>
                 <?php foreach ($block->getOptions() as $languages): ?>
                     <option value="<?php echo $languages->code ?>">
@@ -33,7 +32,6 @@
                     </option>
                 <?php endforeach; ?>
             </select>
-<!--            <div class="note required straker_target_language">--><?php //echo __(' Please fill out this field.')?><!--</div>-->
             <div class="note"><?php echo __('The target language is the language of the destination store')?></div>
         </div>
     </div>
@@ -52,7 +50,6 @@
             <select id="magento_source_store" name="magento_source_store" class="required-entry admin__control-select">
                 <?php echo $block->listStores('Pick a source store view'); ?>
             </select>
-<!--            <div class="note required magento_source_store">--><?php //echo __('Please fill out this field.')?><!--</div>-->
             <div class="note"><?php echo __('Content will be selected from this store view for translation')?></div>
         </div>
     </div>
@@ -70,7 +67,6 @@
                     </option>
                 <?php endforeach; ?>
             </select>
-<!--            <div class="note required straker_source_language">--><?php //echo __('Please fill out this field.')?><!--</div>-->
             <div class="note"><?php echo __('The source language is the language of the source store')?></div>
         </div>
     </div>

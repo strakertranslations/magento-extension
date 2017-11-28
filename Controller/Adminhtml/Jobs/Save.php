@@ -47,7 +47,7 @@ class Save extends Action
     ];
 
     protected $_storeConfigKeys = [
-        'magento_destination_store','straker_target_language','magento_source_store','straker_source_language'
+        'magento_destination_store','straker_destination_language','magento_source_store','straker_source_language'
     ];
 
 
@@ -200,7 +200,7 @@ class Save extends Action
                     $data['magento_destination_store'],
                     $data['magento_source_store'],
                     $data['straker_source_language'],
-                    $data['straker_target_language']
+                    $data['straker_destination_language']
                 );
             } catch (LocalizedException $e) {
                 $this->messageManager->addError($e->getMessage());
@@ -236,22 +236,22 @@ class Save extends Action
 
             $response = $this->_api->callTranslate($this->_jobRequest);
 
-            foreach ($job_object as $job) {
-                $job->addData(['job_key'=>$response->job_key]);
-                $job->setData('sl', $this->_api->getLanguageName($job->getData('sl')));
-                $job->setData('tl', $this->_api->getLanguageName($job->getData('tl')));
-                $job->setData('source_file', $sourceFile);
-                $job->save();
-            }
+            if(key_exists('success', $response) && $response->success){
+                foreach ($job_object as $job) {
+                    $job->addData(['job_key'=>$response->job_key]);
+                    $job->setData('sl', $this->_api->getLanguageName($job->getData('sl')));
+                    $job->setData('tl', $this->_api->getLanguageName($job->getData('tl')));
+                    $job->setData('source_file', $sourceFile);
+                    $job->save();
+                }
 
-            if(!$this->_configHelper->isSandboxMode()){
-
-                $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
-
-            }else{
-
-                $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations'));
-
+                if(!$this->_configHelper->isSandboxMode()){
+                    $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations to be quoted.'));
+                }else{
+                    $this->messageManager->addSuccess(__('Your job was successfully sent to Straker Translations'));
+                }
+            }else {
+                $this->messageManager->addErrorMessage(__($response->message));
             }
 
         } catch (Exception $e) {
