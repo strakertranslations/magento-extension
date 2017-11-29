@@ -244,10 +244,11 @@ class ProductHelper extends AbstractHelper
             });
 
             $productAttributeData[] = [
-                'product_id'=>$product->getId(),
-                'product_name'=>$product->getName(),
-                'product_url'=>$product->setStoreId($this->_storeId)->getUrlInStore(),
-                'attributes'=>$attributeData
+                'product_id'    =>  $product->getId(),
+                'product_name'  =>  $product->getName(),
+                'product_url'   =>  $product->setStoreId($this->_storeId)->getUrlInStore(),
+                'product_type'  =>  $product->getTypeId(),
+                'attributes'    =>  $attributeData
             ];
         }
 
@@ -264,16 +265,23 @@ class ProductHelper extends AbstractHelper
     {
 
         $this->_xmlHelper->create('_'.$jobModel->getId().'_'.time());
+        $this->addSummaryNode();
 
         $collection = $this->_attributeTranslationsCollectionFactory;
-
         $attribute_option_table = $collection->getTable('straker_attribute_option_translation');
-
-        $collection->getSelect()->joinLeft(
-            ['att_option'=>$attribute_option_table],
-            'main_table.attribute_translation_id=att_option.attribute_translation_id',
-            ['att_option.attribute_option_translation_id as optionTranslationId','att_option.option_id as mgOptionId','att_option.original_value as optionValue']
-        )->where('main_table.job_id='.$jobModel->getId().'');
+        $collection
+            ->getSelect()
+            ->joinLeft(
+                ['att_option'=>$attribute_option_table],
+                'main_table.attribute_translation_id=att_option.attribute_translation_id',
+                [
+                    'att_option.attribute_option_translation_id as optionTranslationId',
+                    'att_option.option_id as mgOptionId',
+                    'att_option.original_value as optionValue'
+                ]
+            )->where(
+                'main_table.job_id='.$jobModel->getId().''
+            );
 
         $this->appendProductAttributes(
             $collection->getData(),
@@ -285,18 +293,17 @@ class ProductHelper extends AbstractHelper
         );
 
         $this->_xmlHelper->saveXmlFile();
-
         return $this->_xmlHelper->getXmlFileName();
     }
 
     /**
-     * @param $productData
+     * @param $xmlData
      * @param $job_id
      * @param $jobType_id
      * @param $source_store_id
      * @param $target_store_id
      * @param $xmlHelper
-     * @return bool
+     * @return $this
      */
     protected function appendProductAttributes(
         $xmlData,
@@ -437,10 +444,9 @@ class ProductHelper extends AbstractHelper
     }
 
     /**
-     * @param $option_values
-     * @param $attribute_translation_id
-     * @param $product_key
-     * @param $attribute_key
+     * @param $optionData
+     * @param $job_id
+     * @return $this
      */
     protected function saveOptionValues(
         $optionData,
@@ -529,5 +535,19 @@ class ProductHelper extends AbstractHelper
             }
         }
         return $children;
+    }
+
+    public function addSummaryNode()
+    {
+        $productArray = [];
+        foreach($this->_productData as $productData){
+            if(key_exists($productData['product_type'], $productArray)){
+                $productArray[$productData['product_type']] += 1;
+            }else{
+                $productArray[$productData['product_type']] = 1;
+            }
+        }
+        $summaryArray['product'] = $productArray;
+        $this->_xmlHelper->addContentSummary($summaryArray);
     }
 }

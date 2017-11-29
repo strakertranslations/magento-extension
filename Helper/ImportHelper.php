@@ -154,7 +154,7 @@ class ImportHelper extends AbstractHelper
 
             $parsedData = $this->_xmlParser->load($filePath)->xmlToArray();
 
-            $dataArray = $parsedData['root']['data'];
+            $dataArray = key_exists('data', $parsedData['root']) ? $parsedData['root']['data'] : $parsedData['root']['_value']['data'];
 
             if(key_exists('_value', $dataArray)){
 
@@ -162,7 +162,7 @@ class ImportHelper extends AbstractHelper
 
             }else{
 
-                $this->_parsedFileData = $parsedData['root']['data'];
+                $this->_parsedFileData = $dataArray;
             }
 
             $this->_categoryData = array_filter($this->_parsedFileData, function ($v) {

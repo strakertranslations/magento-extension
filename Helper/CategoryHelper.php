@@ -168,6 +168,7 @@ class CategoryHelper extends AbstractHelper
     public function generateCategoryXML($jobModel)
     {
         $this->_xmlHelper->create('_'.$jobModel->getId().'_'.time());
+        $this->addSummaryNode();
 
         $this->appendCategoryAttributes(
             $this->_categoryData,
@@ -264,5 +265,11 @@ class CategoryHelper extends AbstractHelper
         }
 
         return $this;
+    }
+
+    public function addSummaryNode()
+    {
+        $summaryArray['category'] = count($this->_categoryData);
+        $this->_xmlHelper->addContentSummary($summaryArray);
     }
 }

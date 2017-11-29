@@ -142,6 +142,8 @@ class BlockHelper extends AbstractHelper
     {
         $this->_xmlHelper->create('_'.$jobModel->getId().'_'.time());
 
+        $this->addSummaryNode();
+
         $this->appendBlockAttributes(
             $this->_blockData,
             $jobModel->getId(),
@@ -242,5 +244,11 @@ class BlockHelper extends AbstractHelper
         }
 
         return $this;
+    }
+
+    public function addSummaryNode()
+    {
+        $summaryArray['cms_block'] = count($this->_blockData);
+        $this->_xmlHelper->addContentSummary($summaryArray);
     }
 }

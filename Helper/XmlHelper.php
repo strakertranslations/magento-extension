@@ -59,7 +59,7 @@ class XmlHelper extends AbstractHelper
      * @param bool $showAppInfo
      * @return bool|\DOMElement
      */
-    public function create($jobId, $showAppInfo = false)
+    public function create($jobId)
     {
         $this->_dom->version = $this->getVersion();
         $this->_dom->encoding = $this->getEncoding();
@@ -84,30 +84,54 @@ class XmlHelper extends AbstractHelper
 
         $this->_root = $this->_dom->createElement('root');
 
-        if($showAppInfo){
-            //add app name
-            $this->addAppInfoToRoot();
-        }
-
         return true;
     }
 
-    function addAppInfoToRoot(){
+    function getAppInfo(){
+        $appInfo = [];
+
         if(!empty($this->_root)){
-            $this->_root->setAttribute('app_name', 'magento2');
+            $appInfo['name'] = 'magento2';
 
             //add magento version
             $appVersion = $this->_configHelper->getMagentoVersion();
             if($appVersion !== ''){
-                $this->_root->setAttribute('app_ver', $appVersion);
+                $appInfo['ver'] = $appVersion;
             }
 
             //add module version
             $strakerModuleVersion = $this->_configHelper->getModuleVersion();
             if($strakerModuleVersion !== ''){
-                $this->_root->setAttribute('straker_ver', $this->_configHelper->getModuleVersion());
+                $appInfo['straker_ver'] = $strakerModuleVersion;
             }
         }
+        return $appInfo;
+    }
+
+    function addContentSummary($nodeData, $showAppInfo = false){
+        $summaryNode = $this->_dom->createElement('summary');
+        $summaryValue = [];
+
+        if($showAppInfo){
+            $summaryValue['app_info']  = $this->getAppInfo();
+        }
+
+        $contentData = [];
+        foreach($nodeData as $key => $value){
+            $contentData[$key] = $value;
+        }
+
+        if($showAppInfo){
+            $summaryValue['content'] = $contentData;
+        }else{
+            $summaryValue = $contentData;
+        }
+
+        $summaryValue = json_encode($summaryValue);
+        $summaryNode->nodeValue = $summaryValue;
+        $firstNode = $this->_root->firstChild;
+        $this->_root->insertBefore($summaryNode, $firstNode);
+        return $summaryValue;
     }
 
     /**
@@ -212,6 +236,10 @@ class XmlHelper extends AbstractHelper
     public function getRoot()
     {
         return $this->_root;
+    }
+
+    public function getDom(){
+        return $this->_dom;
     }
 
     /**

@@ -144,6 +144,8 @@ class PageHelper extends AbstractHelper
     {
         $this->_xmlHelper->create('_'.$jobModel->getId().'_'.time());
 
+        $this->addSummaryNode();
+
         $this->appendPageAttributes(
             $this->_pageData,
             $jobModel->getId(),
@@ -241,5 +243,11 @@ class PageHelper extends AbstractHelper
         }
 
         return $this;
+    }
+
+    public function addSummaryNode()
+    {
+        $summaryArray['cms_page'] = count($this->_pageData);
+        $this->_xmlHelper->addContentSummary($summaryArray);
     }
 }

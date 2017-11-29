@@ -216,11 +216,11 @@ class Save extends Action
      */
     protected function _summitJob($job_object)
     {
-        $sourceFile = $this->mergeJobData($job_object);
-
+        $mergeResult    = $this->mergeJobData($job_object);
+        $sourceFile     = $mergeResult['filename'];
+        $summary        = $mergeResult['summary'];
         $strakerJobData = current($job_object);
-
-        $defaultTitle = $strakerJobData->getData('sl').'_'.$strakerJobData->getData('tl').'_'.$strakerJobData->getData('source_store_id').'_'.$strakerJobData->getData('job_id');
+        $defaultTitle   = $strakerJobData->getData('sl').'_'.$strakerJobData->getData('tl').'_'.$strakerJobData->getData('source_store_id').'_'.$strakerJobData->getData('job_id');
 
         $strakerJobData->setData('title', $defaultTitle);
 
@@ -229,6 +229,10 @@ class Save extends Action
         $this->_jobRequest['tl']          = $strakerJobData->getTl();
         $this->_jobRequest['source_file'] = $sourceFile;
         $this->_jobRequest['token']       = $strakerJobData->getId();
+
+        if(!empty($summary)){
+            $this->_jobRequest['summary'] = $summary;
+        }
 
         $response = '';
 
@@ -275,31 +279,65 @@ class Save extends Action
                 $id.=  $data->getData('job_id').'&';
             }
 
-            $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time(), true);
+            $this->_xmlHelper->create('_'.rtrim($id, "&").'_'.time());
+
+            $summary = [];
 
             foreach ($jobMergeData as $file) {
 
-                $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
+//                $fileData = $this->_xmlParser->load($file['file_name'])->xmlToArray();
+                $xmlData = $this->_xmlParser->load($file['file_name'])->getDom();
 
-                if(key_exists('root', $fileData)){
-                    if(key_exists('_value', $fileData['root']['data'])){
-                        $singleData = $fileData['root']['data'];
-                        $fileData['root']['data'] = [];
-                        $fileData['root']['data'][] = $singleData;
-                    }
-
-                    foreach ($fileData['root']['data'] as $data) {
-                        if(!key_exists('_value', $data) || !key_exists('_attribute', $data)){
-                            continue;
+                //merge summary node
+                $summaryNode = $xmlData->getElementsByTagName('summary')->item(0);
+                if($summaryNode){
+                    $summaryValue = $summaryNode->nodeValue;
+                    if($summaryValue){
+                        $summaryValue = json_decode($summaryValue);
+                        foreach($summaryValue as $key => $value){
+                            $summary[$key] = $value;
                         }
-                        $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
-                        $this->_xmlHelper->appendDataToRoot($mergeData);
                     }
                 }
+                $dataNodes = $xmlData->getElementsByTagName('data');
+                if(!empty($dataNodes)){
+                    for($i = 0; $i < $dataNodes->length; $i++){
+                        $dataNode = $dataNodes->item($i);
+                        if(!empty($dataNode)){
+                            $dataNode = $this->_xmlHelper->getDom()->importNode($dataNode, true);
+                            $this->_xmlHelper->getRoot()->appendChild($dataNode);
+                        }
+
+                    }
+                }
+//                for($i = 0; $i < $dataNodes->length; $i++){
+//                    $dataNode = $dataNodes->item($i);
+//
+//                }
+//
+//                if(key_exists('root', $fileData)){
+//                    if(key_exists('_value', $fileData['root']['data'])){
+//                        $singleData = $fileData['root']['data'];
+//                        $fileData['root']['data'] = [];
+//                        $fileData['root']['data'][] = $singleData;
+//                    }
+//
+//                    foreach ($fileData['root']['data'] as $data) {
+//                        if(!key_exists('_value', $data) || !key_exists('_attribute', $data)){
+//                            continue;
+//                        }
+//                        $mergeData = array_merge_recursive($data['_value'], $data['_attribute']);
+//                        $this->_xmlHelper->appendDataToRoot($mergeData);
+//                    }
+//                }
+            }
+
+            if(!empty($summary)){
+                $summary = $this->_xmlHelper->addContentSummary($summary, true);
             }
 
             $this->_xmlHelper->saveXmlFile();
-            return $this->_xmlHelper->getXmlFileName();
+            return ['filename' => $this->_xmlHelper->getXmlFileName(), 'summary' => json_encode($summary)];
 
         }catch (Exception $e){
             $this->_logger->error('error '.__FILE__.' '.__LINE__.''.$e->getMessage(), [$e]);
