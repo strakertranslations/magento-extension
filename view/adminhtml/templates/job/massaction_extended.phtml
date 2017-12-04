@@ -153,6 +153,48 @@
             this.blur();
         });
 
+        var triggerHiddenInputChange = function () {
+            jQuery('input[type="hidden"]').trigger('change');
+        };
+
+        varienGridMassaction.prototype.selectAll = function () {
+            this.setCheckedValues((this.useSelectAll ? this.getGridIds() : this.getCheckboxesValuesAsString()));
+            this.checkCheckboxes();
+            this.updateCount();
+            this.clearLastChecked();
+            triggerHiddenInputChange();
+            return false;
+        };
+
+        varienGridMassaction.prototype.unselectAll = function() {
+            this.setCheckedValues('');
+            this.checkCheckboxes();
+            this.updateCount();
+            this.clearLastChecked();
+            triggerHiddenInputChange();
+            return false;
+        };
+
+        varienGridMassaction.prototype.selectVisible = function() {
+            this.setCheckedValues(this.getCheckboxesValuesAsString());
+            this.checkCheckboxes();
+            this.updateCount();
+            this.clearLastChecked();
+            triggerHiddenInputChange();
+            return false;
+        };
+
+        varienGridMassaction.prototype.unselectVisible = function() {
+            this.getCheckboxesValues().each(function(key){
+                this.checkedString = varienStringArray.remove(key, this.checkedString);
+            }.bind(this));
+            this.checkCheckboxes();
+            this.updateCount();
+            this.clearLastChecked();
+            triggerHiddenInputChange();
+            return false;
+        };
+
         varienGridMassaction.prototype.onGridRowClick = function(grid, evt) {
             var that = grid.massaction;
             var tdElement = Event.findElement(evt, 'td');

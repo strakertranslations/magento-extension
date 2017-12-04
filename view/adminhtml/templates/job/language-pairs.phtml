@@ -18,6 +18,7 @@
         var contentTabs                 = $('#job_tabs_attachment_products,#job_tabs_categories,#job_tabs_cms_pages,#job_tabs_cms_blocks');
         var editForm                    = $('form#edit_form');
         var languagePairSetting         = {};
+        var hiddenInputs                = ['products','pages','blocks']; //not include 'categories', it is not a mass action
 
         //========= functions ==========
         function isEmpty(object) {
@@ -223,7 +224,7 @@
                 title: 'Please confirm',
                 content: content,
                 actions: {
-                    confirm: showContentTabs
+                    confirm: showSourceStore //showContentTabs
                 }
             });
         }
@@ -270,7 +271,7 @@
                 return false;
             } else if(!isEmpty(languagePairSetting)){
                 var isSame = compareLanguagePairSettings(currentLanguagePairSetting);
-                if(!isSame) {
+                if(!isSame && sourceStoreWrapper.is(':hidden')) {
                     showConfirm();
                 }else{
                     return true;
@@ -320,12 +321,14 @@
             showElement(nextButton);
             hideElement(saveButton);
             hideElement(resetButton);
+            hideElement(contentTabs);
         }
 
         function accessOtherTab() {
             hideElement(nextButton);
             showElement(saveButton);
             showElement(resetButton);
+            showElement(contentTabs);
         }
 
         (function init() {
@@ -333,7 +336,6 @@
             disableElement(nextButton);
             accessLanguageTab();
             showElement(sourceStoreWrapper);
-            hideElement(contentTabs);
         })();
 
         function getLanguagePairSetting() {
@@ -435,16 +437,26 @@
                             disableOneOption.apply(this, [destinationLanguageElement, targetObj.val()]);
                             break;
                     }
+
+
                 }
                 isFormValid();
             });
 
             //when job content (products, categories, cms pages and cms blocks) checked
-            editForm.on("click", "input", function () {
-                checkStoreData();
-            });
+            editForm.on('click', 'input', function () {
+//                checkStoreData();
+                $('input[type="hidden"]').trigger('change');
 
+            });
         }
+
+        $('input[type="hidden"]').change(function () {
+            var name = $(this).prop('name');
+            if($.inArray(name, hiddenInputs)){
+                checkStoreData();
+            }
+        });
 
         if (!isEmpty(saveButton)) {
             saveButton.on("click", function (e) {
