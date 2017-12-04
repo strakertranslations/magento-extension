@@ -91,12 +91,13 @@ class XmlHelper extends AbstractHelper
         $appInfo = [];
 
         if(!empty($this->_root)){
-            $appInfo['name'] = 'magento2';
+            $appInfo['app_name'] = 'magento2';
+            $appInfo['php_version'] = phpversion();
 
             //add magento version
             $appVersion = $this->_configHelper->getMagentoVersion();
             if($appVersion !== ''){
-                $appInfo['ver'] = $appVersion;
+                $appInfo['app_ver'] = $appVersion;
             }
 
             //add module version
