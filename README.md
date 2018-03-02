@@ -12,15 +12,47 @@ Our plugin provides the full round-trip experience – from receiving a quote, t
 
 Straker Translations combines high-quality human translation services with top level automati##on of workflow processes. 
 
-## Features List#
+## Features List
 
 - Translate content & metadata (CMS Pages & Static Blocks for Magento CE, products, categories, & attributes)
 - Multiple source and target stores and language options
 - Flexible product detail translation options
 
-## Magento Enterprise Edition 
+## Installation
 
-To install the extension on Magento Enterprise Edition, download the Zip of the extension from our website. 
+We are still in the process of listing on the Magento Marketplace.
+Please follow the instructions below to install the extension manually.
+
+
+Step 1: Extract the ZIP file locally and inspect the contents.
+The first step is to extract all files contained within the ZIP file to your local computer.
+
+- app/code/community/StrakerTranslations
+- app/design/adminhtml/default/straker
+- app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
+- js/straker/translations.js
+- skin/adminhtml/default/straker
+
+
+If you check these folders of the Magento filesystem, you can notice that Magento already contains these folders. We can copy all the files and folders recursively to Magento, so that for instance the new file StrakerTranslations_EasyTranslationPlatform.xml is copied to the existing folder app/etc/modules.
+
+
+Step 2: Uploading all files to the Magento filesystem
+
+Now you're ready to upload all files to the Magento root by using like SSH or FTP.
+
+
+Step 3: Refresh the Magento cache
+
+The next step is to refresh the Magento cache. This can be done through the Magento backend.
+After refreshing the Magento cache, you can see the Straker Translation on the main menu.
+
+
+Step 4: Logout from the Magento backend
+
+This step is optional. Logout from the Magento backend. This makes you loose your PHP session. Next, login again.
+
+
 
 ## Help 
 
