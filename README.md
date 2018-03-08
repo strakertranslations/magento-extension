@@ -18,9 +18,8 @@ Straker Translations combines high-quality human translation services with top l
 - Multiple source and target stores and language options
 - Flexible product detail translation options
 
-## Installation
+## Manual Installation
 
-We are still in the process of listing on the Magento Marketplace.
 Please follow the instructions below to install the extension manually.
 
 
@@ -56,7 +55,7 @@ This step is optional. Logout from the Magento backend. This makes you loose you
 
 ## Help 
 
-Need a little help using our extension? Visit our help site. 
+Need a little help using our extension? [Visit our help site](https://help.strakertranslations.com). 
 
 ## About Straker Translations 
 
