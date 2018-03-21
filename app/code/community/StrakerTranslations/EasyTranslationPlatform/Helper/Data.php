@@ -29,7 +29,7 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Data extends Mage_Core_
         $sourceStore = Mage::getModel('core/store')->load($config['source']);
         $sourceText = $sourceStore->getFrontendName().' ('.$sourceStore->getName().')';
 
-        return $sourceText . ' > ' . $destinationText;
+        return $sourceText . '&nbsp;&gt;&nbsp;' . $destinationText;
     }
 
     public function getCmsCreatedMessage(){

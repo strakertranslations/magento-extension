@@ -35,6 +35,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
         if ($collection->count() > 1){
             /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $job */
             $job = Mage::getModel('strakertranslations_easytranslationplatform/job');
+            //get all translated jobs from straker
             $response = $job->bulkUpdateTranslation();
             if ( $response ) {
                 /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $jobModel */

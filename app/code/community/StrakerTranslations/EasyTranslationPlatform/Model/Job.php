@@ -841,31 +841,36 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         $jobStatusId = $this->_getStatusId($job->status);
 
         if ($jobStatusId && $job->status <> $this->getStatusName()) {
-            $this->setStatusId($jobStatusId)->save();
+            $this->_setStatusId($jobStatusId);
             $updateFlag = true;
         }
 
         if ($job->tj_number && $job->tj_number <> $this->getTjNumber()) {
-            $this->setTjNumber($job->tj_number)->save();
+            $this->setTjNumber($job->tj_number);
             $updateFlag = true;
         }
 
         if ($job->workflow && $job->workflow <> $this->getWorkFlow()) {
-            $this->setWorkFlow($job->workflow)->save();
+            $this->setWorkFlow($job->workflow);
             $updateFlag = true;
         }
 
         if ($job->quotation && $job->quotation <> $this->getQuote()) {
-            $this->setQuote($job->quotation)->save();
+            $this->setQuote($job->quotation);
             $updateFlag = true;
         }
+
         foreach ($job->translated_file as $file) {
-            if ($file->download_url && !$this->getDownloadUrl()) {
-                $this->setDownloadUrl($file->download_url)->save();
+            if ($file->download_url) {
+                if (!$this->getDownloadUrl()) {
+                    $this->setDownloadUrl($file->download_url);
+                }
                 $result = $this->_importTranslation();
                 $updateFlag = $result === false ? false : true;
             }
         }
+
+        $this->save();
         return $updateFlag;
     }
 
@@ -916,7 +921,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
                 }
 
                 $_entityTranslation = Mage::getModel('strakertranslations_easytranslationplatform/' . $this->_getType() . '_translate')->load($content_id);
-                $_entityTranslation->setTranslate($value);
+                $_entityTranslation->setTranslate(trim($value));
                 $_entityTranslation->save();
                 $_entityTranslation->clearInstance();
             }
@@ -1127,6 +1132,20 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         return Mage::getSingleton('core/resource')->getConnection('core_write');
     }
 
+    /**
+     * reset job status for reimport
+     */
+    public function resetJobStatus(){
+        //set status to 'IN_PROGRESS'
+        $this->_setStatusId(3);
+        //set published status to null
+        $writeConnection = $this->getWriteAdapter();
+        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
+        $jobType = $this->_getType(); //product, category, cms_page ...
+        $cmsTableName = in_array($jobType, array('cms_block', 'cms_page')) ? str_replace('_', '', $jobType) : $jobType; //convert to product, category, cmspage and cmsblock
+        $writeConnection->update($prefix . 'straker_job_' . $cmsTableName, array('version' => null), "job_id = {$this->getId()}");
+    }
+
     public function _getStoreOptionArray(){
         $data = [];
         $stores = Mage::getModel('core/store')->getCollection()->getData();
@@ -1148,5 +1167,13 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Model_Api */
         $helper = Mage::getModel('strakertranslations_easytranslationplatform/api');
         return $helper->_getLanguageName($languages);
+    }
+
+    public function _setStatusId($statusId){
+        $this->setStatusId($statusId);
+        /** @var  $stausModel StrakerTranslations_EasyTranslationPlatform_Model_Job_Status */
+        $stausModel = Mage::getModel('strakertranslations_easytranslationplatform/job_status')->load($statusId);
+        $this->setStatusName($stausModel->getStatusName());
+        $this->save();
     }
 }

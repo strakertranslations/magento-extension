@@ -13,6 +13,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product ex
     {
         $jobId = $this->getRequest()->getParam('job_id');
         $jobStatus = $this->getJob()->getStatusId();
+
         if ( $jobStatus == '4'){
             $this->_addButton('publish', array(
                 'label'   => Mage::helper('catalog')->__('Publish All Translations'),
@@ -27,8 +28,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Product ex
                 'onclick' => "setLocation('{$this->getUrl('*/*/exportProductsCsv',array('job_id'=>$jobId))}')",
                 'class'   => 'task'
             ));
-         }
-        
+        }
+
+        if ( $jobStatus == '4' || $jobStatus == '5') {
+            $this->_addButton('reimport', array(
+                'label'   => Mage::helper('catalog')->__('Reimport Translations'),
+                'onclick' => "setLocation('{$this->getUrl('*/*/reimport',array('job_id'=>$jobId))}')",
+                'class'   => 'task'
+            ));
+        }
 
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_job_product_grid', 'job_product.grid'));
         $this->getChild('grid')->setStatusId($jobStatus);
