@@ -14,7 +14,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_C
     protected function _prepareLayout()
     {
         $this->_addButton('submit', array(
-            'label'   => Mage::helper('catalog')->__('Submit'),
+            'label'   => $this->__('Submit'),
             'onclick' => "$('submit-new-job-form').submit();",
             'class'   => 'task'
         ));

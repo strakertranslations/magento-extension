@@ -23,7 +23,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid
     {
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumnAfter('straker_translated', array(
-                'header'    => Mage::helper('strakertranslations_easytranslationplatform')->__('Created by Straker'),
+                'header'    => $this->__('Created by Straker'),
                 'type'      => 'options',
                 'options'   => array('0' => 'No', '1' => 'Yes'),
                 'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_StrakerTranslated',
