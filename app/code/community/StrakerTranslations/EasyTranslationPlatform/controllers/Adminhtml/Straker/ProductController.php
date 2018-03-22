@@ -212,24 +212,12 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
     }
 
     public function reimportAction(){
-        $success = false;
         $jobId = $this->getRequest()->getParam('job_id');
 
         /** @var  $jobModel StrakerTranslations_EasyTranslationPlatform_Model_Job */
         $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
         if($jobModel->getId() > 0) {
-            $jobModel->resetJobStatus();
-            $jobKey = $jobModel->getJobKey();
-
-            if(!empty($jobKey)) {
-                $success = $jobModel->updateTranslation();
-            }
-        }
-
-        if ($success) {
-            Mage::getSingleton('adminhtml/session')->addSuccess('Job has been re-imported successfully!');
-        } else {
-            Mage::getSingleton('adminhtml/session')->addError('Failed to reimport job.');
+            $jobModel->reimport();
         }
 
         $this->_redirect('*/straker_product/',array('job_id' => $jobId));

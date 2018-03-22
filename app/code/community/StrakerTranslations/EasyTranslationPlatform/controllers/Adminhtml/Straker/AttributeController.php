@@ -203,6 +203,18 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         $helper->checkSiteMode();
     }
 
+    public function reimportAction(){
+        $jobId = $this->getRequest()->getParam('job_id');
+
+        /** @var  $jobModel StrakerTranslations_EasyTranslationPlatform_Model_Job */
+        $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
+        if($jobModel->getId() > 0) {
+            $jobModel->reimport();
+        }
+
+        $this->_redirect('*/straker_attribute/',array('job_id' => $jobId));
+    }
+
     public function removeFromCartAction(){
         $attributeId = $this->getRequest()->getParam('attribute_id');
         if(!empty($attributeId)){

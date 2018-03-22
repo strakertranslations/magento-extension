@@ -21,6 +21,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute 
             ));
         }
 
+        if ( $jobStatus == '4' || $jobStatus == '5') {
+            $this->_addButton('reimport', array(
+                'label'   => Mage::helper('catalog')->__('Reimport Translations'),
+                'onclick' => "setLocation('{$this->getUrl('*/*/reimport',array('job_id'=>$jobId))}')",
+                'class'   => 'task'
+            ));
+        }
+
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_job_attribute_grid', 'job_attribute.grid'));
         $this->getChild('grid')->setStatusId($jobStatus);
         return parent::_prepareLayout();

@@ -977,14 +977,12 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
                     //translated content array
                     $newCmsData = [];
                     foreach($collection as $translation){
-                        if(!$translation->getIsImported()){
-                            if(empty($newCmsData[$translation->getData($jobType . '_id')])){
-                                $newCmsData[$translation->getData($jobType . '_id')] = [
-                                    $translation->getColumnName() => $translation->getTranslate(),
-                                ];
-                            }else{
-                                $newCmsData[$translation->getData($jobType . '_id')][$translation->getColumnName()] = $translation->getTranslate();
-                            }
+                        if(empty($newCmsData[$translation->getData($jobType . '_id')])){
+                            $newCmsData[$translation->getData($jobType . '_id')] = [
+                                $translation->getColumnName() => $translation->getTranslate()
+                            ];
+                        }else{
+                            $newCmsData[$translation->getData($jobType . '_id')][$translation->getColumnName()] = $translation->getTranslate();
                         }
                     }
 
@@ -1053,7 +1051,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         }
 
         foreach ($collection as $jobCms) {
-            if (!$jobCms->getNewEntityId()) {
+            $newEntityId = $jobCms->getNewEntityId();
+            if (!$newEntityId) {
                 $cmsModel = Mage::getModel($cmsModelName);
                 $cmsData = json_decode($jobCms->getOrigin());
                 foreach ($cmsData as $k => $v) {
@@ -1070,6 +1069,9 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
                     $return['success'] = false;
                     Mage::getSingleton('adminhtml/session')->addError($e->getMessage() . 'URL Key: ' . $jobCms->getIdentifier());
                 }
+            }else{
+                $return['success'] = true;
+                $return['new_entity_ids'][$jobCms->getData($cmsType . '_id')] = $newEntityId;
             }
         }
         return $return;
@@ -1144,6 +1146,25 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         $jobType = $this->_getType(); //product, category, cms_page ...
         $cmsTableName = in_array($jobType, array('cms_block', 'cms_page')) ? str_replace('_', '', $jobType) : $jobType; //convert to product, category, cmspage and cmsblock
         $writeConnection->update($prefix . 'straker_job_' . $cmsTableName, array('version' => null), "job_id = {$this->getId()}");
+    }
+
+    public function reimport(){
+        $success = false;
+
+        $this->resetJobStatus();
+        $jobKey = $this->getJobKey();
+
+        if(!empty($jobKey)) {
+            $success = $this->updateTranslation();
+        }
+
+        if ($success) {
+            Mage::getSingleton('adminhtml/session')->addSuccess('Job has been re-imported successfully!');
+        } else {
+            Mage::getSingleton('adminhtml/session')->addError('Failed to reimport job.');
+        }
+
+        return $success;
     }
 
     public function _getStoreOptionArray(){
