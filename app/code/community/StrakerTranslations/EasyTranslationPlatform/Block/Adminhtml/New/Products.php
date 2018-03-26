@@ -18,7 +18,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products e
     protected function _prepareLayout()
     {
 //        $this->_addButton('add_new', array(
-//            'label'   => Mage::helper('catalog')->__('Add Product'),
+//            'label'   => $this->__('Add Product'),
 //            'onclick' => "setLocation('{$this->getUrl('*/*/new')}')",
 //            'class'   => 'add'
 //        ));
@@ -48,6 +48,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products e
         if (!Mage::app()->isSingleStoreMode()) {
             return false;
         }
+
         return true;
     }
 }

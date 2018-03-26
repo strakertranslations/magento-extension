@@ -28,7 +28,8 @@
  * Used in creating options for Yes|No config value selection
  *
  */
-class StrakerTranslations_EasyTranslationPlatform_Model_System_Config_Source_SiteMode{
+class StrakerTranslations_EasyTranslationPlatform_Model_System_Config_Source_SiteMode
+{
 
     /**
      * Options getter

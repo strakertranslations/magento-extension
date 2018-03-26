@@ -1,5 +1,6 @@
 <?php
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job extends Mage_Adminhtml_Block_Widget_Container{
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job extends Mage_Adminhtml_Block_Widget_Container
+{
     public function __construct()
     {
         parent::__construct();

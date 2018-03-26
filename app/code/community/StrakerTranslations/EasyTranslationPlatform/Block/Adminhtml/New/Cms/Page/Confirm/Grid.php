@@ -29,64 +29,78 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_C
 
     protected function _prepareColumns()
     {
-        $this->addColumn('title', array(
+        $this->addColumn(
+            'title', array(
             'header'    => Mage::helper('cms')->__('Title'),
             'align'     => 'left',
             'index'     => 'title',
             'filter'  => false
-        ));
+            )
+        );
 
-        $this->addColumn('identifier', array(
+        $this->addColumn(
+            'identifier', array(
             'header'    => Mage::helper('cms')->__('URL Key'),
             'align'     => 'left',
             'index'     => 'identifier',
             'filter'  => false
-        ));
+            )
+        );
 
         /**
          * Check is single store mode
          */
         if (!Mage::app()->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
+            $this->addColumn(
+                'store_id', array(
                 'header'        => Mage::helper('cms')->__('Store View'),
                 'index'         => 'store_id',
                 'type'          => 'store',
                 'store_all'     => true,
                 'store_view'    => true,
                 'filter'      => false
-            ));
+                )
+            );
         }
 
-        $this->addColumn('is_active', array(
+        $this->addColumn(
+            'is_active', array(
             'header'    => Mage::helper('cms')->__('Status'),
             'index'     => 'is_active',
             'type'      => 'options',
             'options'   => Mage::getSingleton('cms/page')->getAvailableStatuses(),
             'filter'  => false
-        ));
+            )
+        );
 
-        $this->addColumn('creation_time', array(
+        $this->addColumn(
+            'creation_time', array(
             'header'    => Mage::helper('cms')->__('Date Created'),
             'index'     => 'creation_time',
             'type'      => 'datetime',
             'filter'  => false
-        ));
+            )
+        );
 
-        $this->addColumn('update_time', array(
+        $this->addColumn(
+            'update_time', array(
             'header'    => Mage::helper('cms')->__('Last Modified'),
             'index'     => 'update_time',
             'type'      => 'datetime',
             'filter'    => false
-        ));
+            )
+        );
 
-        $this->addColumn('page_actions', array(
+        $this->addColumn(
+            'page_actions', array(
             'header'    => Mage::helper('cms')->__('Action'),
             'width'     => 10,
             'sortable'  => false,
             'filter'    => false,
-//            'renderer'  => 'adminhtml/cms_page_grid_renderer_action',
+            //            'renderer'  => 'adminhtml/cms_page_grid_renderer_action',
             'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_PageGridAction'
-        ));
+            )
+        );
 
         return parent::_prepareColumns();
     }

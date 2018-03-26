@@ -1,5 +1,6 @@
 <?php
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_Tree extends Mage_Adminhtml_Block_Catalog_Category_Tree{
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_Tree extends Mage_Adminhtml_Block_Catalog_Category_Tree
+{
     public function __construct()
     {
         parent::__construct();
@@ -37,6 +38,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_T
         }else{
             return explode(',', $categories);
         }
+
 //        return $this->getProduct()->getCategoryIds();
     }
 
@@ -61,6 +63,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_T
         if ($root && in_array($root->getId(), $this->getCategoryIds())) {
             $root->setChecked(true);
         }
+
         return $root;
     }
 
@@ -76,6 +79,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_T
         if (!is_null($parentNodeCategory) && $parentNodeCategory->getId()) {
             return $this->getNode($parentNodeCategory, $recursionLevel);
         }
+
         $root = Mage::registry('root');
         if (is_null($root)) {
             $storeId = (int) $this->getRequest()->getParam('store');
@@ -229,13 +233,16 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_T
         if (empty($categoryIds)) {
             return array();
         }
+
         $collection = Mage::getResourceModel('catalog/category_collection');
 
         if ($rootId) {
-            $collection->addFieldToFilter(array(
+            $collection->addFieldToFilter(
+                array(
                 array('attribute' => 'parent_id', 'eq' => $rootId),
                 array('attribute' => 'entity_id', 'in' => $categoryIds)
-            ));
+                )
+            );
         } else {
             $collection->addFieldToFilter('entity_id', array('in' => $categoryIds));
         }
@@ -244,12 +251,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_T
             if ($rootId && !in_array($rootId, $item->getPathIds())) {
                 continue;
             }
+
             foreach ($item->getPathIds() as $id) {
                 if (!in_array($id, $ids)) {
                     $ids[] = $id;
                 }
             }
         }
+
         return $ids;
     }
 }

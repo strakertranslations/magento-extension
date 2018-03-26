@@ -14,7 +14,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Actionlog extends Mage_C
         $this->_init('strakertranslations_easytranslationplatform/actionlog');
     }
 
-    public function addLog($action='', $message='', $extra='' ) {
+    public function addLog($action='', $message='', $extra='' ) 
+    {
 
         if (!$this->_added) { // should be only one log per action
 
@@ -30,7 +31,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Actionlog extends Mage_C
 
     }
 
-    protected function _getAdminUser(){
+    protected function _getAdminUser()
+    {
 
         return Mage::getSingleton('admin/session')->getUser()->getId();
     }

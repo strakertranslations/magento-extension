@@ -17,11 +17,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
      */
     protected function _prepareLayout()
     {
-        $this->_addButton('submit', array(
+        $this->_addButton(
+            'submit', array(
             'label'   => Mage::helper('catalog')->__('Submit'),
             'onclick' => "$('submit-new-job-form').submit();",
             'class'   => 'task'
-        ));
+            )
+        );
 
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_products_confirm_grid', 'product.grid', array('store' => $this->getStore(), 'attr' => $this->getAttr(), 'product' => $this->getProduct())));
         return parent::_prepareLayout();

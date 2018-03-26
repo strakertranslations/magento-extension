@@ -6,7 +6,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 
     protected $_label;
 
-    public function render(Varien_Object $row){
+    public function render(Varien_Object $row)
+    {
         $id = $row->getAttributeId();
         $html = '<input disabled type="checkbox" name="option" value="' . $id . '" class="checkbox-option"';
         if (in_array($id, $this->_getLabel())) {
@@ -15,13 +16,16 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
         else{
             $html .= ' >';
         }
+
         return $html;
     }
 
-    protected function _getLabel(){
+    protected function _getLabel()
+    {
         if(!$this->_label){
             $this->_label = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
         }
+
         return $this->_label;
     }
 

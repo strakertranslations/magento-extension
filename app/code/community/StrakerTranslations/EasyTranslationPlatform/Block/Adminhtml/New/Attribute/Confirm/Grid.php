@@ -21,39 +21,48 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     {
         parent::_prepareColumns();
 
-        $this->addColumn('attribute_code', array(
+        $this->addColumn(
+            'attribute_code', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Code'),
             'sortable'=>true,
             'filter'    => false,
             'index'=>'attribute_code'
-        ));
+            )
+        );
 
-        $this->addColumn('frontend_label', array(
+        $this->addColumn(
+            'frontend_label', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
             'sortable'=>true,
             'filter'    => false,
             'index'=>'frontend_label'
-        ));
+            )
+        );
 
-        $this->addColumn('translate_label', array(
+        $this->addColumn(
+            'translate_label', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Translate Attribute Label'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_ConfirmTranslateLabel',
             'align' => 'center',
             'index' => false,
             'sortable'=> false,
             'filter'    => false,
-        ));
+            )
+        );
 
-        $this->addColumn('translate_options', array(
+        $this->addColumn(
+            'translate_options', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Translate Attribute Options'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_ConfirmTranslateOptions',
             'align' => 'center',
             'index' => false,
             'sortable'=> false,
             'filter'    => false,
-        ));
+            )
+        );
 
-        $this->addColumn('is_visible', array(
+        $this->addColumn(
+            'is_visible', array(
             'header'=>Mage::helper('catalog')->__('Visible'),
             'sortable'=>true,
             'index'=>'is_visible_on_front',
@@ -64,11 +73,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
                 '0' => Mage::helper('catalog')->__('No'),
             ),
             'align' => 'center',
-        ));
+            )
+        );
 
         $this->addColumn(
             'action',
-            [
+            array(
                 'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '50px',
                 'type'      => 'action',
@@ -76,16 +86,16 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
                 'actions'   => array(
                     array(
                         'caption' => $this->__('Remove'),
-                        'url'     => [
+                        'url'     => array(
                             'base'=>'*/*/removeFromCart',
-                        ],
+                        ),
                         'field'   => 'attribute_id'
                     )
                 ),
                 'filter'    => false,
                 'sortable'  => false,
                 'index'     => 'attribute_id'
-            ]
+            )
         );
         return $this;
     }
@@ -103,6 +113,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         else {
             $attributeIds = $this->getAttribute();
         }
+
         $collection = Mage::getResourceModel('catalog/product_attribute_collection')
             ->addFieldToFilter('main_table.attribute_id', $attributeIds)
             ->addVisibleFilter();
@@ -121,7 +132,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         return '';
     }
 
-    public function getAttrArray(){
+    public function getAttrArray()
+    {
         return explode(',', $this->getAttr());
     }
 }

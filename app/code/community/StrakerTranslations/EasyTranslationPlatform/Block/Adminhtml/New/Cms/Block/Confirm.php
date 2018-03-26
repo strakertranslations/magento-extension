@@ -13,11 +13,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
 
     protected function _prepareLayout()
     {
-        $this->_addButton('submit', array(
+        $this->_addButton(
+            'submit', array(
             'label'   => Mage::helper('catalog')->__('Submit'),
             'onclick' => "$('submit-new-job-form').submit();",
             'class'   => 'task'
-        ));
+            )
+        );
 
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_cms_block_confirm_grid', 'cms_block.grid', array('store' => $this->getStore(), 'cms_block' => $this->getCmsBlock())));
         return parent::_prepareLayout();
@@ -43,6 +45,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
         if (!Mage::app()->isSingleStoreMode()) {
             return false;
         }
+
         return true;
     }
 }

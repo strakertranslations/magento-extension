@@ -43,17 +43,25 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
             return $this->_initAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_selectstore'))
                 ->renderLayout();
-        } elseif (Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($params['store']) === false ) {
+        } elseif (Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($params['store']) === false) {
             $this->checkSiteMode();
             return $this->_initAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_setupstore',
-                    'strakertranslations_easytranslationplatform_new_setupstore', array('setup_store_id' => $params['store'])))
+                ->_addContent(
+                    Mage::getSingleton('core/layout')->createBlock(
+                        'strakertranslations_easytranslationplatform/adminhtml_new_setupstore',
+                        'strakertranslations_easytranslationplatform_new_setupstore', array('setup_store_id' => $params['store'])
+                    )
+                )
                 ->renderLayout();
         } else {
             $this->checkSiteMode();
             return $this->_initAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_type', 'strakertranslations_easytranslationplatform_new_type',
-                    array('setup_store_id' => $params['store'])))
+                ->_addContent(
+                    Mage::getSingleton('core/layout')->createBlock(
+                        'strakertranslations_easytranslationplatform/adminhtml_new_type', 'strakertranslations_easytranslationplatform_new_type',
+                        array('setup_store_id' => $params['store'])
+                    )
+                )
                 ->renderLayout();
         }
     }
@@ -65,10 +73,12 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         if (array_key_exists('form_key', $data)) {
             unset($data['form_key']);
         }
+
         if ($data['first_name'] && $data['last_name'] && $data['email'] && $data['terms']) {
             if ($data['company'] == '') {
                 $data['company'] = $data['first_name'] . ' ' . $data['last_name'];
             }
+
             $apiModel = Mage::getModel('strakertranslations_easytranslationplatform/api');
             $response = $apiModel->callRegister($data);
             if ($response->access_token && $response->application_key) {
@@ -82,6 +92,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
                 Mage::getSingleton('adminhtml/session')->addError('Registration unsuccessful.');
             }
         }
+
         $this->_redirect('*/*/');
     }
 
@@ -118,6 +129,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
                 return;
             }
         }
+
         $this->_redirect('*/*/');
     }
 
@@ -135,13 +147,14 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
             foreach (Mage::app()->getStores() as $store) {
                 $helper->saveStoreSetup($store->getId(), '', '', '');
             }
+
             $helper->clearSiteMode();
             Mage::app()->getCacheInstance()->cleanType('config');
             $session->addSuccess('Straker Settings has been cleared.');
-
         } catch (Exception $e) {
             $session->addError($e->getMessage());
         }
+
         $this->_redirect('adminhtml/system_config/edit/section/straker');
         return;
     }
@@ -151,7 +164,6 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         $session = Mage::getSingleton('adminhtml/session');
 
         try {
-
             $writeConnection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
             $sql = 'CREATE TABLE catalog_product_entity_varchar_back AS SELECT * FROM catalog_product_entity_varchar;';
@@ -171,10 +183,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
             $writeConnection->query($sql);
 
             $session->addSuccess('product and category entity tables has been duplicated ');
-
         } catch (Exception $e) {
             $session->addError($e->getMessage());
         }
+
         $this->_redirect('adminhtml/system_config/edit/section/straker');
         return;
     }
@@ -184,11 +196,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         $session = Mage::getSingleton('adminhtml/session');
 
         try {
-
             $writeConnection = Mage::getSingleton('core/resource')->getConnection('core_write');
 
             if ($writeConnection->query("SELECT 1 FROM catalog_product_entity_varchar_back LIMIT 1")) {
-
                 $sql = 'DELETE FROM straker_job';
                 $writeConnection->query($sql);
 
@@ -210,10 +220,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
                 $session->addSuccess('product and category entity tables has been restored ');
             }
-
         } catch (Exception $e) {
             $session->addError($e->getMessage());
         }
+
         $this->_redirect('adminhtml/system_config/edit/section/straker');
         return;
     }
@@ -232,11 +242,13 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         } else {
             $session->addError($this->__('Store code is not valid.'));
         }
+
         $this->_redirect('adminhtml/system_config/edit/section/straker');
         return;
     }
 
-    private function checkSiteMode(){
+    private function checkSiteMode()
+    {
         /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $helper->checkSiteMode();

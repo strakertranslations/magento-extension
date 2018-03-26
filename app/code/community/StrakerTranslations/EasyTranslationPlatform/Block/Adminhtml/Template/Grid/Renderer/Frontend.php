@@ -4,7 +4,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 {
     protected $_storeId;
 
-    public function render(Varien_Object $row){
+    public function render(Varien_Object $row)
+    {
         $html = '';
         if(!$row->getVersion()){
             $html .= '<p class="inactive">' . $this->__('View in Frontend') . '</p>';
@@ -30,22 +31,26 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                     )
                 );
             }
+
             $html .= '<a target="_blank" href="' . $url . '">' . $this->__('View in Frontend') . '</a>';
         }
 
         return $html;
     }
 
-    protected function getStoreId($row){
+    protected function getStoreId($row)
+    {
         if (!$this->_storeId){
             $this->_storeId = Mage::getModel('strakertranslations_easytranslationplatform/job')
                 ->load($row->getjobId())
                 ->getStoreId();
         }
+
         return $this->_storeId;
     }
 
-    protected function getStoreCode($row){
+    protected function getStoreCode($row)
+    {
         $this->getStoreId($row);
         return Mage::app()->getStore($this->_storeId)->getCode();
     }

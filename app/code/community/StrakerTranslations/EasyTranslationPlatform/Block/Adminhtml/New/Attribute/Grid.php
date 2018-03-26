@@ -48,9 +48,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $strakerJobAttributeCollection->getSelect()
             ->reset(Zend_Db_Select::COLUMNS)
             ->joinLeft(
-                ['b' => $strakerJobAttributeCollection->getTable('strakertranslations_easytranslationplatform/job')],
+                array('b' => $strakerJobAttributeCollection->getTable('strakertranslations_easytranslationplatform/job')),
                 '`main_table`.`job_id` = `b`.`id`',
-                []
+                array()
             )->where(
                 '`b`.`store_id` = ?', $store->getId()
             )->where(
@@ -58,7 +58,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             )->group(
                 'main_table.attribute_id'
             )->columns(
-                ['version' => 'version', 'attribute_id' => 'attribute_id']
+                array('version' => 'version', 'attribute_id' => 'attribute_id')
             );
 
         $jobAttributeQuery = $strakerJobAttributeCollection->getSelect();
@@ -85,36 +85,43 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         parent::_prepareColumns();
 
 
-        $this->addColumn('attribute_code', array(
+        $this->addColumn(
+            'attribute_code', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Code'),
             'sortable'=>true,
             'index'=>'attribute_code',
             'width' => '22%'
-        ));
+            )
+        );
 
-        $this->addColumn('frontend_label', array(
+        $this->addColumn(
+            'frontend_label', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
             'sortable'=>true,
             'index'=>'frontend_label',
             'width' => '22%'
-        ));
+            )
+        );
 
-        $this->addColumn('translate_options', array(
+        $this->addColumn(
+            'translate_options', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Translate Attribute Options'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_TranslateOptions',
             'align' => 'center',
             'index' => 'frontend_input',
             'sortable'=> false,
             'type'    => 'options',
-            'options' => [
+            'options' => array(
                 'no' => Mage::helper('catalog')->__('No Options'),
                 'select' => Mage::helper('catalog')->__('Has Options')
-            ],
+            ),
             'filter_condition_callback' => array($this, '_optionsFilter'),
             'width' => '22%'
-        ));
+            )
+        );
 
-        $this->addColumn('is_visible', array(
+        $this->addColumn(
+            'is_visible', array(
             'header'=>Mage::helper('catalog')->__('Visible'),
             'sortable'=>true,
             'index'=>'is_visible_on_front',
@@ -125,10 +132,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             ),
             'align' => 'center',
             'width' => '22%'
-        ));
+            )
+        );
 
-        $this->addColumn('version',
-          array(
+        $this->addColumn(
+            'version',
+            array(
             'header'=> Mage::helper('catalog')->__('Translated'),
             'width' => '70px',
             'index' => 'version',
@@ -139,7 +148,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             ),
             'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Translated',
             'filter_condition_callback' => array($this, '_versionFilter'),
-          ));
+            )
+        );
 
         return $this;
     }
@@ -150,10 +160,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             return $this;
         }
 
-        if ($value == 'Translated' ){
+        if ($value == 'Translated'){
             $collection->getSelect()->where('t.version is not null');
            // print $this->getCollection()->getSelect(); exit;
-
         } elseif ($value == 'Not Translated'){
             $collection->getSelect()->where('t.version is null');
         }
@@ -167,11 +176,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             return $this;
         }
 
-        if ( in_array($value, ['select','multiselect'] ) ){
-            $collection->getSelect()->where('frontend_input in (?)', ['select','multiselect']);
+        if (in_array($value, array('select','multiselect'))){
+            $collection->getSelect()->where('frontend_input in (?)', array('select','multiselect'));
         } else {
-            $collection->getSelect()->where('frontend_input not in (?)', ['select','multiselect']);
+            $collection->getSelect()->where('frontend_input not in (?)', array('select','multiselect'));
         }
+
         return $this;
     }
 
@@ -181,17 +191,20 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $this->setMassactionIdFilter('main_table.attribute_id');
         $this->getMassactionBlock()->setFormFieldName('attribute');
 
-        $this->getMassactionBlock()->addItem('add', array(
+        $this->getMassactionBlock()->addItem(
+            'add', array(
              'label'=> Mage::helper('catalog')->__('Add to Confirm Page'),
              'url'  => $this->getUrl('*/*/addToConfirm'),
              'selected' => 1
-        ));
+            )
+        );
         $this->getMassactionBlock()->setTemplate('straker/new/attribute/massaction.phtml');
         $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
         $optionParam = $this->getRequest()->getParam('internal_option');
-        if( !empty($optionParam) ){
+        if(!empty($optionParam)){
             Mage::getSingleton('adminhtml/session')->setData('straker_new_option', $optionParam);
         }
+
         $internalOption = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
         $internalOption = empty($internalOption) ? '' : $internalOption;
         //todo: refine this
@@ -205,14 +218,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
 
     }
 
-    public function getAttributesWithOption(){
+    public function getAttributesWithOption()
+    {
         $AttributeIdsWithOption = clone $this->getCollection()->getSelect();
         $AttributeIdsWithOption->reset(Zend_Db_Select::ORDER);
         $AttributeIdsWithOption->reset(Zend_Db_Select::LIMIT_COUNT);
         $AttributeIdsWithOption->reset(Zend_Db_Select::LIMIT_OFFSET);
         $AttributeIdsWithOption->reset(Zend_Db_Select::COLUMNS);
         $AttributeIdsWithOption->reset(Zend_Db_Select::COLUMNS);
-        $AttributeIdsWithOption->where('frontend_input in (?)',['select','multiselect']);
+        $AttributeIdsWithOption->where('frontend_input in (?)', array('select','multiselect'));
         $AttributeIdsWithOption->columns('attribute_id', 'main_table');
         return  Mage::getSingleton('core/resource')->getConnection('core_read')->fetchCol($AttributeIdsWithOption);
     }
@@ -232,8 +246,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         return $this->getMassactionBlock()->getJsObjectName(); // TODO: Change the autogenerated stub
     }
 
-    public function getSelectedIds(){
+    public function getSelectedIds()
+    {
         $selectedIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
-        return empty($selectedIds) ? [] : $selectedIds;
+        return empty($selectedIds) ? array() : $selectedIds;
     }
 }

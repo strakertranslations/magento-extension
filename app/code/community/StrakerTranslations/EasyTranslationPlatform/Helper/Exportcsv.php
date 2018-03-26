@@ -1,6 +1,7 @@
 <?php
 
-class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_Core_Helper_Abstract {
+class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_Core_Helper_Abstract
+{
 
     /**
      * Contains current collection
@@ -19,9 +20,9 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
    
         $collection->getSelect()
             ->joinLeft(
-                ['product' => $collection->getTable('catalog/product') ],
+                array('product' => $collection->getTable('catalog/product') ),
                 'product.entity_id = main_table.product_id',
-                ['sku']
+                array('sku')
             )
             ->reset(Zend_Db_Select::COLUMNS)
             ->columns('main_table.id')
@@ -29,7 +30,6 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
             ->columns('product.sku');
 
         foreach ($jobAttributes as $jobAttribute) {
-
             $attributeCode = Mage::getModel('eav/entity_attribute')->load($jobAttribute->getAttributeId())->getAttributeCode();
 
             $collection->getSelect()->joinLeft(
@@ -40,7 +40,8 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
                 array($attributeCode . ' - Source' => 'original', $attributeCode . ' - Target' => 'translate')
             );
         }
-        $this->setList( $collection );
+
+        $this->setList($collection);
     }
 
     /**
@@ -63,9 +64,10 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
         $headers = array_keys($product->getData());
         $refine_headers = array();
 
-        foreach ( $headers as $key => $value ) {
-          array_push($refine_headers, ucwords( str_replace("_"," ", $value )));
+        foreach ($headers as $key => $value) {
+          array_push($refine_headers, ucwords(str_replace("_", " ", $value)));
         }
+
         return $refine_headers;
     }
 
@@ -78,7 +80,6 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
         if (!is_null($this->_list)) {
             $items = $this->_list->getItems();
             if (count($items) > 0) {
- 
                 $io = new Varien_Io_File();
                 $path = Mage::getBaseDir('var') . DS . 'export' . DS;
                 $name = md5(microtime());
@@ -92,12 +93,13 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Exportcsv extends Mage_
                 foreach ($items as $product) {
                     $io->streamWriteCsv($product->getData());
                 }
+
                 return array(
                     'type'  => 'filename',
                     'value' => $file,
                     'rm'    => true
                 );
             }
-         }
+        }
      }
 }

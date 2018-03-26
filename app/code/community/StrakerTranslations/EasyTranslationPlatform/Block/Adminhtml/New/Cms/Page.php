@@ -42,6 +42,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page e
         if (!Mage::app()->isSingleStoreMode()) {
             return false;
         }
+
         return true;
     }
 }

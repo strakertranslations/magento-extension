@@ -13,7 +13,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Product_Translate extend
         $this->_init('strakertranslations_easytranslationplatform/product_translate');
     }
 
-    public function importTranslation(){
+    public function importTranslation()
+    {
         $success = true;
         try{
             //if translated value is null, skip
@@ -33,16 +34,19 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Product_Translate extend
         }catch(Exception $e){
             $success = false;
         }
+
         return $success;
     }
 
-    protected function _getAttributeCode($attributeId){
+    protected function _getAttributeCode($attributeId)
+    {
         if (!Mage::registry('attributeCodeCache_'.$attributeId)){
             $productAttributeCode = Mage::getModel('eav/entity_attribute')->load($attributeId)->getAttributeCode();
-            Mage::register('attributeCodeCache_'.$attributeId,$productAttributeCode);
+            Mage::register('attributeCodeCache_'.$attributeId, $productAttributeCode);
         }else{
             $productAttributeCode = Mage::registry('attributeCodeCache_'.$attributeId);
         }
+
         return $productAttributeCode;
     }
 }
