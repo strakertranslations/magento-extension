@@ -13,7 +13,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
         $this->_init('strakertranslations_easytranslationplatform/attribute_translate');
     }
 
-    public function importTranslation(){
+    public function importTranslation()
+    {
 //        if ($this->getTranslate()){
 //
 //            $dataInJson =  json_encode(simplexml_load_string($this->getTranslate()));
@@ -75,11 +76,11 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
         try{
             if ($this->getTranslate()){
                 $dataInJson =  json_encode(simplexml_load_string($this->getTranslate()));
-                $data = json_decode($dataInJson,true);
+                $data = json_decode($dataInJson, true);
                 $storeId = (int) $this->getStoreId();
                 /** @var Mage_Eav_Model_Attribute $eavAttributeModel */
                 $eavAttributeModel = Mage::getModel('eav/entity_attribute');
-                foreach ($data as $k => $attribute ){
+                foreach ($data as $k => $attribute){
                     if ($k == 'title' && $attribute){
                         $attributeId = (int) $this->getAttributeId();
                         $eavAttributeModel->load($attributeId);
@@ -115,30 +116,33 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Attribute_Translate exte
 
                         $optionValueTable = $setup->getTable('eav/attribute_option_value');
 
-                        $newOptionData = [];
+                        $newOptionData = array();
                         foreach ($attribute as $optionId => $optionValue) {
-                            $optionId = str_replace('id_', '',$optionId);
+                            $optionId = str_replace('id_', '', $optionId);
                             //                        /** @var Mage_Eav_Model_Entity_Attribute_Option $optionModel */
                             //                        $optionModel = Mage::getModel('eav/entity_attribute_option');
                             //                        $optionModel->load($optionId);
-                            if( !in_array($optionId, $optionIds)){
-                                $newOptionData[] = [
+                            if(!in_array($optionId, $optionIds)){
+                                $newOptionData[] = array(
                                     'option_id' => $optionId,
                                     'store_id' => $storeId,
                                     'value' => trim($optionValue)
-                                ];
+                                );
                             }
                         }
+
                         if($newOptionData){
                             $setup->getConnection()->insertMultiple($optionValueTable, $newOptionData);
                         }
                     }
                 }
             }
+
             $this->setIsImported(1)->save();
         }catch(Exception $e){
             $success = false;
         }
+
         return $success;
     }
 

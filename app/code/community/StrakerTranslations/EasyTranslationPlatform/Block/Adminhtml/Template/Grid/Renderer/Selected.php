@@ -2,10 +2,10 @@
 class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Selected
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
-    public function render(Varien_Object $row){
+    public function render(Varien_Object $row)
+    {
 
-        if (get_class($row) == get_class(Mage::getModel('strakertranslations_easytranslationplatform/job') )) {
-
+        if (get_class($row) == get_class(Mage::getModel('strakertranslations_easytranslationplatform/job'))) {
             switch ($row->getTypeName()) {
                 case 'Product':
                     $productAttributeCollection =
@@ -17,6 +17,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                     foreach ($productAttributeCollection as $productAttribute) {
                         $output[] = $this->_getAttributeLabel($productAttribute->getAttributeId());
                     }
+
                     $html = implode(', ', $output);
                     break;
                 case 'Category':
@@ -29,6 +30,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                     foreach ($categoryAttributeCollection as $categoryAttribute) {
                     $output[] = $this->_getAttributeLabel($categoryAttribute->getAttributeId());
                     }
+
                     $html = implode(', ', $output);
                     break;
                 case 'Attribute':
@@ -49,6 +51,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                     foreach ($cmsBlockAttributeCollection as $cmsAttribute) {
                         $output[] = $this->_formatColumnName($cmsAttribute->getData('column_name'));
                     }
+
                     $html = implode(', ', $output);
                     break;
                 case 'CMS Page':
@@ -61,6 +64,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                     foreach ($cmsPageAttributeCollection as $cmsAttribute) {
                         $output[] = $this->_formatColumnName($cmsAttribute->getData('column_name'));
                     }
+
                     $html = implode(', ', $output);
                     break;
                 default:
@@ -72,11 +76,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 
     }
 
-   private function _getAttributeLabel($attributeId) {
+   private function _getAttributeLabel($attributeId) 
+   {
      return  Mage::getModel('eav/entity_attribute')->load($attributeId)->getFrontendLabel();
    }
 
-   private function _formatColumnName( $columnName ){
+   private function _formatColumnName( $columnName )
+   {
         $return = '';
         switch(strtolower($columnName)){
             case 'meta_keywords':
@@ -91,6 +97,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             default:
                 $return = ucfirst($columnName);
         }
+
         return $return;
    }
 }

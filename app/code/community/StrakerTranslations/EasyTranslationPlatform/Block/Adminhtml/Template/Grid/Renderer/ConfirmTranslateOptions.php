@@ -6,9 +6,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 
     protected $_option;
 
-    public function render(Varien_Object $row){
+    public function render(Varien_Object $row)
+    {
         $id = $row->getAttributeId();
-        if (in_array($row->getFrontendInput(), ['select', 'multiselect']) ) {
+        if (in_array($row->getFrontendInput(), array('select', 'multiselect'))) {
             $html = '<input disabled type="checkbox" name="option" value="' . $id . '" class="checkbox-option"';
             if (in_array($id, $this->_getOption())) {
                 $html .= ' checked="checked" >';
@@ -20,13 +21,16 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
         else{
             $html = 'N/A';
         }
+
         return $html;
     }
 
-    protected function _getOption(){
+    protected function _getOption()
+    {
         if(!$this->_option){
-            $this->_option = explode(',' ,Mage::getSingleton('adminhtml/session')->getData('straker_new_option'));
+            $this->_option = explode(',', Mage::getSingleton('adminhtml/session')->getData('straker_new_option'));
         }
+
         return $this->_option;
     }
 

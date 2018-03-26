@@ -1,5 +1,6 @@
 <?php
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_Confirm extends Mage_Adminhtml_Block_Widget_Container{
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_Confirm extends Mage_Adminhtml_Block_Widget_Container
+{
     /**
      * Set template
      */
@@ -16,11 +17,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
      */
     protected function _prepareLayout()
     {
-        $this->_addButton('submit', array(
+        $this->_addButton(
+            'submit', array(
             'label'   => Mage::helper('catalog')->__('Submit'),
             'onclick' => "$('submit-new-job-form').submit();",
             'class'   => 'task'
-        ));
+            )
+        );
 
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_confirm_grid', 'category.grid', array('store' => $this->getStore(), 'attr' => $this->getAttr(), 'category' => $this->getCategory())));
         return parent::_prepareLayout();

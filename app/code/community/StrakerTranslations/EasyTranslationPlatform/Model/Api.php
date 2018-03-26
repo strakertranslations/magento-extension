@@ -49,14 +49,13 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
 
             $http->setConfig($config);
             $http->write(
-              $method,
-              $url,
-              '1.1',
-              $this->_headers,
-              $request //$this->_buildQuery($request)
+                $method,
+                $url,
+                '1.1',
+                $this->_headers,
+                $request //$this->_buildQuery($request)
             );
             $response = $http->read();
-
         } catch (Exception $e) {
             $debugData['http_error'] = array('error' => $e->getMessage(), 'code' => $e->getCode());
             $this->_debug($debugData);
@@ -68,9 +67,11 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
 
         // handle transport error
         if ($http->getErrno()) {
-            Mage::logException(new Exception(
-              sprintf('CURL connection error #%s: %s', $http->getErrno(), $http->getError())
-            ));
+            Mage::logException(
+                new Exception(
+                    sprintf('CURL connection error #%s: %s', $http->getErrno(), $http->getError())
+                )
+            );
             $http->close();
 
             Mage::throwException(Mage::helper('strakertranslations_easytranslationplatform')->__('Unable to communicate with the Straker Translations Api.'));
@@ -91,6 +92,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         if ($this->_isCallSuccessful($response)) {
             return $response;
         }
+
         $this->_handleCallErrors($response);
         return $response;
     }
@@ -112,7 +114,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         return $this;
     }
 
-    protected  function _debug($debugData){
+    protected  function _debug($debugData)
+    {
 
         // to be added
 
@@ -127,6 +130,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         if (isset($response->success) || isset($response->languages) || isset($response->country)) {
             return true;
         }
+
         return false;
     }
 
@@ -141,74 +145,90 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         if(empty($response)){
             return;
         }
-        if (isset($response->message) && strpos($response->message,'Authentication failed') !== false){
+
+        if (isset($response->message) && strpos($response->message, 'Authentication failed') !== false){
             $response->magentoMessage = $response->message;
         }
+
         return;
 // to be added
     }
 
-    protected  function _getRegisterUrl(){
+    protected  function _getRegisterUrl()
+    {
         return Mage::getStoreConfig('straker/api_url/register');
     }
 
-    protected  function _getLanguagesUrl(){
+    protected  function _getLanguagesUrl()
+    {
         return Mage::getStoreConfig('straker/api_url/languages');
     }
 
-    protected  function _getCountriesUrl(){
+    protected  function _getCountriesUrl()
+    {
         return Mage::getStoreConfig('straker/api_url/countries');
     }
 
-    protected  function _getTranslateUrl(){
+    protected  function _getTranslateUrl()
+    {
         /** @var  $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
-        if( $helper->isSandboxMode() ){
+        if($helper->isSandboxMode()){
             return Mage::getStoreConfig('straker/api_url/translate_sandbox');
         }else{
             return Mage::getStoreConfig('straker/api_url/translate');
         }
     }
 
-    protected  function _getQuoteUrl(){
+    protected  function _getQuoteUrl()
+    {
         return Mage::getStoreConfig('straker/api_url/quote');
     }
 
-    protected  function _getPaymentUrl(){
+    protected  function _getPaymentUrl()
+    {
         return Mage::getStoreConfig('straker/api_url/payment');
     }
 
-    protected  function _getSupportUrl(){
+    protected  function _getSupportUrl()
+    {
         return Mage::getStoreConfig('straker/api_url/support');
     }
 
-    public function callRegister($data){
+    public function callRegister($data)
+    {
         return $this->_call($this->_getRegisterUrl(), 'post', $data);
     }
 
-    public function callTranslate($data){
+    public function callTranslate($data)
+    {
         $this->_headers[] = 'Content-Type:multipart/form-data';
         return $this->_call($this->_getTranslateUrl(), 'post', $data);
     }
 
-    public function callSupport($data){
+    public function callSupport($data)
+    {
         return $this->_call($this->_getSupportUrl(), 'post', $data);
     }
 
-    public function getQuote($data){
+    public function getQuote($data)
+    {
         return $this->_call($this->_getQuoteUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getPayment($data){
+    public function getPayment($data)
+    {
         return $this->_call($this->_getPaymentUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getTranslation($data){
+    public function getTranslation($data)
+    {
         return $this->_call($this->_getTranslateUrl().'?'. $this->_buildQuery($data));
     }
 
-    public function getTranslatedFile($downloadUrl){
-        return $this->_call($downloadUrl,'get',array(),true);
+    public function getTranslatedFile($downloadUrl)
+    {
+        return $this->_call($downloadUrl, 'get', array(), true);
     }
 
 //    public function getCountries(){
@@ -242,7 +262,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
                 file_put_contents($fileFullPath, json_encode($result));
             }
         }
-        return isset($result->country) ?  $result->country : [];
+
+        return isset($result->country) ?  $result->country : array();
     }
 
     public function getLanguages()
@@ -266,7 +287,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
                 file_put_contents($fileFullPath, json_encode($result));
             }
         }
-        return isset($result->languages) ? $result->languages : [];
+
+        return isset($result->languages) ? $result->languages : array();
     }
 
     public function _getLanguageName($code = '')
@@ -275,14 +297,15 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         $languageName = '';
         $isArray = is_array($code) ? true : false;
         foreach ($languages as $k => $val) {
-            if( $isArray ){
-                if ( ($key = array_search($val->code,  $code)) !== false ) {
+            if($isArray){
+                if (($key = array_search($val->code, $code)) !== false) {
                     $languageName[$val->code] = $val->name;
                     unset($code[$key]);
                 }else{
                     continue;
                 }
-                if( count($code) <= 0 ){
+
+                if(count($code) <= 0){
                     break;
                 }
             }else{
@@ -292,10 +315,12 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
                 }
             }
         }
+
         return $languageName;
     }
 
-    public function saveAppKey($appKey){
+    public function saveAppKey($appKey)
+    {
         if ($this->_storeId === 0) {
             Mage::getModel('core/config')->saveConfig('straker/general/application_key', $appKey);
         }
@@ -304,7 +329,8 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
         }
     }
 
-    public function saveAccessToken($accessToken){
+    public function saveAccessToken($accessToken)
+    {
         if ($this->_storeId === 0) {
             Mage::getModel('core/config')->saveConfig('straker/general/access_token', $accessToken);
         }

@@ -1,8 +1,10 @@
 <?php
 
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_Grid extends Mage_Adminhtml_Block_Widget_Grid {
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_Grid extends Mage_Adminhtml_Block_Widget_Grid
+{
 
-    public function __construct() {
+    public function __construct() 
+    {
         parent::__construct();
         $this->setId('strakerJobAttributeGrid');
         $this->setUseAjax(true);
@@ -11,19 +13,23 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
 
     protected function _prepareLayout()
     {
-        $this->setChild('dispute_button',
+        $this->setChild(
+            'dispute_button',
             $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
+                ->setData(
+                    array(
                     'label'   => $this->__('Feedback'),
                     'onclick' => 'disputeForm.show(\''.$this->getRequest()->getParam('job_id').'\')',
                     'class'   => 'feedback'
-                ))
+                    )
+                )
         );
 
         return parent::_prepareLayout();
     }
 
-    protected function _prepareCollection() {
+    protected function _prepareCollection() 
+    {
 //        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
@@ -49,34 +55,42 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
         return parent::_prepareCollection();
     }
 
-    protected function _prepareColumns() {
-        $this->addColumn('id', array(
+    protected function _prepareColumns() 
+    {
+        $this->addColumn(
+            'id', array(
             'header'        => $this->__('ID'),
             'type'          => 'number',
             'align'         => 'right',
             'width'         => '50px',
             'index'         => 'id',
             'filter_index'  => 'main_table.id',
-        ));
+            )
+        );
 
-        $this->addColumn('attribute_id', array(
+        $this->addColumn(
+            'attribute_id', array(
             'header'        => $this->__('Attribute ID'),
             'type'          => 'number',
             'align'         => 'left',
             'index'         => 'attribute_id',
             'filter_index'  => 'main_table.attribute_id',
             'width'         => '50px'
-        ));
+            )
+        );
 
-        $this->addColumn('attribute_code', array(
+        $this->addColumn(
+            'attribute_code', array(
             'header'        => $this->__('Attribute Code'),
             'align'         => 'left',
             'index'         => 'attribute_code',
             'width'         => '50px'
-        ));
+            )
+        );
 
 
-        $this->addColumn('label_original', array(
+        $this->addColumn(
+            'label_original', array(
             'header'        => $this->__('Label - Source'),
             'renderer'      => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_AttributeOriginalLabel',
             'align'         => 'center',
@@ -84,9 +98,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
             'sortable'      => false,
             'filter'        => false,
             'width'         => '15%'
-        ));
+            )
+        );
 
-        $this->addColumn('label_translate', array(
+        $this->addColumn(
+            'label_translate', array(
             'header'        => $this->__('Label - Target'),
             'renderer'      => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_AttributeTranslateLabel',
             'align'         => 'center',
@@ -95,9 +111,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
             'filter'        => false,
             'width'         => '15%'
 
-        ));
+            )
+        );
 
-        $this->addColumn('option_original', array(
+        $this->addColumn(
+            'option_original', array(
             'header'        => $this->__('Option - Source'),
             'renderer'      => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_AttributeOriginalOption',
             'align'         => 'center',
@@ -105,9 +123,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
             'sortable'      => false,
             'filter'        => false,
             'width'         => '20%'
-        ));
+            )
+        );
 
-        $this->addColumn('option_translate', array(
+        $this->addColumn(
+            'option_translate', array(
             'header'        => $this->__('Option - Target'),
             'renderer'      => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_AttributeTranslateOption',
             'align'         => 'center',
@@ -115,63 +135,72 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
             'sortable'      => false,
             'filter'        => false,
             'width'         => '20%'
-        ));
+            )
+        );
 
         if ($this->getStatusId() == '4' || $this->getStatusId() == '5'){
-            $this->addColumn('version', array(
+            $this->addColumn(
+                'version', array(
                 'header'                    => $this->__('Published'),
                 'renderer'                  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Version',
                 'align'                     => 'center',
                 'index'                     => 'version',
-                'filter_condition_callback' => [$this, '_filterVersion'],
-                'options'                   => [
+                'filter_condition_callback' => array($this, '_filterVersion'),
+                'options'                   => array(
                     '0' => $this->__('Published'),
                     '1' => $this->__('Not Published')
-                ],
+                ),
                 'width' => '50px'
-            ));
+                )
+            );
         }
 
-        $this->addColumn('view_backend', array(
+        $this->addColumn(
+            'view_backend', array(
             'header' => $this->__('View Backend'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Backend',
             'align' => 'center',
             'index' => false,
             'filter'    => false,
-        ));
+            )
+        );
 
         return parent::_prepareColumns();
     }
 
-    public function getRowUrl($row) {
+    public function getRowUrl($row) 
+    {
         return '';
     }
 
     protected function _filterVersion($collection, $column)
     {
-        if ( ($value = $column->getFilter()->getValue()) === FALSE ) {
+        if (($value = $column->getFilter()->getValue()) === FALSE) {
             return $this;
         }
-        if ($value === '1' ){
+
+        if ($value === '1'){
             $this->getCollection()->getSelect()->where('`main_table`.`version` IS NULL');
         } else {
             $this->getCollection()->getSelect()->where('`main_table`.`version` IS NOT NULL');
         }
+
         return $this;
     }
 
     protected function _prepareMassaction()
     {
         if ($this->getStatusId() == '4') {
-
             $this->setMassactionIdField('attribute_id');
             $this->getMassactionBlock()->setFormFieldName('attribute');
 
-            $this->getMassactionBlock()->addItem('add', array(
+            $this->getMassactionBlock()->addItem(
+                'add', array(
                 'label' => $this->__('Publish Translation'),
                 'url' => $this->getUrl('*/*/publish'),
                 'selected' => 1
-            ));
+                )
+            );
 
             $this->getMassactionBlock()->setTemplate('straker/job/attribute/massaction.phtml');
 
@@ -189,7 +218,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
         if ($this->getStatusId() == '4') {
             $columnId = 'massaction';
             $massactionColumn = $this->getLayout()->createBlock('adminhtml/widget_grid_column')
-                ->setData(array(
+                ->setData(
+                    array(
                     'index' => $this->getMassactionIdField(),
                     'use_index' => $this->getMassactionIdField(),
                     'filter_index' => $this->getMassactionIdFilter(),
@@ -197,7 +227,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
                     'name' => $this->getMassactionBlock()->getFormFieldName(),
                     'align' => 'center',
                     'is_system' => true
-                ));
+                    )
+                );
 
             if ($this->getNoFilterMassactionColumn()) {
                 $massactionColumn->setData('filter', false);
@@ -221,10 +252,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Attribute_
         if ($this->getStatusId() == '4') {
             $html .= $this->getChildHtml('dispute_button');
         }
+
         if($this->getFilterVisibility()){
             $html.= $this->getResetFilterButtonHtml();
             $html.= $this->getSearchButtonHtml();
         }
+
         return $html;
     }
 

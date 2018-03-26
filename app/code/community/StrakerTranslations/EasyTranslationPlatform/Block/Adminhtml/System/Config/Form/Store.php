@@ -30,18 +30,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_System_Config_
     {
         if ($store->getId() && Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($store->getId())) {
             $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-                ->setData(array(
+                ->setData(
+                    array(
                     'id' => 'straker_clear_store_button_' . $store->getCode(),
                     'label' => $this->helper('adminhtml')->__('Clear'),
                     'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl(
-                            'adminhtml/straker_new/resetStoreSettings',
-                            array('store' => $store->getId())
-                        ) . '\');'
-                ));
+                        'adminhtml/straker_new/resetStoreSettings',
+                        array('store' => $store->getId())
+                    ) . '\');'
+                    )
+                );
             return $button->toHtml();
         }
         else{
-
             return '<div class="empty-button">'.$this->__('No language settings applied').'</div>';
         }
     }

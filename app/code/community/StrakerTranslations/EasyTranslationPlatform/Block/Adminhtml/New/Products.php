@@ -48,6 +48,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products e
         if (!Mage::app()->isSingleStoreMode()) {
             return false;
         }
+
         return true;
     }
 }

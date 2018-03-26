@@ -1,4 +1,5 @@
-Event.observe(window, "load", function() {
+Event.observe(
+    window, "load", function () {
     // var strakerMenu = $$("#nav LI.level0:has(A[href*=admin/straker])")[0];
     var strakerMenu = $$("#nav LI.level0:has(A[href*=/straker_new])")[0];
     var n = SKIN_URL.indexOf("adminhtml");
@@ -8,21 +9,28 @@ Event.observe(window, "load", function() {
     // var strakerAccountLink = $$('a[href*="admin/straker_new/account"]')[0];
     var strakerAccountLink = strakerMenu.select('a[href*="/straker_new/account"]')[0];
 
-    strakerAccountLink.observe('click', function(event) {
+    strakerAccountLink.observe(
+        'click', function (event) {
         window.open(strakerAccountLink.href, '_blank');
         Event.stop(event);
-    });
+        }
+    );
 
     // var strakerTermsLink = $$('a[href*="admin/straker_new/terms"]')[0];
     var strakerTermsLink = $$('a[href*="/straker_new/terms"]')[0];
-    strakerTermsLink.observe('click', function(event) {
+    strakerTermsLink.observe(
+        'click', function (event) {
         window.open(strakerTermsLink.href, '_blank');
         Event.stop(event);
-    });
+        }
+    );
 
     var strakerSupportLink = $$('a[href*="/straker_new/support"]')[0];
-    strakerSupportLink.observe('click', function(event) {
+    strakerSupportLink.observe(
+        'click', function (event) {
         window.open(strakerSupportLink.href, '_blank');
         Event.stop(event);
-    });
-});
+        }
+    );
+    }
+);
