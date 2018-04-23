@@ -110,4 +110,17 @@ class StrakerTranslations_EasyTranslationPlatform_Helper_Data extends Mage_Core_
     {
         return Mage::getBaseDir('var').DIRECTORY_SEPARATOR.'straker';
     }
+
+    public function getModuleVersion()
+    {
+        $modules = Mage::getConfig()->getNode()->modules;
+        $version = '';
+        if (!empty($modules->StrakerTranslations_EasyTranslationPlatform)) {
+            $module = $modules->StrakerTranslations_EasyTranslationPlatform;
+            if (!empty($module->version)) {
+                $version = $module->version->__toString();
+            }
+        }
+        return $version;
+    }
 }
