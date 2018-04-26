@@ -24,15 +24,6 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
-                        <!--<site_mode translate="label comment" >-->
-                            <!--<label>Site Mode</label>-->
-                            <!--<frontend_type>select</frontend_type>-->
-                            <!--<sort_order>0</sort_order>-->
-                            <!--<source_model>strakertranslations_easytranslationplatform/system_config_source_siteMode</source_model>-->
-                            <!--<show_in_default>1</show_in_default>-->
-                            <!--<show_in_website>1</show_in_website>-->
-                            <!--<show_in_store>1</show_in_store>-->
-                        <!--</site_mode>-->
                         <access_token translate="label comment" >
                             <label>Access Token</label>
                             <frontend_type>text</frontend_type>
@@ -95,6 +86,15 @@
                     <show_in_website>1</show_in_website>
                     <show_in_store>1</show_in_store>
                     <fields>
+                        <!--<site_mode translate="label comment" >-->
+                        <!--<label>Site Mode</label>-->
+                        <!--<frontend_type>select</frontend_type>-->
+                        <!--<sort_order>0</sort_order>-->
+                        <!--<source_model>strakertranslations_easytranslationplatform/system_config_source_siteMode</source_model>-->
+                        <!--<show_in_default>1</show_in_default>-->
+                        <!--<show_in_website>1</show_in_website>-->
+                        <!--<show_in_store>1</show_in_store>-->
+                        <!--</site_mode>-->
                         <version translate="label comment" >
                             <label>Module Version</label>
                             <frontend_type>label</frontend_type>
