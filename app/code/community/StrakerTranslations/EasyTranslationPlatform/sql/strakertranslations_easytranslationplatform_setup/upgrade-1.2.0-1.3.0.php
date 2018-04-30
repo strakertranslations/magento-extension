@@ -12,7 +12,7 @@ $connection = $installer->getConnection();
 
 $rawTableName = 'straker_cms_block_attributes';
 $tableName = $installer->getTable($rawTableName);
-if (!$connection->isTableExists($tableName) != true) {
+if ($connection->isTableExists($tableName) != true) {
     $table = $connection
         ->newTable($tableName)
         ->addColumn(
