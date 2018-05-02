@@ -66,10 +66,12 @@ if(strcasecmp($prefix, '') !== 0){
 /**
  * Add new field to 'cataloginventory/stock_item'
  */
-$installer->getConnection()
-    ->addColumn(
-        $installer->getTable('straker_job'),
-        'is_test_job',
+$strakerJobTable = $installer->getTable('straker_job');
+$newColumnName = 'is_test_job';
+if( !$connection->tableColumnExists($strakerJobTable, $newColumnName)) {
+    $connection->addColumn(
+        $strakerJobTable,
+        $newColumnName,
         array(
             'type' => Varien_Db_Ddl_Table::TYPE_SMALLINT,
             'length' => 1,
@@ -78,5 +80,6 @@ $installer->getConnection()
             'default' => 0
         )
     );
+}
 
 $installer->endSetup();

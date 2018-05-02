@@ -7,15 +7,26 @@ $models = array('page', 'block');
 foreach($models as $model){
     $data = Mage::getModel('strakertranslations_easytranslationplatform/job_cms_' . $model)->getCollection();
     foreach($data as $d){
+        $needSave = false;
+
         $origin = $d->getOrigin() ? json_decode($d->getOrigin(), true) : array();
-        if(array_key_exists('title', $origin)){
-            $d->setTitle($origin['title']);
+
+        if ( !$d->getTitle() ) {
+            if(array_key_exists('title', $origin)){
+                $needSave = true;
+                $d->setTitle($origin['title']);
+            }
         }
 
-        if(array_key_exists('identifier', $origin)){
-            $d->setIdentifier($origin['identifier']);
+        if ( !$d->getIdentifier() ) {
+            if(array_key_exists('identifier', $origin)){
+                $needSave = true;
+                $d->setIdentifier($origin['identifier']);
+            }
         }
 
-        $d->save();
+        if ($needSave) {
+            $d->save();
+        }
     }
 }
