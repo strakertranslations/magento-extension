@@ -18,7 +18,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products e
     protected function _prepareLayout()
     {
 //        $this->_addButton('add_new', array(
-//            'label'   => $this->__('Add Product'),
+//            'label'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Add Product'),
 //            'onclick' => "setLocation('{$this->getUrl('*/*/new')}')",
 //            'class'   => 'add'
 //        ));

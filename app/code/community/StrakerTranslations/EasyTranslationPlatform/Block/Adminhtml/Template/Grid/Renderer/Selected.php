@@ -28,7 +28,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                     $output =array();
 
                     foreach ($categoryAttributeCollection as $categoryAttribute) {
-                    $output[] = $this->_getAttributeLabel($categoryAttribute->getAttributeId());
+                        $output[] = $this->_getAttributeLabel($categoryAttribute->getAttributeId());
                     }
 
                     $html = implode(', ', $output);
@@ -39,7 +39,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                         ->getCollection()->addFieldToFilter('job_id', $row->getId());
 
                     $output = count($AttributeCollection);
-                    $html = $output > 1 ? "$output Attributes" : '1 Attribute';
+                    $html = $output > 1 ? "$output " . Mage::helper('strakertranslations_easytranslationplatform')->__('Attributes') : '1 ' . Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute');
                     break;
                 case 'CMS Block':
                     $cmsBlockAttributeCollection =
@@ -78,7 +78,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 
    private function _getAttributeLabel($attributeId) 
    {
-     return  Mage::getModel('eav/entity_attribute')->load($attributeId)->getFrontendLabel();
+     return  Mage::helper('strakertranslations_easytranslationplatform')->__(Mage::getModel('eav/entity_attribute')->load($attributeId)->getFrontendLabel());
    }
 
    private function _formatColumnName( $columnName )
@@ -98,6 +98,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                 $return = ucfirst($columnName);
         }
 
-        return $return;
+        return Mage::helper('strakertranslations_easytranslationplatform')->__($return);
    }
 }

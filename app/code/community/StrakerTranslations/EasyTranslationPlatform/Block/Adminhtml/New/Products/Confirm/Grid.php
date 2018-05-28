@@ -178,7 +178,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
                 'getter'     => 'getEntityId',
                 'actions'   => array(
                     array(
-                        'caption' => $this->__('Remove'),
+                        'caption' => Mage::helper('strakertranslations_easytranslationplatform')->__('Remove'),
                         'url'     => array(
                             'base'=>'*/*/removeFromCart'
                         ),

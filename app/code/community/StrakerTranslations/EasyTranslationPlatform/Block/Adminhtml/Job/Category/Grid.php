@@ -18,7 +18,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
             $this->getLayout()->createBlock('adminhtml/widget_button')
                 ->setData(
                     array(
-                    'label' => $this->__('Feedback'),
+                    'label' => Mage::helper('strakertranslations_easytranslationplatform')->__('Feedback'),
                     'onclick' => 'disputeForm.show(\'' . $this->getRequest()->getParam('job_id') . '\')',
                     'class' => 'feedback'
                     )
@@ -59,7 +59,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
     protected function _prepareColumns()
     {
 //        $this->addColumn('id', array(
-//            'header' => $this->__('ID'),
+//            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('ID'),
 //            'align' => 'right',
 //            'width' => '50px',
 //            'index' => 'id',
@@ -67,7 +67,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
 
         $this->addColumn(
             'category_id', array(
-            'header' => $this->__('Category ID'),
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Category ID'),
             'align' => 'left',
             'index' => 'category_id',
             'type' => 'number',
@@ -76,7 +76,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
         );
 
 //        $this->addColumn('job_id', array(
-//            'header' => $this->__('Job ID'),
+//            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Job ID'),
 //            'align' => 'left',
 //            'index' => 'job_id',
 //        ));
@@ -90,7 +90,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
             $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(3, $attributeCode);
             $this->addColumn(
                 $attributeCode . '_original', array(
-                'header' => $this->__('%s - Source', $attrModel->getFrontendLabel()),
+                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Source', Mage::helper('strakertranslations_easytranslationplatform')->__($attrModel->getFrontendLabel())),
                 'align' => 'left',
                 'index' => $attributeCode . '_original',
                 'filter_index' => $attributeCode.'.original'
@@ -99,7 +99,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
 
             $this->addColumn(
                 $attributeCode . '_translate', array(
-                'header' => $this->__('%s - Target', $attrModel->getFrontendLabel()),
+                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s - Target', Mage::helper('strakertranslations_easytranslationplatform')->__($attrModel->getFrontendLabel())),
                 'align' => 'left',
                 'index' => $attributeCode . '_translate',
                 'filter_index' => $attributeCode.'.translate'
@@ -110,15 +110,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
         if ($this->getStatusId() == '4' || $this->getStatusId() == '5'){
             $this->addColumn(
                 'version', array(
-                'header' => $this->__('Published'),
+                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
                 'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Version',
                 'align' => 'center',
                 'type' => 'options',
                 'index' => 'version',
                 'filter_condition_callback' => array($this, '_filterVersion'),
                 'options' => array(
-                    '0' => $this->__('Published'),
-                    '1' => $this->__('Not Published')
+                    '0' => Mage::helper('strakertranslations_easytranslationplatform')->__('Published'),
+                    '1' => Mage::helper('strakertranslations_easytranslationplatform')->__('Not Published')
                 ),
                 'width' => '20%'
                 )
@@ -128,7 +128,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
 
         $this->addColumn(
             'view_backend', array(
-            'header' => $this->__('View Backend'),
+            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('View Backend'),
             'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Backend',
             'align' => 'center',
             'index' => false,
@@ -168,7 +168,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Category_G
 
             $this->getMassactionBlock()->addItem(
                 'add', array(
-                'label' => $this->__('Publish Translation'),
+                'label' => Mage::helper('strakertranslations_easytranslationplatform')->__('Publish Translation'),
                 'url' => $this->getUrl('*/*/publish'),
                 'selected' => 1
                 )

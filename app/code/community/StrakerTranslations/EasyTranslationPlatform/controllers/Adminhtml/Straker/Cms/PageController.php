@@ -34,8 +34,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
             return;
         }
 
-        $this->_title($this->__('Straker Translations'))
-            ->_title($this->__('Manage Jobs'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Straker Translations'))
+            ->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 
         $this->loadLayout()->_setActiveMenu('straker/job');
         $this->renderLayout();

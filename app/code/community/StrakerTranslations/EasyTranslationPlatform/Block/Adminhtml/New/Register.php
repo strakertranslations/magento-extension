@@ -24,7 +24,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Register e
         }
 
         $html = '<select class="validate-select" name="'.$name.'">';
-        $html .= '<option value="">' . $this->__('Select a country') . '</option>';
+        $html .= '<option value="">' . Mage::helper('strakertranslations_easytranslationplatform')->__('Select a country') . '</option>';
         if ($this->_countires) {
             foreach ($this->_countires as $country) {
                 $html .= '<option value="' . $country->code . '">' . $country->name . '</option>';

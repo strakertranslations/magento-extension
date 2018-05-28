@@ -19,7 +19,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             }
         }
         else{
-            $html = 'N/A';
+            $html = Mage::helper('strakertranslations_easytranslationplatform')->__('N/A');
         }
 
         return $html;

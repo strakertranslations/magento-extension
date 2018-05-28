@@ -14,10 +14,10 @@
     </table>
 </div>
 <ol class="wizard" data-wizard-steps="4">
-    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
-    <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
-    <li class="wizard-done"><?php echo $this->__('Select Content') ?></li>
-    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Job Type') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Details') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Content') ?></li>
+    <li class="wizard-todo"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("straker/adminhtml_new/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >

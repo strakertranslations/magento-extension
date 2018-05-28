@@ -85,7 +85,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
                 'getter'     => 'getAttributeId',
                 'actions'   => array(
                     array(
-                        'caption' => $this->__('Remove'),
+                        'caption' => Mage::helper('strakertranslations_easytranslationplatform')->__('Remove'),
                         'url'     => array(
                             'base'=>'*/*/removeFromCart',
                         ),

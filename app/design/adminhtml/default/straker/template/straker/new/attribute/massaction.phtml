@@ -30,31 +30,31 @@
             <td colspan="3">
                 <div id="massaction-attribute-label-wrapper">
                     <?php if ($this->getUseSelectAll()):?>
-                        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo $this->__('Select All') ?></a>
+                        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectAll()"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select All') ?></a>
                         <span class="separator">|</span>
-                        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"><?php echo $this->__('Unselect All') ?></a>
+                        <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectAll()"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Unselect All') ?></a>
                         <span class="separator">|</span>
                     <?php endif; ?>
-                    <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo $this->__('Select Visible') ?></a>
+                    <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.selectVisible()"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Visible') ?></a>
                     <span class="separator">|</span>
-                    <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo $this->__('Unselect Visible') ?></a>
+                    <a href="#" onclick="return <?php echo $this->getJsObjectName() ?>.unselectVisible()"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Unselect Visible') ?></a>
                     <span class="separator">|</span>
-                    <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo $this->__('items selected') ?>
+                    <strong id="<?php echo $this->getHtmlId() ?>-count">0</strong> <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('items selected') ?>
                 </div>
             </td>
             <td colspan="3">
                 <div id="massaction-attribute-option-wrapper">
                     <?php if ($this->getUseSelectAll()):?>
-                        <a href="#" onclick="return selectAllMassActionOptions(event)"><?php echo $this->__('Select All') ?></a>
+                        <a href="#" onclick="return selectAllMassActionOptions(event)"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select All') ?></a>
                         <span class="separator">|</span>
-                        <a href="#" onclick="return unselectAllMassActionOptions(event)"><?php echo $this->__('Unselect All') ?></a>
+                        <a href="#" onclick="return unselectAllMassActionOptions(event)"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Unselect All') ?></a>
                         <span class="separator">|</span>
                     <?php endif; ?>
-                    <a href="#" onclick="return selectVisibleMassActionOptions(event)"><?php echo $this->__('Select Visible') ?></a>
+                    <a href="#" onclick="return selectVisibleMassActionOptions(event)"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Visible') ?></a>
                     <span class="separator">|</span>
-                    <a href="#" onclick="return unselectVisibleMassActionOptions(event)"><?php echo $this->__('Unselect Visible') ?></a>
+                    <a href="#" onclick="return unselectVisibleMassActionOptions(event)"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Unselect Visible') ?></a>
                     <span class="separator">|</span>
-                    <strong id="mass-action-options-count">0</strong> <?php echo $this->__('items selected') ?>
+                    <strong id="mass-action-options-count">0</strong> <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('items selected') ?>
                 </div>
             </td>
         </tr>
@@ -69,7 +69,7 @@
                             <?php echo $this->getHiddenParams() ?>
                             <fieldset>
                         <span class="field-row">
-                            <label><?php echo $this->__('Actions') ?></label>
+                            <label><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Actions') ?></label>
                             <select id="<?php echo $this->getHtmlId() ?>-select" class="required-entry select absolute-advice local-validation">
                                 <option value=""></option>
                                 <?php foreach($this->getItems() as $_item): ?>

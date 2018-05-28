@@ -12,7 +12,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         $this
             ->loadLayout()
             ->_setActiveMenu('straker/new');
-        $this->_title($this->__('Create New Job'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job'));
         return $this;
     }
 
@@ -28,7 +28,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
     public function supportAction()
     {
-        $this->_redirectUrl("https://help.strakertranslations.com/docs/magento/");
+        $this->_redirectUrl("https://help.strakertranslations.com/");
     }
 
     public function indexAction()
@@ -237,10 +237,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
         if ($helper->getStoreSetup($storeId)) {
             $helper->saveStoreSetup($storeId, '', '', '');
-            $session->addSuccess($this->__('Language settings has been reset.'));
+            $session->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Language settings has been reset.'));
             Mage::app()->getCacheInstance()->cleanType('config');
         } else {
-            $session->addError($this->__('Store code is not valid.'));
+            $session->addError(Mage::helper('strakertranslations_easytranslationplatform')->__('Store code is not valid.'));
         }
 
         $this->_redirect('adminhtml/system_config/edit/section/straker');

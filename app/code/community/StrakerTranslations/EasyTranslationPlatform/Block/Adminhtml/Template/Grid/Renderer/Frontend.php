@@ -8,14 +8,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     {
         $html = '';
         if(!$row->getVersion()){
-            $html .= '<p class="inactive">' . $this->__('View in Frontend') . '</p>';
+            $html .= '<p class="inactive">' . Mage::helper('strakertranslations_easytranslationplatform')->__('View in Frontend') . '</p>';
         }
         elseif ($row->getProductId()) {
             $product = Mage::getModel('catalog/product')->setStoreId($this->getStoreId($row))->load($row->getProductId());
             if (!$product->isDisabled() && $product->isVisibleInSiteVisibility()) {
-                $html .= '<a target="_blank" href="' . $product->getProductUrl() . '">' . $this->__('View in Frontend') . '</a>';
+                $html .= '<a target="_blank" href="' . $product->getProductUrl() . '">' . Mage::helper('strakertranslations_easytranslationplatform')->__('View in Frontend') . '</a>';
             } else {
-                $html .= 'Product is not visible in frontend';
+
+                $html .= Mage::helper('strakertranslations_easytranslationplatform')->__('Product is not visible in frontend');
             }
         }
         elseif($row->getPageId()){
@@ -32,7 +33,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
                 );
             }
 
-            $html .= '<a target="_blank" href="' . $url . '">' . $this->__('View in Frontend') . '</a>';
+            $html .= '<a target="_blank" href="' . $url . '">' . Mage::helper('strakertranslations_easytranslationplatform')->__('View in Frontend') . '</a>';
         }
 
         return $html;

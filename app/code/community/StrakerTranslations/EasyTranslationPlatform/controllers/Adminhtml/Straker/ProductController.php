@@ -38,19 +38,19 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_ProductContr
             return;
         }
 
-        $this->_title($this->__('Straker Translations'))
-            ->_title($this->__('Manage Jobs'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Straker Translations'))
+            ->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 
         $this->loadLayout()->_setActiveMenu('straker/job');
         $this->renderLayout();
 
 //        try {
-//            $this->_title($this->__('Manage Jobs'));
+//            $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 //            return $this->_initAction()
 //                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_job_grid'))
 //                ->renderLayout();
 //        } catch (Exception $e) {
-//            Mage::getSingleton('core/session')->addError($this->__('Error occurred. Please contact service administrator.'));
+//            Mage::getSingleton('core/session')->addError(Mage::helper('strakertranslations_easytranslationplatform')->__('Error occurred. Please contact service administrator.'));
 //            $this->_redirect('adminhtml/dashboard');
 //        }
     }

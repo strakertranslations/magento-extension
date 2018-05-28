@@ -20,15 +20,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Type exten
             $typeName = $type->getTypeName();
 
             if ('Product' == $typeName) {
-                $title = $this->__('Select all your products or specific products you wish to translate, you can filter by product type, SKU, name, etc');
+                $title = Mage::helper('strakertranslations_easytranslationplatform')->__('Select all your products or specific products you wish to translate, you can filter by product type, SKU, name, etc');
             } elseif ('Attribute' == $typeName) {
-                $title = $this->__('Select all attributes or specific ones');
+                $title = Mage::helper('strakertranslations_easytranslationplatform')->__('Select all attributes or specific ones');
             } elseif ('Category' == $typeName) {
-                $title = $this->__('Select all categories or specific ones');
+                $title = Mage::helper('strakertranslations_easytranslationplatform')->__('Select all categories or specific ones');
             } elseif ('CMS Page' == $typeName) {
-                $title = $this->__('You can select which items from the CMS page to include/exclude: Title, Meta Keywords, Meta Description, Content Heading, Content');
+                $title = Mage::helper('strakertranslations_easytranslationplatform')->__('You can select which items from the CMS page to include/exclude: Title, Meta Keywords, Meta Description, Content Heading, Content');
             } elseif ('CMS Block' == $typeName) {
-                $title = $this->__('You can include/exclude the Title and Content');
+                $title = Mage::helper('strakertranslations_easytranslationplatform')->__('You can include/exclude the Title and Content');
             }
 
             $html .= '<div class="strakertranslations-adminhtml-job-type"><a class="job-type-btn" href="' . Mage::helper("adminhtml")->getUrl("adminhtml/straker_".str_replace(' ', '_', strtolower($type->getTypeName()))."/new", array("store" => $storeId)) . '">' . $type->getTypeName() . '</a></div> <span class="st-tooltip"><img width="18px" src="/skin/adminhtml/default/straker/images/help.svg" /><span class="st-tooltiptext">' . $title . '</span></span>';

@@ -17,7 +17,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job_Type extends Mage_Co
     {
         $data = array();
         foreach($this->getCollection()->getData() as $d){
-            $data[$d['type_id']] = $d['type_name'];
+            $data[$d['type_id']] = Mage::helper('strakertranslations_easytranslationplatform')->__($d['type_name']);
         }
 
         return $data;

@@ -1,15 +1,15 @@
 <div class="content-header">
-    <h3><?php echo $this->__('Create New Job') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getRequest()->getParam('store')) ?></h3>
+    <h3><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getRequest()->getParam('store')) ?></h3>
 </div>
 <ol class="wizard" data-wizard-steps="4">
-    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
-    <li class="wizard-current"><?php echo $this->__('Select Details') ?></li>
-    <li class="wizard-todo"><?php echo $this->__('Select Content') ?></li>
-    <li class="wizard-todo"><?php echo $this->__('Confirm Content') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Job Type') ?></li>
+    <li class="wizard-current"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Details') ?></li>
+    <li class="wizard-todo"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Content') ?></li>
+    <li class="wizard-todo"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
 <div class="straker-main-container border">
-    <h1><?php echo $this->__('CMS Block Details') ?></h1>
-    <p><?php echo $this->__('What CMS block details would you like to translate?') ?></p>
+    <h1><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('CMS Block Details') ?></h1>
+    <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('What CMS block details would you like to translate?') ?></p>
     <form action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_cms_block/attribute") ?>" >
         <div style="padding:0; margin-bottom: 30px;">
             <div style="text-align: left;">

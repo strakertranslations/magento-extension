@@ -143,8 +143,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             'index' => 'version',
             'type'  => 'options',
             'options' => array(
-              'Translated'   => Mage::helper('catalog')->__('Translated'),
-              'Not Translated'   => Mage::helper('catalog')->__('Not Translated')
+              'Translated'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Translated'),
+              'Not Translated'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Not Translated')
             ),
             'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Translated',
             'filter_condition_callback' => array($this, '_versionFilter'),

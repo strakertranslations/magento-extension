@@ -16,7 +16,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Setupstore
         }
 
         $html = '<select class="validate-select" name="'.$name.'">';
-        $html .= '<option value="">' . $this->__('Select a language') . '</option>';
+        $html .= '<option value="">' . Mage::helper('strakertranslations_easytranslationplatform')->__('Select a language') . '</option>';
         if ($this->_languages) {
             foreach ($this->_languages as $language) {
                 $html .= '<option value="' . $language->code . '">' . $language->name . '</option>';

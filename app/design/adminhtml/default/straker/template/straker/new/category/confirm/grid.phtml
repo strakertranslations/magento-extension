@@ -57,27 +57,27 @@ $numColumns = sizeof($this->getColumns());
         <tr>
         <?php if($this->getPagerVisibility()): ?>
             <td class="pager">
-            <?php echo $this->__('Page') ?>
+            <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Page') ?>
 
             <?php $_curPage  = $this->getCollection()->getCurPage() ?>
             <?php $_lastPage = $this->getCollection()->getLastPageNumber() ?>
             <?php if($_curPage>1): ?>
-                <a href="#" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Previous page')) ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape($this->__('Go to Previous page')) ?>" class="arrow"/></a>
+                <a href="#" title="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('strakertranslations_easytranslationplatform')->__('Previous page')) ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage-1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_left.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('strakertranslations_easytranslationplatform')->__('Go to Previous page')) ?>" class="arrow"/></a>
             <?php else: ?>
-                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left_off.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape($this->__('Go to Previous page')) ?>" class="arrow"/>
+                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_left_off.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('strakertranslations_easytranslationplatform')->__('Go to Previous page')) ?>" class="arrow"/>
             <?php endif; ?>
 
             <input type="text" name="<?php echo $this->getVarNamePage() ?>" value="<?php echo $_curPage ?>" class="input-text page" onkeypress="<?php echo $this->getJsObjectName() ?>.inputPage(event, '<?php echo $_lastPage ?>')"/>
 
             <?php if($_curPage < $_lastPage): ?>
-                <a href="#" title="<?php echo Mage::helper('core')->quoteEscape($this->__('Next page')) ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape($this->__('Go to Next page')) ?>" class="arrow"/></a>
+                <a href="#" title="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('strakertranslations_easytranslationplatform')->__('Next page')) ?>" onclick="<?php echo $this->getJsObjectName() ?>.setPage('<?php echo ($_curPage+1) ?>');return false;"><img src="<?php echo $this->getSkinUrl('images/pager_arrow_right.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('strakertranslations_easytranslationplatform')->__('Go to Next page')) ?>" class="arrow"/></a>
             <?php else: ?>
-                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right_off.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape($this->__('Go to Next page')) ?>" class="arrow"/>
+                <img src="<?php echo $this->getSkinUrl('images/pager_arrow_right_off.gif') ?>" alt="<?php echo Mage::helper('core')->quoteEscape(Mage::helper('strakertranslations_easytranslationplatform')->__('Go to Next page')) ?>" class="arrow"/>
             <?php endif; ?>
 
-            <?php echo $this->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>
+            <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('of %s pages', $this->getCollection()->getLastPageNumber()) ?>
             <span class="separator">|</span>
-            <?php echo $this->__('View') ?>
+            <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('View') ?>
             <select name="<?php echo $this->getVarNameLimit() ?>" onchange="<?php echo $this->getJsObjectName() ?>.loadByElement(this)">
                 <option value="20"<?php if($this->getCollection()->getPageSize()==20): ?> selected="selected"<?php endif; ?>>20</option>
                 <option value="30"<?php if($this->getCollection()->getPageSize()==30): ?> selected="selected"<?php endif; ?>>30</option>
@@ -85,8 +85,8 @@ $numColumns = sizeof($this->getColumns());
                 <option value="100"<?php if($this->getCollection()->getPageSize()==100): ?> selected="selected"<?php endif; ?>>100</option>
                 <option value="200"<?php if($this->getCollection()->getPageSize()==200): ?> selected="selected"<?php endif; ?>>200</option>
             </select>
-            <?php echo $this->__('per page') ?><span class="separator">|</span>
-            <?php echo $this->__('Total %d records found', $this->getCollection()->getSize()) ?>
+            <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('per page') ?><span class="separator">|</span>
+            <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Total %d records found', $this->getCollection()->getSize()) ?>
             <span id="<?php echo $this->getHtmlId() ?>-total-count" class="no-display"><?php echo $this->getCollection()->getSize() ?></span>
             <?php if($this->getRssLists()): ?>
                 <?php foreach ($this->getRssLists() as $_rss): ?>
@@ -97,7 +97,7 @@ $numColumns = sizeof($this->getColumns());
     <?php endif ?>
     <?php if($this->getExportTypes()): ?>
         <td class="export a-right">
-            <img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo $this->__('Export to:') ?>
+            <img src="<?php echo $this->getSkinUrl('images/icon_export.gif') ?>" alt="" class="v-middle"/>&nbsp; <?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Export to:') ?>
             <select name="<?php echo $this->getId() ?>_export" id="<?php echo $this->getId() ?>_export" style="width:8em;">
             <?php foreach ($this->getExportTypes() as $_type): ?>
                 <option value="<?php echo $_type->getUrl() ?>"><?php echo $_type->getLabel() ?></option>

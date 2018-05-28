@@ -9,22 +9,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             //if status is QUEUED
             if ($row->getStatusName() == 'QUEUED') {
                 $quote = $row->getQuote();
-                $html = $this->__('Waiting for Quote');
+                $html = Mage::helper('strakertranslations_easytranslationplatform')->__('Waiting for Quote');
                 if ('READY' === $quote && $row->getStatusId() == 2) {
-                        $html = '<button onclick="viewStrakerQuote('.$row->getId().',\'' . $row->getJobKey() . '\')" style="margin: 5px;" title="View Quote" type="button" style="">'.$this->__('View Quote').'</button>';
+                        $html = '<button onclick="viewStrakerQuote('.$row->getId().',\'' . $row->getJobKey() . '\')" style="margin: 5px;" title="View Quote" type="button" style="">'.Mage::helper('strakertranslations_easytranslationplatform')->__('View Quote').'</button>';
                 }
             }
             //else if status is IN_PROGRESS
             elseif ($row->getStatusName() == 'IN_PROGRESS') {
-                $html = $this->__('In Progress');
+                $html = Mage::helper('strakertranslations_easytranslationplatform')->__('In Progress');
             }
             //else if status is COMPLETED
             elseif ($row->getStatusName() == 'COMPLETED') {
-                $html = $this->__('Ready to Publish');
+                $html = Mage::helper('strakertranslations_easytranslationplatform')->__('Ready to Publish');
             }
             //else if status is PUBLISHED
             elseif ($row->getStatusName() == 'PUBLISHED') {
-                $html = $this->__('Published');
+                $html = Mage::helper('strakertranslations_easytranslationplatform')->__('Published');
             }
         }
 

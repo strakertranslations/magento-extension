@@ -43,7 +43,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_System_Config_
             return $button->toHtml();
         }
         else{
-            return '<div class="empty-button">'.$this->__('No language settings applied').'</div>';
+            return '<div class="empty-button">'.Mage::helper('strakertranslations_easytranslationplatform')->__('No language settings applied').'</div>';
         }
     }
 }
