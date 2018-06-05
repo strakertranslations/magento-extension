@@ -1,5 +1,6 @@
 <?php
-Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobController extends Mage_Adminhtml_Controller_Action{
+Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobController extends Mage_Adminhtml_Controller_Action
+{
     protected function _isAllowed()
     {
         return Mage::getSingleton('admin/session')->isAllowed('admin/straker/job');
@@ -9,13 +10,13 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
     {
         $this
             ->loadLayout()
-            ->_setActiveMenu('straker/job')
-        ;
+            ->_setActiveMenu('straker/job');
 
         return $this;
     }
 
-    public function indexAction(){
+    public function indexAction()
+    {
         /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $helper->checkSiteMode();
@@ -29,14 +30,15 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
 //        foreach($collection as $job){
 //            $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($job->getId());
 //            if ( $job->updateTranslation() ){
-//                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+//                Mage::getSingleton('core/session')->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Job %s has been updated.', $job->getId()));
 //            }
 //        }
         if ($collection->count() > 1){
             /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $job */
             $job = Mage::getModel('strakertranslations_easytranslationplatform/job');
+            //get all translated jobs from straker
             $response = $job->bulkUpdateTranslation();
-            if ( $response ) {
+            if ($response) {
                 /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $jobModel */
                 foreach($collection as $jobModel){
                     foreach ($response as $jobResponse) {
@@ -44,7 +46,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
                             $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobModel->getId());
                             $result = $jobModel->updateJob($jobResponse);
                             if($result){
-                                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $jobModel->getId()));
+                                Mage::getSingleton('core/session')->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Job %s has been updated.', $jobModel->getId()));
                             }
                         }
                     }
@@ -55,24 +57,27 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             $this->_updateJob($id);
         }
 
-        $this->_title($this->__('Straker Translations'))
-            ->_title($this->__('Manage Jobs'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Straker Translations'))
+            ->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 
         $this->loadLayout();
         $this->renderLayout();
     }
 
-    public function updateJobAction() {
+    public function updateJobAction() 
+    {
         $data = $this->getRequest()->getParams();
         $id = $data['job_id'];
         if($id){
             $this->_updateJob($id);
             $this->_redirect('*/*/');
         }
+
         return false;
     }
 
-    private function _updateJob($id){
+    private function _updateJob($id)
+    {
         if($id){
             /** @var StrakerTranslations_EasyTranslationPlatform_Model_Job $job */
             $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load((int)$id);
@@ -81,24 +86,29 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
                 return false;
             }
 
-            if( $job->updateTranslation() ){
-                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+            if($job->updateTranslation()){
+                Mage::getSingleton('core/session')->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Job %s has been updated.', $job->getId()));
             }
+
             return true;
         }
+
         return false;
     }
 
-    public function disputeAction() {
+    public function disputeAction() 
+    {
         $data = $this->getRequest()->getParams();
         if($data['job_id'] && $data['message']){
             $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load((int) $data['job_id']);
 
 
-            $response = $job->submitSupport(array(
+            $response = $job->submitSupport(
+                array(
                 'title' => 'Dispute for '.$job->getTjNumber(),
                 'message' => $data['message']
-            ));
+                )
+            );
 
             //Send out email
 
@@ -108,7 +118,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             $mail->addTo('processing@strakertranslations.com', 'Straker Support');
             $mail->setSubject('Dispute for '.$job->getTjNumber());
             $msg  ='';
-            Mage::log(print_r($mail,true), null , 'debugging.log' , true);
+            Mage::log(print_r($mail, true), null, 'debugging.log', true);
             try {
                 if($mail->send())
                 {
@@ -118,6 +128,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             catch(Exception $ex) {
                 $msg = false;
             }
+
             if($msg){
                 Mage::getSingleton('adminhtml/session')->addSuccess('Feedback has been submitted.');
             }
@@ -128,9 +139,12 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
         else{
             Mage::getSingleton('adminhtml/session')->addError('Required parameters missing when submitting a feedback.');
         }
-        $this->_redirect('adminhtml/straker_product/index', array(
+
+        $this->_redirect(
+            'adminhtml/straker_product/index', array(
             'job_id' => $data['job_id']
-        ));
+            )
+        );
         return;
     }
 

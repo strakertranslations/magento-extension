@@ -87,6 +87,34 @@
                         <!-- </restore> -->
                     </fields>
                 </general>
+                <env translate="label">
+                    <label>Environment</label>
+                    <frontend_type>text</frontend_type>
+                    <sort_order>100</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <!--<site_mode translate="label comment" >-->
+                        <!--<label>Site Mode</label>-->
+                        <!--<frontend_type>select</frontend_type>-->
+                        <!--<sort_order>0</sort_order>-->
+                        <!--<source_model>strakertranslations_easytranslationplatform/system_config_source_siteMode</source_model>-->
+                        <!--<show_in_default>1</show_in_default>-->
+                        <!--<show_in_website>1</show_in_website>-->
+                        <!--<show_in_store>1</show_in_store>-->
+                        <!--</site_mode>-->
+                        <version translate="label comment" >
+                            <label>Module Version</label>
+                            <frontend_type>label</frontend_type>
+                            <frontend_model>strakertranslations_easytranslationplatform/adminhtml_system_config_form_moduleVersion</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </version>
+                    </fields>
+                </env>
                 <!-- <api_url translate="label"> -->
                     <!-- <label>Api Url</label> -->
                     <!-- <frontend_type>text</frontend_type> -->

@@ -1,34 +1,34 @@
 <div class="content-header">
-    <h3><?php echo $this->__('Create New Job') ?></h3>
+    <h3><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job') ?></h3>
 </div>
 <div class="straker-main-container">
     <?php echo $this->renderWelcomeIframe(); ?>
     <form id="straker-create-account-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_new/register") ?>" method="post">
         <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
         <div id="register-content" style="padding:0; margin-bottom: 30px;">
-            <h3><?php echo $this->__('Register a New Account') ?></h3>
-            <p><?php echo $this->__('As this is your first time using the Straker Translation Extension please register an account with us.') ?></p>
+            <h3><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Register a New Account') ?></h3>
+            <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('As this is your first time using the Straker Translation Extension please register an account with us.') ?></p>
             <div class="col-left">
-                <div class="input-box"><label for="first_name">First Name</label><em class="required">*</em><br>
+                <div class="input-box"><label for="first_name"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('First Name') ?></label><em class="required">*</em><br>
                     <input type="text" id="first_name" name="first_name" value="" class="required-entry input-text"></div>
-                <div class="input-box"><label for="last_name">Last Name</label><em class="required">*</em><br>
+                <div class="input-box"><label for="last_name"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Last Name') ?></label><em class="required">*</em><br>
                     <input type="text" id="last_name" name="last_name" value="" class="required-entry input-text"></div>
-                <div class="input-box"><label for="email">Email</label><em class="required">*</em><br>
+                <div class="input-box"><label for="email"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Email') ?></label><em class="required">*</em><br>
                     <input type="email" id="email" name="email" value="" class="required-entry validate-email input-text"></div>
-                <div class="input-box"><label for="country">Country</label><em class="required">*</em><?php echo $this->renderCountriesSelect('country') ?></div>
+                <div class="input-box"><label for="country"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Country') ?></label><em class="required">*</em><?php echo $this->renderCountriesSelect('country') ?></div>
             </div>
             <div class="col-right">
-                <div class="input-box"><label for="company">Company Name</label><br>
+                <div class="input-box"><label for="company"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Company Name') ?></label><br>
                     <input type="text" id="company" name="company" value="" class="input-text"></div>
-                <div class="input-box"><label for="phone">Phone Number</label><br>
+                <div class="input-box"><label for="phone"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Phone Number') ?></label><br>
                     <input type="text" id="phone" name="phone" value="" class="input-text"></div>
-                <div class="input-box"><label for="website">Website URL</label><br>
+                <div class="input-box"><label for="website"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Website URL') ?></label><br>
                     <input type="text" id="website" name="website" value="" class="input-text"></div>
             </div>
             <div class="clear"></div>
-            <label class="terms-label"><input type="checkbox" name="terms" value="1" class="required-entry">I have read and agreed to the <a href="https://www.strakertranslations.com/about-us/terms-and-conditions-of-service.cfm">terms and conditions</a></label>
+            <label class="terms-label"><input type="checkbox" name="terms" value="1" class="required-entry"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('I have read and agreed to the %sterms and conditions%s', '<a href="https://www.strakertranslations.com/terms-conditions">','</a>') ?></label>
             <div class="form-buttons">
-                <input type="submit" onclick="registerForm.submit()" class="form-button" value="Register" title="Register">
+                <input type="submit" onclick="registerForm.submit()" class="form-button" value="<?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Register') ?>" title="<?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Register') ?>">
             </div>
         </div>
     </form>

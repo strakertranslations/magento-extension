@@ -6,7 +6,7 @@
 <div class="content-header">
     <table cellspacing="0">
         <tr>
-            <td style="width:80%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Attributes to Translate') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getStore()) ?></h3></td>
+            <td style="width:70%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Attributes to Translate') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getStore()) ?></h3></td>
             <td class="a-right">
                 <?php echo $this->getButtonsHtml() ?>
             </td>
@@ -14,17 +14,17 @@
     </table>
 </div>
 <ol class="wizard" data-wizard-steps="4">
-    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
-    <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
-    <li class="wizard-done"><?php echo $this->__('Select Content') ?></li>
-    <li class="wizard-current"><?php echo $this->__('Confirm Content') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Job Type') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Details') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Content') ?></li>
+    <li class="wizard-current"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
 <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_attribute/new", array(
     'store'=>$this->getStore(),
     'from' => 'confirm'
 //    'internal_attribute'=>implode(',', $this->getAttribute()),
 //    'internal_option'=>$this->getOption()
-) ) ?>"><?php echo $this->__('Edit Attributes') ?></a>
+) ) ?>"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Edit Attributes') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_attribute/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
     <input type="hidden" name="attribute" value="<?php echo implode(',', $this->getAttribute()) ?>" >

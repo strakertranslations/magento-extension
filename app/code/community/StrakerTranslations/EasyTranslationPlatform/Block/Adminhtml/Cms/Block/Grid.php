@@ -1,5 +1,6 @@
 <?php
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid extends Mage_Adminhtml_Block_Cms_Block_Grid {
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid extends Mage_Adminhtml_Block_Cms_Block_Grid
+{
     protected function _prepareCollection()
     {
         /* @var $collection Mage_Cms_Model_Resource_Block_Collection */
@@ -22,7 +23,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid
     protected function _prepareColumns()
     {
         if (!Mage::app()->isSingleStoreMode()) {
-            $this->addColumnAfter('straker_translated', array(
+            $this->addColumnAfter(
+                'straker_translated', array(
                 'header'    => Mage::helper('strakertranslations_easytranslationplatform')->__('Created by Straker'),
                 'type'      => 'options',
                 'options'   => array('0' => 'No', '1' => 'Yes'),
@@ -30,8 +32,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid
                 'index'     => 'straker_translated',
                 'filter_index' => 'straker.version',
                 'filter_condition_callback' => array($this, '_filterStrakerVersion')
-            ), 'update_time');
+                ), 'update_time'
+            );
         }
+
         return parent::_prepareColumns();
     }
 
@@ -40,11 +44,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Cms_Block_Grid
         $value = $column->getFilter()->getValue();
         if ($value == 0) {
             $this->getCollection()->getSelect()->where(
-                "straker.version IS NULL");
+                "straker.version IS NULL"
+            );
         }
         else {
             $this->getCollection()->getSelect()->where(
-                "straker.version = ".$value);
+                "straker.version = ".$value
+            );
         }
 
         return $this;

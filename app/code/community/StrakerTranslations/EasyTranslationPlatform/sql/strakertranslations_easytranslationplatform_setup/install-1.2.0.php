@@ -12,39 +12,39 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'user_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'nullable' => false,
                 'unsigned' => true,
-            ],
+            ),
             'User ID'
         )->addColumn(
             'action', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Action'
         )->addColumn(
             'message', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Message'
         )->addColumn(
             'extra', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Extra'
         )->addColumn(
             'log_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Log Time'
         )->addIndex(
             $installer->getIdxName($rawTableName, 'user_id'),
@@ -66,33 +66,33 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'method', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'nullable' => false,
                 'default' => ''
-            ],
+            ),
             'Method'
         )->addColumn(
             'request', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Request'
         )->addColumn(
             'response', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Response'
         )->addColumn(
             'timestamp', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Timestamp'
         )->setComment('Straker Api Log Table');;
     $connection->createTable($table);
@@ -105,144 +105,151 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'type_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Type Id'
         )->addColumn(
             'source_store', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Source Store'
         )->addColumn(
             'store_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Store Id'
         )->addColumn(
             'title', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Title'
         )->addColumn(
             'tj_number', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Job Number'
         )->addColumn(
             'sl', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Source Language'
         )->addColumn(
             'tl', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Target Language'
         )->addColumn(
             'job_key', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default'   => null
-            ],
+            ),
             'Job Key'
         )->addColumn(
             'quote', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Quote'
         )->addColumn(
             'status_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false,
                 'default' => 1
-            ],
+            ),
             'Status Id'
         )->addColumn(
             'work_flow', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Work Flow'
         )->addColumn(
             'payment_status', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Payment Status'
         )->addColumn(
             'source_file', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Source File'
         )->addColumn(
             'download_url', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Download Url'
         )->addColumn(
             'remote_version', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Remote Version'
         )->addColumn(
             'downloaded_version', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Downloaded Version'
         )->addColumn(
             'created_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Created Time'
         )->addColumn(
             'updated_at', Varien_Db_Ddl_Table::TYPE_TIMESTAMP, null,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Updated Time'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_key'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_key'),
             'job_key',
-            [
+            array(
                 'type' => Varien_Db_Adapter_Interface::INDEX_TYPE_UNIQUE
-            ]
-        )->addIndex($installer->getIdxName($rawTableName, 'store_id'),
+            )
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'store_id'),
             'store_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'type_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'type_id'),
             'type_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'status_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'status_id'),
             'status_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'store_id', 'core_store', 'store_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'store_id', 'core_store', 'store_id'),
             'store_id', $installer->getTable('core_store'), 'store_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'type_id', 'straker_job_type', 'type_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'type_id', 'straker_job_type', 'type_id'),
             'type_id', $installer->getTable('straker_job_type'), 'type_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'status_id', 'straker_job_status', 'status_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'status_id', 'straker_job_status', 'status_id'),
             'status_id', $installer->getTable('straker_job_status'), 'status_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Job Table');
@@ -256,38 +263,41 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'product_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Product Id'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'version', Varien_Db_Ddl_Table::TYPE_SMALLINT, 6,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Version'
-        )->addIndex($installer->getIdxName($rawTableName, 'product_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'product_id'),
             'product_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Product Job Table');
@@ -301,19 +311,19 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'status_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'Status Id'
         )->addColumn(
             'status_name', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'nullable' => false,
                 'default' => ''
-            ],
+            ),
             'Status Name'
         )->setComment('Straker Job Status Table');
     $connection->createTable($table);
@@ -326,19 +336,19 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'type_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'Type Id'
         )->addColumn(
             'type_name', Varien_Db_Ddl_Table::TYPE_VARCHAR, 255,
-            [
+            array(
                 'nullable' => false,
                 'default' => ''
-            ],
+            ),
             'Type Name'
         )->setComment('Straker Job Type Table');
     $connection->createTable($table);
@@ -351,35 +361,39 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Attribute Id'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'attribute_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'attribute_id'),
             'attribute_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id', $installer->getTable('eav_attribute'), 'attribute_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Product Attribute Table');
@@ -393,64 +407,69 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'product_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Product Id'
         )->addColumn(
             'attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Attribute Id'
         )->addColumn(
             'original', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Original'
         )->addColumn(
             'translate', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Translate'
         )->addColumn(
             'backup', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Backup'
         )->addColumn(
             'is_imported', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false,
                 'default' => 0
-            ],
+            ),
             'Is Imported'
-        )->addIndex($installer->getIdxName($rawTableName, 'product_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'product_id'),
             'product_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'attribute_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'attribute_id'),
             'attribute_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id', $installer->getTable('eav_attribute'), 'attribute_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Product Translation Table');
@@ -464,41 +483,45 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'category_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Category Id'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'version', Varien_Db_Ddl_Table::TYPE_SMALLINT, 6,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Version'
-        )->addIndex($installer->getIdxName($rawTableName, 'category_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'category_id'),
             'category_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'category_id', 'catalog_category_entity', 'entity_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'category_id', 'catalog_category_entity', 'entity_id'),
             'category_id', $installer->getTable('catalog_category_entity'), 'entity_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Category Job Table');
@@ -513,35 +536,39 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Attribute Id'
-        )->addIndex($installer->getIdxName($rawTableName, 'attribute_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'attribute_id'),
             'attribute_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id', $installer->getTable('eav_attribute'), 'attribute_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Category Attribute Table');
@@ -556,64 +583,69 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'category_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Category Id'
         )->addColumn(
             'attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Attribute Id'
         )->addColumn(
             'original', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Original'
         )->addColumn(
             'translate', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Translate'
         )->addColumn(
             'backup', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Backup'
         )->addColumn(
             'is_imported', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false,
                 'default' => 0
-            ],
+            ),
             'Is Imported'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'attribute_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'attribute_id'),
             'attribute_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'category_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'category_id'),
             'category_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id', $installer->getTable('eav_attribute'), 'attribute_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Category Translation Table');
@@ -628,57 +660,61 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Attribute Id'
         )->addColumn(
             'translate_label', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false,
                 'default'  => 0
-            ],
+            ),
             'Translate Label'
         )->addColumn(
             'translate_option', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false,
                 'default'  => 0
-            ],
+            ),
             'Translate Option'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'version', Varien_Db_Ddl_Table::TYPE_SMALLINT, 6,
-            [
+            array(
                 'default' => null
-            ],
+            ),
             'Version'
-        )->addIndex($installer->getIdxName($rawTableName, 'attribute_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'attribute_id'),
             'attribute_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id', $installer->getTable('eav_attribute'), 'attribute_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Attribute Job Table');
@@ -693,55 +729,59 @@ if ($connection->isTableExists($tableName) != true) {
         ->newTable($tableName)
         ->addColumn(
             'id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'identity' => true,
                 'unsigned' => true,
                 'nullable' => false,
                 'primary' => true
-            ],
+            ),
             'ID'
         )->addColumn(
             'job_id', Varien_Db_Ddl_Table::TYPE_INTEGER, 10,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Job Id'
         )->addColumn(
             'attribute_id', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false
-            ],
+            ),
             'Attribute Id'
         )->addColumn(
             'original', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Original'
         )->addColumn(
             'translate', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Translate'
         )->addColumn(
             'backup', Varien_Db_Ddl_Table::TYPE_TEXT, null,
-            [],
+            array(),
             'Backup'
         )->addColumn(
             'is_imported', Varien_Db_Ddl_Table::TYPE_SMALLINT, 5,
-            [
+            array(
                 'unsigned' => true,
                 'nullable' => false,
                 'default' => 0
-            ],
+            ),
             'Is Imported'
-        )->addIndex($installer->getIdxName($rawTableName, 'job_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'job_id'),
             'job_id'
-        )->addIndex($installer->getIdxName($rawTableName, 'attribute_id'),
+        )->addIndex(
+            $installer->getIdxName($rawTableName, 'attribute_id'),
             'attribute_id'
-        )->addForeignKey($installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'job_id', 'straker_job', 'id'),
             'job_id', $installer->getTable('straker_job'), 'id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
-        )->addForeignKey($installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
+        )->addForeignKey(
+            $installer->getFkName($rawTableName, 'attribute_id', 'eav_attribute', 'attribute_id'),
             'attribute_id', $installer->getTable('eav_attribute'), 'attribute_id',
             Varien_Db_Ddl_Table::ACTION_CASCADE, Varien_Db_Ddl_Table::ACTION_CASCADE
         )->setComment('Straker Attribute Translation Table');

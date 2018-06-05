@@ -6,23 +6,28 @@
  * Date: 30/09/15
  * Time: 4:37 PM
  */
-class StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job extends Mage_Core_Model_Resource_Db_Abstract {
+class StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job extends Mage_Core_Model_Resource_Db_Abstract
+{
 
-  protected function _construct() {
+  protected function _construct() 
+  {
     $this->_init('strakertranslations_easytranslationplatform/job', 'id');
   }
 
-  protected function _getLoadSelect($field, $value, $object) {
+  protected function _getLoadSelect($field, $value, $object) 
+  {
 //    $prefix = Mage::getConfig()->getTablePrefix()->__toString();
       $strakerJobTableName = $this->getTable('strakertranslations_easytranslationplatform/job');
     $select = parent::_getLoadSelect($field, $value, $object)
-      ->join(array('t' => $this->getTable('strakertranslations_easytranslationplatform/job_type')),
+      ->join(
+          array('t' => $this->getTable('strakertranslations_easytranslationplatform/job_type')),
           $strakerJobTableName.'.type_id=t.type_id',
-        array('type_name')
+          array('type_name')
       )
-      ->join(array('s' => $this->getTable('strakertranslations_easytranslationplatform/job_status')),
+      ->join(
+          array('s' => $this->getTable('strakertranslations_easytranslationplatform/job_status')),
           $strakerJobTableName.'.status_id=s.status_id',
-        array('status_name')
+          array('status_name')
       );
 
     return $select;
@@ -34,11 +39,13 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job extends Mag
    * @param Mage_Core_Model_Abstract $object
    * @return array
    */
-  protected function _prepareDataForSave(Mage_Core_Model_Abstract $object) {
+  protected function _prepareDataForSave(Mage_Core_Model_Abstract $object) 
+  {
     $currentTime = Varien_Date::now();
     if ((!$object->getId() || $object->isObjectNew()) && !$object->getCreatedAt()) {
       $object->setCreatedAt($currentTime);
     }
+
     $object->setUpdatedAt($currentTime);
     $data = parent::_prepareDataForSave($object);
     return $data;

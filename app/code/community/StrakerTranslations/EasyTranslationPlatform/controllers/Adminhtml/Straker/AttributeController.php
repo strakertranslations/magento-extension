@@ -1,5 +1,6 @@
 <?php
-Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeController extends Mage_Adminhtml_Controller_Action{
+Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeController extends Mage_Adminhtml_Controller_Action
+{
     protected function _isAllowed()
     {
         return Mage::getSingleton('admin/session')->isAllowed('admin/straker/job');
@@ -11,8 +12,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
 
         $this
             ->loadLayout()
-            ->_setActiveMenu('straker/job')
-        ;
+            ->_setActiveMenu('straker/job');
 
         return $this;
     }
@@ -23,14 +23,14 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
 
         $this
             ->loadLayout()
-            ->_setActiveMenu('straker/new')
-        ;
+            ->_setActiveMenu('straker/new');
 
         return $this;
     }
 
 
-    public function indexAction(){
+    public function indexAction()
+    {
 
         if (!$this->getRequest()->getParam('job_id')){
             Mage::getSingleton('adminhtml/session')->addError('Job ID missing');
@@ -38,43 +38,46 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             return;
         }
 
-        $this->_title($this->__('Straker Translations'))
-            ->_title($this->__('Manage Jobs'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Straker Translations'))
+            ->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 
         $this->loadLayout()->_setActiveMenu('straker/job');
         $this->renderLayout();
 
     }
 
-    public function newAction(){
+    public function newAction()
+    {
         $params = $this->getRequest()->getParams();
         if (empty($params['store'])) {
             $this->_redirect('*/straker_new');
         }
         else{
-            if( $this->getRequest()->getParam('from') !== 'confirm'){
-                Mage::getSingleton('adminhtml/session')->setData('straker_new_option','');
+            if($this->getRequest()->getParam('from') !== 'confirm'){
+                Mage::getSingleton('adminhtml/session')->setData('straker_new_option', '');
             }
+
             $this->_initNewAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute','strakertranslations_easytranslationplatform_new_attribute',array('setup_store_id' => $params['store'])))
+                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute', 'strakertranslations_easytranslationplatform_new_attribute', array('setup_store_id' => $params['store'])))
                 ->renderLayout();
         }
     }
 
-    public function addToConfirmAction(){
+    public function addToConfirmAction()
+    {
         $data = $this->getRequest()->getParams();
         if(empty($data['attribute']) && empty($data['option'])){
             $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
             $data['option'] = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
         }
+
         $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
 
-        if( $data['store'] && ($data['attribute'] || $data['option']) ){
+        if($data['store'] && ($data['attribute'] || $data['option'])){
             Mage::getSingleton('adminhtml/session')
                 ->setData('straker_new_attribute', $data['attribute'])
                 ->setData('straker_new_option', $data['option'])
-                ->setData('straker_new_store', $data['store'])
-            ;
+                ->setData('straker_new_store', $data['store']);
             return $this->_initAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute_confirm', 'strakertranslations_easytranslationplatform_new_attribute_confirm', array('store' => $data['store'], 'attribute' => $data['attribute']?$data['attribute']:array(), 'option' => $data['option']?$data['option']:array())))
                 ->renderLayout();
@@ -83,24 +86,26 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             if(array_key_exists('key', $data)){
                 unset($data['key']);
             }
+
             $this->_redirect('*/*/new', $data);
         }
     }
 
-    public function submitJobAction(){
+    public function submitJobAction()
+    {
         $data = $this->getRequest()->getParams();
-        if( $data['store'] && isset($data['attribute']) && isset($data['option']) ){
+        if($data['store'] && isset($data['attribute']) && isset($data['option'])){
             $attribute = !empty($data['attribute'])?explode(',', $data['attribute']):array();
             $option = !empty($data['option'])?explode(',', $data['option']):array();
             //prepare attribute array in nested
-            foreach( array_unique( array_merge(
-                $attribute,
-                $option
-            ) ) as $attributeId) {
-
+            foreach(array_unique(
+                array_merge(
+                    $attribute,
+                    $option
+                ) 
+            ) as $attributeId) {
                 $attributeData[$attributeId]['label'] = in_array($attributeId, $attribute, true) ?  1 : 0;
                 $attributeData[$attributeId]['option'] = in_array($attributeId, $option, true) ?  1 : 0;
-
             }
 
 
@@ -116,16 +121,20 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             }
             catch (Mage_Core_Exception $e){
                 Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-                $this->_redirect('*/*/', array(
+                $this->_redirect(
+                    '*/*/', array(
                     'store' => $data['store'],
                     'attr' => $data['attr']
-                ));
+                    )
+                );
                 return;
             }
+
             foreach(explode(',', $data['attr']) as $attributeCode){
                 $attr_ids[] = $attribute = Mage::getSingleton('eav/config')
                     ->getAttribute(Mage_Catalog_Model_Product::ENTITY, $attributeCode)->getAttributeId();
             }
+
             $helper = Mage::helper('strakertranslations_easytranslationplatform');
             $storeSetup = $helper->getStoreSetup($data['store']);
             $jobModel->setStoreId($data['store']);
@@ -147,7 +156,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         }
     }
 
-    public function publishAllAction(){
+    public function publishAllAction()
+    {
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($this->getRequest()->getParam('job_id'));
 
         if (!$job->getId()){
@@ -168,7 +178,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
 
     }
 
-    public function publishAction(){
+    public function publishAction()
+    {
         $jobId = $this->getRequest()->getParam('job_id');
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
 
@@ -177,52 +188,73 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             $this->_redirect('*/straker_job/');
             return;
         }
+
         $attributeIds = $this->getRequest()->getParam('attribute');
         if(!empty($attributeIds)) {
             if ($job->applyTranslation($attributeIds)) {
                 Mage::getSingleton('adminhtml/session')->addSuccess('Translation has been applied.');
-                $this->_redirect('*/straker_attribute/',array('job_id' => $jobId));
+                $this->_redirect('*/straker_attribute/', array('job_id' => $jobId));
                 return;
             } else {
                 Mage::getSingleton('adminhtml/session')->addError('Error when applying translation.');
-                $this->_redirect('*/straker_attribute/',array('job_id' => $jobId));
+                $this->_redirect('*/straker_attribute/', array('job_id' => $jobId));
                 return;
             }
         }
         else{
             Mage::getSingleton('adminhtml/session')->addError('Please select attributes to apply the translation.');
-            $this->_redirect('*/straker_attribute/',array('job_id' => $jobId));
+            $this->_redirect('*/straker_attribute/', array('job_id' => $jobId));
             return;
         }
 
     }
 
-    private function checkSiteMode(){
+    private function checkSiteMode()
+    {
         /** @var $helper StrakerTranslations_EasyTranslationPlatform_Helper_Data */
         $helper = Mage::helper('strakertranslations_easytranslationplatform');
         $helper->checkSiteMode();
     }
 
-    public function removeFromCartAction(){
+    public function reimportAction()
+    {
+        $jobId = $this->getRequest()->getParam('job_id');
+
+        /** @var  $jobModel StrakerTranslations_EasyTranslationPlatform_Model_Job */
+        $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
+        if($jobModel->getId() > 0) {
+            $jobModel->reimport();
+        }
+
+        $this->_redirect('*/straker_attribute/', array('job_id' => $jobId));
+    }
+
+    public function removeFromCartAction()
+    {
         $attributeId = $this->getRequest()->getParam('attribute_id');
         if(!empty($attributeId)){
             $attributeId = $this->getRequest()->getParam('attribute_id');
         }
+
         $attributeIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
         if(!is_array($attributeIds)){
-            $attributeIds = explode(',', trim($attributeIds,','));
+            $attributeIds = explode(',', trim($attributeIds, ','));
         }
-        if( ($key =  array_search($attributeId, $attributeIds)) !== false ){
+
+        if(($key =  array_search($attributeId, $attributeIds)) !== false){
             unset($attributeIds[$key]);
         }
+
         Mage::getSingleton('adminhtml/session')->setData('straker_new_attribute', $attributeIds);
         $optionIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
         if(!is_array($optionIds)){
-            $optionIds = explode(',', trim($optionIds,','));
+            $optionIds = explode(',', trim($optionIds, ','));
         }
-        if( ($key =  array_search($attributeId, $optionIds)) !== false ){
+
+        if(($key =  array_search($attributeId, $optionIds)) !== false){
             unset($optionIds[$key]);
         }
+
 //        var_dump($attributeIds);
 //        var_dump($optionIds);
 //        exit;
@@ -236,6 +268,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
         if (empty($params['store'])) {
             $this->_redirect('*/straker_new');
         }
+
         $this->loadLayout();
         $this->getResponse()->setBody(
             $this
@@ -243,9 +276,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
                 ->createBlock(
                     'strakertranslations_easytranslationplatform/adminhtml_new_attribute_grid',
                     'strakertranslations_easytranslationplatform_new_attribute_grid',
-                    [
+                    array(
                         'setup_store_id' => $params['store']
-                    ]
+                    )
                 )->toHtml()
         );
     }
@@ -257,6 +290,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
             $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
             $data['option'] = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');
         }
+
         $data['store'] = !empty($data['store']) ? $data['store'] : Mage::getSingleton('adminhtml/session')->getData('straker_new_store');
 
         $this->loadLayout();
@@ -266,16 +300,17 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
                 ->createBlock(
                     'strakertranslations_easytranslationplatform/adminhtml_new_attribute_confirm_grid',
                     'strakertranslations_easytranslationplatform_new_attribute_confirm_grid',
-                    [
+                    array(
                         'store'     => $data['store'],
                         'attribute' => $data['attribute'],
                         'option'    => $data['option']
-                    ]
+                    )
                 )->toHtml()
         );
     }
 
-    public function jobGridAction(){
+    public function jobGridAction()
+    {
         $jobId = $this->getRequest()->getParam('job_id');
         $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobId);
         $statusId = $job->getStatusId();
@@ -287,9 +322,9 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
                 ->createBlock(
                     'strakertranslations_easytranslationplatform/adminhtml_job_attribute_grid',
                     'strakertranslations_easytranslationplatform_job_attribute_grid',
-                    [
+                    array(
                         'job_id' => $jobId
-                    ]
+                    )
                 )
                 ->setStatusId($statusId)
                 ->toHtml()

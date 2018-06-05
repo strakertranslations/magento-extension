@@ -24,67 +24,39 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('name')
             ->addAttributeToSelect('type_id');
 
-        foreach ($this->getAttrArray() as $attr){
-            $collection->addAttributeToSelect($attr);
-        }
+        $attrArray = $this->getAttrArray();
+        array_push($attrArray, 'status');
+        array_push($attrArray, 'visibility');
+        array_unique($attrArray);
+
         if ($store->getId()) {
-            //$collection->setStoreId($store->getId());
-            $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
-            $collection->addStoreFilter($store);
-            $collection->joinAttribute(
-                'name',
-                'catalog_product/name',
-                'entity_id',
-                null,
-                'inner',
-                $adminStore
-            );
-            $collection->joinAttribute(
-                'status',
-                'catalog_product/status',
-                'entity_id',
-                null,
-                'inner',
-                $store->getId()
-            );
-            $collection->joinAttribute(
-                'visibility',
-                'catalog_product/visibility',
-                'entity_id',
-                null,
-                'inner',
-                $store->getId()
-            );
+            foreach ($attrArray as $attr){
+                $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, $attr);
+                $collection->joinAttribute(
+                    $attr,
+                    'catalog_product/' . $attr,
+                    'entity_id',
+                    null,
+                    $attributeModel->getIsUserDefined() ? 'left' : 'inner',
+                    $store->getId()
+                );
+            }
         }
         else {
             $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
             $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
         }
-//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
-//        $jobProductQuery = 'select a.`version`, a.`product_id` from `'.$prefix.'straker_job_product` as a
-//                            left join `'.$prefix.'straker_job` as b on a.`job_id`=b.`id`
-//                            where b.`store_id` = '.$store->getId().' and a.`version` =1
-//                            GROUP BY a.`product_id`';
 
-        //join straker job product table to get version for each product
-//        $collection->getSelect()->joinLeft(
-//
-//          new Zend_Db_Expr('('.$jobProductQuery.')'),
-//          'e.entity_id = t.product_id',
-//          array('version')
-//
-//        );
         /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Product_Collection $strakerJobProductCollection */
         $strakerJobProductCollection = Mage::getModel('strakertranslations_easytranslationplatform/job_product')->getCollection();
         $strakerJobProductCollection->getSelect()
             ->reset(Zend_Db_Select::COLUMNS)
             ->joinLeft(
-                ['b' => $collection->getTable('strakertranslations_easytranslationplatform/job')],
+                array('b' => $collection->getTable('strakertranslations_easytranslationplatform/job')),
                 '`main_table`.`job_id` = `b`.`id`',
-                []
+                array()
             )->where(
                 '`b`.`store_id` = ?', $store->getId()
             )->where(
@@ -92,8 +64,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
             )->group(
                 'main_table.product_id'
             )->columns(
-                ['version' => 'version', 'product_id' => 'product_id']
+                array('version' => 'version', 'product_id' => 'product_id')
             );
+
+        //join straker job product table to get version for each product
         $jobProductQuery = $strakerJobProductCollection->getSelect();
         $collection->getSelect()->joinLeft(
             $jobProductQuery,
@@ -102,8 +76,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         );
 
         $this->setCollection($collection);
-
         parent::_prepareCollection();
+
         $this->getCollection()->addWebsiteNamesToResult();
         return $this;
     }
@@ -112,49 +86,48 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
     {
         if ($this->getCollection()) {
             if ($column->getId() == 'websites') {
-                $this->getCollection()->joinField('websites',
+                $this->getCollection()->joinField(
+                    'websites',
                     'catalog/product_website',
                     'website_id',
                     'product_id=entity_id',
                     null,
-                    'left');
+                    'left'
+                );
             }
-//
-//            if ($column->getId() == 'version') {
-//                $this->getCollection()->joinField('version',
-//                    'straker_job_product',
-//                    'version',
-//                    'product_id=entity_id',
-//                    null,
-//                    'left');
-//            }
-
         }
+
         return parent::_addColumnFilterToCollection($column);
     }
 
     protected function _prepareColumns()
     {
-        $this->addColumn('entity_id',
+        $this->addColumn(
+            'entity_id',
             array(
                 'header'=> Mage::helper('catalog')->__('ID'),
                 'width' => '50px',
                 'type'  => 'number',
                 'index' => 'entity_id',
-        ));
-        if (in_array('name',$this->getAttrArray())) {
-            $this->addColumn('name',
+            )
+        );
+        if (in_array('name', $this->getAttrArray())) {
+            $this->addColumn(
+                'name',
                 array(
-                    'header' => Mage::helper('catalog')->__('Name to Translate'),
+                    'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s to Translate', Mage::helper('strakertranslations_easytranslationplatform')->__('Name')),
                     'index' => 'name',
-                ));
+                )
+            );
         }
         else{
-            $this->addColumn('name',
+            $this->addColumn(
+                'name',
                 array(
                     'header' => Mage::helper('catalog')->__('Name'),
                     'index' => 'name',
-                ));
+                )
+            );
         }
 
         // required by IMA-159
@@ -171,53 +144,64 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
             ->load()
             ->toOptionHash();
 
-        $this->addColumn('set_name',
+        $this->addColumn(
+            'set_name',
             array(
                 'header'=> Mage::helper('catalog')->__('Attrib. Set Name'),
                 'width' => '100px',
                 'index' => 'attribute_set_id',
                 'type'  => 'options',
                 'options' => $sets,
-            ));
+            )
+        );
 
         foreach ($this->getAttrArray() as $attr){
             if ($attr!='name') {
-                $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(4, $attr);
-                $this->addColumn($attr,
+                $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, $attr);
+                $this->addColumn(
+                    $attr,
                     array(
-                        'header' => Mage::helper('catalog')->__($attrModel->getFrontendLabel()).' To Translate',
+                        'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('%s to Translate', $attrModel->getStoreLabel($this->_getStore())),
                         'index' => $attr,
-                    ));
+                    )
+                );
             }
         }
 
-        $this->addColumn('type',
+        $this->addColumn(
+            'type',
             array(
                 'header'=> Mage::helper('catalog')->__('Type'),
                 'width' => '60px',
                 'index' => 'type_id',
                 'type'  => 'options',
                 'options' => Mage::getSingleton('catalog/product_type')->getOptionArray(),
-        ));
-        $this->addColumn('visibility',
+            )
+        );
+        $this->addColumn(
+            'visibility',
             array(
                 'header'=> Mage::helper('catalog')->__('Visibility'),
                 'width' => '70px',
                 'index' => 'visibility',
                 'type'  => 'options',
                 'options' => Mage::getModel('catalog/product_visibility')->getOptionArray(),
-        ));
+            )
+        );
 
-        $this->addColumn('status',
+        $this->addColumn(
+            'status',
             array(
                 'header'=> Mage::helper('catalog')->__('Status'),
                 'width' => '70px',
                 'index' => 'status',
                 'type'  => 'options',
                 'options' => Mage::getSingleton('catalog/product_status')->getOptionArray(),
-        ));
+            )
+        );
 
-        $this->addColumn('version',
+        $this->addColumn(
+            'version',
             array(
                 'header'=> Mage::helper('catalog')->__('Translated'),
                 'width' => '70px',
@@ -229,10 +213,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
                 ),
                 'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Translated',
                 'filter_condition_callback' => array($this, '_versionFilter'),
-            ));
+            )
+        );
 
         if (!Mage::app()->isSingleStoreMode()) {
-            $this->addColumn('websites',
+            $this->addColumn(
+                'websites',
                 array(
                     'header'=> Mage::helper('catalog')->__('Websites'),
                     'width' => '100px',
@@ -240,7 +226,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
                     'index'     => 'websites',
                     'type'      => 'options',
                     'options'   => Mage::getModel('core/website')->getCollection()->toOptionHash(),
-            ));
+                )
+            );
         }
 
         return parent::_prepareColumns();
@@ -252,11 +239,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
             return $this;
         }
 
-        if ($value == 'Translated' ){
-            $this->getCollection()->getSelect()->where('t.version is not null');
-
+        if ($value == 'Translated'){
+            $collection->getSelect()->where('t.version is not null');
         } elseif ($value == 'Not Translated'){
-            $this->getCollection()->getSelect()->where('t.version is null');
+            $collection->getSelect()->where('t.version is null');
         }
 
         return $this;
@@ -267,11 +253,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         $this->setMassactionIdField('entity_id');
         $this->getMassactionBlock()->setFormFieldName('product');
 
-        $this->getMassactionBlock()->addItem('add', array(
-             'label'=> Mage::helper('catalog')->__('Add to Confirm Page'),
-             'url'  => $this->getUrl('*/*/addToConfirm'),
-             'selected' => 1
-        ));
+        $this->getMassactionBlock()->addItem(
+            'add', array(
+                'label'=> Mage::helper('catalog')->__('Add to Confirm Page'),
+                'url'  => $this->getUrl('*/*/addToConfirm'),
+                'selected' => 1
+            )
+        );
 
         $this->getMassactionBlock()->setTemplate('straker/new/products/massaction.phtml');
 
@@ -294,7 +282,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         return '';
     }
 
-    public function getAttrArray(){
+    public function getAttrArray()
+    {
         return explode(',', $this->getAttr());
     }
 
@@ -303,8 +292,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         return $this->getMassactionBlock()->getJsObjectName(); // TODO: Change the autogenerated stub
     }
 
-    public function getSelectedIds(){
+    public function getSelectedIds()
+    {
         $selectedIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
-        return empty($selectedIds) ? [] : $selectedIds;
+        return empty($selectedIds) ? array() : $selectedIds;
     }
 }

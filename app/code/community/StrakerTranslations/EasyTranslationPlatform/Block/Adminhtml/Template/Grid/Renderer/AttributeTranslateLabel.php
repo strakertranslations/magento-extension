@@ -2,16 +2,17 @@
 class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_AttributeTranslateLabel
     extends Mage_Adminhtml_Block_Widget_Grid_Column_Renderer_Abstract
 {
-    public function render(Varien_Object $row){
+    public function render(Varien_Object $row)
+    {
         $original = $this->xml2array(simplexml_load_string($row->getTranslate()));
 
-        return !empty($original['title']) ? $original['title'] : 'N/A';
+        return !empty($original['title']) ? $original['title'] : Mage::helper('strakertranslations_easytranslationplatform')->__('N/A');
     }
 
-    public function xml2array ( $xmlObject, $out = array () )
+    public function xml2array( $xmlObject, $out = array () )
     {
-        foreach ( (array) $xmlObject as $index => $node )
-            $out[$index] = ( is_object ( $node ) ) ? $this->xml2array ( $node ) : $node;
+        foreach ((array) $xmlObject as $index => $node)
+            $out[$index] = ( is_object($node) ) ? $this->xml2array($node) : $node;
 
         return $out;
     }

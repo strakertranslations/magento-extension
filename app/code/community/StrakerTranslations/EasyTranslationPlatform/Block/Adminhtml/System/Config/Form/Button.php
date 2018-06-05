@@ -39,11 +39,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_System_Config_
     public function getButtonHtml()
     {
         $button = $this->getLayout()->createBlock('adminhtml/widget_button')
-            ->setData(array(
+            ->setData(
+                array(
                 'id'        => 'straker_clear_button',
                 'label'     => $this->helper('adminhtml')->__('Clear All Language Settings'),
                 'onclick'   => 'setLocation(\''.Mage::helper('adminhtml')->getUrl('adminhtml/straker_new/clearSettings').'\');'
-            ));
+                )
+            );
 
         return $button->toHtml();
     }

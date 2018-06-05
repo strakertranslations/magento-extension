@@ -1,5 +1,6 @@
 <?php
-class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_Attribute extends Mage_Adminhtml_Block_Widget_Container{
+class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_Attribute extends Mage_Adminhtml_Block_Widget_Container
+{
 
     private static  $_excludeAttributes = array(
         'name',
@@ -17,13 +18,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_A
         'url_key'
     );
 
-    protected function _beforeToHtml(){
+    protected function _beforeToHtml()
+    {
         $this->setTemplate('straker/new/products/attributes.phtml');
     }
 
-    public function getAttributes(){
+    public function getAttributes()
+    {
         $attributes = Mage::getResourceModel('eav/entity_attribute_collection')
-            ->setEntityTypeFilter(4)
+            ->setEntityTypeFilter(Mage::getModel('eav/entity_type')->loadByCode(Mage_Catalog_Model_Product::ENTITY)->getEntityTypeId())
             ->addFieldToFilter('backend_type', array('in' => array('varchar', 'text')))
             ->setFrontendInputTypeFilter(array('in' => array('text', 'textarea')))
             ->addFieldToFilter('attribute_code', array('nin' => self::$_excludeAttributes));

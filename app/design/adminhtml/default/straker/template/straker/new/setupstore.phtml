@@ -3,18 +3,18 @@ $store = Mage::getModel('core/store')->load($this->getSetupStoreId());
 $storeTitleText = $store->getFrontendName().'('.$store->getName().')';
 ?>
 <div class="content-header">
-    <h3><?php echo $this->__('Create New Job') ?></h3><h3 class="store-info-heading"><?php echo $storeTitleText; ?></h3>
+    <h3><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job') ?></h3><h3 class="store-info-heading"><?php echo $storeTitleText; ?></h3>
 </div>
 <div class="straker-main-container">
-    <h1><?php echo $this->__('Select your Languages Pairs') ?></h1>
-    <p><?php echo $this->__('Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each Store View.') ?></p>
+    <h1><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select your Languages Pairs') ?></h1>
+    <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select your Source and Destination Store Views and languages for this language pair. This is a one time setup process for each Store View.') ?></p>
     <form id="setupstore-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_new/setupstore") ?>" >
         <div class="store-select-container">
-            <h2><?php echo $this->__('Source') ?></h2>
-            <p><?php echo $this->__('Where would you like us to take your content from?') ?></p>
-            <div class="input-box"><label for="source"><?php echo $this->__('Source Store View:') ?></label>
+            <h2><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Source') ?></h2>
+            <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Where would you like us to take your content from?') ?></p>
+            <div class="input-box"><label for="source"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Source Store View:') ?></label>
                 <select name="source" class="validate-select">
-                    <option value=""><?php echo $this->__('Pick a store view') ?></option>
+                    <option value=""><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Pick a store view') ?></option>
                     <?php foreach (Mage::app()->getWebsites() as $website): ?>
                         <?php $showWebsite = false; ?>
                         <?php foreach ($website->getGroups() as $group): ?>
@@ -37,20 +37,20 @@ $storeTitleText = $store->getFrontendName().'('.$store->getName().')';
                     <?php endforeach; ?>
                 </select>
             </div>
-            <div class="input-box"><label for="from"><?php echo $this->__('Source Language:') ?></label>
+            <div class="input-box"><label for="from"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Source Language:') ?></label>
                 <?php echo $this->renderLanguageSelect('from') ?></div>
         </div>
         <div class="down-arrow"></div>
         <div class="store-select-container">
-            <h2><?php echo $this->__('Destination Store View') ?></h2>
-            <p><?php echo $this->__('Where would you like us to put the translated content?') ?></p>
-            <div class="input-box"><label for="destination"><?php echo $this->__('Destination Store:') ?></label>
+            <h2><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Destination Store View') ?></h2>
+            <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Where would you like us to put the translated content?') ?></p>
+            <div class="input-box"><label for="destination"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Destination Store:') ?></label>
                 <select name="destination" disabled class="disabled">
                     <option value=""><?php echo Mage::getModel('core/store')->load($this->getSetupStoreId())->getName() ?></option>
                 </select>
                 <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
             </div>
-            <div class="input-box"><label for="to"><?php echo $this->__('Target Language:') ?></label>
+            <div class="input-box"><label for="to"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Target Language:') ?></label>
                 <?php echo $this->renderLanguageSelect('to') ?></div>
         </div>
         <div class="form-buttons">

@@ -4,7 +4,7 @@
 $installer = $this;
 $connection = $installer->getConnection();
 
-$tables = [
+$tables = array(
     'straker_actionlog',
     'straker_cms_block_attributes',
     'straker_cms_block_translate',
@@ -12,7 +12,7 @@ $tables = [
     'straker_cms_page_translate',
     'straker_job_cmsblock',
     'straker_job_cmspage'
-];
+);
 
 $prefix = Mage::getConfig()->getTablePrefix();
 
@@ -47,7 +47,6 @@ if(strcasecmp($prefix, '') !== 0){
           );
       }else{
           foreach ($fks as $fk){
-
               if(strcasecmp(substr($fk['REF_TABLE_NAME'], 0, strlen($prefix)), $prefix) !== 0){
                   $connection->dropForeignKey($tableName, $fk['FK_NAME']);
                   $connection->addForeignKey(
@@ -63,20 +62,24 @@ if(strcasecmp($prefix, '') !== 0){
       }
   }
 }
+
 /**
  * Add new field to 'cataloginventory/stock_item'
  */
-$installer->getConnection()
-    ->addColumn(
-        $installer->getTable('straker_job'),
-        'is_test_job',
-        [
+$strakerJobTable = $installer->getTable('straker_job');
+$newColumnName = 'is_test_job';
+if( !$connection->tableColumnExists($strakerJobTable, $newColumnName)) {
+    $connection->addColumn(
+        $strakerJobTable,
+        $newColumnName,
+        array(
             'type' => Varien_Db_Ddl_Table::TYPE_SMALLINT,
             'length' => 1,
             'comment' => 'Is Test Job',
             'nullable' => false,
             'default' => 0
-        ]
+        )
     );
+}
 
 $installer->endSetup();

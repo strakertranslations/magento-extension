@@ -33,6 +33,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
         foreach ($this->getAttrArray() as $attr){
             $collection->addAttributeToSelect($attr);
         }
+
         if ($store->getId()) {
             //$collection->setStoreId($store->getId());
             $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
@@ -78,44 +79,53 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
     {
         if ($this->getCollection()) {
             if ($column->getId() == 'websites') {
-                $this->getCollection()->joinField('websites',
+                $this->getCollection()->joinField(
+                    'websites',
                     'catalog/product_website',
                     'website_id',
                     'product_id=entity_id',
                     null,
-                    'left');
+                    'left'
+                );
             }
         }
+
         return parent::_addColumnFilterToCollection($column);
     }
 
     protected function _prepareColumns()
     {
 
-        $this->addColumn('entity_id',
+        $this->addColumn(
+            'entity_id',
             array(
                 'header'=> Mage::helper('catalog')->__('ID'),
                 'width' => '50px',
                 'type'  => 'number',
                 'index' => 'entity_id',
                 'filter' => false,
-            ));
+            )
+        );
 
-        if (in_array('name',$this->getAttrArray())) {
-            $this->addColumn('name',
+        if (in_array('name', $this->getAttrArray())) {
+            $this->addColumn(
+                'name',
                 array(
                     'header' => Mage::helper('catalog')->__('Name to Translate'),
                     'index' => 'name',
                     'filter' => false,
-                ));
+                )
+            );
         }
         else{
-            $this->addColumn('name',
+            $this->addColumn(
+                'name',
                 array(
                     'header' => Mage::helper('catalog')->__('Name'),
                     'index' => 'name',
                     'filter' => false,
-                ));
+                )
+            );
         }
 
         // required by IMA-159
@@ -133,7 +143,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
             ->load()
             ->toOptionHash();
 
-        $this->addColumn('set_name',
+        $this->addColumn(
+            'set_name',
             array(
                 'header'=> Mage::helper('catalog')->__('Attrib. Set Name'),
                 'width' => '100px',
@@ -141,40 +152,43 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
                 'type'  => 'options',
                 'options' => $sets,
                 'filter' => false
-            ));
+            )
+        );
 
         foreach ($this->getAttrArray() as $attr){
             if ($attr!='name') {
                 $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(4, $attr);
-                $this->addColumn($attr,
+                $this->addColumn(
+                    $attr,
                     array(
                         'header' => Mage::helper('catalog')->__($attrModel->getFrontendLabel()) .' to Translate',
                         'index' => $attr,
                         'filter' => false,
-                    ));
+                    )
+                );
             }
         }
 
         $this->addColumn(
             'action',
-            [
+            array(
                 'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '50px',
                 'type'      => 'action',
                 'getter'     => 'getEntityId',
                 'actions'   => array(
                     array(
-                        'caption' => $this->__('Remove'),
-                        'url'     => [
+                        'caption' => Mage::helper('strakertranslations_easytranslationplatform')->__('Remove'),
+                        'url'     => array(
                             'base'=>'*/*/removeFromCart'
-                        ],
+                        ),
                         'field'   => 'entity_id'
                     )
                 ),
                 'filter'    => false,
                 'sortable'  => false,
                 'index'     => 'entity_id'
-            ]
+            )
         );
 
         return parent::_prepareColumns();
@@ -190,7 +204,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
         return '';
     }
 
-    public function getAttrArray(){
+    public function getAttrArray()
+    {
         return explode(',', $this->getAttr());
     }
 }

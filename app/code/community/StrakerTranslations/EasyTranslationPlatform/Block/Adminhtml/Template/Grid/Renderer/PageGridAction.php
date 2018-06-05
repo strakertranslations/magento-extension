@@ -25,13 +25,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 //            'caption' => Mage::helper('newsletter')->__('Preview')
 //        ];
 
-        $actions[] = [
-            'url' => $this->getUrl('*/*/removeFromCart', ['page_id' => $row->getPageId()] ),
+        $actions[] = array(
+            'url' => $this->getUrl('*/*/removeFromCart', array('page_id' => $row->getPageId())),
             'caption' => Mage::helper('newsletter')->__('Remove')
-        ];
+        );
 
         $this->getColumn()->setActions($actions);
         return parent::render($row);
-//        return '<a href="' . $href . '" target="_blank">' . $this->__('Preview') . '</a>';
+//        return '<a href="' . $href . '" target="_blank">' . Mage::helper('strakertranslations_easytranslationplatform')->__('Preview') . '</a>';
     }
 }

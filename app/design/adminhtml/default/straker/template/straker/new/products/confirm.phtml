@@ -11,13 +11,13 @@
     </table>
 </div>
 <ol class="wizard" data-wizard-steps="4">
-    <li class="wizard-done"><?php echo $this->__('Select Job Type') ?></li>
-    <li class="wizard-done"><?php echo $this->__('Select Details') ?></li>
-    <li class="wizard-done"><?php echo $this->__('Select Content') ?></li>
-    <li class="wizard-current"><?php echo $this->__('Confirm Content') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Job Type') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Details') ?></li>
+    <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Content') ?></li>
+    <li class="wizard-current"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
 <?php $params = $this->getRequest()->getParams(); ?>
-<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'from' => 'confirm' )) ?>"><?php echo $this->__('Edit Products') ?></a>
+<a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'from' => 'confirm' )) ?>"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Edit Products') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_product/submitjob") ?>" method="post">
     <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
     <input type="hidden" name="product" value="<?php echo implode(',', $this->getProduct()) ?>" >

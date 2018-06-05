@@ -9,17 +9,14 @@
 #### Unignore the following ####
 !.gitignore
 !app/code/community/StrakerTranslations/EasyTranslationPlatform
+!app/design/adminhtml/default/straker
+!app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
+!js/straker
+!skin/adminhtml/default/straker
+
+### ignore locale folder for straker extension's language pack until it's ready
+/app/design/adminhtml/default/straker/locale/
 
 ### ignore system.xml and config.xml, since the content are different between live and development ###
 /app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/system.xml
 /app/code/community/StrakerTranslations/EasyTranslationPlatform/etc/config.xml
-
-!app/design/adminhtml/default/straker
-!app/etc/modules/StrakerTranslations_EasyTranslationPlatform.xml
-
-!js/straker
-!skin/adminhtml/default/straker
-
-!Capfile
-!config
-

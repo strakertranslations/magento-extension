@@ -66,7 +66,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
         //join straker job product table to get version for each product
 
         $collection->getSelect()->joinLeft(
-            ['a' => $strakerJobCategoryTable ],
+            array('a' => $strakerJobCategoryTable ),
             'a.category_id = e.entity_id AND a.version = 1',
             'version'
         );
@@ -95,7 +95,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
     protected function _prepareColumns()
     {
 
-        $this->addColumn('entity_id',
+        $this->addColumn(
+            'entity_id',
             array(
                 'header'=> Mage::helper('catalog')->__('ID'),
                 'width' => '50px',
@@ -103,50 +104,60 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
                 'index' => 'entity_id',
                 'filter' => false,
                 'sortable'  => false
-            ));
+            )
+        );
 
-        if (in_array('name',$this->getAttrArray())) {
-            $this->addColumn('name',
+        if (in_array('name', $this->getAttrArray())) {
+            $this->addColumn(
+                'name',
                 array(
                     'header' => Mage::helper('catalog')->__('Name to Translate'),
                     'index' => 'name',
                     'filter' => false,
                     'sortable'  => false
-                ));
+                )
+            );
         }
         else{
-            $this->addColumn('name',
+            $this->addColumn(
+                'name',
                 array(
                     'header' => Mage::helper('catalog')->__('Name'),
                     'index' => 'name',
                     'filter' => false,
                     'sortable'  => false
-                ));
+                )
+            );
         }
 
-        $this->addColumn('path',
+        $this->addColumn(
+            'path',
             array(
                 'header' => Mage::helper('catalog')->__('Path'),
                 'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Path',
                 'index' => 'path',
                 'filter' => false,
                 'sortable'  => false
-            ));
+            )
+        );
 
         foreach ($this->getAttrArray() as $attr){
             if ($attr != 'name' && $attr != '') {
                 $attrModel = Mage::getModel('eav/entity_attribute')->loadByCode(3, $attr);
-                $this->addColumn($attr,
+                $this->addColumn(
+                    $attr,
                     array(
                         'header' => Mage::helper('catalog')->__($attrModel->getFrontendLabel()) .' to Translate',
                         'index' => $attr,
                         'filter' => false,
                         'sortable'  => false
-                    ));
+                    )
+                );
             }
         }
 
-        $this->addColumn('version',
+        $this->addColumn(
+            'version',
             array(
                 'header'=> Mage::helper('catalog')->__('Translated'),
                 'width' => '70px',
@@ -158,28 +169,29 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
                     1    => Mage::helper('catalog')->__('Translated'),
                     ''   => Mage::helper('catalog')->__('Not Translated')
                 )
-            ));
+            )
+        );
 
         $this->addColumn(
             'action',
-            [
+            array(
                 'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '50px',
                 'type'      => 'action',
                 'getter'     => 'getEntityId',
                 'actions'   => array(
                     array(
-                        'caption' => $this->__('Remove'),
-                        'url'     => [
+                        'caption' => Mage::helper('strakertranslations_easytranslationplatform')->__('Remove'),
+                        'url'     => array(
                             'base'=>'*/*/removeFromCart'
-                        ],
+                        ),
                         'field'   => 'entity_id'
                     )
                 ),
                 'filter'    => false,
                 'sortable'  => false,
                 'index'     => 'entity_id'
-            ]
+            )
         );
 
         return parent::_prepareColumns();
@@ -195,7 +207,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
         return '';
     }
 
-    public function getAttrArray(){
+    public function getAttrArray()
+    {
         return explode(',', $this->getAttr());
     }
 }

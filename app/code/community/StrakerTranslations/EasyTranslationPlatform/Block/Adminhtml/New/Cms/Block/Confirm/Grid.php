@@ -28,34 +28,41 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
 
     protected function _prepareColumns()
     {
-        $this->addColumn('title', array(
+        $this->addColumn(
+            'title', array(
             'header'    => Mage::helper('cms')->__('Title'),
             'align'     => 'left',
             'index'     => 'title',
             'filter'    => false,
-        ));
+            )
+        );
 
-        $this->addColumn('identifier', array(
+        $this->addColumn(
+            'identifier', array(
             'header'    => Mage::helper('cms')->__('Identifier'),
             'align'     => 'left',
             'index'     => 'identifier',
             'filter'    => false,
-        ));
+            )
+        );
 
         if (!Mage::app()->isSingleStoreMode()) {
-            $this->addColumn('store_id', array(
+            $this->addColumn(
+                'store_id', array(
                 'header'        => Mage::helper('cms')->__('Store View'),
                 'index'         => 'store_id',
                 'type'          => 'store',
                 'store_all'     => true,
                 'store_view'    => true,
                 'sortable'      => false,
-//                'filter_condition_callback'
-//                => array($this, '_filterStoreCondition'),
-            ));
+                //                'filter_condition_callback'
+                //                => array($this, '_filterStoreCondition'),
+                )
+            );
         }
 
-        $this->addColumn('is_active', array(
+        $this->addColumn(
+            'is_active', array(
             'header'    => Mage::helper('cms')->__('Status'),
             'index'     => 'is_active',
             'type'      => 'options',
@@ -64,42 +71,47 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
                 1 => Mage::helper('cms')->__('Enabled')
             ),
             'filter'    => false,
-        ));
+            )
+        );
 
-        $this->addColumn('creation_time', array(
+        $this->addColumn(
+            'creation_time', array(
             'header'    => Mage::helper('cms')->__('Date Created'),
             'index'     => 'creation_time',
             'type'      => 'datetime',
             'filter'    => false,
-        ));
+            )
+        );
 
-        $this->addColumn('update_time', array(
+        $this->addColumn(
+            'update_time', array(
             'header'    => Mage::helper('cms')->__('Last Modified'),
             'index'     => 'update_time',
             'type'      => 'datetime',
             'filter'    => false,
-        ));
+            )
+        );
 
         $this->addColumn(
             'action',
-            [
+            array(
                 'header'    => Mage::helper('catalog')->__('Action'),
                 'width'     => '50px',
                 'type'      => 'action',
                 'getter'     => 'getBlockId',
                 'actions'   => array(
                     array(
-                        'caption' => $this->__('Remove'),
-                        'url'     => [
+                        'caption' => Mage::helper('strakertranslations_easytranslationplatform')->__('Remove'),
+                        'url'     => array(
                             'base'=>'*/*/removeFromCart'
-                        ],
+                        ),
                         'field'   => 'block_id'
                     )
                 ),
                 'filter'    => false,
                 'sortable'  => false,
                 'index'     => 'block_id'
-            ]
+            )
         );
 
         return parent::_prepareColumns();

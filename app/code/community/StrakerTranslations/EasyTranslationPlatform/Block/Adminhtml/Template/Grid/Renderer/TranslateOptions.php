@@ -4,13 +4,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
 {
     protected $_storeId;
 
-    public function render(Varien_Object $row){
-        if ( in_array($row->getFrontendInput(), ['select', 'multiselect'] ) ) {
+    public function render(Varien_Object $row)
+    {
+        if (in_array($row->getFrontendInput(), array('select', 'multiselect'))) {
             $html = '<input type="checkbox" name="option" value="' . $row->getAttributeId() . '" class="checkbox-option">';
         }
         else{
-            $html = 'N/A';
+            $html = Mage::helper('strakertranslations_easytranslationplatform')->__('N/A');
         }
+
         return $html;
     }
 

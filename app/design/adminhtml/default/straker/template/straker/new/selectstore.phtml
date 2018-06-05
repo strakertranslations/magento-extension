@@ -1,13 +1,13 @@
 <div class="content-header">
-    <h3><?php echo $this->__('Create New Job') ?></h3>
+    <h3><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job') ?></h3>
 </div>
 <div class="straker-main-container">
-    <h1><?php echo $this->__('Select your Destination Store View') ?></h1>
-    <p><?php echo $this->__('Please select the destination Store View where you would like this translation to show.') ?></p>
+    <h1><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select your Destination Store View') ?></h1>
+    <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Please select the destination Store View where you would like this translation to show.') ?></p>
     <form id="selectstore-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_new/selectstore") ?>" >
-        <div class="destination-container input-box input-left"><label for="store"><?php echo $this->__('Destination Store View') ?></label>
+        <div class="destination-container input-box input-left"><label for="store"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Destination Store View') ?></label>
             <select class="validate-select" name="store">
-                    <option value=""><?php echo $this->__('Pick a store view') ?></option>
+                    <option value=""><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Pick a store view') ?></option>
                 <?php foreach (Mage::app()->getWebsites() as $website): ?>
                     <?php $showWebsite = false; ?>
                     <?php foreach ($website->getGroups() as $group): ?>
@@ -30,7 +30,7 @@
                 <?php endforeach; ?>
             </select>
             <div class="form-buttons">
-                <input type="submit" onchange="selectstoreForm.submit()" class="form-button" value="Next" title="Next">
+                <input type="submit" onchange="selectstoreForm.submit()" class="form-button" value="<?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Next'); ?>" title="<?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Next'); ?>">
             </div>
         </div>
     </form>

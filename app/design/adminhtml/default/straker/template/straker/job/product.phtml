@@ -1,7 +1,7 @@
 <div class="content-header">
     <table cellspacing="0">
         <tr>
-            <td style="width:80%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getJob()->getStoreId()) ?></h3></td>
+            <td style="width:70%;"><h3 class="icon-head head-products"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs') ?></h3><h3 class="store-info-heading"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->renderNewJobHeading($this->getJob()->getStoreId()) ?></h3></td>
             <td class="a-right">
                 <?php echo $this->getButtonsHtml() ?>
             </td>
@@ -17,7 +17,7 @@
 <div id="dispute-container" style="display: none">
     <a id="dispute-container-close">X</a>
     <form id="straker-dispute-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_job/dispute") ?>" method="post">
-        <h4 id="dispute-form-title"><?php echo $this->__('If you have any issues, please provide comments below. You must provide specific examples of the source and translation. You can edit translations after you published them to your site.') ?></h4>
+        <h4 id="dispute-form-title"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('If you have any issues, please provide comments below. You must provide specific examples of the source and translation. You can edit translations after you published them to your site.') ?></h4>
         <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
         <input type="hidden" name="job_id">
         <div class="input-box"><label for="message">Message</label><em class="required">*</em><br />
