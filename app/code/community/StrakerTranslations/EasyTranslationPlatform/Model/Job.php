@@ -974,7 +974,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
     public function applyTranslation($entityIds = array())
     {
-        $success = true;
         $jobType = $this->_getType(); //product, category, cms_page ...
         // collection for straker_<TYPE>_translate tables
         $collection = Mage::getModel('strakertranslations_easytranslationplatform/' . $jobType . '_translate')->getCollection()->addFieldToFilter('job_id', $this->getId());
@@ -989,69 +988,103 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
 
         try{
             if (in_array($jobType, array('cms_block', 'cms_page'))) {
-                $result = $this->createNewCms($entityIds);
-                $cmsTableName = str_replace('_', '', $jobType); //cmsxxx
-                $cmsColumnName = str_replace('cms_', '', $jobType); //xxx
-                $cmsModelName = 'cms/'.$cmsColumnName;
-
-                if($result['success']){
-                    //translated content array
-                    $newCmsData = array();
-                    foreach($collection as $translation){
-                        if(empty($newCmsData[$translation->getData($jobType . '_id')])){
-                            $newCmsData[$translation->getData($jobType . '_id')] = array(
-                                $translation->getColumnName() => $translation->getTranslate()
-                            );
-                        }else{
-                            $newCmsData[$translation->getData($jobType . '_id')][$translation->getColumnName()] = $translation->getTranslate();
-                        }
-                    }
-
-                    //cms old id and new id pairs
-                    $newCmsIds = $result['new_entity_ids'];
-                    foreach($newCmsIds as $oldId => $newId){
-                        $model = Mage::getModel($cmsModelName)->load($newId);
-                        foreach($newCmsData[$oldId] as $k => $v){
-                            $model->setData($k, $v);
-                        }
-
-                        $model->setStores($this->getStoreId());
-                        $model->save();
-                        $model->unsetData();
-                    }
-
-                    foreach($collection as $translation){
-                        $entityId = $translation->getData($jobType . '_id');
-                        if(!$translation->getIsImported()){
-                            $translation->setIsImported(1)->save();
-                        }
-
-                        if(empty($updatedIds[$entityId])){
-                            $updatedIds[$entityId] = true;
-                            $writeConnection->update($prefix . 'straker_job_' . $cmsTableName, array('version' => 1), $cmsColumnName . "_id = {$entityId} and job_id ={$this->getId()}");
-                        }
-                    }
-                }else{
-                    $success = false;
-                }
+                $success = $this->applyTranslationOfCmsContent($updatedIds, $entityIds, $jobType, $collection, $writeConnection, $prefix);
             }else{
-                foreach ($collection as $translation) {
-                    if(!$translation->getVersion()){
-                        $return = $translation->setStoreId($this->getStoreId())->importTranslation();
-                        if($return){
-                            $entityId = call_user_func(array($translation, 'getData'), strtolower(str_replace(' ', '_', $this->getTypeName() . '_id')));
-                            if (empty($updatedIds[$entityId])) {
-                                $updatedIds[$entityId] = true;
-                                $writeConnection->update($prefix . 'straker_job_' . $jobType, array('version' => 1), $jobType . "_id = {$entityId} and job_id ={$this->getId()}");
-                            }
-                        }else{
-                            $success = false;
-                        }
-                    }
-                }
+                $success = $this->applyTranslationOfNonCmsContent($updatedIds, $jobType, $collection, $writeConnection, $prefix);
             }
         }catch(Exception $e){
             $success = false;
+        }
+
+        return $success;
+    }
+
+    private function applyTranslationOfNonCmsContent($updatedIds, $jobType, $collection, $writeConnection, $prefix){
+        $success = true;
+        try{
+            foreach ($collection as $translation) {
+                if(!$translation->getVersion()){
+                    $return = $translation->setStoreId($this->getStoreId())->importTranslation();
+                    if($return){
+                        $entityId = call_user_func(array($translation, 'getData'), strtolower(str_replace(' ', '_', $this->getTypeName() . '_id')));
+                        if (empty($updatedIds[$entityId])) {
+                            $updatedIds[$entityId] = true;
+                            $writeConnection->update($prefix . 'straker_job_' . $jobType, array('version' => 1), $jobType . "_id = {$entityId} and job_id ={$this->getId()}");
+                        }
+                    }else{
+                        $success = false;
+                    }
+                }
+            }
+        }catch(Exception $e) {
+            throw $e;
+        }
+
+        return $success;
+    }
+
+    private function applyTranslationOfCmsContent($updatedIds, $entityIds, $jobType, $collection, $writeConnection, $prefix){
+        $success = true;
+
+        try {
+            $result = $this->createNewCms($entityIds);
+            $cmsTableName = str_replace('_', '', $jobType); //cmsxxx
+            $cmsColumnName = str_replace('cms_', '', $jobType); //xxx
+            $cmsModelName = 'cms/'.$cmsColumnName;
+
+            if($result['success']){
+                //translated content array
+                $newCmsData = array();
+                foreach($collection as $translation){
+                    if(empty($newCmsData[$translation->getData($jobType . '_id')])){
+                        $newCmsData[$translation->getData($jobType . '_id')] = array(
+                            $translation->getColumnName() => $translation->getTranslate()
+                        );
+                    }else{
+                        $newCmsData[$translation->getData($jobType . '_id')][$translation->getColumnName()] = $translation->getTranslate();
+                    }
+                }
+                //cms old id and new id pairs
+                $newCmsIds = $result['new_entity_ids'];
+                foreach($newCmsIds as $oldId => $newId){
+                    $model = Mage::getModel($cmsModelName)->load($newId);
+                    $model->setStores($this->getStoreId());
+
+                    //set new title separately, since new revision doesn't change title
+                    //then remove it from newCmsData array
+                    if(isset($newCmsData[$oldId]['title'])){
+                        $model->setTitle($newCmsData[$oldId]['title'])->save();
+                        unset($newCmsData[$oldId]['title']);
+                    }
+
+                    //if page under version control, save as it revision instead and then publish it
+                    if ( $jobType === 'cms_page' && $model->getUnderVersionControl() === '1') {
+                        $this->publishNewCmsPageRevision($model, $newCmsData[$oldId]);
+                    }else{
+                        foreach($newCmsData[$oldId] as $k => $v){
+                            $model->setData($k, $v);
+                        }
+                        $model->save();
+                    }
+
+                }
+
+                foreach($collection as $translation){
+                    $entityId = $translation->getData($jobType . '_id');
+                    if(!$translation->getIsImported()){
+                        $translation->setIsImported(1)->save();
+                    }
+
+                    if(empty($updatedIds[$entityId])){
+                        $updatedIds[$entityId] = true;
+                        $writeConnection->update($prefix . 'straker_job_' . $cmsTableName, array('version' => 1), $cmsColumnName . "_id = {$entityId} and job_id ={$this->getId()}");
+                    }
+                }
+            }else{
+                $success = false;
+            }
+        } catch(Exception $e) {
+            throw $e;
         }
 
         return $success;
@@ -1077,6 +1110,7 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         foreach ($collection as $jobCms) {
             $newEntityId = $jobCms->getNewEntityId();
             if (!$newEntityId) {
+                //this is magento cms model
                 $cmsModel = Mage::getModel($cmsModelName);
                 $cmsData = json_decode($jobCms->getOrigin());
                 foreach ($cmsData as $k => $v) {
@@ -1101,6 +1135,30 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Job extends Mage_Core_Mo
         }
 
         return $return;
+    }
+
+    public function publishNewCmsPageRevision($model, $newCmsData){
+        try {
+            $publishedRevisionId = $model->getPublishedRevisionId();
+            /** @var Enterprise_Cms_Model_Page_Revision $revisionModel */
+            $revisionModel = Mage::getModel('enterprise_cms/page_revision')->load($publishedRevisionId);
+            foreach($newCmsData as $k => $v){
+                $revisionModel->setData($k, $v);
+            }
+            /** @var Enterprise_Cms_Model_Page_Revision $newRevisionModel */
+            $newRevisionModel = $revisionModel->save();
+
+            //$revision = Mage::getModel('enterprise_cms/page_revision');
+            $userId = Mage::getSingleton('admin/session')->getUser()->getId();
+            $accessLevel = Mage::getSingleton('enterprise_cms/config')->getAllowedAccessLevel();
+            $newRevisionModel->loadWithRestrictions($accessLevel, $userId, $newRevisionModel->getId());
+
+            //setting in registry as cms_page to make work CE blocks
+            Mage::register('cms_page', $newRevisionModel);
+            $newRevisionModel->publish();
+        }catch(Exception $e){
+            throw $e;
+        }
     }
 
     public function isPublished()

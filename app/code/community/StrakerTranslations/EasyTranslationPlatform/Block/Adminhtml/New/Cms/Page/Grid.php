@@ -85,6 +85,21 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
             )
         );
 
+        if (Mage::getEdition() == Mage::EDITION_ENTERPRISE) {
+            $this->addColumn(
+                'versioned', array(
+                    'index'     => 'under_version_control',
+                    'header'    => Mage::helper('strakertranslations_easytranslationplatform')->__('Version Control'),
+                    'width'     => 10,
+                    'type'      => 'options',
+                    'options'   => array(
+                        Mage::helper('strakertranslations_easytranslationplatform')->__('No'),
+                        Mage::helper('strakertranslations_easytranslationplatform')->__('Yes')
+                    )
+                )
+            );
+        }
+
         $this->addColumn(
             'page_actions', array(
             'header'    => Mage::helper('cms')->__('Action'),

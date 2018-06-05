@@ -160,7 +160,6 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
             $this->_redirect('*/straker_job/');
             return;
         }
-
     }
 
     public function publishAction()
