@@ -10,13 +10,13 @@
  -->
 <config>
     <tabs>
-        <magepychoall translate="label">
+        <magepychoall translate="label" module="easypathhints">
             <label>MagePsycho Extensions</label>
             <sort_order>400</sort_order>
         </magepychoall>
     </tabs>
     <sections>
-        <magepychoinfo translate="label">
+        <magepychoinfo translate="label" module="easypathhints">
 			<label>Info</label>
 			<tab>magepychoall</tab>
 			<frontend_type>text</frontend_type>
@@ -35,7 +35,7 @@
 			</groups>
 		</magepychoinfo>
         
-        <easypathhints>
+        <easypathhints module="easypathhints">
             <label>Easy Template Path Hints</label>
             <tab>magepychoall</tab>
             <frontend_type>text</frontend_type>
