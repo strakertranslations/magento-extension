@@ -25,7 +25,18 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
             )
         );
 
-        $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_confirm_grid', 'category.grid', array('store' => $this->getStore(), 'attr' => $this->getAttr(), 'category' => $this->getCategory())));
+        $this->setChild('grid',
+            $this->getLayout()->createBlock(
+                'strakertranslations_easytranslationplatform/adminhtml_new_category_confirm_grid',
+                'category.grid',
+                array(
+                    'store' => $this->getStore(),
+                    'attr' => $this->getAttr(),
+                    'category' => $this->getCategory()
+                )
+            )
+        );
+
         return parent::_prepareLayout();
     }
 

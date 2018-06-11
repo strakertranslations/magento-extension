@@ -14,13 +14,29 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
 
     protected function _getStore()
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam('store', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
     }
 
     protected function _getSourceStore(){
-        $storeId = (int) $this->getRequest()->getParam('source_store_id', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam('source_store_id', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
     }
 
     protected function _prepareCollection()
@@ -284,8 +300,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         $this->getMassactionBlock()->setTemplate('straker/new/products/massaction.phtml');
 
         //todo: refine this
-        $hiddenParams = '<input type="hidden" name="store" value="'.$this->_getStore()->getId().'" />';
-        $hiddenParams .= '<input type="hidden" name="attr" value="'.$this->getAttr().'" />';
+        $hiddenParams = '<input type="hidden" name="store" value="' . $this->_getStore()->getId() . '" />';
+        $hiddenParams .= '<input type="hidden" name="attr" value="' . $this->getAttr() . '" />';
+        $hiddenParams .= '<input type="hidden" name="source_store_id" value="' . $this->_getSourceStore()->getId() .'" />';
         $this->getMassactionBlock()->setHiddenParams($hiddenParams);
 
         Mage::dispatchEvent('adminhtml_strakertranslation_new_products_grid_prepare_massaction', array('block' => $this));

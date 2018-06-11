@@ -14,6 +14,7 @@
         <div class="category-attr" style="padding:0; margin-bottom: 30px;">
             <div style="text-align: left;">
                 <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+                <input type="hidden" name="source_store_id" value="<?php echo $this->getRequest()->getParam('source_store_id') ?>" />
                 <input type="checkbox" name="attr[name]" id="name" value="1" checked="checked">
                 <label for="name"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Title') ?></label>
                 <br>
@@ -31,7 +32,6 @@
             <div class="clear"></div>
             <input type="submit" class="form-button right" value="Next" title="Next">
             <input type="button" class="form-button right" value="Back" title="Back" onclick="window.location.href = '<?php echo $this->getUrl('*/straker_new', array('store'=> $this->getSetupStoreId())); ?>'">
-
         </div>
     </form>
 </div>

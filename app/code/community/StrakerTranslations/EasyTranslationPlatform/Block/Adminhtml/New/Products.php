@@ -24,7 +24,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products e
 //        ));
 
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_products_grid', 'product.grid', array('setup_store_id' => $this->getSetupStoreId(), 'attr' => $this->getAttr())));
-        $this->setChild('store_switcher', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_products_store_switcher'));
+        $this->setChild('straker_store_switcher', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_store_switcher'));
         return parent::_prepareLayout();
     }
 

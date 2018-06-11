@@ -12,21 +12,44 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
         $this->setVarNameFilter('product_confirm_filter');
     }
 
-    protected function _getStore()
-    {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+    protected function _getStore() {
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam('store', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
     }
+
+    protected function _getSourceStore(){
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam('source_store_id', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
+    }
+
     protected function _prepareLayout()
     {
         return $this;
     }
+
     protected function _prepareCollection()
     {
-        $store = $this->_getStore();
+        $targetStore = $this->_getStore();
+        $sourceStore = $this->_getSourceStore();
+        /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('sku')
-            ->addAttributeToSelect('name')
             ->addAttributeToSelect('type_id');
         $collection->addAttributeToFilter('entity_id', array('in' => $this->getProduct()));
 
@@ -34,34 +57,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_C
             $collection->addAttributeToSelect($attr);
         }
 
-        if ($store->getId()) {
-            //$collection->setStoreId($store->getId());
-            $adminStore = Mage_Core_Model_App::ADMIN_STORE_ID;
-            $collection->addStoreFilter($store);
-            $collection->joinAttribute(
-                'name',
-                'catalog_product/name',
-                'entity_id',
-                null,
-                'inner',
-                $adminStore
-            );
-            $collection->joinAttribute(
-                'status',
-                'catalog_product/status',
-                'entity_id',
-                null,
-                'inner',
-                $store->getId()
-            );
-            $collection->joinAttribute(
-                'visibility',
-                'catalog_product/visibility',
-                'entity_id',
-                null,
-                'inner',
-                $store->getId()
-            );
+        if ($sourceStore->getId()) {
+            $collection->addStoreFilter($sourceStore);
+            foreach ($this->getAttrArray() as $attr){
+                $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, $attr);
+                $collection->joinAttribute(
+                    $attr,
+                    'catalog_product/' . $attr,
+                    'entity_id',
+                    null,
+                    $attributeModel->getIsUserDefined() ? 'left' : 'inner',
+                    $sourceStore->getId()
+                );
+            }
         }
         else {
             $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');

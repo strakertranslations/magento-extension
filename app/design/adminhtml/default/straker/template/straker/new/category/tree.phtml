@@ -10,6 +10,10 @@
     <li class="wizard-current"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Content') ?></li>
     <li class="wizard-todo"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
+<div>
+</div>
+    <?php echo $this->getChildHtml('straker_store_switcher');?>
+</div>
 <div class="straker-main-container border">
     <h1><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Categories') ?></h1>
     <p><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select categories to Translate') ?></p>
@@ -17,6 +21,7 @@
         <div style="padding:0; margin-bottom: 30px;">
             <input type="hidden" name="form_key" value="<?php echo Mage::getSingleton('core/session')->getFormKey(); ?>" >
             <input type="hidden" name="store" value="<?php echo $this->getRequest()->getParam('store') ?>" />
+            <input type="hidden" name="source_store_id" value="<?php echo $this->getRequest()->getParam('source_store_id') ?>" />
             <input type="hidden" name="attr" value="<?php echo $this->getRequest()->getParam('attr')?>" />
             <input type="hidden" name="category" id="product_categories" value="<?php echo $this->getIdsString() ?>" />
             <div id="product-categories" class="tree"></div>
