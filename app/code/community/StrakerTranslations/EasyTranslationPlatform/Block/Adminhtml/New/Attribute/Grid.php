@@ -11,12 +11,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $this->setVarNameFilter('straker_attribute_filter');
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
         $store = null;
 
         try {
-            $storeId = (Int) $this->getRequest()->getParam('store', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
             $store = Mage::app()->getStore($storeId);
         }catch(Exception $e){
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
@@ -26,16 +26,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     }
 
     protected function _getSourceStore(){
-        $store = null;
-
-        try {
-            $storeId = (Int) $this->getRequest()->getParam('source_store_id', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
-            $store = Mage::app()->getStore($storeId);
-        }catch(Exception $e){
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-        }
-
-        return $store;
+        return $this->_getStore('source_store_id');
     }
 
     /**
@@ -49,20 +40,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $collection = Mage::getResourceModel('catalog/product_attribute_collection')
             ->addVisibleFilter()->addStoreLabel($this->_getSourceStore()->getId());
         $store = $this->_getStore();
-//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
-//        $jobAttributeQuery = 'select a.`version`,  a.`attribute_id` from `'.$prefix.'straker_job_attribute` as a
-//                            left join `'.$prefix.'straker_job` as b on a.`job_id`=b.`id`
-//                            where b.`store_id` ='.$store->getId().' and a.`version` =1
-//                            GROUP BY a.`attribute_id`';
-//
-//        //join straker job product table to get version for each product
-//        $collection->getSelect()->joinLeft(
-//
-//          new Zend_Db_Expr('('.$jobAttributeQuery.')'),
-//          'main_table.attribute_id = t.attribute_id',
-//          array('version')
-//
-//        );
+
         /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Attribute_Collection $strakerJobProductCollection */
         $strakerJobAttributeCollection = Mage::getModel('strakertranslations_easytranslationplatform/job_attribute')->getCollection();
         $strakerJobAttributeCollection->getSelect()
@@ -90,7 +68,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         );
 
         $this->setCollection($collection);
-
         return parent::_prepareCollection();
     }
 
@@ -124,9 +101,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
 
         $this->addColumn(
             'store_label', array(
-                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
+                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Store Label'),
                 'sortable' => true,
                 'index' => 'store_label',
+                'filter_condition_callback' => array($this, '_storeLabelFilter'),
                 'width' => '22%'
             )
         );
@@ -193,6 +171,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
            // print $this->getCollection()->getSelect(); exit;
         } elseif ($value == 'Not Translated'){
             $collection->getSelect()->where('t.version is null');
+        }
+
+        return $this;
+    }
+
+    protected function _storeLabelFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        if (trim($value) !== ''){
+            $collection->getSelect()->where('IFNULL(`al`.`value`,`main_table`.`frontend_label`) like \'%' . $value . '%\'');
         }
 
         return $this;

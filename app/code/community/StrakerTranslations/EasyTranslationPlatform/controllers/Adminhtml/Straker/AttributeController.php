@@ -65,7 +65,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_AttributeCon
 
     public function addToConfirmAction()
     {
-        $data = $this->getRequest()->getParams();var_dump($data);
+        $data = $this->getRequest()->getParams();
         if(empty($data['attribute']) && empty($data['option'])){
             $data['attribute'] =  Mage::getSingleton('adminhtml/session')->getData('straker_new_attribute');
             $data['option'] = Mage::getSingleton('adminhtml/session')->getData('straker_new_option');

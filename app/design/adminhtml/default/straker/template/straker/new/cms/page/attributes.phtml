@@ -14,6 +14,7 @@
         <div style="padding:0; margin-bottom: 30px;">
             <div style="text-align: left;">
                 <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+                <input name="source_store_id" type="hidden" value="<?php echo $this->getRequest()->getParam('source_store_id') ?>" />
                 <?php foreach($this->getAttributes() as $columnName => $label):?>
                     <input type="checkbox" name="attr[<?php echo $columnName ?>]" id="<?php echo $columnName ?>" value="1" checked="checked">
                     <label for="<?php echo $columnName ?>"><?php echo $label ?></label>

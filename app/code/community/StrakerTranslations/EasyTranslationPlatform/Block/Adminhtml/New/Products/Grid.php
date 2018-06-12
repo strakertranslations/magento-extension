@@ -12,12 +12,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         $this->setVarNameFilter('straker_product_filter');
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
         $store = null;
 
         try {
-            $storeId = (Int) $this->getRequest()->getParam('store', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
             $store = Mage::app()->getStore($storeId);
         }catch(Exception $e){
             Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
@@ -27,16 +27,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
     }
 
     protected function _getSourceStore(){
-        $store = null;
-
-        try {
-            $storeId = (Int) $this->getRequest()->getParam('source_store_id', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
-            $store = Mage::app()->getStore($storeId);
-        }catch(Exception $e){
-            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
-        }
-
-        return $store;
+        return $this->_getStore('source_store_id');
     }
 
     protected function _prepareCollection()
@@ -62,7 +53,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
                     'catalog_product/' . $attr,
                     'entity_id',
                     null,
-                    $attributeModel->getIsUserDefined() ? 'left' : 'inner',
+                    'left',
                     $sourceStore->getId()
                 );
             }
@@ -102,6 +93,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         parent::_prepareCollection();
 
         $this->getCollection()->addWebsiteNamesToResult();
+//        var_dump($collection->getSelect()->__toString());
         return $this;
     }
 
