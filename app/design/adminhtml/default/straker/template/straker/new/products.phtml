@@ -23,6 +23,9 @@
     <li class="wizard-todo"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
 <div>
+    <?php echo $this->getChildHtml('straker_store_switcher');?>
+</div>
+<div>
     <?php echo $this->getGridHtml() ?>
 </div>
 <script>

@@ -16,7 +16,6 @@
     <li class="wizard-done"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Select Content') ?></li>
     <li class="wizard-current"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm Content') ?></li>
 </ol>
-<?php $params = Mage::app()->getRequest()->getParams(); ?>
 <!--<a href="--><?php //echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_category/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'internal_category'=> implode(',', $this->getCategory()))) ?><!--">--><?php //echo Mage::helper('strakertranslations_easytranslationplatform')->__('Edit Categories') ?><!--</a>-->
 <a href="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_category/new", array('store'=>$this->getStore(), 'attr'=>$this->getAttr(), 'from' => 'confirm' )) ?>"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Edit Categories') ?></a>
 <form id="submit-new-job-form" action="<?php echo Mage::helper("adminhtml")->getUrl("adminhtml/straker_category/submitjob") ?>" method="post">
@@ -24,6 +23,7 @@
     <input type="hidden" name="category" value="<?php echo implode(',', $this->getCategory()) ?>" >
     <input type="hidden" name="attr" value="<?php echo $this->getAttr() ?>" >
     <input type="hidden" name="store" value="<?php echo $this->getStore() ?>" >
+    <input type="hidden" name="source_store_id" value="<?php echo $this->getRequest()->getParam('source_store_id', Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID) ?>" >
 </form>
 <div class="right">
     <?php echo $this->getButtonsHtml() ?>

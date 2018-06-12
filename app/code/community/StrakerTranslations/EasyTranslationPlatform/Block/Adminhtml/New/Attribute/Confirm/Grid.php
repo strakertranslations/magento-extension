@@ -30,12 +30,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             )
         );
 
+//        $this->addColumn(
+//            'frontend_label', array(
+//            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
+//            'renderer' => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_AttributeStoreLabel',
+//            'sortable' => true,
+//            'filter' => false,
+//            'index' => 'frontend_label'
+//            )
+//        );
+
         $this->addColumn(
-            'frontend_label', array(
-            'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
-            'sortable'=>true,
-            'filter'    => false,
-            'index'=>'frontend_label'
+            'store_label', array(
+                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
+                'sortable' => true,
+                'index' => 'store_label',
+                'width' => '22%'
             )
         );
 
@@ -116,7 +126,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
 
         $collection = Mage::getResourceModel('catalog/product_attribute_collection')
             ->addFieldToFilter('main_table.attribute_id', $attributeIds)
-            ->addVisibleFilter();
+            ->addVisibleFilter()
+            ->addStoreLabel($this->getRequest()->getParam('source_store_id'));
         $this->setCollection($collection);
 
         return parent::_prepareCollection();

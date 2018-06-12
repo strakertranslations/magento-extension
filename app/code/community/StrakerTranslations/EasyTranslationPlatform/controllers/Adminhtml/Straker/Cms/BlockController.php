@@ -68,8 +68,15 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_BlockCon
     public function attributeAction()
     {
         $data = $this->getRequest()->getParams();
-        if($data['attr'] && $data['store']){
-            $this->_redirect('*/*/new', array('store' => $data['store'], 'attr' => implode(",", array_keys($data['attr']))));
+        if($data['attr'] && $data['store'] && $data['source_store_id']){
+            $this->_redirect(
+                '*/*/new',
+                array(
+                    'store' => $data['store'],
+                    'source_store_id' => $data['source_store_id'],
+                    'attr' => implode(",", array_keys($data['attr']))
+                )
+            );
         }
         else {
             $this->_redirect('*/straker_new/');

@@ -16,6 +16,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
     {
         /* @var $collection Mage_Cms_Model_Mysql4_Block_Collection */
         $collection = Mage::getModel('cms/block')->getCollection();
+        $sourceStore = $this->_getSourceStore();
+
+        if ( $sourceStore ) {
+            $this->setDefaultFilter(array('store_id' => $sourceStore->getId()));
+        }
+
         $this->setCollection($collection);
         return parent::_prepareCollection();
     }
@@ -128,10 +134,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Block_
         return '';
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
+    }
+
+    protected function _getSourceStore(){
+        return $this->_getStore('source_store_id');
     }
 
     public function getGridUrl()

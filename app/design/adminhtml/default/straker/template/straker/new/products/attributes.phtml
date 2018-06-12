@@ -14,6 +14,7 @@
         <div style="padding:0; margin-bottom: 30px;">
             <div style="text-align: left;">
                 <input name="store" type="hidden" value="<?php echo $this->getSetupStoreId() ?>" />
+                <input name="source_store_id" type="hidden" value="<?php echo $this->getRequest()->getParam('source_store_id') ?>" />
                 <input type="checkbox" name="attr[name]" id="name" value="1" checked="checked">
                 <label for="name"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Title') ?></label>
                 <br>
