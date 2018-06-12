@@ -44,7 +44,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_Cms_PageCont
 
     public function newAction()
     {
-        $params = $this->getRequest()->getParams();var_dump($params);
+        $params = $this->getRequest()->getParams();
         if (empty($params['store'])) {
             $this->_redirect('*/straker_new');
         }
