@@ -34,6 +34,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_System_Config_
                     array(
                     'id' => 'straker_clear_store_button_' . $store->getCode(),
                     'label' => $this->helper('adminhtml')->__('Clear'),
+                    'title' => $this->helper('adminhtml')->__('Clear Language Setting'),
                     'onclick' => 'setLocation(\'' . Mage::helper('adminhtml')->getUrl(
                         'adminhtml/straker_new/resetStoreSettings',
                         array('store' => $store->getId())
@@ -44,6 +45,25 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_System_Config_
         }
         else{
             return '<div class="empty-button">'.Mage::helper('strakertranslations_easytranslationplatform')->__('No language settings applied').'</div>';
+        }
+    }
+
+    function getSourceStoreName($store){
+        $sourceStoreName = '';
+        try {
+            if ($store->getId()) {
+                $languageSetting = Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($store->getId());
+                if (!empty($languageSetting) && key_exists('source', $languageSetting)){
+                    $sourceStoreId = $languageSetting['source'];
+                    if ($sourceStoreId > 0) {
+                        $sourceStore = Mage::app()->getStore($sourceStoreId);
+                        $sourceStoreName = Mage::helper('strakertranslations_easytranslationplatform')->__('Source Store View: ') . $sourceStore->getName() . ' (' . $sourceStore->getCode() . ')';
+                    }
+                }
+                return $sourceStoreName;
+            }
+        }catch(Exception $e) {
+            return '';
         }
     }
 }

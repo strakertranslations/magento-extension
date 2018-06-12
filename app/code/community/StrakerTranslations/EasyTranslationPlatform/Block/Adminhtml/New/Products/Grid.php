@@ -12,15 +12,28 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         $this->setVarNameFilter('straker_product_filter');
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
+    }
+
+    protected function _getSourceStore(){
+        return $this->_getStore('source_store_id');
     }
 
     protected function _prepareCollection()
     {
-        $store = $this->_getStore();
+        $targetStore = $this->_getStore();
+        $sourceStore = $this->_getSourceStore();
         /** @var Mage_Catalog_Model_Resource_Product_Collection $collection */
         $collection = Mage::getModel('catalog/product')->getCollection()
             ->addAttributeToSelect('sku')
@@ -31,7 +44,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         array_push($attrArray, 'visibility');
         array_unique($attrArray);
 
-        if ($store->getId()) {
+        if ($sourceStore->getId()) {
+            $collection->addStoreFilter($sourceStore);
             foreach ($attrArray as $attr){
                 $attributeModel = Mage::getModel('eav/entity_attribute')->loadByCode(Mage_Catalog_Model_Product::ENTITY, $attr);
                 $collection->joinAttribute(
@@ -39,8 +53,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
                     'catalog_product/' . $attr,
                     'entity_id',
                     null,
-                    $attributeModel->getIsUserDefined() ? 'left' : 'inner',
-                    $store->getId()
+                    'left',
+                    $sourceStore->getId()
                 );
             }
         }
@@ -58,7 +72,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
                 '`main_table`.`job_id` = `b`.`id`',
                 array()
             )->where(
-                '`b`.`store_id` = ?', $store->getId()
+                '`b`.`store_id` = ?', $targetStore->getId()
             )->where(
                 '`main_table`.`version` = ?', 1
             )->group(
@@ -79,6 +93,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         parent::_prepareCollection();
 
         $this->getCollection()->addWebsiteNamesToResult();
+//        var_dump($collection->getSelect()->__toString());
         return $this;
     }
 
@@ -230,6 +245,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
             );
         }
 
+        if (!Mage::app()->isSingleStoreMode()) {
+            $this->addColumn('websites',
+                array(
+                    'header'=> Mage::helper('catalog')->__('Websites'),
+                    'width' => '100px',
+                    'sortable'  => false,
+                    'index'     => 'websites',
+                    'type'      => 'options',
+                    'options'   => Mage::getModel('core/website')->getCollection()->toOptionHash(),
+                    'filter_condition_callback' => array($this, '_websiteFilter'),
+                ));
+        }
+
         return parent::_prepareColumns();
     }
 
@@ -264,8 +292,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
         $this->getMassactionBlock()->setTemplate('straker/new/products/massaction.phtml');
 
         //todo: refine this
-        $hiddenParams = '<input type="hidden" name="store" value="'.$this->_getStore()->getId().'" />';
-        $hiddenParams .= '<input type="hidden" name="attr" value="'.$this->getAttr().'" />';
+        $hiddenParams = '<input type="hidden" name="store" value="' . $this->_getStore()->getId() . '" />';
+        $hiddenParams .= '<input type="hidden" name="attr" value="' . $this->getAttr() . '" />';
+        $hiddenParams .= '<input type="hidden" name="source_store_id" value="' . $this->_getSourceStore()->getId() .'" />';
         $this->getMassactionBlock()->setHiddenParams($hiddenParams);
 
         Mage::dispatchEvent('adminhtml_strakertranslation_new_products_grid_prepare_massaction', array('block' => $this));
@@ -296,5 +325,17 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_G
     {
         $selectedIds = Mage::getSingleton('adminhtml/session')->getData('straker_new_product');
         return empty($selectedIds) ? array() : $selectedIds;
+    }
+
+    protected function _websiteFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        $store = Mage::app()->getWebsite($value);
+        $collection->addStoreFilter($value);
+
+        return $this;
     }
 }

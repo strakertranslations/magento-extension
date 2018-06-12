@@ -38,8 +38,16 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
         }
         elseif (empty($params['attr'])) {
             $this->_initNewAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_attribute', 'strakertranslations_easytranslationplatform_new_categories_attribute', array('setup_store_id' => $params['store'])))
-                ->renderLayout();
+                ->_addContent(
+                    Mage::getSingleton('core/layout')->createBlock(
+                        'strakertranslations_easytranslationplatform/adminhtml_new_category_attribute',
+                        'strakertranslations_easytranslationplatform_new_categories_attribute',
+                        array(
+                            'setup_store_id' => $params['store'],
+                            'source_store_id' => $params['source_store_id']
+                        )
+                    )
+                )->renderLayout();
         }
         else{
             $this->_initNewAction()
@@ -51,8 +59,15 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
     public function attributeAction()
     {
         $data = $this->getRequest()->getParams();
-        if($data['attr'] && $data['store']){
-            $this->_redirect('*/*/new', array('store' => $data['store'], 'attr' => implode(",", array_keys($data['attr']))));
+        if($data['attr'] && $data['store'] && $data['source_store_id']){
+            $this->_redirect(
+                '*/*/new',
+                array(
+                    'store' => $data['store'],
+                    'attr' => implode(",", array_keys($data['attr'])),
+                    'source_store_id' => $data['source_store_id']
+                )
+            );
         }
         else {
             $this->_redirect('*/straker_new/');

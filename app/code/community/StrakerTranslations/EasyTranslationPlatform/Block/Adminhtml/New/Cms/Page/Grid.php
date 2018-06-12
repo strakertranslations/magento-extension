@@ -16,10 +16,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
     {
         /* @var $collection Mage_Cms_Model_Mysql4_Page_Collection */
         $collection = Mage::getModel('cms/page')->getCollection();
-        //todo: should add $collection->addStoreFilter(sourceStoreId);
         $collection->setFirstStoreFlag(true);
-        //var_dump($collection->getSelect()->__toString());exit;
         $this->setCollection($collection);
+
+        $sourceStore = $this->_getSourceStore();
+
+        if ( $sourceStore ) {
+            $this->setDefaultFilter(array('store_id' => $sourceStore->getId()));
+        }
 
         return parent::_prepareCollection();
     }
@@ -48,14 +52,14 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
         if (!Mage::app()->isSingleStoreMode()) {
             $this->addColumn(
                 'store_id', array(
-                'header'        => Mage::helper('cms')->__('Store View'),
-                'index'         => 'store_id',
-                'type'          => 'store',
-                'store_all'     => true,
-                'store_view'    => true,
-                'sortable'      => false,
-                'filter_condition_callback'
-                => array($this, '_filterStoreCondition'),
+                    'header'        => Mage::helper('cms')->__('Store View'),
+                    'index'         => 'store_id',
+                    'type'          => 'store',
+                    'store_all'     => true,
+                    'store_view'    => true,
+                    'sortable'      => false,
+                    'filter_condition_callback' => array($this, '_filterStoreCondition'),
+                    'selected'      => '4'
                 )
             );
         }
@@ -109,10 +113,12 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
     protected function _filterStoreCondition($collection, $column)
     {
         if (!$value = $column->getFilter()->getValue()) {
-            return;
+            return $this;
         }
 
-        $this->getCollection()->addStoreFilter($value);
+        $collection->addStoreFilter($value);
+
+        return $this;
     }
 
     protected function _prepareMassaction()
@@ -144,10 +150,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Cms_Page_G
         return '';
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
+    }
+
+    protected function _getSourceStore(){
+        return $this->_getStore('source_store_id');
     }
 
     public function getGridUrl()

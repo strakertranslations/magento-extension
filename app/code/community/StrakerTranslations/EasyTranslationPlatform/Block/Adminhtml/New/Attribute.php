@@ -14,6 +14,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute 
     protected function _prepareLayout()
     {
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_attribute_grid', 'attribute.grid', array('setup_store_id' => $this->getSetupStoreId() )));
+        $this->setChild('straker_store_switcher', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_store_switcher'));
         return parent::_prepareLayout();
     }
 
