@@ -20,11 +20,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             }
         }
         elseif($row->getPageId()){
-            $url = '';
+//            Mage::dispatchEvent('adminhtml_cms_page_grid_renderer_action_before_render', array('row' => $row));
             if ($row->getPreviewUrl()) {
-                $href = $row->getPreviewUrl();
+                $url = $row->getPreviewUrl();
             } else {
-                $urlModel = Mage::getModel('core/url')->setStore($row->getData('_first_store_id'));
+                $urlModel = Mage::getModel('core/url')->setStore($this->getStoreId($row));
                 $url = $urlModel->getUrl(
                     $row->getIdentifier(), array(
                         '_current' => false,
