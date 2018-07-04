@@ -20,7 +20,11 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
             }
         }
         elseif($row->getPageId()){
-//            Mage::dispatchEvent('adminhtml_cms_page_grid_renderer_action_before_render', array('row' => $row));
+            //current page_id is original page id, so need update with new page id
+            if ($row->getNewEntityId()) $row->setPageId($row->getNewEntityId());
+            //set preview url using event observer, $row must have or only need a correct page_id
+            Mage::dispatchEvent('adminhtml_cms_page_grid_renderer_action_before_render', array('row' => $row));
+
             if ($row->getPreviewUrl()) {
                 $url = $row->getPreviewUrl();
             } else {
