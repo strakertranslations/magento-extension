@@ -6,7 +6,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     {
         $original = $this->xml2array(simplexml_load_string($row->getOriginal()));
 
-        return !empty($original['title']) ? $original['title'] : 'N/A';
+        return !empty($original['title']) ? $original['title'] : Mage::helper('strakertranslations_easytranslationplatform')->__('N/A');
     }
 
     public function xml2array( $xmlObject, $out = array () )

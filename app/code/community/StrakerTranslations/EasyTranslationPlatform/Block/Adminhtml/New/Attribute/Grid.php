@@ -11,10 +11,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $this->setVarNameFilter('straker_attribute_filter');
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
+    }
+
+    protected function _getSourceStore(){
+        return $this->_getStore('source_store_id');
     }
 
     /**
@@ -26,23 +38,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     {
         /** @var \Mage_Catalog_Model_Resource_Product_Attribute_Collection $collection */
         $collection = Mage::getResourceModel('catalog/product_attribute_collection')
-            ->addVisibleFilter();
-
+            ->addVisibleFilter()->addStoreLabel($this->_getSourceStore()->getId());
         $store = $this->_getStore();
-//        $prefix = Mage::getConfig()->getTablePrefix()->__toString();
-//        $jobAttributeQuery = 'select a.`version`,  a.`attribute_id` from `'.$prefix.'straker_job_attribute` as a
-//                            left join `'.$prefix.'straker_job` as b on a.`job_id`=b.`id`
-//                            where b.`store_id` ='.$store->getId().' and a.`version` =1
-//                            GROUP BY a.`attribute_id`';
-//
-//        //join straker job product table to get version for each product
-//        $collection->getSelect()->joinLeft(
-//
-//          new Zend_Db_Expr('('.$jobAttributeQuery.')'),
-//          'main_table.attribute_id = t.attribute_id',
-//          array('version')
-//
-//        );
+
         /** @var StrakerTranslations_EasyTranslationPlatform_Model_Resource_Job_Attribute_Collection $strakerJobProductCollection */
         $strakerJobAttributeCollection = Mage::getModel('strakertranslations_easytranslationplatform/job_attribute')->getCollection();
         $strakerJobAttributeCollection->getSelect()
@@ -70,7 +68,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         );
 
         $this->setCollection($collection);
-
         return parent::_prepareCollection();
     }
 
@@ -84,7 +81,6 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
     {
         parent::_prepareColumns();
 
-
         $this->addColumn(
             'attribute_code', array(
             'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Code'),
@@ -94,12 +90,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             )
         );
 
+//        $this->addColumn(
+//            'frontend_label', array(
+//            'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
+//            'sortable' => true,
+//            'index' => 'frontend_label',
+//            'width' => '22%'
+//            )
+//        );
+
         $this->addColumn(
-            'frontend_label', array(
-            'header'=>Mage::helper('strakertranslations_easytranslationplatform')->__('Attribute Label'),
-            'sortable'=>true,
-            'index'=>'frontend_label',
-            'width' => '22%'
+            'store_label', array(
+                'header' => Mage::helper('strakertranslations_easytranslationplatform')->__('Store Label'),
+                'sortable' => true,
+                'index' => 'store_label',
+                'filter_condition_callback' => array($this, '_storeLabelFilter'),
+                'width' => '22%'
             )
         );
 
@@ -143,8 +149,8 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
             'index' => 'version',
             'type'  => 'options',
             'options' => array(
-              'Translated'   => Mage::helper('catalog')->__('Translated'),
-              'Not Translated'   => Mage::helper('catalog')->__('Not Translated')
+              'Translated'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Translated'),
+              'Not Translated'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Not Translated')
             ),
             'renderer'  => 'StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_Renderer_Translated',
             'filter_condition_callback' => array($this, '_versionFilter'),
@@ -165,6 +171,19 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
            // print $this->getCollection()->getSelect(); exit;
         } elseif ($value == 'Not Translated'){
             $collection->getSelect()->where('t.version is null');
+        }
+
+        return $this;
+    }
+
+    protected function _storeLabelFilter($collection, $column)
+    {
+        if (!$value = $column->getFilter()->getValue()) {
+            return $this;
+        }
+
+        if (trim($value) !== ''){
+            $collection->getSelect()->where('IFNULL(`al`.`value`,`main_table`.`frontend_label`) like \'%' . $value . '%\'');
         }
 
         return $this;
@@ -209,7 +228,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Attribute_
         $internalOption = empty($internalOption) ? '' : $internalOption;
         //todo: refine this
 //        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'.$this->getRequest()->getParam('internal_option').'" />';
-        $hiddenParams = '<input type="hidden" name="store" value="'.$this->getRequest()->getParam('store').'" /><input type="hidden" name="option" value="'. $internalOption .'" />';
+        $hiddenParams = '<input type="hidden" name="store" value="'.$this->_getStore()->getId() .'" />';
+        $hiddenParams .= '<input type="hidden" name="option" value="'. $internalOption .'" />';
+        $hiddenParams .= '<input type="hidden" name="source_store_id" value="'. $this->_getSourceStore()->getId() .'" />';
 
         $this->getMassactionBlock()->setHiddenParams($hiddenParams);
 

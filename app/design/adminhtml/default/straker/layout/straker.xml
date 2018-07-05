@@ -9,9 +9,9 @@
                 <name>straker/translations.js</name>
             </action>
         </reference>
-        <reference name="before_body_end">
-            <block type="core/template" name="straker_feedback_script" template="straker/feedback_script.phtml"/>
-        </reference>
+        <!--<reference name="before_body_end">-->
+            <!--<block type="core/template" name="straker_feedback_script" template="straker/feedback_script.phtml"/>-->
+        <!--</reference>-->
     </default>
     <adminhtml_straker_job_index>
         <referense name="head">

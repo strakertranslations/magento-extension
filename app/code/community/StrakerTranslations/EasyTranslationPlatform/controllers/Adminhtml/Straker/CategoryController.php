@@ -26,7 +26,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
             ->loadLayout()
             ->_setActiveMenu('straker/new');
         $this->getLayout()->getBlock('head')->setCanLoadExtJs(true);
-        $this->_title($this->__('Create New Job'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job'));
         return $this;
     }
 
@@ -38,8 +38,16 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
         }
         elseif (empty($params['attr'])) {
             $this->_initNewAction()
-                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_category_attribute', 'strakertranslations_easytranslationplatform_new_categories_attribute', array('setup_store_id' => $params['store'])))
-                ->renderLayout();
+                ->_addContent(
+                    Mage::getSingleton('core/layout')->createBlock(
+                        'strakertranslations_easytranslationplatform/adminhtml_new_category_attribute',
+                        'strakertranslations_easytranslationplatform_new_categories_attribute',
+                        array(
+                            'setup_store_id' => $params['store'],
+                            'source_store_id' => $params['source_store_id']
+                        )
+                    )
+                )->renderLayout();
         }
         else{
             $this->_initNewAction()
@@ -51,8 +59,15 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
     public function attributeAction()
     {
         $data = $this->getRequest()->getParams();
-        if($data['attr'] && $data['store']){
-            $this->_redirect('*/*/new', array('store' => $data['store'], 'attr' => implode(",", array_keys($data['attr']))));
+        if($data['attr'] && $data['store'] && $data['source_store_id']){
+            $this->_redirect(
+                '*/*/new',
+                array(
+                    'store' => $data['store'],
+                    'attr' => implode(",", array_keys($data['attr'])),
+                    'source_store_id' => $data['source_store_id']
+                )
+            );
         }
         else {
             $this->_redirect('*/straker_new/');
@@ -147,19 +162,19 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_CategoryCont
             return;
         }
 
-        $this->_title($this->__('Straker Translations'))
-            ->_title($this->__('Manage Jobs'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Straker Translations'))
+            ->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 
         $this->loadLayout()->_setActiveMenu('straker/job');
         $this->renderLayout();
 
 //        try {
-//            $this->_title($this->__('Manage Jobs'));
+//            $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 //            return $this->_initAction()
 //                ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_job_grid'))
 //                ->renderLayout();
 //        } catch (Exception $e) {
-//            Mage::getSingleton('core/session')->addError($this->__('Error occurred. Please contact service administrator.'));
+//            Mage::getSingleton('core/session')->addError(Mage::helper('strakertranslations_easytranslationplatform')->__('Error occurred. Please contact service administrator.'));
 //            $this->_redirect('adminhtml/dashboard');
 //        }
     }

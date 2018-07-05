@@ -2,7 +2,7 @@
 <config>
     <modules>
         <StrakerTranslations_EasyTranslationPlatform>
-            <version>1.4.5</version>
+            <version>1.4.6</version>
         </StrakerTranslations_EasyTranslationPlatform>
     </modules>
     <global>
@@ -130,6 +130,15 @@
         </admin>
     </stores>
     <adminhtml>
+        <translate>
+            <modules>
+                <StrakerTranslations_EasyTranslationPlatform>
+                    <files>
+                        <default>StrakerTranslations_EasyTranslationPlatform.csv</default>
+                    </files>
+                </StrakerTranslations_EasyTranslationPlatform>
+            </modules>
+        </translate>
         <layout>
             <updates>
                 <StrakerTranslations_EasyTranslationPlatform>

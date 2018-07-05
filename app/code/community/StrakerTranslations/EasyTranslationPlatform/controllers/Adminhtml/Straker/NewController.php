@@ -12,7 +12,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
         $this
             ->loadLayout()
             ->_setActiveMenu('straker/new');
-        $this->_title($this->__('Create New Job'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Create New Job'));
         return $this;
     }
 
@@ -28,7 +28,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
     public function supportAction()
     {
-        $this->_redirectUrl("https://help.strakertranslations.com/docs/magento/");
+        $this->_redirectUrl("https://help.strakertranslations.com/");
     }
 
     public function indexAction()
@@ -39,11 +39,13 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_register'))
                 ->renderLayout();
         } elseif (empty($params['store'])) {
+            //to select store
             $this->checkSiteMode();
             return $this->_initAction()
                 ->_addContent(Mage::getSingleton('core/layout')->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_selectstore'))
                 ->renderLayout();
         } elseif (Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($params['store']) === false) {
+            //to setup store language pair
             $this->checkSiteMode();
             return $this->_initAction()
                 ->_addContent(
@@ -54,12 +56,19 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
                 )
                 ->renderLayout();
         } else {
+            //to select job type
             $this->checkSiteMode();
+            $storeSetup = Mage::helper('strakertranslations_easytranslationplatform')->getStoreSetup($params['store']);
+            $sourceStoreId = array_key_exists('source', $storeSetup) ? $storeSetup['source'] : Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID;
+
             return $this->_initAction()
                 ->_addContent(
                     Mage::getSingleton('core/layout')->createBlock(
                         'strakertranslations_easytranslationplatform/adminhtml_new_type', 'strakertranslations_easytranslationplatform_new_type',
-                        array('setup_store_id' => $params['store'])
+                        array(
+                            'setup_store_id' => $params['store'],
+                            'source_store_id' => $sourceStoreId
+                        )
                     )
                 )
                 ->renderLayout();
@@ -118,7 +127,13 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
                 if ($helper->saveStoreSetup($data['store'], $data['source'], $data['from'], $data['to']) !== false) {
                     Mage::app()->getCacheInstance()->cleanType('config');
-                    $this->_redirect('*/*/', array('store' => $data['store']));
+                    $this->_redirect(
+                        '*/*/',
+                        array(
+                            'store' => $data['store'],
+                            'source_store_id' => $data['source']
+                        )
+                    );
                     return;
                 } else {
                     Mage::throwException(Mage::helper('strakertranslations_easytranslationplatform')->__('Unable to save store configurations.'));
@@ -237,10 +252,10 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
         if ($helper->getStoreSetup($storeId)) {
             $helper->saveStoreSetup($storeId, '', '', '');
-            $session->addSuccess($this->__('Language settings has been reset.'));
+            $session->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Language settings has been reset.'));
             Mage::app()->getCacheInstance()->cleanType('config');
         } else {
-            $session->addError($this->__('Store code is not valid.'));
+            $session->addError(Mage::helper('strakertranslations_easytranslationplatform')->__('Store code is not valid.'));
         }
 
         $this->_redirect('adminhtml/system_config/edit/section/straker');

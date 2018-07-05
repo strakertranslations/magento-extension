@@ -6,9 +6,9 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     {
         $out = '';
         if (get_class($row) == get_class(Mage::getModel('strakertranslations_easytranslationplatform/job'))) {
-            $buttonText = $row->getStatusId() == 4 ? $this->__('Confirm') : $this->__('View');
+            $buttonText = $row->getStatusId() == 4 ? Mage::helper('strakertranslations_easytranslationplatform')->__('Confirm') : Mage::helper('strakertranslations_easytranslationplatform')->__('View');
 
-            $out = '<button id="button-update-'.$row->getId().'" style="margin: 5px; display: block;" onclick="event.stopPropagation(); setLocation(\'' . Mage::helper("adminhtml")->getUrl("adminhtml/straker_".str_replace(' ', '_', strtolower($row->getTypeName())).'/', array('job_id' => $row->getId())) . '\')" title="View" type="button" style="">'.$buttonText.'</button>';
+            $out = '<button id="button-update-'.$row->getId().'" style="margin: 5px; display: block;" onclick="event.stopPropagation(); setLocation(\'' . Mage::helper("adminhtml")->getUrl("adminhtml/straker_".str_replace(' ', '_', strtolower($row->getTypeName())).'/', array('job_id' => $row->getId())) . '\')" title="' . Mage::helper('strakertranslations_easytranslationplatform')->__($buttonText) . '" type="button" style="">'.$buttonText.'</button>';
         }
 
         return $out;

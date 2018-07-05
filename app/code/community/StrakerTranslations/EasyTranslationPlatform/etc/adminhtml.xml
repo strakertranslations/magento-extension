@@ -39,10 +39,6 @@
                     <action>adminhtml/straker_new/terms</action>
                     <sort_order>50</sort_order>
                 </terms>
-                <feedback translate="title">
-                    <title><![CDATA[Feedback]]></title>
-                    <sort_order>60</sort_order>
-                </feedback>
             </children>
         </straker>
     </menu>
@@ -53,15 +49,15 @@
             </all>
             <admin>
                 <children>
-                    <straker>
+                    <straker translate="title">
                         <title>Easy Translation Platform</title>
                         <sort_order>70</sort_order>
                         <children>
-                            <new>
+                            <new translate="title">
                                 <title>Create a Translation Job</title>
                                 <sort_order>0</sort_order>
                             </new>
-                            <job>
+                            <job translate="title">
                                 <title>Manage Jobs</title>
                                 <sort_order>1</sort_order>
                             </job>
@@ -71,7 +67,7 @@
                         <children>
                             <config>
                                 <children>
-                                    <straker>
+                                    <straker translate="title">
                                         <title>Easy Translation Platform</title>
                                     </straker>
                                 </children>

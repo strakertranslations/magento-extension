@@ -5,10 +5,10 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Template_Grid_
     public function render(Varien_Object $row)
     {
         if($row->getStrakerTranslated()){
-            return 'Yes';
+            return Mage::helper('strakertranslations_easytranslationplatform')->__('Yes');
         }
         else{
-            return 'No';
+            return Mage::helper('strakertranslations_easytranslationplatform')->__('No');
         }
     }
 }

@@ -26,7 +26,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products_A
     public function getAttributes()
     {
         $attributes = Mage::getResourceModel('eav/entity_attribute_collection')
-            ->setEntityTypeFilter(4)
+            ->setEntityTypeFilter(Mage::getModel('eav/entity_type')->loadByCode(Mage_Catalog_Model_Product::ENTITY)->getEntityTypeId())
             ->addFieldToFilter('backend_type', array('in' => array('varchar', 'text')))
             ->setFrontendInputTypeFilter(array('in' => array('text', 'textarea')))
             ->addFieldToFilter('attribute_code', array('nin' => self::$_excludeAttributes));

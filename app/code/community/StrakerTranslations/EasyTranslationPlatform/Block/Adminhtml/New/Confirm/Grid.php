@@ -12,11 +12,24 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Confirm_Gr
         $this->setVarNameFilter('product_filter');
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
     }
+
+    protected function _getSourceStore(){
+        return $this->_getStore('source_store_id');
+    }
+
     protected function _prepareLayout()
     {
         return $this;

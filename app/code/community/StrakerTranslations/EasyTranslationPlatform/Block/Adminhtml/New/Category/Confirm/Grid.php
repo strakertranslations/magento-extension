@@ -13,10 +13,22 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
         $this->setTemplate('straker/new/category/confirm/grid.phtml');
     }
 
-    protected function _getStore()
+    protected function _getStore($key = 'store')
     {
-        $storeId = (int) $this->getRequest()->getParam('store', 0);
-        return Mage::app()->getStore($storeId);
+        $store = null;
+
+        try {
+            $storeId = (Int) $this->getRequest()->getParam($key, Mage_Catalog_Model_Abstract::DEFAULT_STORE_ID);
+            $store = Mage::app()->getStore($storeId);
+        }catch(Exception $e){
+            Mage::getSingleton('adminhtml/session')->addError($e->getMessage());
+        }
+
+        return $store;
+    }
+
+    protected function _getSourceStore(){
+        return $this->_getStore('source_store_id');
     }
 
     protected function _prepareLayout()
@@ -51,10 +63,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
 
     protected function _prepareCollection()
     {
+        $sourceStoreId = $this->_getSourceStore()->getId();
+
         /** @var Mage_Catalog_Model_Resource_Category_Collection $collection */
         $collection = Mage::getModel('catalog/category')->getCollection()
             ->addAttributeToSelect('path')
-            ->addAttributeToSelect('name');
+            ->addAttributeToSelect('name')
+//            ->setProductStoreId($sourceStoreId)
+            ->setStoreId($sourceStoreId);
+
         $collection->addAttributeToFilter('entity_id', array('in' => $this->getCategory()));
 
         foreach ($this->getAttrArray() as $attr){
@@ -181,7 +198,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Category_C
                 'getter'     => 'getEntityId',
                 'actions'   => array(
                     array(
-                        'caption' => $this->__('Remove'),
+                        'caption' => Mage::helper('strakertranslations_easytranslationplatform')->__('Remove'),
                         'url'     => array(
                             'base'=>'*/*/removeFromCart'
                         ),

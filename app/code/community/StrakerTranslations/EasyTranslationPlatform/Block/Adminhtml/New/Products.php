@@ -18,12 +18,13 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Products e
     protected function _prepareLayout()
     {
 //        $this->_addButton('add_new', array(
-//            'label'   => $this->__('Add Product'),
+//            'label'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Add Product'),
 //            'onclick' => "setLocation('{$this->getUrl('*/*/new')}')",
 //            'class'   => 'add'
 //        ));
 
         $this->setChild('grid', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_products_grid', 'product.grid', array('setup_store_id' => $this->getSetupStoreId(), 'attr' => $this->getAttr())));
+        $this->setChild('straker_store_switcher', $this->getLayout()->createBlock('strakertranslations_easytranslationplatform/adminhtml_new_store_switcher'));
         return parent::_prepareLayout();
     }
 

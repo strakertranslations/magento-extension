@@ -17,7 +17,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page e
         if ($jobStatus == '4'){
             $this->_addButton(
                 'publish', array(
-                'label'   => $this->__('Publish All Translations'),
+                'label'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Publish All Translations'),
                 'onclick' => "setLocation('{$this->getUrl('*/*/publishAll',array('job_id'=>$jobId))}');",
                 'class'   => 'task'
                 )
@@ -27,7 +27,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_Job_Cms_Page e
         if ($jobStatus == '4' || $jobStatus == '5') {
             $this->_addButton(
                 'reimport', array(
-                'label'   => $this->__('Reimport Translations'),
+                'label'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Reimport Translations'),
                 'onclick' => "setLocation('{$this->getUrl('*/*/reimport',array('job_id'=>$jobId))}')",
                 'class'   => 'task'
                 )

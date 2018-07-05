@@ -19,7 +19,7 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Confirm ex
     {
         $this->_addButton(
             'submit', array(
-            'label'   => $this->__('Submit'),
+            'label'   => Mage::helper('strakertranslations_easytranslationplatform')->__('Submit'),
             'onclick' => "$('submit-new-job-form').submit();",
             //            'onclick' => "setLocation('{$this->getUrl('*/*/submit')}')",
             'class'   => 'task'

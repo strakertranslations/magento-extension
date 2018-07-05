@@ -30,7 +30,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
 //        foreach($collection as $job){
 //            $job = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($job->getId());
 //            if ( $job->updateTranslation() ){
-//                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+//                Mage::getSingleton('core/session')->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Job %s has been updated.', $job->getId()));
 //            }
 //        }
         if ($collection->count() > 1){
@@ -46,7 +46,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
                             $jobModel = Mage::getModel('strakertranslations_easytranslationplatform/job')->load($jobModel->getId());
                             $result = $jobModel->updateJob($jobResponse);
                             if($result){
-                                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $jobModel->getId()));
+                                Mage::getSingleton('core/session')->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Job %s has been updated.', $jobModel->getId()));
                             }
                         }
                     }
@@ -57,8 +57,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             $this->_updateJob($id);
         }
 
-        $this->_title($this->__('Straker Translations'))
-            ->_title($this->__('Manage Jobs'));
+        $this->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Straker Translations'))
+            ->_title(Mage::helper('strakertranslations_easytranslationplatform')->__('Manage Jobs'));
 
         $this->loadLayout();
         $this->renderLayout();
@@ -87,7 +87,7 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_JobControlle
             }
 
             if($job->updateTranslation()){
-                Mage::getSingleton('core/session')->addSuccess($this->__('Job %s has been updated.', $job->getId()));
+                Mage::getSingleton('core/session')->addSuccess(Mage::helper('strakertranslations_easytranslationplatform')->__('Job %s has been updated.', $job->getId()));
             }
 
             return true;
