@@ -62,10 +62,6 @@
 .strakertranslations-adminhtml-job-index {
   /* DO NOT CHANGE THESE VALUES*/
 }
-.strakertranslations-adminhtml-job-type{
-  clear: both;
-  width: 600px;
-}
 .strakertranslations-adminhtml-job-index .overlay_dialog {
   background-color: #666666;
   filter: alpha(opacity=60);
@@ -226,7 +222,10 @@
   display: block;
 }
 .adminhtml-straker-product-index #dispute-container,
-.adminhtml-straker-category-index #dispute-container {
+.adminhtml-straker-category-index #dispute-container,
+.adminhtml-straker-cms-page-index #dispute-container,
+.adminhtml-straker-cms-block-index #dispute-container,
+.adminhtml-straker-attribute-index #dispute-container {
   position: fixed;
   background: #fff;
   margin-left: -300px;
@@ -240,7 +239,10 @@
   z-index: 10;
 }
 .adminhtml-straker-product-index #dispute-container #dispute-container-close,
-.adminhtml-straker-category-index #dispute-container #dispute-container-close {
+.adminhtml-straker-category-index #dispute-container #dispute-container-close,
+.adminhtml-straker-cms-page-index #dispute-container #dispute-container-close,
+.adminhtml-straker-cms-block-index #dispute-container #dispute-container-close,
+.adminhtml-straker-attribute-index #dispute-container #dispute-container-close {
   height: 20px;
   width: 20px;
   display: block;
@@ -255,8 +257,14 @@
 }
 .adminhtml-straker-product-index #strakerJobProductGrid button.feedback,
 .adminhtml-straker-category-index #strakerJobProductGrid button.feedback,
+.adminhtml-straker-cms-page-index #strakerJobProductGrid button.feedback,
+.adminhtml-straker-cms-block-index #strakerJobProductGrid button.feedback,
+.adminhtml-straker-attribute-index #strakerJobProductGrid button.feedback,
 .adminhtml-straker-product-index #strakerJobCategoryGrid button.feedback,
-.adminhtml-straker-category-index #strakerJobCategoryGrid button.feedback {
+.adminhtml-straker-category-index #strakerJobCategoryGrid button.feedback,
+.adminhtml-straker-cms-page-index #strakerJobCategoryGrid button.feedback,
+.adminhtml-straker-cms-block-index #strakerJobCategoryGrid button.feedback,
+.adminhtml-straker-attribute-index #strakerJobCategoryGrid button.feedback {
   background: none;
   color: #ea7601;
   border: none;
@@ -265,9 +273,9 @@
 }
 .adminhtml-straker-product-index p.inactive,
 .adminhtml-straker-category-index p.inactive,
-.adminhtml-straker-attribute-index p.inactive,
 .adminhtml-straker-cms-page-index p.inactive,
-.adminhtml-straker-cms-block-index p.inactive{
+.adminhtml-straker-cms-block-index p.inactive,
+.adminhtml-straker-attribute-index p.inactive {
   color: #888888;
   text-decoration: underline;
 }
@@ -422,25 +430,6 @@ Temp UI Updates : Yogi
   font-size: 15px;
   color: #8A8A8A;
 }
-.job-type-btn-wrap {
-  margin-top: 20px;
-}
-.job-type-btn-wrap a.job-type-btn {
-  color: #fff;
-  background: #02A3DB;
-  padding: 9px 12px;
-  overflow: hidden;
-  float: left;
-  display: block;
-  width: 130px;
-  text-align: center;
-  text-decoration: none;
-  margin-bottom: 10px;
-  margin-right: 15px;
-  border-radius: 3px;
-  font-weight: bold;
-  font-size: 14px;
-}
 .category-attr {
   margin-top: 18px;
 }
@@ -502,47 +491,65 @@ ol.wizard {
 #attributeGrid_table #massactions-wrapper {
   background: url(../../default/images/massaction_bg.gif) repeat-x 0 100% #ebebeb;
 }
-
-/* Straker Tooltip */
-.st-tooltip {
-  position:relative;
-  cursor:help;
+.job-type-btn-wrap {
+  margin-top: 20px;
+}
+.job-type-btn-wrap .strakertranslations-adminhtml-job-type {
+  clear: both;
+  width: 600px;
+}
+.job-type-btn-wrap a.job-type-btn {
+  color: #fff;
+  background: #02A3DB;
+  padding: 9px 12px;
+  overflow: hidden;
+  float: left;
+  display: block;
+  width: 130px;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 10px;
+  margin-right: 15px;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 14px;
+}
+.job-type-btn-wrap .st-tooltip {
   position: relative;
+  cursor: help;
   top: 12px;
 }
-.st-tooltip .st-tooltiptext {
-  position:absolute;
-  top:-20px;
-  right:9999px;
-  width:270px;
-  margin-right:-290px; /* width + left/right padding */
-  padding:10px;
-  
-  color:#fff;
-  background:#333;
-  -webkit-box-shadow:2px 2px 5px #aaa;
-      -moz-box-shadow:2px 2px 5px #aaa;
-          box-shadow:2px 2px 5px #aaa;
-  opacity:0;
-  -webkit-transition:opacity 250ms ease-out;
-  -moz-transition:opacity 250ms ease-out;
-  -ms-transition:opacity 250ms ease-out;
-  -o-transition:opacity 250ms ease-out;
-  transition:opacity 250ms ease-out;
+.job-type-btn-wrap .st-tooltip .st-tooltiptext {
+  position: absolute;
+  top: -20px;
+  right: 9999px;
+  width: 270px;
+  margin-right: -290px;
+  padding: 10px;
+  color: #fff;
+  background: #333;
+  -webkit-box-shadow: 2px 2px 5px #aaa;
+  -moz-box-shadow: 2px 2px 5px #aaa;
+  box-shadow: 2px 2px 5px #aaa;
+  opacity: 0;
+  -webkit-transition: opacity 250ms ease-out;
+  -moz-transition: opacity 250ms ease-out;
+  -o-transition: opacity 250ms ease-out;
+  transition: opacity 250ms ease-out;
 }
-.st-tooltip .st-tooltiptext:before {
-  content:' ';
-  position:absolute;
-  top:50%;
-  left:-16px;
-  width:0;
-  height:0;
-  margin-top:-8px;
-  border:8px solid transparent;
-  border-right-color:#333;
+.job-type-btn-wrap .st-tooltip .st-tooltiptext:before {
+  content: ' ';
+  position: absolute;
+  top: 50%;
+  left: -16px;
+  width: 0;
+  height: 0;
+  margin-top: -8px;
+  border: 8px solid transparent;
+  border-right-color: #333;
 }
-.st-tooltip:hover .st-tooltiptext {
-  right:-20px;
-  opacity:1;
-  border-radius:5px
+.job-type-btn-wrap .st-tooltip:hover .st-tooltiptext {
+  right: -20px;
+  opacity: 1;
+  border-radius: 5px;
 }
