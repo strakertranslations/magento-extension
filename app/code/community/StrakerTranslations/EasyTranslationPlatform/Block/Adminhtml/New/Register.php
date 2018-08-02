@@ -34,4 +34,15 @@ class StrakerTranslations_EasyTranslationPlatform_Block_Adminhtml_New_Register e
         $html .= '</select>';
         return $html;
     }
+
+    public function renderCompanySizeSelect(){
+        $html = '<select class="validate-select" name="company_size">';
+        $html .= '<option value="">-</option>';
+        $html .= '<option value="1 - 10">1 - 10</option>';
+        $html .= '<option value="11 - 50">11 - 50</option>';
+        $html .= '<option value="51 - 250">51 - 250</option>';
+        $html .= '<option value="250+">250+</option>';
+        $html .= '</select>';
+        return $html;
+    }
 }

@@ -64,7 +64,6 @@ class StrakerTranslations_EasyTranslationPlatform_Model_Api extends Mage_Core_Mo
 
         $debugData['response'] = $response;
 
-
         // handle transport error
         if ($http->getErrno()) {
             Mage::logException(

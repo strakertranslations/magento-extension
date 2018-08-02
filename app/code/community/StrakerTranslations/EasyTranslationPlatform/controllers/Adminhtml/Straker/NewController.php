@@ -77,8 +77,8 @@ Class StrakerTranslations_EasyTranslationPlatform_Adminhtml_Straker_NewControlle
 
     public function registerAction()
     {
-
         $data = $this->getRequest()->getPost();
+
         if (array_key_exists('form_key', $data)) {
             unset($data['form_key']);
         }
