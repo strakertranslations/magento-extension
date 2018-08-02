@@ -18,12 +18,14 @@
                 <div class="input-box"><label for="country"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Country') ?></label><em class="required">*</em><?php echo $this->renderCountriesSelect('country') ?></div>
             </div>
             <div class="col-right">
-                <div class="input-box"><label for="company"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Company Name') ?></label><br>
-                    <input type="text" id="company" name="company" value="" class="input-text"></div>
+                <div class="input-box"><label for="company"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Company Name') ?></label><em class="required">*</em><br>
+                    <input type="text" id="company" name="company" value="" class="required-entry input-text"></div>
+                <div class="input-box"><label for="company_size"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Company Size') ?></label><em class="required">*</em><br>
+                    <?php echo $this->renderCompanySizeSelect() ?></div>
                 <div class="input-box"><label for="phone"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Phone Number') ?></label><br>
                     <input type="text" id="phone" name="phone" value="" class="input-text"></div>
-                <div class="input-box"><label for="website"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Website URL') ?></label><br>
-                    <input type="text" id="website" name="website" value="" class="input-text"></div>
+                <div class="input-box"><label for="url"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('Website URL') ?></label><br>
+                    <input type="text" id="url" name="url" value="" class="input-text"></div>
             </div>
             <div class="clear"></div>
             <label class="terms-label"><input type="checkbox" name="terms" value="1" class="required-entry"><?php echo Mage::helper('strakertranslations_easytranslationplatform')->__('I have read and agreed to the %sterms and conditions%s', '<a href="https://www.strakertranslations.com/terms-conditions">','</a>') ?></label>
